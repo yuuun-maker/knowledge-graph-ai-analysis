@@ -4,14 +4,14 @@
     <div class="brand-panel">
       <div class="brand-inner">
         <div class="brand-logo">
-          <img :src="brandImage" alt="A10 赛题项目理解" />
+          <BrandMark :size="72" />
         </div>
         <h1 class="brand-title">课程知识图谱智能构建<br />与学习系统</h1>
         <p class="brand-sub">基于 AIGC · 服务外包创新创业大赛 A10</p>
         <ul class="brand-features">
-          <li><span class="feat-icon">✦</span>LLM 智能抽取知识点与关系</li>
-          <li><span class="feat-icon">✦</span>知识图谱可视化与教师编辑</li>
-          <li><span class="feat-icon">✦</span>RAG 问答 · 学习路径推荐</li>
+          <li><el-icon class="feat-icon"><MagicStick /></el-icon>LLM 智能抽取知识点与关系</li>
+          <li><el-icon class="feat-icon"><Connection /></el-icon>知识图谱可视化与教师编辑</li>
+          <li><el-icon class="feat-icon"><ChatDotRound /></el-icon>RAG 问答 · 学习路径推荐</li>
         </ul>
       </div>
     </div>
@@ -20,7 +20,7 @@
     <div class="form-panel">
       <div class="login-card">
         <div class="mobile-brand">
-          <img :src="brandImage" alt="" />
+          <span class="mobile-mark"><BrandMark :size="22" /></span>
           <span>课程知识图谱系统</span>
         </div>
 
@@ -118,37 +118,7 @@
     </div>
 
     <!-- 右下角后端服务状态（模仿教师/学生端） -->
-    <div
-      v-if="!store.backendStatusDismissed"
-      class="backend-status"
-      :class="store.backendOnline ? 'online' : store.healthChecked ? 'offline' : 'checking'"
-    >
-      <img :src="brandImage" class="status-avatar" alt="服务状态" />
-      <div class="status-meta">
-        <div class="status-title">
-          <i class="status-dot"></i>
-          <span>
-            {{ store.backendOnline ? '后端服务在线' : store.healthChecked ? '后端服务离线' : '检查后端服务…' }}
-          </span>
-        </div>
-        <div class="status-desc">
-          {{
-            store.backendOnline
-              ? '所有功能可正常使用'
-              : '请启动后端：python -m uvicorn app.main:app --reload'
-          }}
-        </div>
-      </div>
-      <button
-        class="status-close"
-        type="button"
-        aria-label="关闭"
-        title="关闭"
-        @click="store.dismissBackendStatus()"
-      >
-        <el-icon :size="12"><Close /></el-icon>
-      </button>
-    </div>
+    <BackendStatusCard />
   </div>
 </template>
 
@@ -156,9 +126,10 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { User, Lock, Close } from '@element-plus/icons-vue'
+import { User, Lock, MagicStick, Connection, ChatDotRound } from '@element-plus/icons-vue'
 import { useAppStore } from '../stores/app'
-import brandImage from '../phtotos/A10赛题项目理解(1).png'
+import BrandMark from '../components/BrandMark.vue'
+import BackendStatusCard from '../components/BackendStatusCard.vue'
 
 const store = useAppStore()
 const router = useRouter()
@@ -267,7 +238,7 @@ async function onRegister() {
   align-items: center;
   justify-content: center;
   padding: 48px;
-  background: linear-gradient(150deg, #1a1f36 0%, #243b6b 45%, #2f5fb8 100%);
+  background: linear-gradient(180deg, #1a1f36 0%, #161b2e 100%);
 }
 .brand-inner {
   position: relative;
@@ -276,19 +247,15 @@ async function onRegister() {
   color: #e8ecf4;
 }
 .brand-logo {
-  width: 150px;
-  height: 150px;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+  width: 132px;
+  height: 132px;
+  border-radius: 24px;
   background: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
   margin-bottom: 28px;
-}
-.brand-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .brand-title {
   font-size: 30px;
@@ -300,7 +267,7 @@ async function onRegister() {
 }
 .brand-sub {
   font-size: 14px;
-  color: #b9c6e8;
+  color: var(--text-sidebar);
   margin: 0 0 32px;
 }
 .brand-features {
@@ -313,14 +280,15 @@ async function onRegister() {
 }
 .brand-features li {
   font-size: 14px;
-  color: #cdd7f0;
+  color: var(--text-sidebar);
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .feat-icon {
-  color: #6ea8ff;
+  color: var(--color-primary-hover);
   font-size: 16px;
+  flex-shrink: 0;
 }
 
 /* ===== 右侧表单区 ===== */
@@ -349,87 +317,6 @@ async function onRegister() {
   border-radius: 8px;
 }
 
-/* ===== 右下角后端服务状态浮窗 ===== */
-.backend-status {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 32px 12px 12px;
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid #eef0f6;
-  box-shadow: 0 10px 30px rgba(31, 48, 92, 0.16);
-}
-.status-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-.status-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.status-title {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #303133;
-}
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #909399;
-  flex-shrink: 0;
-}
-.backend-status.online .status-dot {
-  background: #67c23a;
-  box-shadow: 0 0 6px #67c23a;
-}
-.backend-status.offline .status-dot {
-  background: #f56c6c;
-  box-shadow: 0 0 6px #f56c6c;
-}
-.backend-status.checking .status-dot {
-  background: #e6a23c;
-}
-.status-desc {
-  font-size: 11px;
-  color: #909399;
-  max-width: 320px;
-  line-height: 1.5;
-}
-.status-close {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background: transparent;
-  color: #c0c4cc;
-  cursor: pointer;
-  border-radius: 50%;
-  padding: 0;
-  transition: all 0.2s;
-}
-.status-close:hover {
-  color: #f56c6c;
-  background: #fef0f0;
-}
-
 /* 响应式：窄屏隐藏品牌区 */
 @media (max-width: 860px) {
   .brand-panel {
@@ -448,11 +335,15 @@ async function onRegister() {
     font-weight: 700;
     color: #303133;
   }
-  .mobile-brand img {
+  .mobile-mark {
     width: 34px;
     height: 34px;
     border-radius: 8px;
-    object-fit: cover;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 }
 </style>

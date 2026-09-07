@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="page-header">
-      <h2 class="page-title">学习空间</h2>
-      <p class="page-desc">浏览课程知识图谱，智能问答与个性化学习路径推荐</p>
-    </div>
+    <PageHeader title="学习空间" desc="浏览课程知识图谱，智能问答与个性化学习路径推荐" />
 
     <!-- 统一学习上下文条（Phase 7）：当前课程 + 当前文档，所有学习 Tab 共享 -->
     <el-card class="page-card ctx-bar">
@@ -237,7 +234,7 @@
 
         <el-row :gutter="16" class="qa-layout">
           <!-- 左栏：当前课程 + 相关知识点 -->
-          <el-col :span="6">
+          <el-col :xs="24" :sm="6">
             <el-card class="page-card qa-side">
               <template #header>
                 <div class="qa-side-title"><el-icon><Collection /></el-icon>当前课程</div>
@@ -263,7 +260,7 @@
           </el-col>
 
           <!-- 右栏：AI 学习助手 -->
-          <el-col :span="18">
+          <el-col :xs="24" :sm="18">
             <el-card class="qa-card qa-main">
               <div class="qa-toolbar">
                 <span class="qa-title"><el-icon><MagicStick /></el-icon>AI 学习助手</span>
@@ -272,7 +269,7 @@
 
               <div ref="chatBoxRef" class="chat-box chat-scroll">
                 <div v-if="!messages.length" class="chat-welcome">
-                  <div class="welcome-icon"><el-icon :size="40" color="#409eff"><MagicStick /></el-icon></div>
+                  <div class="welcome-icon"><el-icon :size="40" color="var(--color-primary)"><MagicStick /></el-icon></div>
                   <p>基于课程知识图谱的 AI 问答助手</p>
                   <p class="welcome-sub">例如：什么是线性表？栈和队列有什么区别？</p>
                 </div>
@@ -459,10 +456,10 @@
 
         <el-row :gutter="16">
           <!-- 推荐下一步 -->
-          <el-col :span="12">
+          <el-col :xs="24" :sm="12">
             <el-card class="page-card">
               <template #header>
-                <b><el-icon class="icon-gap" color="#409eff"><Aim /></el-icon>推荐下一步学习内容</b>
+                <b><el-icon class="icon-gap" color="var(--color-primary)"><Aim /></el-icon>推荐下一步学习内容</b>
               </template>
               <p class="tip">输入你已掌握的知识点（每行一个），系统根据图谱前置关系推荐可学习的知识点</p>
               <el-input
@@ -485,7 +482,7 @@
                     <b>{{ r.name }}</b>
                   </div>
                   <div class="rec-desc">{{ r.description }}</div>
-                  <div class="rec-reason"><el-icon class="icon-gap" color="#e6a23c"><Opportunity /></el-icon>{{ r.reason }}</div>
+                  <div class="rec-reason"><el-icon class="icon-gap" color="var(--color-warning)"><Opportunity /></el-icon>{{ r.reason }}</div>
                 </div>
               </template>
               <el-empty
@@ -497,10 +494,10 @@
           </el-col>
 
           <!-- 目标路径 + 前置知识 -->
-          <el-col :span="12">
+          <el-col :xs="24" :sm="12">
             <el-card class="page-card">
               <template #header>
-                <b><el-icon class="icon-gap" color="#409eff"><Guide /></el-icon>到达目标知识点的学习路径</b>
+                <b><el-icon class="icon-gap" color="var(--color-primary)"><Guide /></el-icon>到达目标知识点的学习路径</b>
               </template>
               <p class="tip">输入目标知识点，系统自动生成从入门到该知识点的最短学习路径</p>
               <div class="btn-row">
@@ -534,7 +531,7 @@
                     <b>{{ pathTargetNode?.name || targetKnowledge }}</b>
                   </div>
                   <div class="rec-desc">{{ pathTargetNode?.description }}</div>
-                  <div class="rec-reason"><el-icon class="icon-gap" color="#e6a23c"><Opportunity /></el-icon>{{ pathReason }}</div>
+                  <div class="rec-reason"><el-icon class="icon-gap" color="var(--color-warning)"><Opportunity /></el-icon>{{ pathReason }}</div>
                 </div>
                 <el-divider content-position="left">相关概念（{{ pathRelated.length }}）</el-divider>
                 <div v-for="r in pathRelated" :key="r.name" class="rec-item">
@@ -554,7 +551,7 @@
 
             <el-card class="page-card">
               <template #header>
-                <b><el-icon class="icon-gap" color="#409eff"><Search /></el-icon>前置知识查询</b>
+                <b><el-icon class="icon-gap" color="var(--color-primary)"><Search /></el-icon>前置知识查询</b>
               </template>
               <div class="btn-row">
                 <el-input v-model="prereqName" placeholder="知识点名称" style="max-width: 320px" />
@@ -691,6 +688,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Refresh, Compass, ChatDotRound, Guide, Aim, Search, Document, Opportunity, MagicStick, ArrowDown, CircleCheckFilled, Right, Collection, WarningFilled, Star, StarFilled, DataAnalysis, Histogram, Odometer, Checked } from '@element-plus/icons-vue'
 import { api } from '../api'
+import PageHeader from '../components/PageHeader.vue'
 import GraphCanvas from '../components/GraphCanvas.vue'
 import CourseDocumentSelector from '../components/CourseDocumentSelector.vue'
 import NodeDetailDrawer from '../components/NodeDetailDrawer.vue'
@@ -1534,34 +1532,22 @@ function overviewAsk(q) {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 8px;
-}
-.page-title {
-  margin: 0 0 4px;
-  color: #303133;
-}
-.page-desc {
-  margin: 0 0 12px;
-  color: #909399;
-  font-size: 13px;
-}
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   flex-wrap: wrap; /* 窄屏下自动换行，避免横向溢出 */
 }
 .stats-text {
-  color: #909399;
-  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label);
 }
 .graph-card {
   height: 620px;
 }
 .graph-card :deep(.el-card__body) {
   height: 100%;
-  padding: 12px;
+  padding: var(--space-3);
 }
 
 /* 问答 */
@@ -1572,29 +1558,29 @@ function overviewAsk(q) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 .chat-box {
   height: 460px;
-  padding: 12px;
-  background: #fafbfc;
-  border: 1px solid #e4e7ed;
-  border-radius: 8px;
+  padding: var(--space-3);
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 .chat-welcome {
   text-align: center;
-  color: #909399;
+  color: var(--color-text-secondary);
   margin-top: 120px;
 }
 .welcome-icon {
   font-size: 44px;
 }
 .welcome-sub {
-  font-size: 13px;
+  font-size: var(--font-size-label);
 }
 .msg-row {
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 .msg-user {
   justify-content: flex-end;
@@ -1604,97 +1590,97 @@ function overviewAsk(q) {
 }
 .msg-bubble {
   max-width: 78%;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 14px;
+  padding: 10px var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-body);
   line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
 }
 .msg-user .msg-bubble {
-  background: #409eff;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--text-inverse);
 }
 .msg-ai .msg-bubble {
-  background: #fff;
-  border: 1px solid #e4e7ed;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
 }
 .msg-sources {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px dashed #e4e7ed;
+  border-top: 1px dashed var(--color-border);
 }
 .sources-empty {
-  font-size: 12px;
-  color: #c0c4cc;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
 }
 .msg-error {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #f56c6c;
-  font-size: 13px;
+  color: var(--color-danger);
+  font-size: var(--font-size-label);
 }
 .sources-title {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 12px;
-  color: #909399;
-  margin-bottom: 8px;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
 }
 .source-card {
-  padding: 8px 10px;
-  border: 1px solid #e4e7ed;
-  border-radius: 8px;
+  padding: var(--space-2) 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   margin-bottom: 6px;
-  background: #fafbfc;
+  background: var(--color-bg-soft);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
 .source-card:hover {
-  background: #f0f7ff;
-  border-color: #d9ecff;
+  background: var(--color-bg-hover);
+  border-color: var(--el-color-primary-light-8);
 }
 .source-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .source-name {
   flex: 1;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .source-jump {
-  color: #c0c4cc;
+  color: var(--color-text-muted);
   flex-shrink: 0;
 }
 .source-card:hover .source-jump {
-  color: #409eff;
+  color: var(--color-primary);
 }
 .source-desc {
   margin-top: 6px;
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 .typing {
   display: flex;
   gap: 5px;
   align-items: center;
-  padding: 14px 16px;
+  padding: var(--space-4) var(--space-4);
 }
 .typing-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #c0c4cc;
+  background: var(--color-text-muted);
   animation: blink 1.2s infinite;
 }
 .typing-dot:nth-child(2) {
@@ -1715,23 +1701,23 @@ function overviewAsk(q) {
 .chat-input {
   display: flex;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: var(--space-3);
 }
 .qa-title {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 .qa-side-title {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #303133;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-primary);
 }
 .qa-side :deep(.course-selector) {
   flex-wrap: wrap;
@@ -1748,75 +1734,75 @@ function overviewAsk(q) {
 .kp-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border: 1px solid #f0f2f5;
-  border-radius: 8px;
+  gap: var(--space-2);
+  padding: var(--space-2) 10px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
 .kp-item:hover {
-  background: #f0f7ff;
-  border-color: #d9ecff;
+  background: var(--color-bg-hover);
+  border-color: var(--el-color-primary-light-8);
 }
 .kp-name {
   flex: 1;
   min-width: 0;
-  font-size: 13px;
-  color: #303133;
+  font-size: var(--font-size-label);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .kp-jump {
-  color: #c0c4cc;
+  color: var(--color-text-muted);
   flex-shrink: 0;
 }
 .kp-item:hover .kp-jump {
-  color: #409eff;
+  color: var(--color-primary);
 }
 
 /* 路径推荐 */
 .tip {
-  color: #909399;
-  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label);
   margin: 0 0 10px;
 }
 .btn-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   margin-top: 10px;
   flex-wrap: wrap;
 }
 .rec-item {
   padding: 10px 0;
-  border-bottom: 1px dashed #e4e7ed;
+  border-bottom: 1px dashed var(--color-border);
 }
 .rec-name {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .rec-desc {
-  color: #606266;
-  font-size: 13px;
+  color: var(--color-text-regular);
+  font-size: var(--font-size-label);
   margin: 6px 0 4px;
 }
 .rec-reason {
-  color: #909399;
-  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption);
 }
 .path-chain {
-  margin-bottom: 14px;
+  margin-bottom: var(--space-4);
   padding: 10px;
-  background: #fafbfc;
-  border-radius: 8px;
+  background: var(--color-bg-soft);
+  border-radius: var(--radius-md);
 }
 .path-index {
-  font-size: 12px;
-  color: #909399;
-  margin-bottom: 8px;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
 }
 .path-steps {
   display: flex;
@@ -1828,18 +1814,18 @@ function overviewAsk(q) {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #fff;
-  border: 1px solid #e4e7ed;
-  border-radius: 6px;
-  padding: 4px 8px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
 }
 .step-name {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
 }
 .path-arrow {
-  color: #67c23a;
-  font-weight: 700;
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
 }
 .icon-gap {
   vertical-align: -2px;
@@ -1851,55 +1837,56 @@ function overviewAsk(q) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-3);
 }
 .path-hero-title {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 .path-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 14px 16px;
-  background: #fafbfc;
-  border: 1px solid #f0f2f5;
-  border-radius: 10px;
-  margin-bottom: 16px;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-4);
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
 }
 .summary-left {
   flex: 1;
   min-width: 0;
 }
 .summary-line {
-  font-size: 14px;
-  color: #606266;
+  font-size: var(--font-size-body);
+  color: var(--color-text-regular);
 }
 .summary-line .num {
   font-size: 22px;
-  font-weight: 700;
-  color: #409eff;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
   margin: 0 2px;
 }
 .summary-line .muted {
-  color: #909399;
-  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label);
 }
 .summary-suggestion {
   margin-top: 6px;
-  font-size: 13px;
-  color: #409eff;
-  font-weight: 600;
+  font-size: var(--font-size-label);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
 }
 .summary-suggestion.success {
-  color: #67c23a;
+  color: var(--color-success);
 }
 .summary-suggestion.muted {
-  color: #909399;
-  font-weight: 400;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
 }
 .summary-progress {
   width: 220px;
@@ -1912,37 +1899,37 @@ function overviewAsk(q) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 0;
+  padding: var(--space-2) 0;
 }
 .chain-node {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
   width: 100%;
   max-width: 560px;
-  padding: 12px 16px;
-  background: #fff;
-  border: 1px solid #e4e7ed;
-  border-left: 4px solid #c0c4cc;
-  border-radius: 10px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-text-muted);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
 }
 .chain-node:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-hover);
 }
 .chain-node.state-mastered {
-  border-left-color: #67c23a;
+  border-left-color: var(--color-success);
 }
 .chain-node.state-current {
-  border-left-color: #409eff;
-  background: #f0f7ff;
-  border-color: #d9ecff;
+  border-left-color: var(--color-primary);
+  background: var(--color-bg-hover);
+  border-color: var(--el-color-primary-light-8);
   box-shadow: 0 4px 16px rgba(64, 158, 255, 0.15);
 }
 .chain-node.state-recommended {
-  border-left-color: #e6a23c;
+  border-left-color: var(--color-warning);
 }
 .chain-node.state-unlearned {
   border-left-color: #dcdfe6;
@@ -1956,24 +1943,24 @@ function overviewAsk(q) {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   flex-shrink: 0;
 }
 .state-mastered .chain-icon {
-  background: #f0f9eb;
-  color: #67c23a;
+  background: var(--el-color-success-light-9);
+  color: var(--color-success);
 }
 .state-current .chain-icon {
-  background: #409eff;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--text-inverse);
 }
 .state-recommended .chain-icon {
-  background: #fdf6ec;
-  color: #e6a23c;
+  background: var(--el-color-warning-light-9);
+  color: var(--color-warning);
 }
 .state-unlearned .chain-icon {
-  background: #f5f7fa;
-  color: #c0c4cc;
+  background: var(--el-fill-color-light);
+  color: var(--color-text-muted);
 }
 .chain-content {
   flex: 1;
@@ -1982,70 +1969,70 @@ function overviewAsk(q) {
 .chain-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 .chain-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: #303133;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 .state-label {
-  font-size: 12px;
+  font-size: var(--font-size-caption);
   padding: 1px 8px;
-  border-radius: 10px;
-  font-weight: 600;
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-semibold);
 }
 .state-label-mastered {
-  color: #67c23a;
-  background: #f0f9eb;
+  color: var(--color-success);
+  background: var(--el-color-success-light-9);
 }
 .state-label-current {
-  color: #409eff;
-  background: #ecf5ff;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 .state-label-recommended {
-  color: #e6a23c;
-  background: #fdf6ec;
+  color: var(--color-warning);
+  background: var(--el-color-warning-light-9);
 }
 .state-label-unlearned {
-  color: #909399;
-  background: #f4f4f5;
+  color: var(--color-text-secondary);
+  background: var(--el-color-info-light-9);
 }
 .chain-reason {
   margin-top: 6px;
-  font-size: 13px;
-  color: #606266;
+  font-size: var(--font-size-label);
+  color: var(--color-text-regular);
 }
 .chain-status {
   margin-top: 4px;
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
 }
 .chain-link {
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: #c0c4cc;
-  font-size: 12px;
-  padding: 4px 0;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+  padding: var(--space-1) 0;
 }
 .path-actions {
   display: flex;
   justify-content: center;
-  margin-top: 16px;
+  margin-top: var(--space-4);
 }
 
 /* ===== 收藏夹 ===== */
 .fav-count {
-  margin: 12px 0 8px;
-  font-size: 14px;
-  color: #606266;
+  margin: var(--space-3) 0 var(--space-2);
+  font-size: var(--font-size-body);
+  color: var(--color-text-regular);
 }
 .fav-count .num {
   font-size: 18px;
-  font-weight: 700;
-  color: #409eff;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
   margin: 0 2px;
 }
 .fav-list {
@@ -2054,46 +2041,46 @@ function overviewAsk(q) {
 .fav-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+  gap: var(--space-4);
 }
 .fav-card {
   display: flex;
   flex-direction: column;
-  padding: 14px 16px;
-  border: 1px solid #f0f2f5;
-  border-radius: 10px;
-  background: #fff;
+  padding: var(--space-4) var(--space-4);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
   box-shadow: var(--shadow-card);
   transition: box-shadow 0.15s, border-color 0.15s;
 }
 .fav-card:hover {
-  border-color: #d9ecff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-color: var(--el-color-primary-light-8);
+  box-shadow: var(--shadow-hover);
 }
 .fav-card-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .fav-star {
-  color: #e6a23c;
+  color: var(--color-warning);
   font-size: 16px;
   flex-shrink: 0;
 }
 .fav-name {
   flex: 1;
   min-width: 0;
-  font-size: 15px;
-  font-weight: 700;
-  color: #303133;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .fav-desc {
-  margin-top: 8px;
-  font-size: 13px;
-  color: #606266;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-label);
+  color: var(--color-text-regular);
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -2102,18 +2089,18 @@ function overviewAsk(q) {
 }
 .fav-actions {
   display: flex;
-  gap: 8px;
-  margin-top: 12px;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
 }
 .fav-empty-title {
-  margin: 0 0 4px;
-  font-weight: 600;
-  color: #303133;
+  margin: 0 0 var(--space-1);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 .fav-empty-sub {
   margin: 0;
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
   line-height: 1.6;
 }
 
@@ -2133,7 +2120,7 @@ function overviewAsk(q) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 .ov-hero-left {
@@ -2141,36 +2128,36 @@ function overviewAsk(q) {
 }
 .ov-title {
   font-size: 18px;
-  font-weight: 700;
-  color: #303133;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 .ov-sub {
-  margin-top: 4px;
-  font-size: 13px;
-  color: #909399;
+  margin-top: var(--space-1);
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
 }
 
 /* 第一层：KPI 卡片 */
 .ov-kpi-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
 }
 .ov-kpi {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 18px;
-  background: #fff;
-  border: 1px solid var(--border-light);
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-light);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
 .ov-kpi-icon {
   width: 44px;
   height: 44px;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2180,20 +2167,20 @@ function overviewAsk(q) {
   min-width: 0;
 }
 .ov-kpi-value {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: var(--font-size-number);
+  font-weight: var(--font-weight-bold);
   line-height: 1.1;
-  color: #303133;
-  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-number);
 }
 .ov-kpi-label {
-  margin-top: 4px;
-  font-size: 12px;
-  color: #909399;
+  margin-top: var(--space-1);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
 }
 
 .ov-row {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
 }
 .ov-card {
   height: 100%;
@@ -2202,8 +2189,8 @@ function overviewAsk(q) {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-weight: 600;
-  color: #303133;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 .ov-card-count {
   margin-left: auto;
@@ -2211,10 +2198,10 @@ function overviewAsk(q) {
   height: 22px;
   padding: 0 7px;
   border-radius: 11px;
-  background: #ecf5ff;
-  color: #409eff;
-  font-size: 13px;
-  font-weight: 700;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2224,7 +2211,7 @@ function overviewAsk(q) {
 .ov-state-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--space-4);
   min-height: 180px;
 }
 .ov-state-row {
@@ -2235,14 +2222,14 @@ function overviewAsk(q) {
 .ov-state-glyph {
   width: 22px;
   text-align: center;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
   flex-shrink: 0;
 }
 .ov-state-name {
   width: 60px;
-  font-size: 13px;
-  color: #606266;
+  font-size: var(--font-size-label);
+  color: var(--color-text-regular);
   flex-shrink: 0;
 }
 .ov-state-bar {
@@ -2251,99 +2238,99 @@ function overviewAsk(q) {
 .ov-state-num {
   width: 32px;
   text-align: right;
-  font-size: 14px;
-  font-weight: 700;
-  color: #303133;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
   flex-shrink: 0;
 }
 .ov-state-glyph.st-mastered {
-  color: #67c23a;
+  color: var(--color-success);
 }
 .ov-state-glyph.st-current {
-  color: #409eff;
+  color: var(--color-primary);
 }
 .ov-state-glyph.st-recommended {
-  color: #e6a23c;
+  color: var(--color-warning);
 }
 .ov-state-glyph.st-unlearned {
-  color: #c0c4cc;
+  color: var(--color-text-muted);
 }
 .ov-state-total {
-  margin-top: 4px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border-light);
-  font-size: 12px;
-  color: #909399;
+  margin-top: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--color-border-light);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
 }
 
 /* 继续学习 */
 .ov-continue {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
   min-height: 180px;
 }
 .ov-current {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
-  background: #f0f7ff;
-  border: 1px solid #d9ecff;
-  border-radius: 10px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-hover);
+  border: 1px solid var(--el-color-primary-light-8);
+  border-radius: var(--radius-lg);
 }
 .ov-current-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 .ov-current-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: #303133;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 .ov-next-title {
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
   margin-bottom: 6px;
 }
 .ov-next-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 12px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
   margin-bottom: 6px;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
 .ov-next-item:hover {
-  background: #fdf6ec;
-  border-color: #f3d19e;
+  background: var(--el-color-warning-light-9);
+  border-color: var(--el-color-warning-light-5);
 }
 .ov-next-name {
   flex: 1;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .ov-next-jump {
-  color: #c0c4cc;
+  color: var(--color-text-muted);
   flex-shrink: 0;
 }
 .ov-next-item:hover .ov-next-jump {
-  color: #e6a23c;
+  color: var(--color-warning);
 }
 .ov-actions {
   display: flex;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: var(--space-3);
   flex-wrap: wrap;
 }
 
@@ -2352,30 +2339,30 @@ function overviewAsk(q) {
 .ov-fav-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .ov-focus-item {
-  padding: 10px 12px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
+  padding: 10px var(--space-3);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
 .ov-focus-item:hover {
-  background: #f5f9ff;
-  border-color: #d9ecff;
+  background: var(--color-bg-hover);
+  border-color: var(--el-color-primary-light-8);
 }
 .ov-focus-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .ov-focus-name {
   flex: 1;
   min-width: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2386,34 +2373,34 @@ function overviewAsk(q) {
 }
 .ov-focus-reason {
   margin-top: 6px;
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 .ov-fav-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
+  padding: 10px var(--space-3);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
 .ov-fav-item:hover {
-  background: #fdf6ec;
-  border-color: #f3d19e;
+  background: var(--el-color-warning-light-9);
+  border-color: var(--el-color-warning-light-5);
 }
 .ov-fav-star {
-  color: #e6a23c;
+  color: var(--color-warning);
   flex-shrink: 0;
 }
 .ov-fav-name {
   flex: 1;
   min-width: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2422,14 +2409,14 @@ function overviewAsk(q) {
 /* 第四层：AI 学习助手 */
 .ov-ai-tip {
   margin: 0 0 10px;
-  font-size: 13px;
-  color: #909399;
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
 }
 .ov-ai-quick {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 .ov-ai-chip {
   cursor: pointer;
@@ -2444,30 +2431,30 @@ function overviewAsk(q) {
 
 /* ===== Phase 7 统一学习上下文条 ===== */
 .ctx-bar {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
 }
 .ctx-bar :deep(.el-card__body) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 .ctx-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
   min-width: 0;
 }
 .ctx-label {
-  color: #909399;
-  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label);
 }
 .ctx-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
   max-width: 360px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2477,20 +2464,25 @@ function overviewAsk(q) {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #909399;
-  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-body);
 }
 .qa-side-course {
-  font-size: 13px;
-  color: #303133;
-  font-weight: 600;
+  font-size: var(--font-size-label);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
   padding: 2px 0;
 }
 
-/* 响应式：窄屏 KPI 换行 */
-@media (max-width: 1100px) {
+/* 响应式：KPI 卡片按断点换行（1200+ 四列 / 768-1199 两列 / <768 单列） */
+@media (max-width: 1199px) {
   .ov-kpi-row {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .ov-kpi-row {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 </style>

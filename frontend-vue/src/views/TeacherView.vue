@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="page-header">
-      <h2 class="page-title">课程管理</h2>
-      <p class="page-desc">管理课程、课程文档、知识图谱与教学监测</p>
-    </div>
+    <PageHeader title="课程管理" desc="管理课程、课程文档、知识图谱与教学监测" />
 
     <el-tabs v-model="activeTab" @tab-change="onTabChange">
       <!-- ===================== Tab 0：课程列表 ===================== -->
@@ -37,17 +34,17 @@
 
               <div class="course-stats">
                 <div class="course-stat">
-                  <el-icon color="#409eff"><Document /></el-icon>
+                  <el-icon color="var(--color-primary)"><Document /></el-icon>
                   <span class="stat-num">{{ c.document_count ?? 0 }}</span>
                   <span class="stat-label">文档</span>
                 </div>
                 <div class="course-stat">
-                  <el-icon color="#e6a23c"><DataAnalysis /></el-icon>
+                  <el-icon color="var(--color-warning)"><DataAnalysis /></el-icon>
                   <span class="stat-num">{{ c.node_count ?? 0 }}</span>
                   <span class="stat-label">知识点</span>
                 </div>
                 <div class="course-stat">
-                  <el-icon color="#67c23a"><Connection /></el-icon>
+                  <el-icon color="var(--color-success)"><Connection /></el-icon>
                   <span class="stat-num">{{ c.edge_count ?? 0 }}</span>
                   <span class="stat-label">关系</span>
                 </div>
@@ -132,10 +129,10 @@
           <template #header>
             <div class="doc-toolbar">
               <span class="panel-header">文档列表（{{ documents.length }}）</span>
-              <el-button :icon="Refresh" circle size="small" @click="loadDocuments" />
+              <el-button :icon="Refresh" circle size="small" aria-label="刷新文档列表" @click="loadDocuments" />
             </div>
           </template>
-          <el-table :data="documents" v-loading="documentsLoading">
+          <el-table :data="documents" v-loading="documentsLoading" class="doc-table">
             <el-table-column prop="file_name" label="文件名" min-width="180" show-overflow-tooltip />
             <el-table-column prop="file_type" label="类型" width="80" align="center" />
             <el-table-column label="大小" width="100" align="center">
@@ -158,7 +155,7 @@
             </el-table-column>
             <el-table-column label="操作" width="300" fixed="right">
               <template #default="{ row }">
-                <el-button size="small" type="primary" plain :icon="View" @click="viewDocumentGraph(row)">查看图谱</el-button>
+                <el-button size="small" type="primary" :icon="View" @click="viewDocumentGraph(row)">查看图谱</el-button>
                 <el-button size="small" type="warning" plain :icon="EditPen" @click="editDocumentGraph(row)">编辑</el-button>
                 <el-button size="small" type="success" plain :icon="UserFilled" @click="monitorDocument(row)">监测</el-button>
                 <el-button size="small" type="danger" plain :icon="Delete" @click="deleteDocument(row)">删除</el-button>
@@ -232,7 +229,7 @@
 
         <!-- 三栏：知识点列表 | 图谱 | 详情面板 -->
         <el-row :gutter="12" class="workspace">
-          <el-col :span="5">
+          <el-col :xs="24" :sm="5">
             <el-card class="panel-card">
               <template #header>
                 <div class="panel-header">知识点列表（{{ filteredEditNodes.length }}）</div>
@@ -271,7 +268,7 @@
             </el-card>
           </el-col>
 
-          <el-col :span="13">
+          <el-col :xs="24" :sm="13">
             <el-card class="panel-card graph-panel">
               <GraphCanvas
                 ref="editGraphRef"
@@ -284,7 +281,7 @@
             </el-card>
           </el-col>
 
-          <el-col :span="6">
+          <el-col :xs="24" :sm="6">
             <el-card class="panel-card">
               <template #header>
                 <div class="panel-header">知识点详情</div>
@@ -648,6 +645,7 @@ import {
 } from '@element-plus/icons-vue'
 import { api } from '../api'
 import { useAppStore } from '../stores/app'
+import PageHeader from '../components/PageHeader.vue'
 import GraphCanvas from '../components/GraphCanvas.vue'
 import NodeDetailDrawer from '../components/NodeDetailDrawer.vue'
 import { edgeTypeLabel, nodeTypeLabel, nodeColor } from '../utils/graphStyle'
@@ -1418,18 +1416,6 @@ function extractStatusText(s) {
 </script>
 
 <style scoped>
-.page-header {
-  margin-bottom: 8px;
-}
-.page-title {
-  margin: 0 0 4px;
-  color: #303133;
-}
-.page-desc {
-  margin: 0 0 12px;
-  color: #909399;
-  font-size: 13px;
-}
 .toolbar {
   display: flex;
   align-items: center;
@@ -1437,8 +1423,8 @@ function extractStatusText(s) {
   flex-wrap: wrap;
 }
 .stats-text {
-  color: #909399;
-  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-label);
 }
 .graph-card {
   height: 620px;
@@ -1452,30 +1438,36 @@ function extractStatusText(s) {
 .context-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 8px 12px;
-  background: #fafbfc;
-  border: 1px solid #f0f2f5;
-  border-radius: 8px;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
 }
 .context-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 
 /* ===== 文档列表 / 上传 ===== */
 .upload-card {
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 .upload-result-alert {
-  margin-top: 12px;
+  margin-top: var(--space-3);
 }
 .doc-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.doc-table :deep(.el-table__header th) {
+  background: var(--color-bg-soft);
+  color: var(--color-text-regular);
+  font-weight: var(--font-weight-semibold);
 }
 
 .result-header {
@@ -1513,8 +1505,8 @@ function extractStatusText(s) {
   padding: 12px;
 }
 .panel-header {
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-body);
 }
 .panel-scroll {
   flex: 1;
@@ -1602,7 +1594,9 @@ function extractStatusText(s) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
 }
 .course-grid-wrap {
   min-height: 200px;
@@ -1610,17 +1604,17 @@ function extractStatusText(s) {
 .course-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 16px;
+  gap: var(--space-4);
 }
 .course-card {
-  background: #fff;
-  border: 1px solid var(--border-light);
-  border-radius: 10px;
-  padding: 16px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .course-card:hover {
@@ -1631,12 +1625,12 @@ function extractStatusText(s) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .course-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: #303133;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1644,8 +1638,8 @@ function extractStatusText(s) {
   min-width: 0;
 }
 .course-desc {
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
   line-height: 1.5;
   min-height: 36px;
   display: -webkit-box;
@@ -1655,47 +1649,47 @@ function extractStatusText(s) {
 }
 .course-stats {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .course-stat {
   flex: 1;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px;
-  border-radius: 8px;
-  background: #fafbfc;
-  border: 1px solid #f0f2f5;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border-light);
 }
 .stat-num {
   font-size: 16px;
-  font-weight: 700;
-  color: #303133;
-  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-number);
 }
 .stat-label {
   font-size: 11px;
-  color: #909399;
+  color: var(--color-text-secondary);
 }
 .course-card-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
-  border-top: 1px solid #f0f2f5;
+  border-top: 1px solid var(--color-border-light);
   padding-top: 10px;
 }
 .course-updated {
-  font-size: 12px;
-  color: #c0c4cc;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-1);
 }
 .course-actions {
   display: flex;
-  gap: 4px;
+  gap: var(--space-1);
 }
 
 /* ===== 教学监测 ===== */
@@ -1794,5 +1788,12 @@ function extractStatusText(s) {
 }
 .drawer-actions {
   margin-top: 16px;
+}
+
+/* ===== 响应式：三栏工作区窄屏堆叠 ===== */
+@media (max-width: 768px) {
+  .workspace :deep(.el-col) {
+    margin-bottom: var(--space-3);
+  }
 }
 </style>

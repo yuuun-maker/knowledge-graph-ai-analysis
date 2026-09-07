@@ -2,9 +2,9 @@
   <div class="graph-wrap">
     <div ref="containerRef" class="graph-container"></div>
 
-    <!-- 筛选 / 聚焦控制（左上） -->
+    <!-- 筛选 / 聚焦控制（右上，轻量悬浮工具条） -->
     <div class="graph-controls">
-      <el-popover trigger="click" width="236" placement="bottom-start">
+      <el-popover trigger="click" width="236" placement="bottom-end">
         <template #reference>
           <el-button size="small" :icon="Filter">筛选</el-button>
         </template>
@@ -43,23 +43,34 @@
       </el-button>
     </div>
 
-    <!-- 图例（右上，统一说明节点类型/状态/关系类型） -->
-    <div class="graph-legend">
-      <div class="legend-title">图例</div>
-      <div class="legend-section">知识点类型</div>
-      <span v-for="(t, key) in NODE_TYPES" :key="key" class="legend-item">
-        <i class="legend-dot" :style="{ background: t.color }"></i>{{ t.label }}
-      </span>
-      <div class="legend-section">节点状态</div>
-      <span class="legend-item"><i class="legend-shape legend-mastered">✓</i>已掌握</span>
-      <span class="legend-item"><i class="legend-shape legend-diamond"></i>当前学习</span>
-      <span class="legend-item"><i class="legend-shape legend-star">★</i>推荐学习</span>
-      <span class="legend-item"><i class="legend-shape legend-ring-dark"></i>路径高亮</span>
-      <span class="legend-item"><i class="legend-shape legend-halo-dark"></i>聚焦节点</span>
-      <div class="legend-section">关系类型</div>
-      <span v-for="(label, key) in EDGE_TYPE_LABELS" :key="key" class="legend-item">
-        <i class="legend-line" :style="{ background: EDGE_TYPE_COLORS[key] }"></i>{{ label }}
-      </span>
+    <!-- 图例（左上，可折叠，默认紧凑；展开后展示与真实节点一致的形状） -->
+    <div class="graph-legend" :class="{ expanded: !legendCollapsed }">
+      <button
+        type="button"
+        class="legend-header"
+        :aria-expanded="!legendCollapsed"
+        :aria-label="legendCollapsed ? '展开图例' : '收起图例'"
+        @click="toggleLegend"
+      >
+        <span class="legend-title">图例</span>
+        <el-icon class="legend-toggle"><ArrowDown /></el-icon>
+      </button>
+      <div v-show="!legendCollapsed" class="legend-body">
+        <div class="legend-section">知识点类型</div>
+        <span v-for="(t, key) in NODE_TYPES" :key="key" class="legend-item">
+          <i class="legend-dot" :style="{ background: t.color }"></i>{{ t.label }}
+        </span>
+        <div class="legend-section">节点状态</div>
+        <span class="legend-item"><i class="legend-shape legend-mastered">✓</i>已掌握</span>
+        <span class="legend-item"><i class="legend-shape legend-diamond"></i>当前学习</span>
+        <span class="legend-item"><i class="legend-shape legend-star">★</i>推荐学习</span>
+        <span class="legend-item"><i class="legend-shape legend-ring-dark"></i>路径高亮</span>
+        <span class="legend-item"><i class="legend-shape legend-halo-dark"></i>聚焦节点</span>
+        <div class="legend-section">关系类型</div>
+        <span v-for="(label, key) in EDGE_TYPE_LABELS" :key="key" class="legend-item">
+          <i class="legend-line" :style="{ background: EDGE_TYPE_COLORS[key] }"></i>{{ label }}
+        </span>
+      </div>
     </div>
 
     <!-- 空状态（无数据 / 加载失败） -->
@@ -77,14 +88,19 @@
       class="graph-empty"
     />
     <!-- 加载状态 -->
-    <div v-if="loading" class="graph-loading" v-loading="true"></div>
+    <div v-if="loading" class="graph-loading">
+      <div class="graph-loading-card">
+        <el-icon class="is-loading graph-loading-spinner" :size="26"><Loading /></el-icon>
+        <span class="graph-loading-text">图谱加载中…</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
 import { Graph } from '@antv/g6'
-import { Filter } from '@element-plus/icons-vue'
+import { Filter, ArrowDown, Loading } from '@element-plus/icons-vue'
 import { api } from '../api'
 import {
   NODE_TYPES,
@@ -136,6 +152,14 @@ let resizeTimer = null
 
 // 节点状态 / 强调统一使用中性深色（--text-primary），避免与知识点类型色（蓝/红/橙/绿）重合
 const STATE_STROKE = '#303133'
+
+// ---------------------------------------------------------------
+// UI 外壳状态（与 G6 渲染/数据无关，仅图例折叠展示）
+// ---------------------------------------------------------------
+const legendCollapsed = ref(true)
+function toggleLegend() {
+  legendCollapsed.value = !legendCollapsed.value
+}
 
 // ---------------------------------------------------------------
 // P6 交互状态
@@ -746,15 +770,20 @@ function centerOnSearch() {
   inset: 0;
 }
 
-/* 筛选 / 聚焦控制（左上） */
+/* 筛选 / 聚焦控制（右上，轻量悬浮工具条：白底半透明 + 轻描边 + 小圆角 + 微弱阴影） */
 .graph-controls {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: var(--space-3);
+  right: var(--space-3);
   z-index: 10;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
 }
 .filter-panel {
   display: flex;
@@ -763,7 +792,7 @@ function centerOnSearch() {
 }
 .filter-group-title {
   font-size: 12px;
-  color: #909399;
+  color: var(--color-text-secondary);
   margin-top: 6px;
 }
 .filter-group-title:first-child {
@@ -774,31 +803,65 @@ function centerOnSearch() {
   text-align: right;
 }
 
-/* 图例（右上） */
+/* 图例（左上，可折叠，默认紧凑） */
 .graph-legend {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: var(--space-3);
+  left: var(--space-3);
   z-index: 10;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #e4e7ed;
-  border-radius: 6px;
-  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  gap: 4px;
   font-size: 12px;
-  color: #606266;
+  color: var(--color-text-regular);
   max-width: 180px;
+  overflow: hidden;
+}
+.legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+.legend-header:hover {
+  background: var(--color-bg-hover);
 }
 .legend-title {
   font-weight: 600;
-  color: #303133;
+  color: var(--color-text-primary);
+  font-size: 12px;
+}
+.legend-toggle {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  transition: transform 0.2s ease;
+}
+.graph-legend.expanded .legend-toggle {
+  transform: rotate(180deg);
+}
+.legend-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 var(--space-3) var(--space-3);
 }
 .legend-section {
-  margin-top: 6px;
+  margin-top: var(--space-2);
   font-size: 11px;
-  color: #909399;
+  color: var(--color-text-secondary);
+}
+.legend-section:first-child {
+  margin-top: 0;
 }
 .legend-item {
   display: flex;
@@ -821,11 +884,11 @@ function centerOnSearch() {
   flex-shrink: 0;
   font-size: 10px;
   line-height: 1;
-  color: #303133;
+  color: var(--color-text-primary);
 }
 /* 已掌握：绿底白勾徽标（小型状态图标，非节点着色） */
 .legend-mastered {
-  background: #67c23a;
+  background: var(--color-success);
   color: #fff;
   border-radius: 50%;
   font-size: 9px;
@@ -834,27 +897,27 @@ function centerOnSearch() {
 .legend-diamond {
   width: 8px;
   height: 8px;
-  border: 2px solid #303133;
+  border: 2px solid var(--color-text-primary);
   background: #fff;
   transform: rotate(45deg);
 }
 /* 推荐学习：星形（形状为主信号） */
 .legend-star {
   background: transparent;
-  color: #303133;
+  color: var(--color-text-primary);
   font-size: 13px;
 }
 /* 路径高亮：中性深色粗描边圆环 */
 .legend-ring-dark {
   width: 8px;
   height: 8px;
-  border: 3px solid #303133;
+  border: 3px solid var(--color-text-primary);
   border-radius: 50%;
   background: transparent;
 }
 /* 聚焦：中性深色光晕圆点 */
 .legend-halo-dark {
-  background: #303133;
+  background: var(--color-text-primary);
   border-radius: 50%;
   box-shadow: 0 0 0 3px rgba(48, 49, 51, 0.22);
 }
@@ -875,5 +938,37 @@ function centerOnSearch() {
   justify-content: center;
   z-index: 5;
   pointer-events: none;
+}
+
+/* 空状态：居中浮层卡片（显示条件 v-if 不变，仅视觉） */
+.graph-empty :deep(.el-empty) {
+  padding: var(--space-6) var(--space-8);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hover);
+}
+.graph-empty :deep(.el-empty__description) {
+  color: var(--color-text-secondary);
+}
+
+/* 加载状态：居中浮层卡片（转圈 + 文案，显示条件 v-if 不变） */
+.graph-loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hover);
+}
+.graph-loading-spinner {
+  color: var(--color-primary);
+}
+.graph-loading-text {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
 }
 </style>

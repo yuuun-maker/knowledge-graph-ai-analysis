@@ -1,10 +1,7 @@
 <template>
   <div class="dashboard">
     <!-- 页头 -->
-    <div class="page-header">
-      <h2 class="page-title">数据总览</h2>
-      <p class="page-desc">课程知识图谱与系统资源概况</p>
-    </div>
+    <PageHeader title="数据总览" desc="课程知识图谱与系统资源概况" />
 
     <!-- 第一层：核心统计卡（原有 7 张 KPI，全部保留） -->
     <div class="stats-row">
@@ -82,6 +79,7 @@ import {
   Collection, Document, User, UserFilled, Upload, Notebook,
 } from '@element-plus/icons-vue'
 import { api } from '../api'
+import PageHeader from '../components/PageHeader.vue'
 
 const router = useRouter()
 
@@ -329,47 +327,34 @@ onBeforeUnmount(() => {
 .dashboard {
   min-height: 100%;
 }
-.page-header {
-  margin-bottom: 16px;
-}
-.page-title {
-  margin: 0 0 4px;
-  color: #1a1f36;
-  font-size: 20px;
-  font-weight: 700;
-}
-.page-desc {
-  margin: 0;
-  color: #909399;
-  font-size: 13px;
-}
 
 /* ===== 统计卡 ===== */
 .stats-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 14px;
-  margin-bottom: 18px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 .stat-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 16px 14px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-light);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-3);
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-left: 3px solid #409eff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  gap: var(--space-3);
+  box-shadow: var(--shadow-card);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .stat-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-hover);
 }
 .stat-icon-box {
   width: 44px;
   height: 44px;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,20 +364,20 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 .stat-value {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: var(--font-size-number);
+  font-weight: var(--font-weight-bold);
   line-height: 1.1;
-  font-family: 'DIN Alternate', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-family-number);
 }
 .stat-label {
-  font-size: 12px;
-  color: #909399;
-  margin-top: 4px;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
 }
 
 /* ===== 图表卡片 ===== */
 .chart-row {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
 }
 /* 行内两列等高：el-col 转 flex 容器，卡片 flex:1 撑满列高，保证快速入口底边与关系结构底边对齐 */
 .chart-row :deep(.el-col) {
@@ -403,21 +388,22 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 .chart-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 18px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-card);
 }
 .chart-title {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #303133;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f0f2f5;
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border-light);
 }
 .chart-body {
   width: 100%;
@@ -428,29 +414,29 @@ onBeforeUnmount(() => {
 .quick-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .quick-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 8px;
-  border: 1px solid #f0f2f5;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, transform 0.2s;
 }
 .quick-item:hover {
-  background: #f5f9ff;
-  border-color: #d9ecff;
+  background: var(--color-bg-hover);
+  border-color: var(--el-color-primary-light-8);
   transform: translateX(2px);
 }
 .quick-icon {
   width: 36px;
   height: 36px;
-  border-radius: 8px;
-  background: #ecf5ff;
-  color: #409eff;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -461,17 +447,17 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 .quick-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #303133;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
 }
 .quick-desc {
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
   margin-top: 2px;
 }
 .quick-arrow {
-  color: #c0c4cc;
+  color: var(--color-text-muted);
 }
 
 /* 响应式：小屏幕时统计卡片换行 */

@@ -66,6 +66,33 @@
       <el-tab-pane name="documents">
         <template #label><span class="tab-label"><el-icon><FolderOpened /></el-icon>课程文档</span></template>
 
+        <!-- 未选择课程：页内引导选择（不再弹窗强制跳回课程列表） -->
+        <el-card v-if="!currentCourseId" class="page-card">
+          <el-empty description="请先选择要管理文档的课程">
+            <div class="doc-course-pick">
+              <el-select
+                v-model="currentCourseId"
+                placeholder="选择课程"
+                filterable
+                clearable
+                style="width: 260px"
+                @change="syncDocumentsRoute"
+              >
+                <el-option
+                  v-for="c in store.courses"
+                  :key="c.course_id"
+                  :label="c.course_name"
+                  :value="String(c.course_id)"
+                />
+              </el-select>
+              <el-button :icon="Notebook" @click="goCourses">前往课程管理</el-button>
+              <el-button type="primary" :icon="Plus" @click="openCreateCourse">新建课程</el-button>
+            </div>
+            <p v-if="!store.courses.length" class="doc-course-pick-tip">暂无课程，可先点击「新建课程」创建</p>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
         <div class="context-bar">
           <el-button text :icon="Back" @click="backToCourses">返回课程列表</el-button>
           <el-divider direction="vertical" />
@@ -73,6 +100,22 @@
           <el-tag v-if="currentCourse?.course_code" size="small" type="info">
             {{ currentCourse.course_code }}
           </el-tag>
+          <el-select
+            v-model="currentCourseId"
+            class="course-switcher"
+            size="small"
+            filterable
+            clearable
+            placeholder="切换课程"
+            @change="syncDocumentsRoute"
+          >
+            <el-option
+              v-for="c in store.courses"
+              :key="c.course_id"
+              :label="c.course_name"
+              :value="String(c.course_id)"
+            />
+          </el-select>
         </div>
 
         <!-- 上传入口（上传到当前课程，不再自动建课） -->
@@ -166,12 +209,30 @@
             </template>
           </el-table>
         </el-card>
+        </template>
       </el-tab-pane>
 
       <!-- ===================== Tab 2：文档图谱预览 ===================== -->
       <el-tab-pane name="preview">
         <template #label><span class="tab-label"><el-icon><View /></el-icon>图谱预览</span></template>
 
+        <!-- 未选择课程/文档：页内引导选择（不再弹窗强制跳回） -->
+        <el-card v-if="!currentCourseId || !currentDocumentId" class="page-card">
+          <el-empty description="请先选择要预览图谱的课程和文档">
+            <div class="doc-course-pick">
+              <el-select v-model="currentCourseId" placeholder="选择课程" filterable clearable style="width: 220px" @change="onContextCourseChange">
+                <el-option v-for="c in store.courses" :key="c.course_id" :label="c.course_name" :value="String(c.course_id)" />
+              </el-select>
+              <el-select v-model="currentDocumentId" placeholder="选择文档" filterable clearable style="width: 240px" :disabled="!currentCourseId" @change="onContextDocChange">
+                <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
+              </el-select>
+              <el-button :icon="Notebook" @click="goCourses">前往课程管理</el-button>
+            </div>
+            <p v-if="currentCourseId && !documents.length" class="doc-course-pick-tip">该课程暂无文档，请先到「课程文档」上传</p>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
         <div class="context-bar">
           <el-button text :icon="Back" @click="backToDocuments">返回文档列表</el-button>
           <el-divider direction="vertical" />
@@ -205,12 +266,30 @@
             @loaded="(s) => (previewStats = s)"
           />
         </el-card>
+        </template>
       </el-tab-pane>
 
       <!-- ===================== Tab 3：编辑图谱（三栏审核） ===================== -->
       <el-tab-pane name="edit">
         <template #label><span class="tab-label"><el-icon><EditPen /></el-icon>编辑图谱</span></template>
 
+        <!-- 未选择课程/文档：页内引导选择（不再弹窗强制跳回） -->
+        <el-card v-if="!currentCourseId || !currentDocumentId" class="page-card">
+          <el-empty description="请先选择要编辑图谱的课程和文档">
+            <div class="doc-course-pick">
+              <el-select v-model="currentCourseId" placeholder="选择课程" filterable clearable style="width: 220px" @change="onContextCourseChange">
+                <el-option v-for="c in store.courses" :key="c.course_id" :label="c.course_name" :value="String(c.course_id)" />
+              </el-select>
+              <el-select v-model="currentDocumentId" placeholder="选择文档" filterable clearable style="width: 240px" :disabled="!currentCourseId" @change="onContextDocChange">
+                <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
+              </el-select>
+              <el-button :icon="Notebook" @click="goCourses">前往课程管理</el-button>
+            </div>
+            <p v-if="currentCourseId && !documents.length" class="doc-course-pick-tip">该课程暂无文档，请先到「课程文档」上传</p>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
         <div class="context-bar">
           <el-button text :icon="Back" @click="backToDocuments">返回文档列表</el-button>
           <el-divider direction="vertical" />
@@ -348,17 +427,31 @@
             </el-card>
           </el-col>
         </el-row>
+        </template>
       </el-tab-pane>
 
       <!-- ===================== Tab 4：教学监测 ===================== -->
       <el-tab-pane name="monitor">
         <template #label><span class="tab-label"><el-icon><UserFilled /></el-icon>教学监测</span></template>
 
+        <!-- 未选择课程：页内引导选择（不再弹窗强制跳回） -->
+        <el-card v-if="!currentCourseId" class="page-card">
+          <el-empty description="请先选择要查看教学监测的课程">
+            <div class="doc-course-pick">
+              <el-select v-model="currentCourseId" placeholder="选择课程" filterable clearable style="width: 260px" @change="onContextCourseChange">
+                <el-option v-for="c in store.courses" :key="c.course_id" :label="c.course_name" :value="String(c.course_id)" />
+              </el-select>
+              <el-button :icon="Notebook" @click="goCourses">前往课程管理</el-button>
+            </div>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
         <div class="context-bar">
           <el-button text :icon="Back" @click="backToDocuments">返回文档列表</el-button>
           <el-divider direction="vertical" />
           <span class="context-title">{{ currentCourseName }}</span>
-          <el-tag size="small" type="info">{{ currentDocumentName || '文档' }}</el-tag>
+          <el-tag v-if="currentDocumentName" size="small" type="info">{{ currentDocumentName }}</el-tag>
         </div>
 
         <!-- 第一层：班级学习情况（真实学生数据） -->
@@ -480,6 +573,7 @@
             layout="total, sizes, prev, pager, next"
           />
         </el-card>
+        </template>
       </el-tab-pane>
     </el-tabs>
 
@@ -533,7 +627,7 @@
         <el-empty v-else description="暂无推荐" :image-size="60" />
 
         <div class="drawer-actions">
-          <el-button type="primary" @click="goMonitorGraph">查看知识图谱</el-button>
+          <el-button type="primary" :disabled="!currentDocumentId" @click="goMonitorGraph">查看知识图谱</el-button>
         </div>
       </template>
     </el-drawer>
@@ -1035,9 +1129,13 @@ async function submitCreateCourse() {
   }
   createCourseLoading.value = true
   try {
-    await store.createCourse(name, { description: createCourseForm.value.description.trim() })
+    const created = await store.createCourse(name, { description: createCourseForm.value.description.trim() })
     createCourseVisible.value = false
     ElMessage.success(`课程「${name}」创建成功`)
+    // 在文档页空状态新建课程后，直接进入该课程的文档管理，省去一次手动选课
+    if (activeTab.value === 'documents' && created?.course_id != null) {
+      router.replace({ path: '/teacher', query: { tab: 'documents', course_id: String(created.course_id) } })
+    }
   } catch (e) {
     ElMessage.error(`创建失败：${e.message}`)
   } finally {
@@ -1288,6 +1386,50 @@ function monitorDocument(doc) {
   })
 }
 
+// 文档页内选择/切换/清空课程：同步路由，由路由守卫统一落地上下文并触发文档加载
+function syncDocumentsRoute(id) {
+  router
+    .replace({
+      path: '/teacher',
+      query: { tab: 'documents', course_id: id ? String(id) : undefined },
+    })
+    .catch(() => {})
+}
+
+// 图谱预览/编辑/监测页内选择课程：清空已选文档并重置各页内部状态，避免残留上一个上下文的选中项
+function onContextCourseChange(id) {
+  currentDocumentId.value = ''
+  drawerVisible.value = false
+  drawerNode.value = null
+  selectedNode.value = null
+  prereqs.value = []
+  prereqLoaded.value = false
+  router
+    .replace({
+      path: '/teacher',
+      query: { tab: activeTab.value, course_id: id || undefined },
+    })
+    .catch(() => {})
+  // 监测数据是课程级：选好课程即可加载；图谱类页面等选好文档后由组件挂载时自加载
+  if (activeTab.value === 'monitor' && id) loadMonitorData()
+}
+
+// 图谱预览/编辑页内选择文档：重置内部状态并同步路由；编辑页需主动拉取知识点列表
+function onContextDocChange(id) {
+  drawerVisible.value = false
+  drawerNode.value = null
+  selectedNode.value = null
+  prereqs.value = []
+  prereqLoaded.value = false
+  router
+    .replace({
+      path: '/teacher',
+      query: { tab: activeTab.value, course_id: currentCourseId.value || undefined, document_id: id || undefined },
+    })
+    .catch(() => {})
+  if (activeTab.value === 'edit' && id) loadEditNodes()
+}
+
 // 用户直接点击 Tab 头：同步路由（缺失参数的守卫统一由 route watcher 处理）
 function onTabChange(name) {
   if (name === 'courses') {
@@ -1325,25 +1467,12 @@ watch(
       return
     }
     if (['preview', 'edit', 'monitor'].includes(tab)) {
-      if (!cid) {
-        ElMessage.warning('请先选择课程')
-        router.replace({ path: '/teacher', query: { tab: 'courses' } })
-        return
-      }
-      if (!did) {
-        ElMessage.warning('请先选择一个文档')
-        router.replace({ path: '/teacher', query: { tab: 'documents', course_id: String(cid) } })
-        return
-      }
-      currentCourseId.value = String(cid)
-      currentDocumentId.value = String(did)
+      // 缺少课程/文档时停留在当前页，由页内级联选择器引导，不再弹窗强制跳回
+      currentCourseId.value = cid ? String(cid) : ''
+      currentDocumentId.value = did ? String(did) : ''
     } else if (tab === 'documents') {
-      if (!cid) {
-        ElMessage.warning('请先选择课程')
-        router.replace({ path: '/teacher', query: { tab: 'courses' } })
-        return
-      }
-      currentCourseId.value = String(cid)
+      // 未指定课程时停留在文档页，由页内课程选择器引导，不再弹窗强制跳回课程列表
+      currentCourseId.value = cid ? String(cid) : ''
       currentDocumentId.value = ''
     } else {
       currentCourseId.value = ''
@@ -1788,6 +1917,24 @@ function extractStatusText(s) {
 }
 .drawer-actions {
   margin-top: 16px;
+}
+
+/* ===== 文档页课程选择引导 ===== */
+.doc-course-pick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.doc-course-pick-tip {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #909399;
+}
+.course-switcher {
+  margin-left: auto;
+  width: 200px;
 }
 
 /* ===== 响应式：三栏工作区窄屏堆叠 ===== */

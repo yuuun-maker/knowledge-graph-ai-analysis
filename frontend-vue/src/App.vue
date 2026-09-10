@@ -1,6 +1,7 @@
 <template>
-  <!-- 登录页为独立整页，不套侧边栏布局 -->
-  <router-view v-if="$route.name === 'login'" />
+  <!-- 登录页 / 文档阅读器为独立整页，不套侧边栏布局：
+       阅读器需要 100vh 独占屏幕，套在主框架里会被 header 与内边距挤掉可视高度 -->
+  <router-view v-if="isStandalone" />
 
   <el-container v-else class="app-layout">
     <!-- 深色侧边栏（可折叠） -->
@@ -54,6 +55,10 @@
           </el-menu-item>
         </template>
         <template v-else>
+          <el-menu-item index="/student?tab=documents">
+            <el-icon><Document /></el-icon>
+            <template #title>课程文档</template>
+          </el-menu-item>
           <el-menu-item index="/student?tab=browse">
             <el-icon><Compass /></el-icon>
             <template #title>图谱浏览</template>
@@ -122,6 +127,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   Upload, Compass, DataAnalysis, Search, EditPen, ChatDotRound, Guide, Fold, Expand, Notebook, StarFilled, DataLine,
+  Document,
 } from '@element-plus/icons-vue'
 import { useAppStore } from './stores/app'
 import BackendStatusCard from './components/BackendStatusCard.vue'
@@ -132,10 +138,15 @@ const route = useRoute()
 
 const collapsed = ref(window.innerWidth < 768)
 
+// 独立整页路由（不套主框架）
+const STANDALONE_ROUTES = ['login', 'reader']
+const isStandalone = computed(() => STANDALONE_ROUTES.includes(route.name))
+
 // Tab 子页面中文名（面包屑 + 侧边栏 active 一致）
 // 注：courses 为课程管理默认 Tab，面包屑主级已是「课程管理」，故不再重复显示为第三级
 const TAB_LABELS = {
   overview: '学习总览',
+  documents: '课程文档',
   documents: '课程文档',
   preview: '图谱预览',
   edit: '编辑图谱',

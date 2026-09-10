@@ -54,7 +54,12 @@ request.interceptors.response.use(
     } else if (err.message) {
       message = err.message
     }
-    return Promise.reject(new Error(message))
+    // 附带 HTTP 状态码：二进制响应（responseType: 'arraybuffer'，如文档在线阅读）
+    // 的响应体不是 JSON，上面的 detail/message 提取拿不到内容，调用方需要靠状态码区分
+    // 「无权限(403)」「文件已移除(404)」等情况。仅新增属性，不改变既有 message 语义。
+    const wrapped = new Error(message)
+    wrapped.status = err.response?.status
+    return Promise.reject(wrapped)
   }
 )
 

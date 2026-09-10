@@ -196,9 +196,11 @@
             <el-table-column label="创建时间" width="150">
               <template #default="{ row }">{{ fmtTime(row.created_at) }}</template>
             </el-table-column>
-            <el-table-column label="操作" width="300" fixed="right">
+            <el-table-column label="操作" width="392" fixed="right">
               <template #default="{ row }">
-                <el-button size="small" type="primary" :icon="View" @click="viewDocumentGraph(row)">查看图谱</el-button>
+                <el-button size="small" type="primary" :icon="Reading" @click="readDocument(row)">在线阅读</el-button>
+                <el-button size="small" :icon="Download" plain @click="downloadDocument(row)">下载</el-button>
+                <el-button size="small" type="primary" plain :icon="View" @click="viewDocumentGraph(row)">查看图谱</el-button>
                 <el-button size="small" type="warning" plain :icon="EditPen" @click="editDocumentGraph(row)">编辑</el-button>
                 <el-button size="small" type="success" plain :icon="UserFilled" @click="monitorDocument(row)">监测</el-button>
                 <el-button size="small" type="danger" plain :icon="Delete" @click="deleteDocument(row)">删除</el-button>
@@ -736,8 +738,10 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   UploadFilled, Upload, View, EditPen, Refresh, FullScreen, Plus, Connection, ArrowRight, Search, SuccessFilled,
   Notebook, Document, Delete, DataAnalysis, Clock, User, UserFilled, Back, Files, FolderOpened,
+  Reading, Download,
 } from '@element-plus/icons-vue'
 import { api } from '../api'
+import { fetchDocumentBuffer } from '../utils/documentContent'
 import { useAppStore } from '../stores/app'
 import PageHeader from '../components/PageHeader.vue'
 import GraphCanvas from '../components/GraphCanvas.vue'
@@ -1372,6 +1376,30 @@ function viewDocumentGraph(doc) {
     path: '/teacher',
     query: { tab: 'preview', course_id: String(doc.course_id), document_id: String(doc.doc_id) },
   })
+}
+/** 在线阅读：进入独立的文档阅读器整页（from=teacher 决定返回时回到课程管理） */
+function readDocument(doc) {
+  router.push({
+    name: 'reader',
+    params: { docId: String(doc.doc_id) },
+    query: { course_id: String(doc.course_id), from: 'teacher' },
+  })
+}
+/** 下载原文件：内容接口需要 JWT，地址栏直达会 401，因此取回字节后用 Blob 触发下载 */
+async function downloadDocument(doc) {
+  try {
+    const buffer = await fetchDocumentBuffer(doc.doc_id)
+    const url = URL.createObjectURL(new Blob([buffer]))
+    const a = document.createElement('a')
+    a.href = url
+    a.download = doc.file_name || `document-${doc.doc_id}`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 10000)
+  } catch (e) {
+    ElMessage.error(`下载失败：${e.message}`)
+  }
 }
 function editDocumentGraph(doc) {
   router.push({

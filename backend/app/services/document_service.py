@@ -6,7 +6,7 @@
 import os
 import hashlib
 
-from ..core.config import settings
+from ..core.config import BASE_DIR, settings
 from ..core.database import db
 from ..core.sql_database import sql_db
 from .document_parser import DocumentParser
@@ -15,6 +15,33 @@ from .kg_manager import KnowledgeGraphManager
 
 # 扩展名 -> 文档类型（对齐规划文档表格 10 的 file_type ENUM）
 EXT_TO_FILE_TYPE = {".pdf": "PDF", ".txt": "TXT", ".docx": "DOCX", ".md": "MD"}
+
+# 文档类型 -> HTTP Content-Type（供在线阅读接口使用；不声明 charset：
+# TXT/MD 的真实编码由前端读取字节后自行探测，避免后端声明一个可能错误的具体编码）
+FILE_TYPE_TO_MEDIA_TYPE = {
+    "PDF": "application/pdf",
+    "TXT": "text/plain",
+    "MD": "text/markdown",
+    "DOCX": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+}
+
+
+def _media_type_for(file_type: str) -> str:
+    """文件类型 -> Content-Type；未知类型退化为二进制流"""
+    return FILE_TYPE_TO_MEDIA_TYPE.get(file_type, "application/octet-stream")
+
+
+def _resolve_stored_path(path: str) -> str:
+    """把 t_document.file_path 解析为可用的绝对路径（只读场景，不写回数据库）。
+
+    历史行存在两种形态：绝对路径，以及相对启动目录的路径（如 ./data/uploads/5/x.pdf）。
+    后者只有从 backend/ 启动时才成立。这里在按原样找不到文件时，再相对 backend/
+    根目录解析一次，使旧数据在任何启动目录下都能在线阅读；仍找不到则交由调用方报错。
+    """
+    if os.path.exists(path):
+        return path
+    candidate = os.path.normpath(os.path.join(str(BASE_DIR), path))
+    return candidate if os.path.exists(candidate) else path
 
 
 def _clean_filename(filename: str) -> str:
@@ -188,6 +215,40 @@ class DocumentService:
             return {"ok": False, "code": 4003, "message": "无权限：仅该文档所属课程的教师可查看"}
         return {"ok": True, "code": 0, "message": "success",
                 "data": _doc_payload(doc)}
+
+    @staticmethod
+    def get_document_content(doc_id: int, user_id: int, role: str = "student") -> dict:
+        """在线阅读所需的文件定位信息（只读，不修改任何现有流程）。
+
+        权限规则与 list_documents 完全一致（单一事实来源）：
+        - 教师：仅本人所授课程的文档
+        - 学生：项目当前没有选课/班级体系，沿用「学生可见全部课程」的既有规则
+          （要收紧为「仅已选课程」时，只需改这一处）
+
+        返回 data 为 {path, file_name, file_type, media_type}，
+        仅在后端内部使用真实路径，接口层不会把它返回给客户端。
+        """
+        doc = sql_db.get_document(doc_id)
+        if doc is None:
+            return {"ok": False, "code": 2002, "message": f"文档不存在: doc_id={doc_id}"}
+        course = sql_db.get_course(doc["course_id"])
+        if course is None:
+            return {"ok": False, "code": 2001,
+                    "message": f"课程不存在: course_id={doc['course_id']}"}
+        if role == "teacher" and course["teacher_id"] != user_id:
+            return {"ok": False, "code": 4003, "message": "无权限：仅该课程所属教师可阅读本文档"}
+
+        path = _resolve_stored_path(doc["file_path"]) if doc.get("file_path") else None
+        if not path or not os.path.exists(path):
+            return {"ok": False, "code": 2003, "message": "文档文件不存在或已被移除，无法在线阅读"}
+
+        return {"ok": True, "code": 0, "message": "success", "data": {
+            "path": path,
+            "file_name": doc["file_name"],
+            "file_type": doc["file_type"],
+            "file_size": doc["file_size"],
+            "media_type": _media_type_for(doc["file_type"]),
+        }}
 
     @staticmethod
     def delete_document(doc_id: int, teacher_id: int) -> dict:

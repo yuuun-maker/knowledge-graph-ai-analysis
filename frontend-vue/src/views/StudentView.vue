@@ -14,9 +14,17 @@
         </template>
         <span v-else class="ctx-empty"><el-icon><Compass /></el-icon>请选择课程和学习资料</span>
       </div>
-      <el-button type="primary" plain @click="openSelector">
-        {{ currentCourseId && currentDocumentId ? '切换课程/文档' : '选择课程/文档' }}
-      </el-button>
+      <div class="ctx-actions">
+        <el-button
+          v-if="currentCourseId && currentDocumentId"
+          type="primary"
+          :icon="Reading"
+          @click="readCurrentDocument"
+        >在线阅读</el-button>
+        <el-button type="primary" plain @click="openSelector">
+          {{ currentCourseId && currentDocumentId ? '切换课程/文档' : '选择课程/文档' }}
+        </el-button>
+      </div>
     </el-card>
 
     <el-tabs v-model="activeTab" @tab-change="onTabChange">
@@ -191,6 +199,76 @@
             </div>
           </el-card>
         </template>
+      </el-tab-pane>
+
+      <!-- ===================== Tab：课程文档（在线阅读入口） ===================== -->
+      <el-tab-pane name="documents">
+        <template #label><span class="tab-label"><el-icon><Document /></el-icon>课程文档</span></template>
+
+        <el-card class="page-card">
+          <div class="sd-head">
+            <div class="sd-head-left">
+              <span class="sd-title">课程文档</span>
+              <span v-if="currentCourseName" class="sd-course">{{ currentCourseName }}</span>
+            </div>
+            <div class="sd-head-right">
+              <el-input
+                v-model="docFilter"
+                placeholder="搜索文档名"
+                clearable
+                size="small"
+                style="width: 180px"
+              />
+              <el-button :icon="Refresh" circle size="small" title="刷新" @click="loadCourseDocuments" />
+            </div>
+          </div>
+        </el-card>
+
+        <el-empty
+          v-if="!currentCourseId"
+          description="请先选择课程，查看该课程的文档"
+          :image-size="90"
+        >
+          <el-button type="primary" @click="openSelector">选择课程</el-button>
+        </el-empty>
+
+        <el-card v-else v-loading="docLoading" class="page-card">
+          <el-empty
+            v-if="!docLoading && !filteredDocuments.length"
+            :description="docFilter ? '没有匹配的文档' : '该课程暂无文档'"
+            :image-size="80"
+          />
+          <ul v-else class="sd-list">
+            <li v-for="d in filteredDocuments" :key="d.doc_id" class="sd-item">
+              <div class="sd-item-main">
+                <div class="sd-item-top">
+                  <span class="sd-item-name" :title="d.file_name">{{ d.file_name }}</span>
+                  <span class="sd-badge">{{ d.file_type }}</span>
+                  <span v-if="docProgress[d.doc_id]?.percent > 1" class="sd-badge is-progress">
+                    已读 {{ docProgress[d.doc_id].percent }}%
+                  </span>
+                  <span v-if="docProgress[d.doc_id]?.percent >= 99" class="sd-badge is-done">已读完</span>
+                </div>
+                <div class="sd-item-meta">
+                  {{ fmtDocSize(d.file_size) }} · {{ d.entity_count || 0 }} 个知识点 ·
+                  {{ d.relation_count || 0 }} 条关系
+                  <template v-if="docProgress[d.doc_id]?.page > 1">
+                    · 上次读到第 {{ docProgress[d.doc_id].page }} 页
+                  </template>
+                </div>
+                <div v-if="docProgress[d.doc_id]?.percent > 1" class="sd-item-bar">
+                  <div class="sd-item-bar-fill" :style="{ width: docProgress[d.doc_id].percent + '%' }" />
+                </div>
+              </div>
+              <div class="sd-item-actions">
+                <el-button type="primary" :icon="Reading" @click="readDocument(d)">
+                  {{ docProgress[d.doc_id]?.percent > 1 ? '继续阅读' : '在线阅读' }}
+                </el-button>
+                <el-button :icon="Download" plain @click="downloadDocument(d)">下载</el-button>
+              </div>
+            </li>
+          </ul>
+        </el-card>
       </el-tab-pane>
 
       <!-- ===================== Tab 1：图谱浏览 ===================== -->
@@ -686,7 +764,9 @@
 import { ref, nextTick, watch, computed, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Refresh, Compass, ChatDotRound, Guide, Aim, Search, Document, Opportunity, MagicStick, ArrowDown, CircleCheckFilled, Right, Collection, WarningFilled, Star, StarFilled, DataAnalysis, Histogram, Odometer, Checked } from '@element-plus/icons-vue'
+import { Refresh, Compass, ChatDotRound, Guide, Aim, Search, Document, Opportunity, MagicStick, ArrowDown, CircleCheckFilled, Right, Collection, WarningFilled, Star, StarFilled, DataAnalysis, Histogram, Odometer, Checked, Reading, Download } from '@element-plus/icons-vue'
+import { fetchDocumentBuffer } from '../utils/documentContent'
+import { getReadingProgress } from '../utils/readingProgress'
 import { api } from '../api'
 import PageHeader from '../components/PageHeader.vue'
 import GraphCanvas from '../components/GraphCanvas.vue'
@@ -721,6 +801,8 @@ const currentDocumentName = computed(() => {
 
 // 需要学习上下文的学习 Tab（overview 无需强制上下文）
 const LEARNING_TABS = ['browse', 'qa', 'path', 'favorites']
+// 只需要课程、不需要选定文档的 Tab（课程文档列表本身用于挑文档）
+const COURSE_ONLY_TABS = ['documents']
 const activeTab = ref(route.query.tab || 'overview')
 
 // 课程 → 文档选择器
@@ -762,9 +844,33 @@ function ensureContext() {
   return false
 }
 
+// 「课程文档」只要求选了课程：没选时同样不猜测，回退到学习总览并提示
+function ensureCourseOnly() {
+  if (currentCourseId.value) return true
+  const cid = route.query.course_id
+  if (cid) {
+    store.setLearningContext({ courseId: cid, documentId: route.query.document_id || null })
+    store.fetchDocuments(cid).catch(() => {})
+    return !!currentCourseId.value
+  }
+  return false
+}
+
 // 进入指定 Tab（学习 Tab 缺上下文时不猜测，回退到选择态并提示）
 function enterTab(tab) {
   const target = tab || 'overview'
+  if (COURSE_ONLY_TABS.includes(target)) {
+    if (!ensureCourseOnly()) {
+      activeTab.value = 'overview'
+      router.replace({ path: '/student', query: { tab: 'overview' } })
+      ElMessage.warning('请先选择课程')
+      selectorVisible.value = true
+      return
+    }
+    activeTab.value = target
+    loadCourseDocuments()
+    return
+  }
   if (LEARNING_TABS.includes(target) && !ensureContext()) {
     activeTab.value = 'overview'
     router.replace({ path: '/student', query: { tab: 'overview' } })
@@ -793,6 +899,85 @@ onMounted(() => {
   enterTab(route.query.tab || 'overview')
   if (currentCourseId.value) store.fetchDocuments(currentCourseId.value).catch(() => {})
 })
+
+// ===================== 课程文档（在线阅读入口） =====================
+const docFilter = ref('')
+const docLoading = ref(false)
+// 阅读进度存在浏览器本地（见 utils/readingProgress.js），仅用于列表上的续读提示
+const docProgress = reactive({})
+
+const filteredDocuments = computed(() => {
+  const list = store.learningContext.documentList || []
+  const q = docFilter.value.trim().toLowerCase()
+  return q ? list.filter((d) => String(d.file_name).toLowerCase().includes(q)) : list
+})
+
+function fmtDocSize(bytes) {
+  if (!bytes) return '—'
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`
+}
+
+/** 本地阅读进度只用于列表上的「继续阅读」提示，不参与任何业务判断 */
+function syncDocProgress(list) {
+  Object.keys(docProgress).forEach((k) => delete docProgress[k])
+  ;(list || []).forEach((d) => {
+    const saved = getReadingProgress(d.doc_id)
+    if (saved) docProgress[d.doc_id] = saved
+  })
+}
+
+// 文档列表变化（切换课程 / 首次加载）时同步一次进度
+watch(() => store.learningContext.documentList, syncDocProgress, { immediate: true })
+
+async function loadCourseDocuments() {
+  const cid = currentCourseId.value
+  if (!cid) return
+  docLoading.value = true
+  try {
+    await store.fetchDocuments(cid) // 列表写入 store，进度由上面的 watcher 同步
+  } catch (e) {
+    ElMessage.warning(`文档列表加载失败：${e.message}`)
+  } finally {
+    docLoading.value = false
+  }
+}
+
+function readDocument(doc) {
+  router.push({
+    name: 'reader',
+    params: { docId: String(doc.doc_id) },
+    query: { course_id: String(doc.course_id ?? currentCourseId.value), from: 'student' },
+  })
+}
+
+/** 下载原文件：内容接口需要 JWT，取回字节后用 Blob 触发下载 */
+async function downloadDocument(doc) {
+  try {
+    const buffer = await fetchDocumentBuffer(doc.doc_id)
+    const url = URL.createObjectURL(new Blob([buffer]))
+    const a = document.createElement('a')
+    a.href = url
+    a.download = doc.file_name || `document-${doc.doc_id}`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 10000)
+  } catch (e) {
+    ElMessage.error(`下载失败：${e.message}`)
+  }
+}
+
+/** 当前上下文里直接开始阅读（上下文条按钮） */
+function readCurrentDocument() {
+  if (!currentCourseId.value || !currentDocumentId.value) return
+  router.push({
+    name: 'reader',
+    params: { docId: String(currentDocumentId.value) },
+    query: { course_id: String(currentCourseId.value), from: 'student' },
+  })
+}
 
 // ===================== 图谱浏览 =====================
 const browseGraphRef = ref(null)
@@ -2466,6 +2651,130 @@ function overviewAsk(q) {
   gap: 6px;
   color: var(--color-text-secondary);
   font-size: var(--font-size-body);
+}
+.ctx-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* ===== 课程文档（在线阅读入口） ===== */
+.sd-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.sd-head-left {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.sd-title {
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+.sd-course {
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sd-head-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.sd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sd-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+.sd-item:last-child {
+  border-bottom: none;
+}
+.sd-item-main {
+  flex: 1;
+  min-width: 0;
+}
+.sd-item-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.sd-item-name {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sd-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  line-height: 16px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+.sd-badge.is-progress {
+  background: #fdf6ec;
+  color: var(--color-warning);
+}
+.sd-badge.is-done {
+  background: #f0f9eb;
+  color: var(--color-success);
+}
+.sd-item-meta {
+  margin-top: 3px;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+.sd-item-bar {
+  margin-top: 7px;
+  height: 4px;
+  max-width: 320px;
+  border-radius: 2px;
+  background: var(--color-border-light);
+  overflow: hidden;
+}
+.sd-item-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+.sd-item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .sd-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+  .sd-item-actions {
+    justify-content: flex-end;
+  }
 }
 .qa-side-course {
   font-size: var(--font-size-label);

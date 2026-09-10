@@ -4,8 +4,12 @@
 Phase 5 改造：
 - 上传不再自动建课：POST /upload 必须传 course_id（上传到已有课程）
 - 新增文档列表 / 详情 / 删除三个端点，均做「文档 → 课程 → 教师归属」权限校验
+
+在线阅读改造（新增，不改动上述任何已有端点）：
+- GET /{doc_id}/content 返回文档原始字节流，供前端 PDF/TXT/DOCX 阅读器使用
 """
 from fastapi import APIRouter, UploadFile, File, Form, Depends, Query
+from fastapi.responses import FileResponse, JSONResponse
 
 from ..core.response import success, error
 from ..core.dependencies import get_current_user, require_teacher
@@ -61,6 +65,39 @@ async def get_document(doc_id: int, current_user: dict = Depends(require_teacher
     """文档详情（仅该文档所属课程的教师）"""
     result = DocumentService.get_document_detail(doc_id, current_user["user_id"])
     return success(result["data"]) if result["ok"] else error(result["code"], result["message"])
+
+
+# 业务错误码 -> HTTP 状态码（在线阅读是二进制流接口，客户端需要靠状态码区分
+# 「没权限」「文件没了」和「内容本身损坏」，不能一律 200）
+_CONTENT_ERROR_STATUS = {2001: 404, 2002: 404, 2003: 404, 4003: 403}
+
+
+@router.get("/{doc_id}/content", response_class=FileResponse)
+async def get_document_content(doc_id: int, current_user: dict = Depends(get_current_user)):
+    """在线阅读：返回文档原始字节流（PDF/TXT/MD/DOCX）。
+
+    - 权限与文档列表口径一致（教师仅本人课程；学生沿用当前「可见全部课程」规则）
+    - Content-Type 由文档类型决定；Content-Disposition 为 inline，仅暴露文件名，不含服务器路径
+    - 支持 Range 请求（由 FileResponse 处理），PDF 阅读器可分段加载
+    - 只读接口，不影响上传 / 解析 / 抽取 / 删除等既有行为
+    """
+    result = DocumentService.get_document_content(
+        doc_id, current_user["user_id"], current_user.get("role", "student"),
+    )
+    if not result["ok"]:
+        return JSONResponse(
+            status_code=_CONTENT_ERROR_STATUS.get(result["code"], 400),
+            content=error(result["code"], result["message"]),
+        )
+    info = result["data"]
+    # filename + content_disposition_type="inline" 由 Starlette 生成
+    # `inline; filename*=utf-8''...`（仅文件名，不含服务器路径）
+    return FileResponse(
+        path=info["path"],
+        media_type=info["media_type"],
+        filename=info["file_name"],
+        content_disposition_type="inline",
+    )
 
 
 @router.delete("/{doc_id}")

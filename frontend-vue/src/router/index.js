@@ -32,6 +32,14 @@ const router = createRouter({
     },
     { path: '/teacher', name: 'teacher', component: TeacherView, meta: { title: '课程管理' } },
     { path: '/student', name: 'student', component: StudentView, meta: { title: '学习空间' } },
+    {
+      // 文档在线阅读器：独立整页（不走主框架布局），需要高度占满屏幕
+      // query: course_id（用于文档信息与知识点）、from（teacher/student，决定「返回」去向）
+      path: '/reader/:docId',
+      name: 'reader',
+      component: () => import('../views/DocumentReaderView.vue'),
+      meta: { title: '文档阅读' },
+    },
   ],
 })
 

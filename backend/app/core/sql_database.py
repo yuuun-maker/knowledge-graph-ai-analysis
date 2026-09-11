@@ -28,6 +28,11 @@ DOC_EXTRACT_STATUS = ("PENDING", "EXTRACTING", "COMPLETED", "FAILED")
 RECORD_STATUS = ("MASTERED", "LEARNING", "RECOMMENDED")
 RECORD_SOURCE = ("MANUAL", "SYSTEM")
 
+# 题库枚举（Scope A：仅三型客观题，全部可自动判分）
+QUESTION_TYPES = ("SINGLE", "MULTI", "JUDGE")
+QUESTION_SOURCE = ("MANUAL", "AI", "IMPORT")
+ANSWER_GRADE_SOURCE = ("AUTO", "LLM", "TEACHER")
+
 # 默认教师账号初始密码（仅用于演示/初始开发；生产环境应删除默认账号或改为环境变量注入）
 DEFAULT_TEACHER_PASSWORD = "admin123"
 
@@ -152,6 +157,74 @@ _SCHEMA_SQL = [
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_fav_user_course ON t_student_favorite(user_id, course_id);",
+
+    # 4.2.7 题目表（题库唯一事实来源；kp_id 为逻辑外键 → Neo4j KnowledgePoint）
+    # options / answer 用 JSON 文本存储：题型差异大（单选/多选/判断），拆表会产生大量空列；
+    # 与 t_kp_embedding.embedding 存 JSON 同一先例，迁 MySQL 时 TEXT/JSON 均可，业务代码零改动。
+    """
+    CREATE TABLE IF NOT EXISTS t_question (
+        question_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+        course_id    INTEGER NOT NULL,
+        document_id  INTEGER,
+        kp_id        TEXT,
+        q_type       TEXT NOT NULL CHECK (q_type IN ('SINGLE', 'MULTI', 'JUDGE')),
+        stem         TEXT NOT NULL,
+        options      TEXT,
+        answer       TEXT NOT NULL,
+        analysis     TEXT,
+        difficulty   INTEGER NOT NULL DEFAULT 3 CHECK (difficulty BETWEEN 1 AND 5),
+        source       TEXT NOT NULL DEFAULT 'MANUAL' CHECK (source IN ('MANUAL', 'AI', 'IMPORT')),
+        created_by   INTEGER NOT NULL,
+        is_active    INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
+        created_at   TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        updated_at   TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        FOREIGN KEY (course_id) REFERENCES t_course(course_id),
+        FOREIGN KEY (created_by) REFERENCES t_user(user_id)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_q_course_doc ON t_question(course_id, document_id);",
+    "CREATE INDEX IF NOT EXISTS idx_q_kp ON t_question(kp_id);",
+    "CREATE INDEX IF NOT EXISTS idx_q_type ON t_question(course_id, q_type);",
+
+    # 4.2.8 学生答题记录（错题本 + 正确率统计的唯一来源）
+    # 追加式（不建 UNIQUE）：同一题可多次作答，错题本取「每题最近一次」；
+    # 这样既能统计正确率趋势，又不会覆盖历史作答。
+    """
+    CREATE TABLE IF NOT EXISTS t_answer_record (
+        record_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id      INTEGER NOT NULL,
+        course_id    INTEGER NOT NULL,
+        document_id  INTEGER,
+        question_id  INTEGER NOT NULL,
+        user_answer  TEXT,
+        is_correct   INTEGER NOT NULL DEFAULT 0 CHECK (is_correct IN (0, 1)),
+        score        REAL NOT NULL DEFAULT 0,
+        grade_source TEXT NOT NULL DEFAULT 'AUTO' CHECK (grade_source IN ('AUTO', 'LLM', 'TEACHER')),
+        answered_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        FOREIGN KEY (user_id) REFERENCES t_user(user_id),
+        FOREIGN KEY (course_id) REFERENCES t_course(course_id),
+        FOREIGN KEY (question_id) REFERENCES t_question(question_id)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_ans_user_q ON t_answer_record(user_id, question_id);",
+    "CREATE INDEX IF NOT EXISTS idx_ans_user_c ON t_answer_record(user_id, course_id, document_id);",
+
+    # 4.2.9 学生题目收藏（独立于 t_student_favorite 的知识点收藏：
+    # 后者 kp_id NOT NULL 且语义为「知识点书签」，混用会污染两侧统计口径）
+    """
+    CREATE TABLE IF NOT EXISTS t_question_favorite (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id     INTEGER NOT NULL,
+        course_id   INTEGER NOT NULL,
+        question_id INTEGER NOT NULL,
+        created_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        UNIQUE (user_id, question_id),
+        FOREIGN KEY (user_id) REFERENCES t_user(user_id),
+        FOREIGN KEY (course_id) REFERENCES t_course(course_id),
+        FOREIGN KEY (question_id) REFERENCES t_question(question_id)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_qfav_user_course ON t_question_favorite(user_id, course_id);",
 ]
 
 
@@ -329,16 +402,28 @@ class SQLDatabase:
         self._execute(f"UPDATE t_course SET {', '.join(sets)} WHERE course_id = ?", tuple(params))
 
     def delete_course(self, course_id: int) -> int:
-        """删除课程及其文档、学习记录、收藏、向量（按子表->父表顺序满足外键），返回删除的文档数。
+        """删除课程及其文档、学习记录、收藏、向量、题库（按子表->父表顺序满足外键），返回删除的文档数。
 
         Phase 9（技术债修复）：补充清理 t_kp_embedding——该表无外键、不参与级联，
         历史实现整课删除会残留孤儿向量，故在此显式删除。
+        题库（题目/答题记录/题目收藏）同样无级联，必须在删 t_course 前显式清理，
+        否则会留下指向已删课程的孤儿题目。
         """
         doc_count = self.count_documents_by_course(course_id)
         with self._connect() as conn:
             conn.execute("DELETE FROM t_kp_embedding WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_student_favorite WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_learning_record WHERE course_id = ?", (course_id,))
+            # 题库：先删题目收藏与答题记录（引用 t_question），再删题目本身
+            conn.execute(
+                "DELETE FROM t_question_favorite WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ?)", (course_id,),
+            )
+            conn.execute(
+                "DELETE FROM t_answer_record WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ?)", (course_id,),
+            )
+            conn.execute("DELETE FROM t_question WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_document WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_course WHERE course_id = ?", (course_id,))
             conn.commit()
@@ -586,6 +671,375 @@ class SQLDatabase:
         with self._connect() as conn:
             cur = conn.execute(
                 "DELETE FROM t_student_favorite WHERE course_id = ? AND document_id = ?",
+                (course_id, document_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    # ---------- 题库：题目（题库唯一事实来源） ----------
+
+    @staticmethod
+    def _json_text(value):
+        """把 options/answer 一律序列化为 JSON 文本（None 原样返回）。
+
+        为什么「一律 dumps」而不是「字符串原样返回」：
+        - 单选答案 "A" 这类字符串不是合法 JSON，原样存库后回读 json.loads 会失败；
+        - 判断题答案 "true" 恰好是合法 JSON，原样存库后回读会变成布尔 True；
+        两种题型行为不一致（单选永远判错）。统一 json.dumps 后 _loads 可无损还原：
+        "A" -> '"A"' -> "A"，"true" -> '"true"' -> "true"。
+        """
+        if value is None:
+            return None
+        return json.dumps(value, ensure_ascii=False)
+
+    def create_question(self, course_id: int, document_id, kp_id, q_type: str,
+                        stem: str, options, answer, analysis: str = None,
+                        difficulty: int = 3, created_by: int = None,
+                        source: str = "MANUAL") -> int:
+        """新增题目，返回 question_id（options/answer 自动序列化为 JSON 文本）"""
+        return self._execute(
+            "INSERT INTO t_question "
+            "(course_id, document_id, kp_id, q_type, stem, options, answer, analysis, "
+            " difficulty, source, created_by) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (course_id, document_id, kp_id, q_type, stem,
+             self._json_text(options), self._json_text(answer),
+             analysis, difficulty, source, created_by),
+        )
+
+    def get_question(self, question_id: int) -> dict:
+        return self._query_one("SELECT * FROM t_question WHERE question_id = ?", (question_id,))
+
+    def update_question(self, question_id: int, **fields) -> None:
+        """更新题目字段（白名单，None 跳过表示不修改；options/answer 自动序列化），刷新 updated_at"""
+        allowed = {"document_id", "kp_id", "q_type", "stem", "options", "answer",
+                   "analysis", "difficulty", "source", "is_active"}
+        sets, params = [], []
+        for key, val in fields.items():
+            if key not in allowed or val is None:
+                continue
+            if key in ("options", "answer"):
+                val = self._json_text(val)
+            sets.append(f"{key} = ?")
+            params.append(val)
+        if not sets:
+            return
+        sets.append("updated_at = ?")
+        params.append(_now())
+        params.append(question_id)
+        self._execute(f"UPDATE t_question SET {', '.join(sets)} WHERE question_id = ?", tuple(params))
+
+    def set_question_document(self, question_id: int, document_id) -> int:
+        """把题目挂到指定文档（document_id=None 表示改为「课程通用题」）。
+
+        单独提供该方法是必要的：update_question 对 None 的语义是「不修改」，
+        无法表达「清空 document_id」，而「改为课程通用题」是教师端的真实编辑动作。
+        """
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE t_question SET document_id = ?, updated_at = ? WHERE question_id = ?",
+                (document_id, _now(), question_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def set_question_active(self, question_id: int, is_active: bool) -> int:
+        """启用/停用题目（软删：保留学生答题记录，仅从出题池移除），返回受影响行数"""
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE t_question SET is_active = ?, updated_at = ? WHERE question_id = ?",
+                (1 if is_active else 0, _now(), question_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def delete_question(self, question_id: int) -> int:
+        """物理删除题目及其全部收藏/答题记录（先删子表再删主表，满足外键顺序）"""
+        with self._connect() as conn:
+            conn.execute("DELETE FROM t_question_favorite WHERE question_id = ?", (question_id,))
+            conn.execute("DELETE FROM t_answer_record WHERE question_id = ?", (question_id,))
+            cur = conn.execute("DELETE FROM t_question WHERE question_id = ?", (question_id,))
+            conn.commit()
+            return cur.rowcount
+
+    # ---------- 题库：题目查询（管理列表 / 出题池） ----------
+
+    def list_questions(self, course_id: int, document_id=None, kp_id: str = None,
+                       q_type: str = None, keyword: str = None, is_active=None,
+                       page: int = 1, page_size: int = 10,
+                       include_course_level: bool = True):
+        """分页查询题目（LEFT JOIN 取创建人姓名），返回 (total, rows)。
+
+        作用域规则：传入 document_id 时默认同时包含「该文档题目」与「课程通用题
+        （document_id IS NULL，即题目挂课程不挂具体文档）」；include_course_level=False
+        时退化为精确匹配该文档（用于文档级清理/统计）。
+        """
+        where, params = ["course_id = ?"], [course_id]
+        if document_id is not None:
+            if include_course_level:
+                where.append("(document_id = ? OR document_id IS NULL)")
+            else:
+                where.append("document_id = ?")
+            params.append(document_id)
+        if kp_id:
+            where.append("kp_id = ?")
+            params.append(kp_id)
+        if q_type:
+            where.append("q_type = ?")
+            params.append(q_type)
+        if keyword:
+            where.append("stem LIKE ?")
+            params.append(f"%{keyword}%")
+        if is_active is not None:
+            where.append("is_active = ?")
+            params.append(1 if is_active else 0)
+        where_sql = "WHERE " + " AND ".join(where)
+
+        total = self._query_one(
+            f"SELECT count(*) AS cnt FROM t_question {where_sql}", tuple(params),
+        )["cnt"]
+        rows = self._query(
+            f"""
+            SELECT q.*, COALESCE(u.display_name, u.username, '') AS creator_name
+            FROM t_question q LEFT JOIN t_user u ON q.created_by = u.user_id
+            {where_sql}
+            ORDER BY q.question_id DESC
+            LIMIT ? OFFSET ?
+            """,
+            tuple(params + [page_size, (page - 1) * page_size]),
+        )
+        return total, rows
+
+    def list_practice_questions(self, course_id: int, document_id=None, kp_id: str = None,
+                                q_type: str = None, limit: int = 10,
+                                exclude_ids=None) -> list:
+        """出题查询：仅取启用题目，随机排序；document_id 传入时含「该文档题 + 课程通用题」。"""
+        where, params = ["course_id = ?", "is_active = 1"], [course_id]
+        if document_id is not None:
+            where.append("(document_id = ? OR document_id IS NULL)")
+            params.append(document_id)
+        if kp_id:
+            where.append("kp_id = ?")
+            params.append(kp_id)
+        if q_type:
+            where.append("q_type = ?")
+            params.append(q_type)
+        if exclude_ids:
+            placeholders = ",".join("?" for _ in exclude_ids)
+            where.append(f"question_id NOT IN ({placeholders})")
+            params.extend(list(exclude_ids))
+        params.append(limit)
+        return self._query(
+            f"SELECT * FROM t_question WHERE {' AND '.join(where)} "
+            f"ORDER BY RANDOM() LIMIT ?",
+            tuple(params),
+        )
+
+    def count_questions_by_course(self, course_id: int) -> int:
+        return self._query_one(
+            "SELECT count(*) AS cnt FROM t_question WHERE course_id = ?", (course_id,),
+        )["cnt"]
+
+    def count_questions_by_document(self, course_id: int, document_id) -> int:
+        """该文档精确挂载的题目数（不含课程通用题），供文档删除报告使用"""
+        return self._query_one(
+            "SELECT count(*) AS cnt FROM t_question WHERE course_id = ? AND document_id = ?",
+            (course_id, document_id),
+        )["cnt"]
+
+    def question_answer_stats(self, course_id: int) -> dict:
+        """按题统计作答人次与正确数，返回 {question_id: {"attempts": n, "correct": n}}"""
+        rows = self._query(
+            "SELECT question_id, count(*) AS attempts, sum(is_correct) AS correct "
+            "FROM t_answer_record WHERE course_id = ? GROUP BY question_id",
+            (course_id,),
+        )
+        return {
+            r["question_id"]: {"attempts": r["attempts"], "correct": r["correct"] or 0}
+            for r in rows
+        }
+
+    # ---------- 题库：学生答题记录 ----------
+
+    def add_answer_record(self, user_id: int, course_id: int, document_id, question_id: int,
+                          user_answer, is_correct: bool, score: float = 0,
+                          grade_source: str = "AUTO") -> int:
+        """追加一条答题记录（不覆盖历史，同一题可多次作答）"""
+        return self._execute(
+            "INSERT INTO t_answer_record "
+            "(user_id, course_id, document_id, question_id, user_answer, is_correct, "
+            " score, grade_source, answered_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (user_id, course_id, document_id, question_id, self._json_text(user_answer),
+             1 if is_correct else 0, score, grade_source, _now()),
+        )
+
+    def list_answer_records(self, user_id: int, course_id: int = None, document_id=None,
+                            only_wrong: bool = False) -> list:
+        """查询答题记录（时间倒序）；only_wrong=True 仅返回答错的记录（错题本原始数据）"""
+        where, params = ["user_id = ?"], [user_id]
+        if course_id is not None:
+            where.append("course_id = ?")
+            params.append(course_id)
+        if document_id is not None:
+            where.append("document_id = ?")
+            params.append(document_id)
+        if only_wrong:
+            where.append("is_correct = 0")
+        return self._query(
+            f"SELECT * FROM t_answer_record WHERE {' AND '.join(where)} ORDER BY record_id DESC",
+            tuple(params),
+        )
+
+    def list_answer_records_by_course(self, course_id: int) -> list:
+        """某课程全部答题记录（教师端统计学生练习情况）"""
+        return self._query(
+            "SELECT * FROM t_answer_record WHERE course_id = ? ORDER BY user_id, record_id",
+            (course_id,),
+        )
+
+    def count_answers_by_course(self, course_id: int) -> int:
+        return self._query_one(
+            "SELECT count(*) AS cnt FROM t_answer_record WHERE course_id = ?", (course_id,),
+        )["cnt"]
+
+    def count_answers_by_question(self, question_id: int) -> int:
+        """某题被作答次数（题目是否可物理删除的判据：已作答过则只允许软删）"""
+        return self._query_one(
+            "SELECT count(*) AS cnt FROM t_answer_record WHERE question_id = ?", (question_id,),
+        )["cnt"]
+
+    def count_answers_grouped_by_course(self) -> dict:
+        """按课程统计答题总数，返回 {course_id: count}"""
+        rows = self._query(
+            "SELECT course_id, count(*) AS cnt FROM t_answer_record GROUP BY course_id",
+        )
+        return {r["course_id"]: r["cnt"] for r in rows}
+
+    # ---------- 题库：学生题目收藏（独立于知识点收藏 t_student_favorite） ----------
+
+    def add_question_favorite(self, user_id: int, course_id: int, question_id: int) -> bool:
+        """新增题目收藏（INSERT OR IGNORE 幂等）；返回是否新插入（True=新增，False=已存在）"""
+        with self._connect() as conn:
+            cur = conn.execute(
+                "INSERT OR IGNORE INTO t_question_favorite (user_id, course_id, question_id) "
+                "VALUES (?, ?, ?)",
+                (user_id, course_id, question_id),
+            )
+            conn.commit()
+            return cur.rowcount > 0
+
+    def remove_question_favorite(self, user_id: int, course_id: int, question_id: int) -> int:
+        """取消题目收藏，返回删除条数"""
+        with self._connect() as conn:
+            cur = conn.execute(
+                "DELETE FROM t_question_favorite "
+                "WHERE user_id = ? AND course_id = ? AND question_id = ?",
+                (user_id, course_id, question_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def list_question_favorites(self, user_id: int, course_id: int) -> list:
+        """查询某用户某课程的题目收藏（按收藏时间倒序）"""
+        return self._query(
+            "SELECT question_id, course_id, created_at FROM t_question_favorite "
+            "WHERE user_id = ? AND course_id = ? ORDER BY id DESC",
+            (user_id, course_id),
+        )
+
+    def list_question_favorite_ids(self, user_id: int, course_id: int) -> set:
+        """某用户某课程已收藏的 question_id 集合（出题时回填 is_favorited 标记）"""
+        rows = self._query(
+            "SELECT question_id FROM t_question_favorite WHERE user_id = ? AND course_id = ?",
+            (user_id, course_id),
+        )
+        return {r["question_id"] for r in rows}
+
+    def count_question_favorites_grouped(self, course_id: int) -> dict:
+        """按题统计某课程的收藏数，返回 {question_id: count}（教师端「题目收藏情况」）"""
+        rows = self._query(
+            "SELECT question_id, count(*) AS cnt FROM t_question_favorite "
+            "WHERE course_id = ? GROUP BY question_id",
+            (course_id,),
+        )
+        return {r["question_id"]: r["cnt"] for r in rows}
+
+    def list_question_favorite_users(self, course_id: int, question_id: int = None) -> list:
+        """某课程（或某题）的收藏明细：谁收藏了哪道题，[{user_id, question_id, created_at}]"""
+        if question_id is not None:
+            return self._query(
+                "SELECT user_id, question_id, created_at FROM t_question_favorite "
+                "WHERE course_id = ? AND question_id = ? ORDER BY id DESC",
+                (course_id, question_id),
+            )
+        return self._query(
+            "SELECT user_id, question_id, created_at FROM t_question_favorite "
+            "WHERE course_id = ? ORDER BY id DESC",
+            (course_id,),
+        )
+
+    # ---------- 题库：级联清理（防孤儿数据，顺序敏感：子表 -> 主表） ----------
+
+    def delete_questions_by_course(self, course_id: int) -> int:
+        """删除课程全部题目及其收藏/答题记录，返回删除的题目数（整课删除时调用）"""
+        with self._connect() as conn:
+            count = conn.execute(
+                "SELECT count(*) AS cnt FROM t_question WHERE course_id = ?", (course_id,),
+            ).fetchone()["cnt"]
+            conn.execute(
+                "DELETE FROM t_question_favorite WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ?)", (course_id,),
+            )
+            conn.execute(
+                "DELETE FROM t_answer_record WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ?)", (course_id,),
+            )
+            conn.execute("DELETE FROM t_question WHERE course_id = ?", (course_id,))
+            conn.commit()
+            return count
+
+    def delete_questions_by_document(self, course_id: int, document_id) -> int:
+        """删除某文档精确挂载的题目（课程通用题 document_id IS NULL 刻意保留），返回题目数。
+
+        防御性处理：若题目在「已被作答之后」才被改挂到别的文档，其答题记录的 document_id
+        可能与题目当前 document_id 不一致，故这里先按 question_id 子查询清子表，再删题目，
+        避免触发 t_answer_record / t_question_favorite 的外键约束。
+        """
+        with self._connect() as conn:
+            conn.execute(
+                "DELETE FROM t_question_favorite WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ? AND document_id = ?)",
+                (course_id, document_id),
+            )
+            conn.execute(
+                "DELETE FROM t_answer_record WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ? AND document_id = ?)",
+                (course_id, document_id),
+            )
+            cur = conn.execute(
+                "DELETE FROM t_question WHERE course_id = ? AND document_id = ?",
+                (course_id, document_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def delete_question_favorites_by_document(self, course_id: int, document_id) -> int:
+        """删除某文档题目的收藏记录（须先于题目删除调用），返回条数"""
+        with self._connect() as conn:
+            cur = conn.execute(
+                "DELETE FROM t_question_favorite WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ? AND document_id = ?)",
+                (course_id, document_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def delete_answers_by_document(self, course_id: int, document_id) -> int:
+        """删除某文档的答题记录，返回条数"""
+        with self._connect() as conn:
+            cur = conn.execute(
+                "DELETE FROM t_answer_record WHERE course_id = ? AND document_id = ?",
                 (course_id, document_id),
             )
             conn.commit()

@@ -53,6 +53,10 @@
             <el-icon><Notebook /></el-icon>
             <template #title>课程管理</template>
           </el-menu-item>
+          <el-menu-item index="/teacher?tab=questions">
+            <el-icon><Collection /></el-icon>
+            <template #title>题库管理</template>
+          </el-menu-item>
         </template>
         <template v-else>
           <el-menu-item index="/student?tab=documents">
@@ -74,6 +78,10 @@
           <el-menu-item index="/student?tab=favorites" class="menu-sub">
             <el-icon><StarFilled /></el-icon>
             <template #title>收藏夹</template>
+          </el-menu-item>
+          <el-menu-item index="/student?tab=practice" class="menu-sub">
+            <el-icon><Collection /></el-icon>
+            <template #title>做题练习</template>
           </el-menu-item>
         </template>
       </el-menu>
@@ -127,7 +135,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   Upload, Compass, DataAnalysis, Search, EditPen, ChatDotRound, Guide, Fold, Expand, Notebook, StarFilled, DataLine,
-  Document,
+  Document, Collection,
 } from '@element-plus/icons-vue'
 import { useAppStore } from './stores/app'
 import BackendStatusCard from './components/BackendStatusCard.vue'
@@ -150,10 +158,12 @@ const TAB_LABELS = {
   preview: '图谱预览',
   edit: '编辑图谱',
   monitor: '教学监测',
+  questions: '题库管理',
   browse: '图谱浏览',
   qa: '智能问答',
   path: '学习路径推荐',
   favorites: '收藏夹',
+  practice: '做题练习',
 }
 
 // 侧边栏 active：将 /teacher?tab=upload 等映射为菜单 index，保证 URL / 菜单 / 面包屑三者一致

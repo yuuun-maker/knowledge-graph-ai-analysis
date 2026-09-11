@@ -723,6 +723,234 @@
           </div>
         </el-card>
       </el-tab-pane>
+
+      <!-- ===================== Tab 5：做题练习（Scope A：单选/多选/判断，提交后判定与解析） ===================== -->
+      <el-tab-pane name="practice">
+        <template #label><span class="tab-label"><el-icon><Collection /></el-icon>做题练习</span></template>
+
+        <el-card v-if="!ctxKey" class="page-card">
+          <el-empty description="请先选择课程和学习资料，开始做题练习" :image-size="90">
+            <el-button type="primary" @click="openSelector">选择课程/文档</el-button>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
+          <!-- 练习设置 + 我的练习统计 -->
+          <el-card class="page-card">
+            <div class="chart-title-line"><el-icon><Opportunity /></el-icon> 练习设置</div>
+            <div class="table-toolbar">
+              <el-radio-group v-model="practiceScope">
+                <el-radio value="document">本学习资料</el-radio>
+                <el-radio value="course">整门课程</el-radio>
+              </el-radio-group>
+              <el-select v-model="practiceQType" placeholder="全部题型" clearable style="width: 130px">
+                <el-option label="单选题" value="SINGLE" />
+                <el-option label="多选题" value="MULTI" />
+                <el-option label="判断题" value="JUDGE" />
+              </el-select>
+              <el-select v-model="practiceKpId" placeholder="全部知识点" clearable filterable style="width: 200px">
+                <el-option v-for="n in practiceKpOptions" :key="n.id" :label="n.label" :value="n.id" />
+              </el-select>
+              <el-select v-model="practiceCount" style="width: 110px">
+                <el-option :value="5" label="5 题" />
+                <el-option :value="10" label="10 题" />
+                <el-option :value="20" label="20 题" />
+              </el-select>
+              <el-button type="primary" :icon="Opportunity" :loading="practiceLoading" @click="startPractice">开始练习</el-button>
+              <el-button :icon="MagicStick" @click="practiceByRecommendation">按推荐知识点出题</el-button>
+            </div>
+            <div v-loading="practiceStatsLoading" class="practice-kpis">
+              <div class="practice-kpi">
+                <div class="practice-kpi-value">{{ practiceStats?.answer_count ?? 0 }}</div>
+                <div class="practice-kpi-label">累计作答</div>
+              </div>
+              <div class="practice-kpi">
+                <div class="practice-kpi-value">{{ practiceStats?.correct_rate ?? 0 }}%</div>
+                <div class="practice-kpi-label">正确率</div>
+              </div>
+              <div class="practice-kpi">
+                <div class="practice-kpi-value">{{ practiceStats?.wrong_question_count ?? 0 }}</div>
+                <div class="practice-kpi-label">错题数</div>
+              </div>
+              <div class="practice-kpi">
+                <div class="practice-kpi-value">{{ practiceStats?.favorite_count ?? 0 }}</div>
+                <div class="practice-kpi-label">收藏题目</div>
+              </div>
+            </div>
+          </el-card>
+
+          <el-tabs v-model="practiceSubTab">
+            <!-- 子页 1：答题 -->
+            <el-tab-pane name="doing">
+              <template #label><span class="tab-label"><el-icon><EditPen /></el-icon>练习答题</span></template>
+
+              <el-card class="page-card">
+                <el-empty
+                  v-if="!practiceList.length && !practiceLoading"
+                  description="还没有题目。请在上方设置出题条件后点击「开始练习」"
+                  :image-size="80"
+                />
+
+                <div v-else-if="currentPracticeQuestion" v-loading="practiceLoading" class="practice-card">
+                  <div class="practice-head">
+                    <el-tag size="small" effect="plain">{{ currentPracticeQuestion.q_type_label }}</el-tag>
+                    <el-tag size="small" type="info" effect="plain">难度 {{ '★'.repeat(currentPracticeQuestion.difficulty || 0) }}</el-tag>
+                    <span class="practice-progress">第 {{ practiceIndex + 1 }} / {{ practiceList.length }} 题</span>
+                    <div class="practice-head-actions">
+                      <el-button
+                        size="small"
+                        :icon="isPracticeFavorited(currentPracticeQuestion) ? StarFilled : Star"
+                        @click="togglePracticeFavorite(currentPracticeQuestion)"
+                      >{{ isPracticeFavorited(currentPracticeQuestion) ? '已收藏' : '收藏' }}</el-button>
+                      <el-button size="small" @click="viewPracticeKp(currentPracticeQuestion)">查看知识点</el-button>
+                    </div>
+                  </div>
+
+                  <div class="practice-stem">{{ currentPracticeQuestion.stem }}</div>
+
+                  <!-- 单选 -->
+                  <el-radio-group
+                    v-if="currentPracticeQuestion.q_type === 'SINGLE'"
+                    v-model="practiceAnswers[currentPracticeQuestion.question_id]"
+                    class="practice-options"
+                    :disabled="!!practiceResults[currentPracticeQuestion.question_id]"
+                  >
+                    <el-radio v-for="o in currentPracticeQuestion.options" :key="o.key" :value="o.key" class="practice-option">
+                      {{ o.key }}. {{ o.text }}
+                    </el-radio>
+                  </el-radio-group>
+
+                  <!-- 多选 -->
+                  <el-checkbox-group
+                    v-else-if="currentPracticeQuestion.q_type === 'MULTI'"
+                    v-model="practiceAnswers[currentPracticeQuestion.question_id]"
+                    class="practice-options"
+                    :disabled="!!practiceResults[currentPracticeQuestion.question_id]"
+                  >
+                    <el-checkbox v-for="o in currentPracticeQuestion.options" :key="o.key" :value="o.key" class="practice-option">
+                      {{ o.key }}. {{ o.text }}
+                    </el-checkbox>
+                  </el-checkbox-group>
+
+                  <!-- 判断 -->
+                  <el-radio-group
+                    v-else
+                    v-model="practiceAnswers[currentPracticeQuestion.question_id]"
+                    class="practice-options"
+                    :disabled="!!practiceResults[currentPracticeQuestion.question_id]"
+                  >
+                    <el-radio value="true" class="practice-option">正确</el-radio>
+                    <el-radio value="false" class="practice-option">错误</el-radio>
+                  </el-radio-group>
+
+                  <!-- 判定结果（提交后才下发答案与解析） -->
+                  <div
+                    v-if="practiceResults[currentPracticeQuestion.question_id]"
+                    class="practice-result"
+                    :class="practiceResults[currentPracticeQuestion.question_id].is_correct ? 'ok' : 'bad'"
+                  >
+                    <div class="practice-result-head">
+                      <el-icon>
+                        <component :is="practiceResults[currentPracticeQuestion.question_id].is_correct ? CircleCheckFilled : WarningFilled" />
+                      </el-icon>
+                      {{ practiceResults[currentPracticeQuestion.question_id].is_correct ? '回答正确' : '回答错误' }}
+                      <span class="practice-result-answer">
+                        正确答案：{{ formatAnswer(practiceResults[currentPracticeQuestion.question_id].correct_answer) }}
+                      </span>
+                    </div>
+                    <div v-if="practiceResults[currentPracticeQuestion.question_id].analysis" class="practice-analysis">
+                      解析：{{ practiceResults[currentPracticeQuestion.question_id].analysis }}
+                    </div>
+                  </div>
+
+                  <div class="practice-actions">
+                    <el-button :disabled="practiceIndex === 0" @click="practiceIndex--">上一题</el-button>
+                    <el-button
+                      v-if="!practiceResults[currentPracticeQuestion.question_id]"
+                      type="primary"
+                      :loading="practiceSubmitting"
+                      @click="submitCurrent"
+                    >提交答案</el-button>
+                    <el-button
+                      v-else
+                      type="primary"
+                      :disabled="practiceIndex >= practiceList.length - 1"
+                      @click="practiceIndex++"
+                    >下一题</el-button>
+                    <el-button
+                      v-if="practiceIndex >= practiceList.length - 1 && practiceResults[currentPracticeQuestion.question_id]"
+                      @click="startPractice"
+                    >再练一组</el-button>
+                  </div>
+                </div>
+              </el-card>
+            </el-tab-pane>
+
+            <!-- 子页 2：错题本 -->
+            <el-tab-pane name="wrong">
+              <template #label><span class="tab-label"><el-icon><WarningFilled /></el-icon>错题本</span></template>
+              <el-card class="page-card">
+                <div class="table-toolbar">
+                  <el-button :icon="Refresh" @click="loadWrongBook">刷新</el-button>
+                  <span class="practice-tip">按题去重，取每题最近一次答错记录；答对后不会自动移除，便于复习巩固。</span>
+                </div>
+                <el-table :data="wrongList" v-loading="wrongLoading" row-key="question_id">
+                  <el-table-column prop="stem" label="题目" min-width="240" show-overflow-tooltip />
+                  <el-table-column label="题型" width="90">
+                    <template #default="{ row }"><el-tag size="small" effect="plain">{{ row.q_type_label }}</el-tag></template>
+                  </el-table-column>
+                  <el-table-column label="知识点" width="150">
+                    <template #default="{ row }">
+                      <span v-if="row.kp_name">{{ row.kp_name }}</span>
+                      <span v-else class="cell-empty">—</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="wrong_count" label="错答次数" width="90" />
+                  <el-table-column label="最近错误作答" width="140">
+                    <template #default="{ row }">{{ formatAnswer(row.last_user_answer) }}</template>
+                  </el-table-column>
+                  <el-table-column label="正确答案" width="120">
+                    <template #default="{ row }">{{ formatAnswer(row.correct_answer) }}</template>
+                  </el-table-column>
+                  <el-table-column prop="last_wrong_at" label="最近错误时间" width="150" />
+                  <el-table-column label="操作" width="160" fixed="right">
+                    <template #default="{ row }">
+                      <el-button size="small" type="primary" link @click="redoQuestion(row)">重做</el-button>
+                      <el-button size="small" link @click="viewPracticeKp(row)">知识点</el-button>
+                    </template>
+                  </el-table-column>
+                  <template #empty><el-empty description="还没有错题，继续保持！" :image-size="80" /></template>
+                </el-table>
+              </el-card>
+            </el-tab-pane>
+
+            <!-- 子页 3：我的收藏题目 -->
+            <el-tab-pane name="fav">
+              <template #label><span class="tab-label"><el-icon><StarFilled /></el-icon>收藏题目</span></template>
+              <el-card class="page-card">
+                <div class="table-toolbar">
+                  <el-button :icon="Refresh" @click="loadMyQuestionFavorites">刷新</el-button>
+                  <span class="practice-tip">收藏的题目可随时重做，也可取消收藏。</span>
+                </div>
+                <el-table :data="myQuestionFavs" v-loading="myQuestionFavLoading" row-key="question_id">
+                  <el-table-column prop="stem" label="题目" min-width="280" show-overflow-tooltip />
+                  <el-table-column label="题型" width="90">
+                    <template #default="{ row }"><el-tag size="small" effect="plain">{{ row.q_type_label }}</el-tag></template>
+                  </el-table-column>
+                  <el-table-column prop="favorited_at" label="收藏时间" width="160" />
+                  <el-table-column label="操作" width="180" fixed="right">
+                    <template #default="{ row }">
+                      <el-button size="small" type="primary" link @click="redoQuestion(row)">重做</el-button>
+                      <el-button size="small" type="danger" link @click="togglePracticeFavorite(row)">取消收藏</el-button>
+                    </template>
+                  </el-table-column>
+                  <template #empty><el-empty description="还没有收藏题目" :image-size="80" /></template>
+                </el-table>
+              </el-card>
+            </el-tab-pane>
+          </el-tabs>
+        </template>
+      </el-tab-pane>
     </el-tabs>
 
     <!-- 课程 → 文档选择器（Phase 7） -->
@@ -766,7 +994,7 @@
 import { ref, nextTick, watch, computed, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Refresh, Compass, ChatDotRound, Guide, Aim, Search, Document, Opportunity, MagicStick, ArrowDown, CircleCheckFilled, Right, Collection, WarningFilled, Star, StarFilled, DataAnalysis, Histogram, Odometer, Checked, Reading, Download } from '@element-plus/icons-vue'
+import { Refresh, Compass, ChatDotRound, Guide, Aim, Search, Document, Opportunity, MagicStick, ArrowDown, CircleCheckFilled, Right, Collection, WarningFilled, Star, StarFilled, DataAnalysis, Histogram, Odometer, Checked, Reading, Download, EditPen } from '@element-plus/icons-vue'
 import { fetchDocumentBuffer } from '../utils/documentContent'
 import { getReadingProgress } from '../utils/readingProgress'
 import { api } from '../api'
@@ -803,7 +1031,7 @@ const currentDocumentName = computed(() => {
 })
 
 // 需要学习上下文的学习 Tab（overview 无需强制上下文）
-const LEARNING_TABS = ['browse', 'qa', 'path', 'favorites']
+const LEARNING_TABS = ['browse', 'qa', 'path', 'favorites', 'practice']
 // 只需要课程、不需要选定文档的 Tab（课程文档列表本身用于挑文档）
 const COURSE_ONLY_TABS = ['documents']
 const activeTab = ref(route.query.tab || 'overview')
@@ -882,6 +1110,7 @@ function enterTab(tab) {
     return
   }
   activeTab.value = target
+  if (target === 'practice') loadPracticeTab()
 }
 
 function onTabChange(tab) {
@@ -1453,14 +1682,276 @@ async function loadPathData() {
   }
 }
 
+// ===================== 做题练习（Scope A：单选/多选/判断；出题接口不含答案） =====================
+const practiceSubTab = ref('doing')      // doing=答题 / wrong=错题本 / fav=收藏题目
+const practiceScope = ref('document')    // document=本学习资料 / course=整门课程
+const practiceQType = ref('')
+const practiceCount = ref(10)
+const practiceKpId = ref('')
+const practiceKpOptions = ref([])        // 图谱节点（含 id/label/description），供选知识点与跳转
+const practiceList = ref([])
+const practiceIndex = ref(0)
+const practiceLoading = ref(false)
+const practiceSubmitting = ref(false)
+const practiceStats = ref(null)
+const practiceStatsLoading = ref(false)
+const practiceAnswers = reactive({})     // question_id -> 单选/判断为字符串，多选为数组
+const practiceResults = reactive({})     // question_id -> 提交后的判分结果（含正确答案与解析）
+const practiceFavoriteIds = ref([])      // 我已收藏的 question_id（本课程）
+
+const wrongList = ref([])
+const wrongLoading = ref(false)
+const myQuestionFavs = ref([])
+const myQuestionFavLoading = ref(false)
+
+const currentPracticeQuestion = computed(() => practiceList.value[practiceIndex.value] || null)
+
+/** 答案展示：单选→键；多选→"A、C"；判断→正确/错误 */
+function formatAnswer(answer) {
+  if (answer === null || answer === undefined || answer === '') return '—'
+  if (Array.isArray(answer)) return answer.length ? answer.join('、') : '—'
+  if (answer === true || String(answer) === 'true') return '正确'
+  if (answer === false || String(answer) === 'false') return '错误'
+  return String(answer)
+}
+
+function isPracticeFavorited(q) {
+  return !!q && practiceFavoriteIds.value.includes(q.question_id)
+}
+
+/** 知识点下拉数据：复用文档图谱节点（含描述，便于「查看知识点」直接打开详情抽屉） */
+async function ensurePracticeKpOptions() {
+  if (!currentCourseId.value || !currentDocumentId.value) {
+    practiceKpOptions.value = []
+    return practiceKpOptions.value
+  }
+  if (practiceKpOptions.value.length) return practiceKpOptions.value
+  try {
+    const g = await api.getGraphV1(currentCourseId.value, currentDocumentId.value, { limit: 500 })
+    practiceKpOptions.value = g.nodes || []
+  } catch {
+    practiceKpOptions.value = []
+  }
+  return practiceKpOptions.value
+}
+
+async function loadPracticeStats() {
+  if (!currentCourseId.value) {
+    practiceStats.value = null
+    return
+  }
+  practiceStatsLoading.value = true
+  try {
+    practiceStats.value = await api.getPracticeStats({
+      course_id: currentCourseId.value,
+      document_id: practiceScope.value === 'document' ? currentDocumentId.value : undefined,
+    })
+  } catch {
+    practiceStats.value = null
+  } finally {
+    practiceStatsLoading.value = false
+  }
+}
+
+/** 出题并重置作答/判定状态（学生接口不下发答案，判分只在提交后返回） */
+async function startPractice() {
+  if (!currentCourseId.value) {
+    ElMessage.warning('请先选择课程和学习资料')
+    return
+  }
+  practiceLoading.value = true
+  try {
+    const data = await api.getPracticeQuestions({
+      course_id: currentCourseId.value,
+      document_id: practiceScope.value === 'document' ? currentDocumentId.value : undefined,
+      kp_id: practiceKpId.value || undefined,
+      q_type: practiceQType.value || undefined,
+      count: practiceCount.value,
+    })
+    practiceList.value = data.items || []
+    practiceIndex.value = 0
+    // 清空上一组作答与判定，避免串题（v-model 绑定的是同一对象，必须显式清理）
+    Object.keys(practiceAnswers).forEach((k) => delete practiceAnswers[k])
+    Object.keys(practiceResults).forEach((k) => delete practiceResults[k])
+    practiceList.value.forEach((q) => {
+      practiceAnswers[q.question_id] = q.q_type === 'MULTI' ? [] : ''
+    })
+    practiceFavoriteIds.value = practiceList.value.filter((q) => q.is_favorited).map((q) => q.question_id)
+    practiceSubTab.value = 'doing'
+    if (!practiceList.value.length) {
+      ElMessage.info('该范围内暂无题目，请更换出题范围或联系教师添加题目')
+    }
+  } catch (e) {
+    ElMessage.error(`出题失败：${e.message}`)
+  } finally {
+    practiceLoading.value = false
+  }
+}
+
+/** 按学习路径推荐的知识点出题（推荐 → 练题闭环） */
+async function practiceByRecommendation() {
+  if (!currentCourseId.value || !currentDocumentId.value) {
+    ElMessage.warning('请先选择课程和学习资料')
+    return
+  }
+  try {
+    const nodes = await ensurePracticeKpOptions()
+    const progress = await api.getProgress(currentCourseId.value, currentDocumentId.value)
+    const nameOf = (kpId) => nodes.find((n) => String(n.id) === String(kpId))?.label
+    const mastered = (progress.mastered_kp_ids || []).map(nameOf).filter(Boolean)
+    const recs = await api.recommendNext(mastered, currentCourseId.value, currentDocumentId.value)
+    const first = (recs || [])[0]
+    if (!first || !first.name) {
+      ElMessage.info('暂无可推荐的知识点，请先标记已掌握的知识点或查看学习路径')
+      return
+    }
+    const target = nodes.find((n) => n.label === first.name)
+    practiceKpId.value = target ? target.id : ''
+    if (!target) {
+      ElMessage.warning(`推荐知识点「${first.name}」未在当前图谱中定位，将按其他条件出题`)
+    } else {
+      ElMessage.success(`已按推荐知识点「${first.name}」出题`)
+    }
+    await startPractice()
+  } catch (e) {
+    ElMessage.error(`推荐出题失败：${e.message}`)
+  }
+}
+
+/** 提交当前题：服务端判分 + 落答题记录，返回正确答案与解析后展示 */
+async function submitCurrent() {
+  const q = currentPracticeQuestion.value
+  if (!q) return
+  const answer = practiceAnswers[q.question_id]
+  const empty = answer === undefined || answer === null || answer === '' ||
+    (Array.isArray(answer) && !answer.length)
+  if (empty) {
+    ElMessage.warning('请先作答再提交')
+    return
+  }
+  practiceSubmitting.value = true
+  try {
+    const data = await api.submitAnswer(q.question_id, answer)
+    practiceResults[q.question_id] = data
+    if (data.is_correct) ElMessage.success('回答正确 🎉')
+    else ElMessage.warning('回答错误，看看解析再试')
+    loadPracticeStats()
+  } catch (e) {
+    ElMessage.error(`提交失败：${e.message}`)
+  } finally {
+    practiceSubmitting.value = false
+  }
+}
+
+/** 收藏 / 取消收藏题目（幂等，后端保证不重复插入） */
+async function togglePracticeFavorite(q) {
+  if (!q || !currentCourseId.value) return
+  try {
+    if (isPracticeFavorited(q)) {
+      await api.unfavoriteQuestion(currentCourseId.value, q.question_id)
+      practiceFavoriteIds.value = practiceFavoriteIds.value.filter((id) => id !== q.question_id)
+      myQuestionFavs.value = myQuestionFavs.value.filter((x) => x.question_id !== q.question_id)
+      ElMessage.success('已取消收藏')
+    } else {
+      await api.favoriteQuestion(currentCourseId.value, q.question_id)
+      practiceFavoriteIds.value = [...practiceFavoriteIds.value, q.question_id]
+      ElMessage.success('已收藏题目')
+    }
+    loadPracticeStats()
+  } catch (e) {
+    ElMessage.error(`操作失败：${e.message}`)
+  }
+}
+
+/** 错题本：按题取最近一次答错（含正确答案/解析/知识点名称） */
+async function loadWrongBook() {
+  if (!currentCourseId.value) {
+    wrongList.value = []
+    return
+  }
+  wrongLoading.value = true
+  try {
+    const data = await api.getWrongBook({
+      course_id: currentCourseId.value,
+      document_id: practiceScope.value === 'document' ? currentDocumentId.value : undefined,
+    })
+    wrongList.value = data.items || []
+  } catch (e) {
+    wrongList.value = []
+    ElMessage.warning(`错题本加载失败：${e.message}`)
+  } finally {
+    wrongLoading.value = false
+  }
+}
+
+/** 我收藏的题目（本课程） */
+async function loadMyQuestionFavorites() {
+  if (!currentCourseId.value) {
+    myQuestionFavs.value = []
+    return
+  }
+  myQuestionFavLoading.value = true
+  try {
+    const data = await api.getQuestionFavList(currentCourseId.value)
+    myQuestionFavs.value = data.items || []
+    // 同一课程内「我的收藏」是全量集合，可安全用于覆盖收藏标记
+    practiceFavoriteIds.value = myQuestionFavs.value.map((q) => q.question_id)
+  } catch (e) {
+    myQuestionFavs.value = []
+    ElMessage.warning(`收藏题目加载失败：${e.message}`)
+  } finally {
+    myQuestionFavLoading.value = false
+  }
+}
+
+/** 从错题本 / 收藏题目直接重做：载入单题并切回答题子页 */
+function redoQuestion(q) {
+  if (!q) return
+  practiceList.value = [{ ...q }]
+  practiceIndex.value = 0
+  practiceAnswers[q.question_id] = q.q_type === 'MULTI' ? [] : ''
+  delete practiceResults[q.question_id]
+  practiceSubTab.value = 'doing'
+}
+
+/** 查看该题关联的知识点（切到图谱浏览并打开详情抽屉） */
+function viewPracticeKp(q) {
+  const node = practiceKpOptions.value.find((n) => String(n.id) === String(q?.kp_id))
+  if (!node) {
+    ElMessage.info('该题未关联图谱知识点')
+    return
+  }
+  locateKnowledgePoint(node)
+}
+
+/** 进入练习 Tab / 切换上下文时统一刷新（统计 + 错题本 + 收藏题目 + 知识点下拉） */
+async function loadPracticeTab() {
+  ensurePracticeKpOptions()
+  await Promise.all([loadPracticeStats(), loadWrongBook(), loadMyQuestionFavorites()])
+}
+
+// 子页切换：按需刷新错题本 / 收藏题目
+watch(practiceSubTab, (sub) => {
+  if (sub === 'wrong') loadWrongBook()
+  else if (sub === 'fav') loadMyQuestionFavorites()
+})
+
 // 学习上下文切换：清空文档级学习状态，并加载对应文档作用域的数据
 watch(ctxKey, (key) => {
   currentKnowledgePointId.value = null
   recommendedKnowledgePointIds.value = []
+  // 练习上下文变化即失效：清空作答/判定/题目与知识点下拉
+  practiceList.value = []
+  practiceIndex.value = 0
+  practiceKpId.value = ''
+  practiceKpOptions.value = []
+  Object.keys(practiceAnswers).forEach((k) => delete practiceAnswers[k])
+  Object.keys(practiceResults).forEach((k) => delete practiceResults[k])
   if (key) {
     loadPathData()
     loadFavorites()
     loadFavoritesTab()
+    loadPracticeTab()
   } else {
     pathGraphNodes.value = []
     pathGraphEdges.value = []
@@ -1468,6 +1959,10 @@ watch(ctxKey, (key) => {
     favNodes.value = []
     favLoaded.value = false
     pathDataChecked.value = false
+    practiceStats.value = null
+    wrongList.value = []
+    myQuestionFavs.value = []
+    practiceFavoriteIds.value = []
   }
 })
 
@@ -2795,6 +3290,139 @@ function overviewAsk(q) {
 @media (max-width: 767px) {
   .ov-kpi-row {
     grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+/* ===== 做题练习（学生端题库） ===== */
+.practice-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.practice-kpi {
+  background: var(--bg-page, #f5f7fa);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.practice-kpi-value {
+  font-size: 22px;
+  font-weight: 600;
+}
+.practice-kpi-label {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #909399;
+}
+.chart-title-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.cell-empty {
+  color: #c0c4cc;
+}
+.practice-tip {
+  font-size: 12px;
+  color: #909399;
+}
+.practice-card {
+  padding: 4px 2px;
+}
+.practice-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.practice-progress {
+  color: #909399;
+  font-size: 13px;
+}
+.practice-head-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.practice-stem {
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 600;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+}
+.practice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+/* 选项整行可点，长选项自动换行（避免被 el-radio 默认高度裁切） */
+.practice-option {
+  display: flex;
+  align-items: center;
+  height: auto;
+  padding: 8px 12px;
+  margin-right: 0 !important;
+  border: 1px solid var(--border-light, #ebeef5);
+  border-radius: 8px;
+  white-space: normal;
+  line-height: 1.6;
+}
+.practice-option.is-checked {
+  border-color: #409eff;
+  background: rgba(64, 158, 255, 0.06);
+}
+.practice-result {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border-left: 4px solid #67c23a;
+  background: rgba(103, 194, 58, 0.08);
+}
+.practice-result.bad {
+  border-left-color: #f56c6c;
+  background: rgba(245, 108, 108, 0.08);
+}
+.practice-result-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.practice-result-answer {
+  margin-left: 8px;
+  font-weight: 500;
+  color: #606266;
+}
+.practice-analysis {
+  margin-top: 8px;
+  color: #606266;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.practice-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+@media (max-width: 767px) {
+  .practice-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .practice-head-actions {
+    margin-left: 0;
   }
 }
 </style>

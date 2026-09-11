@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="课程管理" desc="管理课程、课程文档、知识图谱与教学监测" />
+    <PageHeader title="课程管理" desc="管理课程、课程文档、知识图谱、题库与教学监测" />
 
     <el-tabs v-model="activeTab" @tab-change="onTabChange">
       <!-- ===================== Tab 0：课程列表 ===================== -->
@@ -588,6 +588,226 @@
         </el-card>
         </template>
       </el-tab-pane>
+
+      <!-- ===================== Tab 5：题库管理（Scope A：单选/多选/判断，答案仅教师可见） ===================== -->
+      <el-tab-pane name="questions">
+        <template #label><span class="tab-label"><el-icon><Collection /></el-icon>题库管理</span></template>
+
+        <!-- 未选择课程：页内引导选择（与教学监测一致，不弹窗强制跳回） -->
+        <el-card v-if="!currentCourseId" class="page-card">
+          <el-empty description="请先选择要管理题库的课程">
+            <div class="doc-course-pick">
+              <el-select v-model="currentCourseId" placeholder="选择课程" filterable clearable style="width: 260px" @change="onContextCourseChange">
+                <el-option v-for="c in store.courses" :key="c.course_id" :label="c.course_name" :value="String(c.course_id)" />
+              </el-select>
+              <el-button :icon="Notebook" @click="goCourses">前往课程管理</el-button>
+            </div>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
+          <!-- 第一层：题库总览（题量 / 题型分布 / 作答正确率 / 收藏） -->
+          <el-card class="page-card">
+            <div class="chart-title-line">
+              <el-icon><Collection /></el-icon> 题库总览
+              <span class="class-note">（{{ currentCourseName }}）</span>
+            </div>
+            <div v-loading="questionsLoading" class="class-summary">
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.total ?? 0 }}</div>
+                <div class="class-kpi-label">题目总数</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.active_count ?? 0 }}</div>
+                <div class="class-kpi-label">启用中</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.by_type?.SINGLE ?? 0 }}</div>
+                <div class="class-kpi-label">单选题</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.by_type?.MULTI ?? 0 }}</div>
+                <div class="class-kpi-label">多选题</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.by_type?.JUDGE ?? 0 }}</div>
+                <div class="class-kpi-label">判断题</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.answer_count ?? 0 }}</div>
+                <div class="class-kpi-label">累计作答</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.correct_rate ?? 0 }}%</div>
+                <div class="class-kpi-label">平均正确率</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.favorite_total ?? 0 }}</div>
+                <div class="class-kpi-label">被收藏</div>
+              </div>
+            </div>
+          </el-card>
+
+          <!-- 第二层：题目列表 -->
+          <el-card class="page-card">
+            <div class="chart-title-line"><el-icon><Files /></el-icon> 题目列表</div>
+
+            <div class="table-toolbar">
+              <el-select v-model="questionDocFilter" placeholder="全部文档（含课程通用题）" clearable style="width: 210px" @change="loadQuestionsTab">
+                <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
+              </el-select>
+              <el-select v-model="questionFilters.q_type" placeholder="全部题型" clearable style="width: 130px" @change="loadQuestionsTab">
+                <el-option v-for="t in QUESTION_TYPES" :key="t.value" :label="t.label" :value="t.value" />
+              </el-select>
+              <el-select v-model="questionFilters.is_active" placeholder="全部状态" clearable style="width: 130px" @change="loadQuestionsTab">
+                <el-option label="启用中" value="1" />
+                <el-option label="已停用" value="0" />
+              </el-select>
+              <el-input
+                v-model="questionFilters.keyword"
+                placeholder="搜索题干"
+                clearable
+                :prefix-icon="Search"
+                style="width: 190px"
+                @keyup.enter="loadQuestionsTab"
+                @clear="loadQuestionsTab"
+              />
+              <el-button :icon="Refresh" @click="loadQuestionsTab">刷新</el-button>
+              <el-button type="primary" :icon="Plus" @click="openQuestionForm(null)">新增题目</el-button>
+              <el-button :icon="Star" @click="openQuestionFavorites">题目收藏情况</el-button>
+            </div>
+
+            <el-table :data="questionList" v-loading="questionsLoading" row-key="question_id">
+              <el-table-column prop="stem" label="题干" min-width="260" show-overflow-tooltip />
+              <el-table-column label="题型" width="90">
+                <template #default="{ row }">
+                  <el-tag size="small" effect="plain">{{ row.q_type_label || questionTypeLabel(row.q_type) }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="知识点" width="150">
+                <template #default="{ row }">
+                  <span v-if="row.kp_id">{{ kpNameById(row.kp_id) || row.kp_id }}</span>
+                  <span v-else class="cell-empty">课程通用</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="难度" width="90">
+                <template #default="{ row }">{{ '★'.repeat(row.difficulty || 0) || '—' }}</template>
+              </el-table-column>
+              <el-table-column label="作答 / 正确率" width="140">
+                <template #default="{ row }">
+                  <span v-if="row.attempts">{{ row.attempts }} 次 / {{ row.correct_rate }}%</span>
+                  <span v-else class="cell-empty">—</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="favorite_count" label="收藏" width="70" />
+              <el-table-column label="状态" width="90">
+                <template #default="{ row }">
+                  <el-tag size="small" :type="row.is_active ? 'success' : 'info'">{{ row.is_active ? '启用' : '停用' }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="200" fixed="right">
+                <template #default="{ row }">
+                  <el-button size="small" type="primary" link @click="openQuestionForm(row)">编辑</el-button>
+                  <el-button size="small" link @click="toggleQuestionActive(row)">{{ row.is_active ? '停用' : '启用' }}</el-button>
+                  <el-button size="small" type="danger" link @click="removeQuestion(row)">删除</el-button>
+                </template>
+              </el-table-column>
+              <template #empty>
+                <el-empty description="本课程还没有题目，点击「新增题目」开始" :image-size="80" />
+              </template>
+            </el-table>
+
+            <el-pagination
+              v-if="questionTotal > questionPageSize"
+              class="table-pagination"
+              v-model:current-page="questionPage"
+              v-model:page-size="questionPageSize"
+              :page-sizes="[10, 20, 50]"
+              :total="questionTotal"
+              layout="total, sizes, prev, pager, next"
+              @current-change="loadQuestions"
+              @size-change="loadQuestionsTab"
+            />
+          </el-card>
+
+          <!-- 新增 / 编辑题目 -->
+          <el-dialog
+            v-model="questionFormVisible"
+            :title="questionEditingId ? '编辑题目' : '新增题目'"
+            width="720px"
+            :close-on-click-modal="false"
+          >
+            <el-form label-width="96px">
+              <el-form-item label="题型">
+                <el-radio-group v-model="questionForm.q_type" :disabled="!!questionEditingId">
+                  <el-radio v-for="t in QUESTION_TYPES" :key="t.value" :value="t.value">{{ t.label }}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="题干">
+                <el-input v-model="questionForm.stem" type="textarea" :rows="3" maxlength="1000" show-word-limit placeholder="请输入题干" />
+              </el-form-item>
+
+              <template v-if="questionForm.q_type !== 'JUDGE'">
+                <el-form-item v-for="(opt, idx) in questionForm.options" :key="opt.key" :label="`选项 ${opt.key}`">
+                  <div class="opt-row">
+                    <el-input v-model="opt.text" placeholder="选项内容" />
+                    <el-button :icon="Delete" text type="danger" :disabled="questionForm.options.length <= 2" @click="removeQuestionOption(idx)" />
+                  </div>
+                </el-form-item>
+                <el-form-item label=" ">
+                  <el-button :icon="Plus" size="small" :disabled="questionForm.options.length >= 8" @click="addQuestionOption">添加选项</el-button>
+                </el-form-item>
+                <el-form-item label="正确答案">
+                  <el-radio-group v-if="questionForm.q_type === 'SINGLE'" v-model="questionForm.singleAnswer">
+                    <el-radio v-for="o in questionForm.options" :key="o.key" :value="o.key">{{ o.key }}</el-radio>
+                  </el-radio-group>
+                  <el-checkbox-group v-else v-model="questionForm.multiAnswer">
+                    <el-checkbox v-for="o in questionForm.options" :key="o.key" :value="o.key">{{ o.key }}</el-checkbox>
+                  </el-checkbox-group>
+                </el-form-item>
+              </template>
+              <el-form-item v-else label="正确答案">
+                <el-radio-group v-model="questionForm.judgeAnswer">
+                  <el-radio value="true">正确</el-radio>
+                  <el-radio value="false">错误</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item label="解析">
+                <el-input v-model="questionForm.analysis" type="textarea" :rows="2" maxlength="1000" placeholder="可选：答案解析（提交后展示给学生）" />
+              </el-form-item>
+              <el-form-item label="难度">
+                <el-rate v-model="questionForm.difficulty" :max="5" />
+              </el-form-item>
+              <el-form-item label="所属文档">
+                <el-select v-model="questionForm.document_id" placeholder="课程通用题（任意文档练习均可见）" clearable style="width: 100%">
+                  <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="关联知识点">
+                <el-select v-model="questionForm.kp_id" placeholder="可选：关联图谱知识点（用于推荐练题）" clearable filterable style="width: 100%">
+                  <el-option v-for="n in questionKpOptions" :key="n.id" :label="n.label" :value="n.id" />
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <el-button @click="questionFormVisible = false">取消</el-button>
+              <el-button type="primary" :loading="questionFormLoading" @click="submitQuestionForm">保存</el-button>
+            </template>
+          </el-dialog>
+
+          <!-- 题目收藏情况（哪些学生收藏了哪道题） -->
+          <el-dialog v-model="questionFavVisible" title="题目收藏情况" width="660px">
+            <el-table :data="questionFavs" v-loading="questionFavLoading" max-height="420">
+              <el-table-column prop="student_name" label="学生" width="140" />
+              <el-table-column prop="stem" label="题目" min-width="240" show-overflow-tooltip />
+              <el-table-column prop="q_type_label" label="题型" width="90" />
+              <el-table-column prop="created_at" label="收藏时间" width="150" />
+              <template #empty><el-empty description="暂无学生收藏题目" :image-size="70" /></template>
+            </el-table>
+          </el-dialog>
+        </template>
+      </el-tab-pane>
     </el-tabs>
 
     <!-- 预览 Tab 的节点详情抽屉（只读） -->
@@ -742,14 +962,14 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, watch, computed, onMounted, onBeforeUnmount, nextTick, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import * as echarts from 'echarts'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   UploadFilled, Upload, View, EditPen, Refresh, FullScreen, Plus, Connection, ArrowRight, Search, SuccessFilled,
   Notebook, Document, Delete, DataAnalysis, Clock, User, UserFilled, Back, Files, FolderOpened,
-  Reading, Download,
+  Reading, Download, Collection, Star,
 } from '@element-plus/icons-vue'
 import { api } from '../api'
 import { fetchDocumentBuffer } from '../utils/documentContent'
@@ -762,7 +982,7 @@ import { edgeTypeLabel, nodeTypeLabel, nodeColor } from '../utils/graphStyle'
 const store = useAppStore()
 const route = useRoute()
 const router = useRouter()
-const TEACHER_TABS = ['courses', 'documents', 'preview', 'edit', 'monitor']
+const TEACHER_TABS = ['courses', 'documents', 'preview', 'edit', 'monitor', 'questions']
 const activeTab = ref(TEACHER_TABS.includes(route.query.tab) ? route.query.tab : 'courses')
 
 // ===================== 当前上下文：课程 + 文档（教师端不搬 student learningContext） =====================
@@ -1559,8 +1779,12 @@ function onContextCourseChange(id) {
       query: { tab: activeTab.value, course_id: id || undefined },
     })
     .catch(() => {})
-  // 监测数据是课程级：选好课程即可加载；图谱类页面等选好文档后由组件挂载时自加载
+  // 监测数据是课程级：选好课程即可加载；题库为课程级；图谱类页面等选好文档后由组件挂载时自加载
   if (activeTab.value === 'monitor' && id) loadMonitorData()
+  if (activeTab.value === 'questions' && id) {
+    questionDocFilter.value = ''
+    loadQuestionsTab()
+  }
 }
 
 // 图谱预览/编辑页内选择文档：重置内部状态并同步路由；编辑页需主动拉取知识点列表
@@ -1638,6 +1862,255 @@ watch(currentCourseId, (cid) => {
   else documents.value = []
 })
 
+// ===================== 题库管理（Scope A：单选/多选/判断；答案与解析仅教师可见） =====================
+const QUESTION_TYPES = [
+  { value: 'SINGLE', label: '单选题' },
+  { value: 'MULTI', label: '多选题' },
+  { value: 'JUDGE', label: '判断题' },
+]
+const questionTypeLabel = (t) => QUESTION_TYPES.find((x) => x.value === t)?.label || t || ''
+
+const questionList = ref([])
+const questionsLoading = ref(false)
+const questionTotal = ref(0)
+const questionPage = ref(1)
+const questionPageSize = ref(10)
+const questionStats = ref(null)
+const questionDocFilter = ref('')
+const questionFilters = reactive({ q_type: '', keyword: '', is_active: '' })
+
+const questionFormVisible = ref(false)
+const questionFormLoading = ref(false)
+const questionEditingId = ref(null)
+const questionKpOptions = ref([])
+const questionForm = reactive({
+  q_type: 'SINGLE', stem: '', analysis: '', difficulty: 3, kp_id: '', document_id: '',
+  options: [], singleAnswer: 'A', multiAnswer: [], judgeAnswer: 'true',
+})
+
+const questionFavVisible = ref(false)
+const questionFavLoading = ref(false)
+const questionFavs = ref([])
+
+/** 默认选项 A-D（教师可在表单内增删，最多 8 个） */
+function emptyOptions() {
+  return ['A', 'B', 'C', 'D'].map((k) => ({ key: k, text: '' }))
+}
+
+/** 关联知识点下拉数据：来自当前文档图谱（图谱不可用时降级为空，不影响新增课程通用题） */
+async function loadQuestionKpOptions() {
+  if (!currentCourseId.value || !currentDocumentId.value) {
+    questionKpOptions.value = []
+    return
+  }
+  try {
+    const g = await api.getGraphV1(currentCourseId.value, currentDocumentId.value, { limit: 500 })
+    questionKpOptions.value = (g.nodes || []).map((n) => ({ id: n.id, label: n.label }))
+  } catch {
+    questionKpOptions.value = []
+  }
+}
+
+function kpNameById(id) {
+  return questionKpOptions.value.find((n) => n.id === id)?.label
+}
+
+async function loadQuestions() {
+  if (!currentCourseId.value) {
+    questionList.value = []
+    questionTotal.value = 0
+    return
+  }
+  questionsLoading.value = true
+  try {
+    const data = await api.listQuestions({
+      course_id: currentCourseId.value,
+      document_id: questionDocFilter.value || undefined,
+      q_type: questionFilters.q_type || undefined,
+      keyword: questionFilters.keyword || undefined,
+      is_active: questionFilters.is_active === '' ? undefined : questionFilters.is_active === '1',
+      page: questionPage.value,
+      page_size: questionPageSize.value,
+    })
+    questionList.value = data.items || []
+    questionTotal.value = data.total || 0
+  } catch (e) {
+    questionList.value = []
+    questionTotal.value = 0
+    ElMessage.warning(`题库加载失败：${e.message}`)
+  } finally {
+    questionsLoading.value = false
+  }
+}
+
+async function loadQuestionStats() {
+  if (!currentCourseId.value) {
+    questionStats.value = null
+    return
+  }
+  try {
+    questionStats.value = await api.getQuestionStats(currentCourseId.value)
+  } catch {
+    questionStats.value = null
+  }
+}
+
+/** 进入题库 Tab / 切换筛选时统一刷新（列表 + 总览 + 知识点下拉） */
+async function loadQuestionsTab() {
+  questionPage.value = 1
+  // 题库的「所属文档」下拉与知识点下拉都依赖文档列表；用户可能从未进过文档 Tab
+  if (currentCourseId.value && !documents.value.length) loadDocuments()
+  loadQuestionKpOptions()
+  await Promise.all([loadQuestions(), loadQuestionStats()])
+}
+
+/** 打开新增（row=null）或编辑表单：回填题型/选项/答案/文档/知识点 */
+function openQuestionForm(row) {
+  questionEditingId.value = row ? row.question_id : null
+  questionForm.q_type = row ? row.q_type : 'SINGLE'
+  questionForm.stem = row ? row.stem : ''
+  questionForm.analysis = row ? (row.analysis || '') : ''
+  questionForm.difficulty = row ? (row.difficulty || 3) : 3
+  questionForm.kp_id = row ? (row.kp_id || '') : ''
+  questionForm.document_id = row
+    ? (row.document_id ? String(row.document_id) : '')
+    : (currentDocumentId.value || '')
+
+  const isJudge = row && row.q_type === 'JUDGE'
+  questionForm.options = isJudge || !row
+    ? (row ? [] : emptyOptions())
+    : (Array.isArray(row.options) ? row.options.map((o) => ({ key: String(o.key), text: o.text })) : emptyOptions())
+
+  const ans = row ? row.answer : null
+  questionForm.singleAnswer = row && row.q_type === 'SINGLE' ? String(ans) : (questionForm.options[0]?.key || 'A')
+  questionForm.multiAnswer = row && row.q_type === 'MULTI' && Array.isArray(ans)
+    ? ans.map((x) => String(x).toUpperCase())
+    : []
+  questionForm.judgeAnswer = row && row.q_type === 'JUDGE'
+    ? (String(ans) === 'false' ? 'false' : 'true')
+    : 'true'
+
+  if (!questionForm.options.length && !isJudge) questionForm.options = emptyOptions()
+  questionFormVisible.value = true
+  if (!questionKpOptions.value.length) loadQuestionKpOptions()
+}
+
+/** 添加选项：取 A-H 中第一个未使用的编号（不重排已有编号，避免答案键错位） */
+function addQuestionOption() {
+  const used = new Set(questionForm.options.map((o) => o.key))
+  const next = 'ABCDEFGH'.split('').find((k) => !used.has(k))
+  if (next) questionForm.options.push({ key: next, text: '' })
+}
+
+/** 删除选项：同步剔除该键在答案中的引用 */
+function removeQuestionOption(idx) {
+  if (questionForm.options.length <= 2) return
+  const [removed] = questionForm.options.splice(idx, 1)
+  questionForm.multiAnswer = questionForm.multiAnswer.filter((k) => k !== removed.key)
+  if (questionForm.singleAnswer === removed.key) {
+    questionForm.singleAnswer = questionForm.options[0]?.key || ''
+  }
+}
+
+/** 组装提交体：空选项被过滤；document_id 留空即「课程通用题」 */
+function buildQuestionPayload() {
+  const base = {
+    q_type: questionForm.q_type,
+    stem: questionForm.stem,
+    analysis: questionForm.analysis || null,
+    difficulty: questionForm.difficulty,
+    kp_id: questionForm.kp_id || null,
+    document_id: questionForm.document_id || null,
+  }
+  if (questionForm.q_type === 'JUDGE') {
+    return { ...base, options: [], answer: questionForm.judgeAnswer }
+  }
+  const options = questionForm.options
+    .filter((o) => (o.text || '').trim())
+    .map((o) => ({ key: o.key, text: o.text.trim() }))
+  return {
+    ...base,
+    options,
+    answer: questionForm.q_type === 'MULTI' ? questionForm.multiAnswer : questionForm.singleAnswer,
+  }
+}
+
+async function submitQuestionForm() {
+  const payload = buildQuestionPayload()
+  if (!payload.stem || !payload.stem.trim()) {
+    ElMessage.warning('请填写题干')
+    return
+  }
+  if (payload.q_type !== 'JUDGE' && payload.options.length < 2) {
+    ElMessage.warning('选择题至少需要 2 个非空选项')
+    return
+  }
+  if (payload.q_type === 'MULTI' && !payload.answer.length) {
+    ElMessage.warning('请勾选多选题的正确答案')
+    return
+  }
+  questionFormLoading.value = true
+  try {
+    if (questionEditingId.value) {
+      await api.updateQuestion(questionEditingId.value, payload)
+      ElMessage.success('题目已更新')
+    } else {
+      await api.createQuestion({ course_id: currentCourseId.value, ...payload })
+      ElMessage.success('题目已新增')
+    }
+    questionFormVisible.value = false
+    await loadQuestionsTab()
+  } catch (e) {
+    ElMessage.error(`保存失败：${e.message}`)
+  } finally {
+    questionFormLoading.value = false
+  }
+}
+
+async function toggleQuestionActive(row) {
+  try {
+    await api.setQuestionActive(row.question_id, !row.is_active)
+    ElMessage.success(row.is_active ? '题目已停用（移出出题池）' : '题目已启用')
+    await loadQuestionsTab()
+  } catch (e) {
+    ElMessage.error(`操作失败：${e.message}`)
+  }
+}
+
+async function removeQuestion(row) {
+  try {
+    await ElMessageBox.confirm(
+      '删除后学生将无法再做该题；若已有作答记录，系统会自动改为「停用」以保护答题数据。是否继续？',
+      '删除题目',
+      { type: 'warning' },
+    )
+  } catch {
+    return
+  }
+  try {
+    const data = await api.deleteQuestion(row.question_id)
+    ElMessage.success(data?.soft_deleted ? '该题已有作答记录，已停用（未物理删除）' : '题目已删除')
+    await loadQuestionsTab()
+  } catch (e) {
+    ElMessage.error(`删除失败：${e.message}`)
+  }
+}
+
+/** 题目收藏情况：哪些学生收藏了本课程的题 */
+async function openQuestionFavorites() {
+  questionFavVisible.value = true
+  questionFavLoading.value = true
+  try {
+    const data = await api.getQuestionFavorites(currentCourseId.value)
+    questionFavs.value = data.items || []
+  } catch (e) {
+    questionFavs.value = []
+    ElMessage.warning(`收藏情况加载失败：${e.message}`)
+  } finally {
+    questionFavLoading.value = false
+  }
+}
+
 // Tab 变化 → 按需加载数据
 watch(activeTab, (tab) => {
   if (tab === 'courses') store.fetchCourses(true).catch(() => {})
@@ -1653,6 +2126,7 @@ watch(activeTab, (tab) => {
     if (currentCourseId.value) loadEditNodes()
   }
   if (tab === 'monitor' && currentCourseId.value) loadMonitorData()
+  if (tab === 'questions' && currentCourseId.value) loadQuestionsTab()
 })
 
 onMounted(() => {
@@ -1662,6 +2136,7 @@ onMounted(() => {
   if (activeTab.value === 'documents' && currentCourseId.value) loadDocuments()
   if (activeTab.value === 'edit' && currentCourseId.value) loadEditNodes()
   if (activeTab.value === 'monitor' && currentCourseId.value) loadMonitorData()
+  if (activeTab.value === 'questions' && currentCourseId.value) loadQuestionsTab()
 })
 
 onBeforeUnmount(() => {
@@ -2064,6 +2539,13 @@ function isDocInFlight(doc) {
 }
 .cell-empty {
   color: #c0c4cc;
+}
+/* 题库表单：选项输入 + 删除按钮同一行（右侧按钮不挤压输入框） */
+.opt-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 .rec-tag {
   margin: 2px 4px 2px 0;

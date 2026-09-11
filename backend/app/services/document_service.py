@@ -291,6 +291,16 @@ class DocumentService:
         except Exception as e:
             return {"ok": False, "code": 5002, "message": f"删除文档收藏失败: {str(e)}"}
 
+        # 4.5 题库：答题记录 → 题目收藏 → 该文档题目
+        # 顺序敏感（t_answer_record / t_question_favorite 均外键指向 t_question）：
+        # 必须先删子表再删题目；课程通用题（document_id IS NULL）刻意保留，不随文档删除而消失。
+        try:
+            removed_answers = sql_db.delete_answers_by_document(cid, doc_id)
+            removed_question_favorites = sql_db.delete_question_favorites_by_document(cid, doc_id)
+            removed_questions = sql_db.delete_questions_by_document(cid, doc_id)
+        except Exception as e:
+            return {"ok": False, "code": 5002, "message": f"删除文档题库数据失败: {str(e)}"}
+
         # 5. 本地文件（不存在视为已删，幂等）
         path = doc.get("file_path")
         if path and os.path.exists(path):
@@ -311,4 +321,7 @@ class DocumentService:
             "removed_embeddings": removed_embeddings,
             "removed_records": removed_records,
             "removed_favorites": removed_favorites,
+            "removed_questions": removed_questions,
+            "removed_question_favorites": removed_question_favorites,
+            "removed_answers": removed_answers,
         }}

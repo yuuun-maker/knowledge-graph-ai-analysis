@@ -129,4 +129,45 @@ export const api = {
     request.delete(`/api/v1/favorites/${encodeURIComponent(kpId)}`, {
       params: { course_id: courseId, document_id: documentId },
     }),
+
+  // ---- 题库管理（教师端；Scope A：单选/多选/判断） ----
+  /** 题库列表（含答案/解析/作答正确率/收藏数） */
+  listQuestions: (params = {}) => request.get('/api/v1/questions', { params }),
+  /** 题库总览：题量/题型分布/作答正确率/收藏数 */
+  getQuestionStats: (courseId) =>
+    request.get('/api/v1/questions/stats', { params: { course_id: courseId } }),
+  /** 题目收藏情况（哪些学生收藏了哪道题） */
+  getQuestionFavorites: (courseId, questionId) =>
+    request.get('/api/v1/questions/favorites', {
+      params: { course_id: courseId, question_id: questionId || undefined },
+    }),
+  getQuestionDetail: (questionId) => request.get(`/api/v1/questions/${questionId}`),
+  createQuestion: (data) => request.post('/api/v1/questions', data),
+  /** 修改题目（未传字段沿用原值） */
+  updateQuestion: (questionId, data) => request.put(`/api/v1/questions/${questionId}`, data),
+  /** 删除题目（已被学生作答过则后端自动改为停用） */
+  deleteQuestion: (questionId) => request.delete(`/api/v1/questions/${questionId}`),
+  /** 启用/停用题目 */
+  setQuestionActive: (questionId, isActive) =>
+    request.patch(`/api/v1/questions/${questionId}/active`, { is_active: isActive }),
+
+  // ---- 做题练习（学生端；出题接口不含答案，提交后才下发） ----
+  /** 出题（course_id 必填；可指定文档/知识点/题型/数量） */
+  getPracticeQuestions: (params = {}) => request.get('/api/v1/practice/questions', { params }),
+  /** 提交作答：服务端判分并返回正确答案与解析 */
+  submitAnswer: (questionId, userAnswer) =>
+    request.post('/api/v1/practice/submit', { question_id: questionId, user_answer: userAnswer }),
+  /** 我的答题记录（onlyWrong=true 仅错误记录） */
+  getAnswerRecords: (params = {}) => request.get('/api/v1/practice/records', { params }),
+  /** 错题本（每题最近一次错误 + 关联知识点） */
+  getWrongBook: (params = {}) => request.get('/api/v1/practice/wrong-book', { params }),
+  /** 我的练习统计 */
+  getPracticeStats: (params = {}) => request.get('/api/v1/practice/stats', { params }),
+  /** 我的题目收藏 */
+  getQuestionFavList: (courseId) =>
+    request.get('/api/v1/practice/favorites', { params: { course_id: courseId } }),
+  favoriteQuestion: (courseId, questionId) =>
+    request.post('/api/v1/practice/favorites', { course_id: courseId, question_id: questionId }),
+  unfavoriteQuestion: (courseId, questionId) =>
+    request.delete(`/api/v1/practice/favorites/${questionId}`, { params: { course_id: courseId } }),
 }

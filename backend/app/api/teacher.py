@@ -7,8 +7,8 @@
 from fastapi import APIRouter, Depends, Query
 
 from ..core.dependencies import require_teacher
+from ..core.permissions import Permissions
 from ..core.response import success, error
-from ..core.sql_database import sql_db
 from ..services.teacher_service import TeacherService
 
 router = APIRouter(prefix="/api/v1/teacher", tags=["教师教学监测"])
@@ -26,15 +26,16 @@ async def get_students_progress(
     course_id: str = Query(..., description="课程 ID"),
     current_user: dict = Depends(require_teacher),
 ):
-    """查看自己课程下的学生学习进度（仅教师，课程归属校验）"""
+    """查看自己课程下的学生学习进度（仅教师，权限统一走 Permissions）"""
     cid = _coerce_int(course_id)
     if cid is None:
         return error(4001, "参数错误：course_id 必须为整数")
 
-    course = sql_db.get_course(cid)
-    if course is None:
-        return error(2001, f"课程不存在: course_id={cid}")
-    if course["teacher_id"] != current_user["user_id"]:
-        return error(4003, "无权限：仅该课程所属教师可查看班级学习情况")
+    perm = Permissions.require_course_manage(cid, current_user)
+    if not perm["ok"]:
+        # 保持原有文案：教学监测是课程管理动作，非本课程教师一律拒绝
+        message = ("无权限：仅该课程所属教师可查看班级学习情况"
+                   if perm["code"] == 4003 else perm["message"])
+        return error(perm["code"], message)
 
     return success(TeacherService.get_students_progress(cid))

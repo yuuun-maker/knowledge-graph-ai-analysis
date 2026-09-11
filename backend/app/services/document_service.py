@@ -8,6 +8,7 @@ import hashlib
 
 from ..core.config import BASE_DIR, settings
 from ..core.database import db
+from ..core.permissions import Permissions
 from ..core.sql_database import sql_db
 from .document_parser import DocumentParser
 from .knowledge_extractor import KnowledgeExtractor
@@ -106,11 +107,11 @@ class DocumentService:
             return {"ok": False, "code": 1004, "message": f"教师账号不存在: user_id={teacher_id}"}
 
         # 4. 校验课程存在且归属当前教师（Phase 5：上传必须指定已存在课程，禁止自动建课）
-        course = sql_db.get_course(course_id)
-        if course is None:
-            return {"ok": False, "code": 2001, "message": f"课程不存在: course_id={course_id}"}
-        if course["teacher_id"] != teacher_id:
-            return {"ok": False, "code": 4003, "message": "无权限：仅该课程所属教师可上传文档"}
+        # 权限统一走 Permissions（课程创建者或被邀请的协作教师）
+        perm = Permissions.require_course_manage(
+            course_id, {"user_id": teacher_id, "role": "teacher"})
+        if not perm["ok"]:
+            return {"ok": False, "code": perm["code"], "message": perm["message"]}
 
         # 5. 建文档记录（file_path 保存后回填）
         doc_id = sql_db.create_document(
@@ -192,51 +193,44 @@ class DocumentService:
     def list_documents(course_id: int, user_id: int, role: str = "teacher") -> dict:
         """某课程文档列表。
 
-        Phase 7：学生端需读取可学习课程的文档。当前项目无选课/班级体系，
-        沿用现有「学生可见全部课程」规则——学生可读任意课程文档；教师仍校验课程归属。
+        课程中心改造：由「学生可见全部课程」收紧为「课程成员可见」。
+        权限单一事实来源 = Permissions.require_course_content：
+        课程创建者 / 协作教师 / 已通过审核的学生成员可读，其余一律 4003。
         """
-        course = sql_db.get_course(course_id)
-        if course is None:
-            return {"ok": False, "code": 2001, "message": f"课程不存在: course_id={course_id}"}
-        if role == "teacher" and course["teacher_id"] != user_id:
-            return {"ok": False, "code": 4003, "message": "无权限：仅该课程所属教师可查看文档列表"}
+        perm = Permissions.require_course_content(
+            course_id, {"user_id": user_id, "role": role})
+        if not perm["ok"]:
+            return {"ok": False, "code": perm["code"], "message": perm["message"]}
         docs = sql_db.list_documents_by_course(course_id)
         return {"ok": True, "code": 0, "message": "success",
                 "data": [_doc_payload(d) for d in docs]}
 
     @staticmethod
-    def get_document_detail(doc_id: int, teacher_id: int) -> dict:
-        """文档详情（校验文档所属课程归属）"""
-        doc = sql_db.get_document(doc_id)
-        if doc is None:
-            return {"ok": False, "code": 2002, "message": f"文档不存在: doc_id={doc_id}"}
-        course = sql_db.get_course(doc["course_id"])
-        if course is None or course["teacher_id"] != teacher_id:
-            return {"ok": False, "code": 4003, "message": "无权限：仅该文档所属课程的教师可查看"}
+    def get_document_detail(doc_id: int, user_id: int, role: str = "teacher") -> dict:
+        """文档详情（文档 -> 课程 -> 成员关系；课程成员均可查看）"""
+        perm = Permissions.require_document_content(
+            doc_id, {"user_id": user_id, "role": role})
+        if not perm["ok"]:
+            return {"ok": False, "code": perm["code"], "message": perm["message"]}
         return {"ok": True, "code": 0, "message": "success",
-                "data": _doc_payload(doc)}
+                "data": _doc_payload(perm["data"]["document"])}
 
     @staticmethod
     def get_document_content(doc_id: int, user_id: int, role: str = "student") -> dict:
         """在线阅读所需的文件定位信息（只读，不修改任何现有流程）。
 
-        权限规则与 list_documents 完全一致（单一事实来源）：
-        - 教师：仅本人所授课程的文档
-        - 学生：项目当前没有选课/班级体系，沿用「学生可见全部课程」的既有规则
-          （要收紧为「仅已选课程」时，只需改这一处）
+        课程中心改造：权限收紧为「课程成员可读」——这正是原先注释里标注的
+        「要收紧为『仅已选课程』时，只需改这一处」。教师仅限本人所授课程，
+        学生仅限已加入（approved）的课程，二者共用 Permissions 同一判定。
 
         返回 data 为 {path, file_name, file_type, media_type}，
         仅在后端内部使用真实路径，接口层不会把它返回给客户端。
         """
-        doc = sql_db.get_document(doc_id)
-        if doc is None:
-            return {"ok": False, "code": 2002, "message": f"文档不存在: doc_id={doc_id}"}
-        course = sql_db.get_course(doc["course_id"])
-        if course is None:
-            return {"ok": False, "code": 2001,
-                    "message": f"课程不存在: course_id={doc['course_id']}"}
-        if role == "teacher" and course["teacher_id"] != user_id:
-            return {"ok": False, "code": 4003, "message": "无权限：仅该课程所属教师可阅读本文档"}
+        perm = Permissions.require_document_content(
+            doc_id, {"user_id": user_id, "role": role})
+        if not perm["ok"]:
+            return {"ok": False, "code": perm["code"], "message": perm["message"]}
+        doc = perm["data"]["document"]
 
         path = _resolve_stored_path(doc["file_path"]) if doc.get("file_path") else None
         if not path or not os.path.exists(path):
@@ -258,12 +252,11 @@ class DocumentService:
         每步幂等可重试；任一步失败返回明确错误，不假装全部删除成功。
         绝不误删同课程其他文档的图谱/向量/学习记录/收藏（均按 course_id + document_id 限定）。
         """
-        doc = sql_db.get_document(doc_id)
-        if doc is None:
-            return {"ok": False, "code": 2002, "message": f"文档不存在: doc_id={doc_id}"}
-        course = sql_db.get_course(doc["course_id"])
-        if course is None or course["teacher_id"] != teacher_id:
-            return {"ok": False, "code": 4003, "message": "无权限：仅该文档所属课程的教师可删除"}
+        perm = Permissions.require_document_manage(
+            doc_id, {"user_id": teacher_id, "role": "teacher"})
+        if not perm["ok"]:
+            return {"ok": False, "code": perm["code"], "message": perm["message"]}
+        doc = perm["data"]["document"]
 
         cid = doc["course_id"]
 

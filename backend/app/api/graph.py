@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 from ..core.response import success, error
 from ..core.dependencies import get_current_user, require_teacher
+from ..core.permissions import Permissions
 from ..services.kg_manager import KnowledgeGraphManager
 
 router = APIRouter(prefix="/api/v1/graph", tags=["知识图谱"])
@@ -27,6 +28,27 @@ def _coerce_document_id(document_id: str) -> int:
         raise ValueError(f"document_id 必须为整数，收到: {document_id}")
 
 
+def _guard(course_id: str, current_user: dict, manage: bool = False):
+    """课程权限闸门：返回 (cid, None) 或 (None, 错误响应)。
+
+    课程中心改造：图谱读写原先完全不校验归属（任何登录用户猜 course_id 即可读写
+    别人课程的图谱）。判定统一走 Permissions：
+    - 读（get_graph）：课程成员（创建者 / 协作教师 / 已加入学生）
+    - 写（节点与关系的增删改）：课程教师
+    判定刻意放在任何 Neo4j 调用之前——这样即使图数据库没启动，
+    无权限请求也会稳定返回 4003 而不是 3000。
+    """
+    try:
+        cid = _coerce_course_id(course_id)
+    except ValueError as e:
+        return None, error(1001, str(e))
+    perm = (Permissions.require_course_manage(cid, current_user) if manage
+            else Permissions.require_course_content(cid, current_user))
+    if not perm["ok"]:
+        return None, error(perm["code"], perm["message"])
+    return cid, None
+
+
 # ---------------- 请求体模型 ----------------
 
 class NodeCreate(BaseModel):
@@ -36,9 +58,10 @@ class NodeCreate(BaseModel):
 
 
 class NodeUpdate(BaseModel):
-    name: str = None
-    category: str = None
-    description: str = None
+    # str | None：Pydantic v2 下 `str = None` 不接受显式 null（语义均为「不修改该字段」）
+    name: str | None = None
+    category: str | None = None
+    description: str | None = None
 
 
 class EdgeCreate(BaseModel):
@@ -57,9 +80,11 @@ async def get_graph(
     node_type: str = Query(None, description="按类别过滤：概念/定理/公式/方法"),
     current_user: dict = Depends(get_current_user),
 ):
-    """获取指定文档的知识图谱数据（节点 + 关系）"""
+    """获取指定文档的知识图谱数据（节点 + 关系；仅课程成员可读）"""
+    course_id_int, denied = _guard(course_id, current_user)
+    if denied is not None:
+        return denied
     try:
-        course_id_int = _coerce_course_id(course_id)
         did = _coerce_document_id(document_id)
     except ValueError as e:
         return error(1001, str(e))
@@ -76,9 +101,11 @@ async def get_graph(
 async def create_node(course_id: str, body: NodeCreate,
                       document_id: str = Query(..., description="文档 ID（必填）"),
                       current_user: dict = Depends(require_teacher)):
-    """教师手动新增知识点（is_manual=True）"""
+    """教师手动新增知识点（is_manual=True；仅该课程教师）"""
+    cid, denied = _guard(course_id, current_user, manage=True)
+    if denied is not None:
+        return denied
     try:
-        cid = _coerce_course_id(course_id)
         did = _coerce_document_id(document_id)
         node = KnowledgeGraphManager.create_node(cid, did, body.name, body.category, body.description)
     except ValueError as e:
@@ -90,9 +117,11 @@ async def create_node(course_id: str, body: NodeCreate,
 async def update_node(course_id: str, node_id: str, body: NodeUpdate,
                       document_id: str = Query(..., description="文档 ID（必填）"),
                       current_user: dict = Depends(require_teacher)):
-    """教师手动更新知识点（按 kp_id 定位）"""
+    """教师手动更新知识点（按 kp_id 定位；仅该课程教师）"""
+    cid, denied = _guard(course_id, current_user, manage=True)
+    if denied is not None:
+        return denied
     try:
-        cid = _coerce_course_id(course_id)
         did = _coerce_document_id(document_id)
         node = KnowledgeGraphManager.update_node(
             cid, did, node_id, name=body.name, category=body.category, description=body.description,
@@ -106,9 +135,11 @@ async def update_node(course_id: str, node_id: str, body: NodeUpdate,
 async def delete_node(course_id: str, node_id: str,
                       document_id: str = Query(..., description="文档 ID（必填）"),
                       current_user: dict = Depends(require_teacher)):
-    """教师手动删除知识点及其关系（按 kp_id 定位）"""
+    """教师手动删除知识点及其关系（按 kp_id 定位；仅该课程教师）"""
+    cid, denied = _guard(course_id, current_user, manage=True)
+    if denied is not None:
+        return denied
     try:
-        cid = _coerce_course_id(course_id)
         did = _coerce_document_id(document_id)
         result = KnowledgeGraphManager.delete_node(cid, did, node_id)
     except ValueError as e:
@@ -122,9 +153,11 @@ async def delete_node(course_id: str, node_id: str,
 async def create_edge(course_id: str, body: EdgeCreate,
                       document_id: str = Query(..., description="文档 ID（必填）"),
                       current_user: dict = Depends(require_teacher)):
-    """教师手动新增关系（source/target 为 kp_id）"""
+    """教师手动新增关系（source/target 为 kp_id；仅该课程教师）"""
+    cid, denied = _guard(course_id, current_user, manage=True)
+    if denied is not None:
+        return denied
     try:
-        cid = _coerce_course_id(course_id)
         did = _coerce_document_id(document_id)
         edge = KnowledgeGraphManager.create_relationship(cid, did, body.source, body.target, body.type)
     except ValueError as e:
@@ -136,9 +169,11 @@ async def create_edge(course_id: str, body: EdgeCreate,
 async def delete_edge(course_id: str, edge_id: str,
                       document_id: str = Query(..., description="文档 ID（必填）"),
                       current_user: dict = Depends(require_teacher)):
-    """教师手动删除关系（按 edge_id = elementId(r)）"""
+    """教师手动删除关系（按 edge_id = elementId(r)；仅该课程教师）"""
+    cid, denied = _guard(course_id, current_user, manage=True)
+    if denied is not None:
+        return denied
     try:
-        cid = _coerce_course_id(course_id)
         did = _coerce_document_id(document_id)
         result = KnowledgeGraphManager.delete_relationship(cid, did, edge_id)
     except ValueError as e:

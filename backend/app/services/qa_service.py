@@ -126,11 +126,21 @@ class QAService:
 
     # ---------- 关键词检索（兜底） ----------
 
-    def _keyword_search(self, question: str, course_id, document_id, top_k: int) -> List[dict]:
-        """关键词检索（向量不可用时的兜底），返回结构化节点列表"""
+    def _keyword_search(self, question: str, course_id, document_id, top_k: int,
+                        allowed_ids: List[int] = None) -> List[dict]:
+        """关键词检索（向量不可用时的兜底），返回结构化节点列表。
+
+        allowed_ids：调用方（当前用户）可访问的课程 id 列表。仅在「未指定 course_id」
+        这条原本会全库扫描的分支上生效——把「不带课程参数」从全库泄漏收敛为
+        「仅我的课程」。默认 None 表示不过滤，保证既有调用方行为逐字节不变。
+        """
         cid = _coerce_course_id(course_id)
         did = _coerce_document_id(document_id)
         keyword = (question or "")[:20]
+
+        # 未指定课程且用户没有任何可访问课程：直接返回空，避免退化成全库扫描
+        if cid is None and allowed_ids is not None and len(allowed_ids) == 0:
+            return []
 
         if cid is not None and did is not None:
             cypher = """
@@ -149,10 +159,13 @@ class QAService:
         else:
             cypher = """
             MATCH (n:KnowledgePoint)
-            WHERE n.name CONTAINS $keyword OR n.description CONTAINS $keyword
-            RETURN n LIMIT $top_k
+            WHERE (n.name CONTAINS $keyword OR n.description CONTAINS $keyword)
             """
             params = {"keyword": keyword, "top_k": top_k}
+            if allowed_ids is not None:
+                cypher += " AND n.course_id IN $allowed_course_ids\n"
+                params["allowed_course_ids"] = list(allowed_ids)
+            cypher += "RETURN n LIMIT $top_k"
 
         records = db.query(cypher, params)
         contexts = [self._node_dict(rec["n"]) for rec in records if rec.get("n")]
@@ -172,9 +185,13 @@ class QAService:
                     {"course_id": cid, "top_k": top_k},
                 )
             else:
-                records = db.query(
-                    "MATCH (n:KnowledgePoint) RETURN n LIMIT $top_k", {"top_k": top_k},
-                )
+                fallback_cypher = "MATCH (n:KnowledgePoint)"
+                fallback_params = {"top_k": top_k}
+                if allowed_ids is not None:
+                    fallback_cypher += " WHERE n.course_id IN $allowed_course_ids"
+                    fallback_params["allowed_course_ids"] = list(allowed_ids)
+                fallback_cypher += " RETURN n LIMIT $top_k"
+                records = db.query(fallback_cypher, fallback_params)
             for rec in records:
                 n = rec.get("n")
                 if not n or n.get("name") in existing_names:
@@ -185,22 +202,25 @@ class QAService:
         return contexts
 
     def search_related_nodes(self, question: str, course_id=None, document_id=None,
-                             top_k: int = 5) -> List[dict]:
+                             top_k: int = 5, allowed_ids: List[int] = None) -> List[dict]:
         """检索相关知识（优先向量，失败退回关键词），返回结构化节点（含 kp_id/name/category/description）"""
         nodes = self._vector_search(question, course_id, document_id, top_k)
         if not nodes:
-            nodes = self._keyword_search(question, course_id, document_id, top_k)
+            nodes = self._keyword_search(question, course_id, document_id, top_k, allowed_ids)
         return nodes
 
     def search_related_knowledge(self, question: str, course_id=None, document_id=None,
-                                 top_k: int = 5) -> List[str]:
+                                 top_k: int = 5, allowed_ids: List[int] = None) -> List[str]:
         """检索相关知识，返回格式化字符串（供 LLM 上下文 / 向后兼容）"""
-        return [_format_node(n) for n in self.search_related_nodes(question, course_id, document_id, top_k)]
+        return [_format_node(n) for n in self.search_related_nodes(
+            question, course_id, document_id, top_k, allowed_ids)]
 
-    async def ask(self, question: str, course_id=None, document_id=None) -> str:
+    async def ask(self, question: str, course_id=None, document_id=None,
+                  allowed_ids: List[int] = None) -> str:
         """回答问题（RAG 模式）"""
         # 1. 检索相关知识（向量优先，文档作用域）
-        contexts = self.search_related_knowledge(question, course_id, document_id)
+        contexts = self.search_related_knowledge(question, course_id, document_id,
+                                                 allowed_ids=allowed_ids)
         context_text = "\n".join(contexts) if contexts else "暂无相关课程知识"
 
         # 2. 调用 LLM 生成回答

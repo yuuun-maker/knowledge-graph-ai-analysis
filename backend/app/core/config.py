@@ -50,6 +50,14 @@ class Settings:
     MAX_UPLOAD_SIZE: int = 50 * 1024 * 1024  # 50MB
     ALLOWED_EXTENSIONS: set = {".pdf", ".docx", ".txt", ".md"}
 
+    # 头像上传配置（个人中心）。与课程文档分目录存放，避免与 course_id 目录混淆
+    AVATAR_DIR: str = _resolve_path(os.getenv("AVATAR_DIR", "./data/uploads/avatars"))
+    MAX_AVATAR_SIZE: int = 2 * 1024 * 1024  # 2MB
+    ALLOWED_AVATAR_EXTENSIONS: dict = {
+        ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+        ".png": "image/png", ".webp": "image/webp",
+    }
+
     # 知识提取配置
     EXTRACTION_TIMEOUT: int = 60  # 秒
     QA_TIMEOUT: int = 15  # 秒

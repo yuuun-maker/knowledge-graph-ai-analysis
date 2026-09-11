@@ -19,6 +19,7 @@ from datetime import datetime
 
 from .config import settings
 from .security import hash_password
+from .codes import gen_join_code
 
 # 枚举取值（与规划文档表格 8/9/10/11 的 ENUM 定义一致，供应用层校验）
 USER_ROLES = ("teacher", "student")
@@ -27,6 +28,14 @@ DOC_PARSE_STATUS = ("UPLOADED", "PARSING", "PARSED", "FAILED")
 DOC_EXTRACT_STATUS = ("PENDING", "EXTRACTING", "COMPLETED", "FAILED")
 RECORD_STATUS = ("MASTERED", "LEARNING", "RECOMMENDED")
 RECORD_SOURCE = ("MANUAL", "SYSTEM")
+
+# 课程中心枚举（应用层校验；表内以 CHECK 约束保留同一取值集合）
+MEMBER_ROLES = ("teacher", "student")
+MEMBER_STATUS = ("pending", "approved", "rejected", "removed")
+MEMBER_JOIN_SOURCE = ("create", "code", "invite", "apply", "import")
+JOIN_MODES = ("auto", "approval", "closed")          # 直接加入 / 审核后加入 / 关闭加入
+INVITE_STATUS = ("active", "used", "revoked")
+GENDERS = ("male", "female", "other", "unknown")
 
 # 默认教师账号初始密码（仅用于演示/初始开发；生产环境应删除默认账号或改为环境变量注入）
 DEFAULT_TEACHER_PASSWORD = "admin123"
@@ -152,6 +161,89 @@ _SCHEMA_SQL = [
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_fav_user_course ON t_student_favorite(user_id, course_id);",
+
+    # ---------- 课程中心改造（课程成员 / 邀请 / 用户资料） ----------
+    # 说明：t_course 的新增列（join_code / join_mode / organization / category /
+    # cover / is_public）刻意不写在上面的 CREATE TABLE 里，而是统一由 _migrate()
+    # 补列，避免「新建库」与「迁移库」的表结构分叉。
+
+    # 课程成员表（用户 ↔ 课程 多对多，替代「学生硬编码在课程表」的做法）
+    # UNIQUE(course_id, user_id) 保证同一用户在同一课程至多一条关系，重复加入不会产生脏数据。
+    """
+    CREATE TABLE IF NOT EXISTS t_course_member (
+        member_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+        course_id      INTEGER NOT NULL,
+        user_id        INTEGER NOT NULL,
+        role           TEXT NOT NULL DEFAULT 'student'
+                       CHECK (role IN ('teacher', 'student')),
+        status         TEXT NOT NULL DEFAULT 'pending'
+                       CHECK (status IN ('pending', 'approved', 'rejected', 'removed')),
+        join_source    TEXT NOT NULL DEFAULT 'code'
+                       CHECK (join_source IN ('create', 'code', 'invite', 'apply', 'import')),
+        applied_reason TEXT,
+        reviewed_by    INTEGER,
+        reviewed_at    TEXT,
+        review_comment TEXT,
+        joined_at      TEXT,
+        created_at     TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        updated_at     TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        FOREIGN KEY (course_id) REFERENCES t_course(course_id),
+        FOREIGN KEY (user_id) REFERENCES t_user(user_id),
+        UNIQUE (course_id, user_id)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_cm_course_status ON t_course_member(course_id, status);",
+    "CREATE INDEX IF NOT EXISTS idx_cm_user_status ON t_course_member(user_id, status);",
+    "CREATE INDEX IF NOT EXISTS idx_cm_course_role ON t_course_member(course_id, role);",
+
+    # 课程邀请令牌（单次使用；token 为随机串，与 course_id / user_id 无推导关系）
+    """
+    CREATE TABLE IF NOT EXISTS t_course_invite (
+        invite_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+        course_id   INTEGER NOT NULL,
+        token       TEXT NOT NULL UNIQUE,
+        invited_by  INTEGER NOT NULL,
+        role        TEXT NOT NULL DEFAULT 'student'
+                    CHECK (role IN ('teacher', 'student')),
+        status      TEXT NOT NULL DEFAULT 'active'
+                    CHECK (status IN ('active', 'used', 'revoked')),
+        used_by     INTEGER,
+        used_at     TEXT,
+        expires_at  TEXT,
+        created_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        FOREIGN KEY (course_id) REFERENCES t_course(course_id),
+        FOREIGN KEY (invited_by) REFERENCES t_user(user_id),
+        FOREIGN KEY (used_by) REFERENCES t_user(user_id)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_invite_course ON t_course_invite(course_id, status);",
+
+    # 用户资料表（1:1，主键即 user_id；字段全部可空，与认证列完全分离）
+    # 只读不写 t_user 的 username / password_hash / role，认证逻辑零影响。
+    """
+    CREATE TABLE IF NOT EXISTS t_user_profile (
+        user_id       INTEGER PRIMARY KEY,
+        avatar_url    TEXT,
+        real_name     TEXT,
+        nickname      TEXT,
+        gender        TEXT CHECK (gender IN ('male', 'female', 'other', 'unknown')),
+        school        TEXT,
+        college       TEXT,
+        bio           TEXT,
+        student_no    TEXT,
+        major         TEXT,
+        grade         TEXT,
+        class_name    TEXT,
+        teacher_no    TEXT,
+        title         TEXT,
+        research_area TEXT,
+        created_at    TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        updated_at    TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        FOREIGN KEY (user_id) REFERENCES t_user(user_id)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_profile_student_no ON t_user_profile(student_no);",
+    "CREATE INDEX IF NOT EXISTS idx_profile_teacher_no ON t_user_profile(teacher_no);",
 ]
 
 
@@ -205,7 +297,72 @@ class SQLDatabase:
                     f"SELECT d.doc_id FROM t_document d WHERE d.course_id = {table}.{fk} LIMIT 1"
                     f") WHERE document_id IS NULL"
                 )
+            self._migrate_course_center(conn)
             conn.commit()
+
+    # t_course 在课程中心改造中新增的列（全部可空或带默认值，历史行不受影响）
+    _COURSE_NEW_COLUMNS = (
+        ("join_code", "TEXT"),
+        ("join_mode", "TEXT NOT NULL DEFAULT 'approval'"),
+        ("organization", "TEXT"),
+        ("category", "TEXT"),
+        ("cover", "TEXT"),
+        ("is_public", "INTEGER NOT NULL DEFAULT 1"),
+    )
+
+    def _migrate_course_center(self, conn: sqlite3.Connection):
+        """幂等迁移：课程中心改造（t_course 补列 + 加课码 + 老课程教师成员回填）。
+
+        四步全部可重复执行，重启任意次结果一致：
+        1) PRAGMA table_info 守卫补列——SQLite 无 ADD COLUMN IF NOT EXISTS；
+           注意 ALTER TABLE ADD COLUMN 不允许带 UNIQUE / PRIMARY KEY，因此
+           join_code 只加成普通可空列，唯一性交给下面的独立唯一索引。
+        2) 唯一索引（SQLite 唯一索引允许多个 NULL，可与历史 NULL 行共存）。
+        3) 仅为 join_code IS NULL 的行回填加课码——教师已发出的码不会被重新生成。
+        4) 每个已存在课程的 teacher_id 自动成为 role=teacher/status=approved 成员，
+           靠 UNIQUE(course_id, user_id) + INSERT OR IGNORE 保证幂等，且不会覆盖
+           教师后续手动改动过的成员行。
+
+        历史课程不猜测学生成员关系：学生需通过加课码 / 邀请 / 申请重新加入。
+        """
+        cols = {row["name"] for row in conn.execute("PRAGMA table_info(t_course)").fetchall()}
+        for name, decl in self._COURSE_NEW_COLUMNS:
+            if name not in cols:
+                conn.execute(f"ALTER TABLE t_course ADD COLUMN {name} {decl}")
+
+        conn.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS uq_course_join_code ON t_course(join_code)"
+        )
+
+        pending = conn.execute(
+            "SELECT course_id FROM t_course WHERE join_code IS NULL"
+        ).fetchall()
+        for row in pending:
+            for _ in range(20):  # 冲突重试；8 位随机码在实际规模下几乎不会冲突
+                code = gen_join_code()
+                exists = conn.execute(
+                    "SELECT 1 FROM t_course WHERE join_code = ?", (code,)
+                ).fetchone()
+                if not exists:
+                    conn.execute(
+                        "UPDATE t_course SET join_code = ? "
+                        "WHERE course_id = ? AND join_code IS NULL",
+                        (code, row["course_id"]),
+                    )
+                    break
+
+        conn.execute(
+            """
+            INSERT OR IGNORE INTO t_course_member
+                (course_id, user_id, role, status, join_source, joined_at, created_at, updated_at)
+            SELECT c.course_id, c.teacher_id, 'teacher', 'approved', 'create',
+                   COALESCE(c.created_at, datetime('now', 'localtime')),
+                   COALESCE(c.created_at, datetime('now', 'localtime')),
+                   datetime('now', 'localtime')
+            FROM t_course c
+            WHERE c.teacher_id IS NOT NULL
+            """
+        )
 
     def _execute(self, sql: str, params: tuple = ()) -> int:
         """执行写操作，返回 lastrowid（INSERT 时的自增主键）"""
@@ -265,11 +422,21 @@ class SQLDatabase:
     # ---------- 课程 ----------
 
     def create_course(self, course_name: str, teacher_id: int,
-                      course_code: str = None, description: str = None) -> int:
+                      course_code: str = None, description: str = None,
+                      join_code: str = None, join_mode: str = "approval",
+                      organization: str = None, category: str = None,
+                      cover: str = None, is_public: int = 1) -> int:
+        """新建课程（课程中心改造新增 join_code / join_mode / 组织 / 分类 / 封面 / 是否公开）。
+
+        前 4 个参数保持原有位置与默认值不变，历史调用方无需改动。
+        """
         return self._execute(
-            "INSERT INTO t_course (course_name, teacher_id, course_code, description) "
-            "VALUES (?, ?, ?, ?)",
-            (course_name, teacher_id, course_code, description),
+            "INSERT INTO t_course "
+            "(course_name, teacher_id, course_code, description, join_code, join_mode, "
+            " organization, category, cover, is_public) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (course_name, teacher_id, course_code, description, join_code, join_mode,
+             organization, category, cover, is_public),
         )
 
     def get_course(self, course_id: int) -> dict:
@@ -284,16 +451,51 @@ class SQLDatabase:
     def get_course_by_code(self, course_code: str) -> dict:
         return self._query_one("SELECT * FROM t_course WHERE course_code = ?", (course_code,))
 
+    def get_course_by_join_code(self, join_code: str) -> dict:
+        """按加课码查课程（走 uq_course_join_code 唯一索引）"""
+        return self._query_one("SELECT * FROM t_course WHERE join_code = ?", (join_code,))
+
     def list_courses_page(self, page: int = 1, page_size: int = 10,
-                          teacher_id: int = None, keyword: str = None):
-        """分页查询课程（LEFT JOIN 教师表取教师名），返回 (total, rows)"""
+                          teacher_id: int = None, keyword: str = None,
+                          category: str = None, is_public: int = None,
+                          join_mode: str = None,
+                          course_ids: list = None,
+                          exclude_course_ids: list = None):
+        """分页查询课程（LEFT JOIN 教师表取教师名），返回 (total, rows)。
+
+        课程中心改造新增过滤条件：
+        - course_ids：白名单（权限范围，见 Permissions.allowed_course_ids）
+        - exclude_course_ids：排除已加入/已申请的课程（发现课程页）
+        - category / is_public / join_mode：发现课程页的筛选
+        空列表语义：course_ids=[] 表示「无可见课程」直接返回空，绝不生成 IN ()；
+        exclude_course_ids=[] 等价于不过滤。
+        """
+        if course_ids is not None and len(course_ids) == 0:
+            return 0, []
+
         where, params = [], []
         if teacher_id is not None:
             where.append("c.teacher_id = ?")
             params.append(teacher_id)
         if keyword:
-            where.append("c.course_name LIKE ?")
+            where.append("(c.course_name LIKE ? OR c.description LIKE ?)")
             params.append(f"%{keyword}%")
+            params.append(f"%{keyword}%")
+        if category:
+            where.append("c.category = ?")
+            params.append(category)
+        if is_public is not None:
+            where.append("c.is_public = ?")
+            params.append(is_public)
+        if join_mode:
+            where.append("c.join_mode = ?")
+            params.append(join_mode)
+        if course_ids:
+            where.append(f"c.course_id IN ({','.join('?' * len(course_ids))})")
+            params.extend(course_ids)
+        if exclude_course_ids:
+            where.append(f"c.course_id NOT IN ({','.join('?' * len(exclude_course_ids))})")
+            params.extend(exclude_course_ids)
         where_sql = ("WHERE " + " AND ".join(where)) if where else ""
 
         total = self._query_one(
@@ -313,8 +515,14 @@ class SQLDatabase:
         return total, rows
 
     def update_course(self, course_id: int, **fields) -> None:
-        """更新课程字段（白名单，None 跳过表示不修改），自动刷新 updated_at"""
-        allowed = {"course_name", "course_code", "description", "status"}
+        """更新课程字段（白名单，None 跳过表示不修改），自动刷新 updated_at。
+
+        join_code 也在白名单内，但仅由 CourseService.refresh_join_code 调用
+        （刷新即覆盖旧码）；普通课程设置接口不允许手填加课码。
+        """
+        allowed = {"course_name", "course_code", "description", "status",
+                   "join_code", "join_mode", "organization", "category",
+                   "cover", "is_public"}
         sets, params = [], []
         for key, val in fields.items():
             if key not in allowed or val is None:
@@ -339,10 +547,43 @@ class SQLDatabase:
             conn.execute("DELETE FROM t_kp_embedding WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_student_favorite WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_learning_record WHERE course_id = ?", (course_id,))
+            conn.execute("DELETE FROM t_course_invite WHERE course_id = ?", (course_id,))
+            conn.execute("DELETE FROM t_course_member WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_document WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_course WHERE course_id = ?", (course_id,))
             conn.commit()
         return doc_count
+
+    def update_course_join_code(self, course_id: int, join_code: str) -> int:
+        """刷新加课码：单条 UPDATE 直接覆盖，旧码立即失效；返回影响行数"""
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE t_course SET join_code = ?, updated_at = ? WHERE course_id = ?",
+                (join_code, _now(), course_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def list_accessible_course_ids(self, user_id: int, role: str) -> list:
+        """该用户可读的课程 id 列表：教师=自己创建的 + 被邀请协作的；学生=已通过审核的成员课程。
+
+        供 Permissions 计算「未指定课程时」的读作用域，以及数据总览/问答的范围收敛。
+        """
+        if role == "teacher":
+            rows = self._query(
+                "SELECT course_id FROM t_course WHERE teacher_id = ? "
+                "UNION "
+                "SELECT course_id FROM t_course_member "
+                "WHERE user_id = ? AND status = 'approved'",
+                (user_id, user_id),
+            )
+        else:
+            rows = self._query(
+                "SELECT course_id FROM t_course_member "
+                "WHERE user_id = ? AND status = 'approved'",
+                (user_id,),
+            )
+        return [r["course_id"] for r in rows]
 
     # ---------- 文档 ----------
 
@@ -590,6 +831,299 @@ class SQLDatabase:
             )
             conn.commit()
             return cur.rowcount
+
+    # ---------- 课程成员（课程中心） ----------
+
+    def get_membership(self, course_id: int, user_id: int) -> dict:
+        return self._query_one(
+            "SELECT * FROM t_course_member WHERE course_id = ? AND user_id = ?",
+            (course_id, user_id),
+        )
+
+    def get_course_with_membership(self, course_id: int, user_id: int) -> dict:
+        """一次查询取回课程 + 该用户在该课程上的成员关系（权限判定的唯一数据来源）"""
+        return self._query_one(
+            """
+            SELECT c.*,
+                   m.role    AS member_role,
+                   m.status  AS member_status,
+                   m.join_source AS member_join_source,
+                   m.joined_at   AS member_joined_at
+            FROM t_course c
+            LEFT JOIN t_course_member m
+                   ON m.course_id = c.course_id AND m.user_id = ?
+            WHERE c.course_id = ?
+            """,
+            (user_id, course_id),
+        )
+
+    def upsert_membership(self, course_id: int, user_id: int, role: str = "student",
+                          status: str = "pending", join_source: str = "code",
+                          applied_reason: str = None) -> int:
+        """写入/覆盖成员关系（依赖 UNIQUE(course_id, user_id)）。
+
+        覆盖时清空上一轮的审核痕迹（reviewed_by/at/comment），避免「上次拒绝理由」
+        残留在本次待审核记录上；joined_at 一旦有值不再被覆盖（保留最早加入时间）。
+        """
+        now = _now()
+        joined_at = now if status == "approved" else None
+        sql = """
+        INSERT INTO t_course_member
+            (course_id, user_id, role, status, join_source, applied_reason,
+             joined_at, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(course_id, user_id) DO UPDATE SET
+            role = excluded.role,
+            status = excluded.status,
+            join_source = excluded.join_source,
+            applied_reason = excluded.applied_reason,
+            joined_at = CASE WHEN excluded.status = 'approved'
+                             THEN COALESCE(t_course_member.joined_at, excluded.joined_at)
+                             ELSE t_course_member.joined_at END,
+            reviewed_by = NULL,
+            reviewed_at = NULL,
+            review_comment = NULL,
+            updated_at = excluded.updated_at
+        """
+        return self._execute(sql, (course_id, user_id, role, status, join_source,
+                                   applied_reason, joined_at, now, now))
+
+    def set_membership_status(self, course_id: int, user_id: int, status: str,
+                              reviewed_by: int = None, comment: str = None) -> int:
+        """审核/移除：仅改状态，返回影响行数（0 表示成员记录不存在）。
+
+        移除（removed）只翻状态，不删该学生的学习记录与收藏——那是学生自己的数据。
+        """
+        now = _now()
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE t_course_member SET "
+                "status = ?, reviewed_by = ?, reviewed_at = ?, review_comment = ?, "
+                "joined_at = CASE WHEN ? = 'approved' THEN COALESCE(joined_at, ?) "
+                "ELSE joined_at END, "
+                "updated_at = ? "
+                "WHERE course_id = ? AND user_id = ?",
+                (status, reviewed_by, now, comment, status, now, now, course_id, user_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def list_members(self, course_id: int, status: str = None, role: str = None,
+                     keyword: str = None, page: int = 1, page_size: int = 20):
+        """分页查询课程成员（联表带出用户基础信息与资料），返回 (total, rows)。
+
+        keyword 支持按用户名 / 姓名 / 昵称 / 学号搜索（对应「学生管理」的搜索框）。
+        """
+        where = ["m.course_id = ?"]
+        params = [course_id]
+        if status:
+            where.append("m.status = ?")
+            params.append(status)
+        if role:
+            where.append("m.role = ?")
+            params.append(role)
+        if keyword:
+            where.append("(u.username LIKE ? OR p.real_name LIKE ? "
+                         "OR p.nickname LIKE ? OR p.student_no LIKE ? OR p.teacher_no LIKE ?)")
+            params.extend([f"%{keyword}%"] * 5)
+        where_sql = "WHERE " + " AND ".join(where)
+
+        total = self._query_one(
+            f"""
+            SELECT count(*) AS cnt FROM t_course_member m
+            LEFT JOIN t_user u ON u.user_id = m.user_id
+            LEFT JOIN t_user_profile p ON p.user_id = m.user_id
+            {where_sql}
+            """,
+            tuple(params),
+        )["cnt"]
+
+        rows = self._query(
+            f"""
+            SELECT m.*, u.username, u.display_name, u.email, u.is_active,
+                   p.avatar_url, p.real_name, p.nickname, p.gender, p.school,
+                   p.college, p.major, p.grade, p.class_name,
+                   p.student_no, p.teacher_no, p.title, p.research_area
+            FROM t_course_member m
+            LEFT JOIN t_user u ON u.user_id = m.user_id
+            LEFT JOIN t_user_profile p ON p.user_id = m.user_id
+            {where_sql}
+            ORDER BY CASE m.status WHEN 'pending' THEN 0 WHEN 'approved' THEN 1 ELSE 2 END,
+                     m.member_id DESC
+            LIMIT ? OFFSET ?
+            """,
+            tuple(params + [page_size, (page - 1) * page_size]),
+        )
+        return total, rows
+
+    def list_memberships_by_user(self, user_id: int, statuses: tuple = None) -> list:
+        """某用户的全部课程成员关系（可按状态过滤），用于「我的课程」标注我的角色与状态"""
+        if statuses:
+            marks = ",".join("?" * len(statuses))
+            return self._query(
+                f"SELECT * FROM t_course_member WHERE user_id = ? AND status IN ({marks}) "
+                f"ORDER BY member_id DESC",
+                tuple([user_id] + list(statuses)),
+            )
+        return self._query(
+            "SELECT * FROM t_course_member WHERE user_id = ? ORDER BY member_id DESC",
+            (user_id,),
+        )
+
+    def count_members_by_status(self, course_id: int) -> dict:
+        """某课程各状态成员数，返回 {status: count}"""
+        rows = self._query(
+            "SELECT status, count(*) AS cnt FROM t_course_member "
+            "WHERE course_id = ? GROUP BY status",
+            (course_id,),
+        )
+        return {r["status"]: r["cnt"] for r in rows}
+
+    def member_counts_by_course(self, course_ids: list) -> dict:
+        """批量统计多门课程的成员数，返回 {course_id: {status: count}}（课程卡片角标用）"""
+        if not course_ids:
+            return {}
+        rows = self._query(
+            f"SELECT course_id, status, count(*) AS cnt FROM t_course_member "
+            f"WHERE course_id IN ({','.join('?' * len(course_ids))}) "
+            f"GROUP BY course_id, status",
+            tuple(course_ids),
+        )
+        result = {}
+        for r in rows:
+            result.setdefault(r["course_id"], {})[r["status"]] = r["cnt"]
+        return result
+
+    def list_member_user_ids(self, course_id: int, status: str = "approved",
+                             role: str = None) -> list:
+        """某课程指定状态（可按角色过滤）的成员 user_id 列表。
+
+        教学监测的「学生集合」= role='student' 的已通过成员 ∪ 有学习记录者——
+        必须排除 role='teacher' 的成员，否则课程创建者会出现在自己的学生名单里。
+        """
+        if role:
+            rows = self._query(
+                "SELECT user_id FROM t_course_member "
+                "WHERE course_id = ? AND status = ? AND role = ?",
+                (course_id, status, role),
+            )
+        else:
+            rows = self._query(
+                "SELECT user_id FROM t_course_member WHERE course_id = ? AND status = ?",
+                (course_id, status),
+            )
+        return [r["user_id"] for r in rows]
+
+    # ---------- 课程邀请 ----------
+
+    def create_invite(self, course_id: int, token: str, invited_by: int,
+                      role: str = "student", expires_at: str = None) -> int:
+        return self._execute(
+            "INSERT INTO t_course_invite (course_id, token, invited_by, role, expires_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (course_id, token, invited_by, role, expires_at),
+        )
+
+    def get_invite_by_token(self, token: str) -> dict:
+        return self._query_one("SELECT * FROM t_course_invite WHERE token = ?", (token,))
+
+    def list_invites_by_course(self, course_id: int) -> list:
+        return self._query(
+            """
+            SELECT i.*,
+                   COALESCE(inv.display_name, inv.username, '') AS inviter_name,
+                   COALESCE(ub.display_name, ub.username, '')   AS used_by_name
+            FROM t_course_invite i
+            LEFT JOIN t_user inv ON inv.user_id = i.invited_by
+            LEFT JOIN t_user ub  ON ub.user_id  = i.used_by
+            WHERE i.course_id = ?
+            ORDER BY i.invite_id DESC
+            """,
+            (course_id,),
+        )
+
+    def mark_invite_used(self, invite_id: int, used_by: int) -> int:
+        """标记邀请已使用；rowcount==1 才是本次真正消费掉该邀请。
+
+        条件里带 status='active'，因此「并发点击 / 重复点击」只有一个请求能拿到 1，
+        无需先读后写，从根上避免邀请被重复使用。
+        """
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE t_course_invite SET status = 'used', used_by = ?, used_at = ? "
+                "WHERE invite_id = ? AND status = 'active'",
+                (used_by, _now(), invite_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def revoke_invite(self, invite_id: int, course_id: int) -> int:
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE t_course_invite SET status = 'revoked' "
+                "WHERE invite_id = ? AND course_id = ? AND status = 'active'",
+                (invite_id, course_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    # ---------- 用户资料（个人中心） ----------
+
+    _PROFILE_FIELDS = ("avatar_url", "real_name", "nickname", "gender", "school",
+                       "college", "bio", "student_no", "major", "grade",
+                       "class_name", "teacher_no", "title", "research_area")
+
+    def get_user_profile(self, user_id: int) -> dict:
+        """取用户身份信息 + 资料（资料行不存在时右侧字段为 NULL，不算错误）"""
+        return self._query_one(
+            """
+            SELECT u.user_id, u.username, u.role, u.display_name, u.email,
+                   u.is_active, u.created_at AS user_created_at,
+                   p.avatar_url, p.real_name, p.nickname, p.gender, p.school,
+                   p.college, p.bio, p.student_no, p.major, p.grade, p.class_name,
+                   p.teacher_no, p.title, p.research_area,
+                   p.updated_at AS profile_updated_at
+            FROM t_user u
+            LEFT JOIN t_user_profile p ON p.user_id = u.user_id
+            WHERE u.user_id = ?
+            """,
+            (user_id,),
+        )
+
+    def upsert_user_profile(self, user_id: int, **fields) -> None:
+        """写入/更新资料（仅白名单字段；None 表示清空该字段，与「不修改」由服务层区分）"""
+        cols = [k for k in fields if k in self._PROFILE_FIELDS]
+        if not cols:
+            return
+        now = _now()
+        placeholders = ", ".join("?" * len(cols))
+        updates = ", ".join(f"{c} = excluded.{c}" for c in cols)
+        self._execute(
+            f"INSERT INTO t_user_profile (user_id, {', '.join(cols)}, updated_at) "
+            f"VALUES (?, {placeholders}, ?) "
+            f"ON CONFLICT(user_id) DO UPDATE SET {updates}, updated_at = excluded.updated_at",
+            tuple([user_id] + [fields[c] for c in cols] + [now]),
+        )
+
+    def list_user_profiles(self, user_ids: list) -> dict:
+        """批量取资料，返回 {user_id: {nickname, real_name, avatar_url, school, ...}}（成员列表用）"""
+        if not user_ids:
+            return {}
+        rows = self._query(
+            f"""
+            SELECT u.user_id, u.username, u.display_name,
+                   p.avatar_url, p.real_name, p.nickname, p.school, p.college,
+                   p.major, p.grade, p.class_name, p.student_no, p.teacher_no, p.title
+            FROM t_user u
+            LEFT JOIN t_user_profile p ON p.user_id = u.user_id
+            WHERE u.user_id IN ({','.join('?' * len(user_ids))})
+            """,
+            tuple(user_ids),
+        )
+        return {r["user_id"]: dict(r) for r in rows}
+
+    def count_user_profiles(self) -> int:
+        return self._query_one("SELECT count(*) AS cnt FROM t_user_profile")["cnt"]
 
     # ---------- 统计（数据总览） ----------
 

@@ -7,7 +7,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .core.config import settings
 from .core.sql_database import sql_db
-from .api import auth, courses, knowledge_graph, qa, learning_path, graph, documents, learning, dashboard, favorites, teacher
+from .api import (auth, courses, knowledge_graph, qa, learning_path, graph, documents,
+                  learning, dashboard, favorites, teacher,
+                  course_members, invites, profile)
 
 
 @asynccontextmanager
@@ -46,6 +48,10 @@ app.include_router(documents.router)
 app.include_router(dashboard.router)
 app.include_router(favorites.router)
 app.include_router(teacher.router)
+# 课程中心：成员管理（复用 /api/v1/courses 前缀）、邀请、个人中心
+app.include_router(course_members.router)
+app.include_router(invites.router)
+app.include_router(profile.router)
 
 
 @app.get("/")

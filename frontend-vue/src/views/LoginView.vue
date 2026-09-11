@@ -164,14 +164,15 @@ const regRules = {
 }
 
 function afterLogin() {
+  // 带 redirect（例如从邀请链接被弹到登录页）时优先回跳原地址
   const redirect = route.query.redirect
-  const target =
-    typeof redirect === 'string' && redirect.startsWith('/')
-      ? redirect
-      : store.role === 'teacher'
-        ? '/teacher'
-        : '/student'
-  router.push(target)
+  if (typeof redirect === 'string' && redirect.startsWith('/')) {
+    router.push(redirect)
+    return
+  }
+  // 课程中心改造：教师与学生统一落到「课程中心 → 我的课程」，
+  // 数据总览 / 学习总览仍在侧边栏一键可达
+  router.push({ path: '/course-center', query: { tab: 'mine' } })
 }
 
 async function onLogin() {

@@ -15,12 +15,22 @@
       </div>
 
       <div class="user-box" :class="{ collapsed }">
-        <div class="user-avatar">{{ store.username.slice(0, 1).toUpperCase() }}</div>
-        <div v-if="!collapsed" class="user-meta">
-          <div class="user-name">{{ store.username }}</div>
-          <el-tag size="small" :type="store.role === 'teacher' ? 'warning' : 'success'" effect="dark">
-            {{ store.role === 'teacher' ? '教师' : '学生' }}
-          </el-tag>
+        <!-- 头像 / 昵称区域点击进入个人中心（退出按钮保持独立，避免点击冲突） -->
+        <div class="user-entry" :title="collapsed ? '个人中心' : ''" @click="goProfile">
+          <img
+            v-if="store.avatarUrl"
+            class="user-avatar user-avatar-img"
+            :src="store.avatarUrl"
+            alt="头像"
+            @error="avatarFailed = true"
+          />
+          <div v-else class="user-avatar">{{ avatarInitial }}</div>
+          <div v-if="!collapsed" class="user-meta">
+            <div class="user-name">{{ store.displayName }}</div>
+            <el-tag size="small" :type="store.role === 'teacher' ? 'warning' : 'success'" effect="dark">
+              {{ store.role === 'teacher' ? '教师' : '学生' }}
+            </el-tag>
+          </div>
         </div>
         <el-button
           v-if="!collapsed"
@@ -42,6 +52,12 @@
         text-color="#b0b8d1"
         active-text-color="#409eff"
       >
+        <!-- 课程中心（教师与学生共用的首页：我的课程 / 发现课程 / 加入课程） -->
+        <el-menu-item index="/course-center?tab=mine">
+          <el-icon><School /></el-icon>
+          <template #title>课程中心</template>
+        </el-menu-item>
+
         <!-- 数据总览（教师全局统计）/ 学习总览（学生学习驾驶舱） -->
         <el-menu-item :index="store.role === 'teacher' ? '/dashboard' : '/student?tab=overview'">
           <el-icon><DataAnalysis /></el-icon>
@@ -76,6 +92,11 @@
             <template #title>收藏夹</template>
           </el-menu-item>
         </template>
+
+        <el-menu-item index="/profile">
+          <el-icon><User /></el-icon>
+          <template #title>个人中心</template>
+        </el-menu-item>
       </el-menu>
 
       <div class="aside-footer" :class="{ collapsed }">
@@ -127,7 +148,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   Upload, Compass, DataAnalysis, Search, EditPen, ChatDotRound, Guide, Fold, Expand, Notebook, StarFilled, DataLine,
-  Document,
+  Document, School, User,
 } from '@element-plus/icons-vue'
 import { useAppStore } from './stores/app'
 import BackendStatusCard from './components/BackendStatusCard.vue'
@@ -137,10 +158,15 @@ const router = useRouter()
 const route = useRoute()
 
 const collapsed = ref(window.innerWidth < 768)
+// 头像加载失败（例如未设置头像返回 404）时回退为姓名首字母色块
+const avatarFailed = ref(false)
 
-// 独立整页路由（不套主框架）
-const STANDALONE_ROUTES = ['login', 'reader']
+// 独立整页路由（不套主框架）：邀请落地页在加入课程前不应出现侧边栏与其它课程入口
+const STANDALONE_ROUTES = ['login', 'reader', 'invite']
 const isStandalone = computed(() => STANDALONE_ROUTES.includes(route.name))
+
+// 展示名首字母（昵称 > 真名 > display_name > 用户名）
+const avatarInitial = computed(() => (store.displayName || '?').slice(0, 1).toUpperCase())
 
 // Tab 子页面中文名（面包屑 + 侧边栏 active 一致）
 // 注：courses 为课程管理默认 Tab，面包屑主级已是「课程管理」，故不再重复显示为第三级
@@ -150,10 +176,14 @@ const TAB_LABELS = {
   preview: '图谱预览',
   edit: '编辑图谱',
   monitor: '教学监测',
+  members: '学生管理',
   browse: '图谱浏览',
   qa: '智能问答',
   path: '学习路径推荐',
   favorites: '收藏夹',
+  mine: '我的课程',
+  discover: '发现课程',
+  join: '加入课程',
 }
 
 // 侧边栏 active：将 /teacher?tab=upload 等映射为菜单 index，保证 URL / 菜单 / 面包屑三者一致
@@ -169,6 +199,10 @@ function onLogout() {
   router.push('/login')
 }
 
+function goProfile() {
+  if (route.name !== 'profile') router.push({ name: 'profile' })
+}
+
 // 窄屏（<768px）自动折叠侧边栏释放横向空间；桌面端保持默认展开宽度
 function handleSidebarResize() {
   if (window.innerWidth < 768) collapsed.value = true
@@ -177,6 +211,9 @@ function handleSidebarResize() {
 onMounted(() => {
   store.checkHealth()
   setInterval(() => store.checkHealth(), 30000)
+  // 拉取个人资料（昵称/头像）供侧边栏展示；失败不影响任何功能（登录响应里已有兜底字段）
+  // 仅在已登录时请求：登录页也会挂载 App，未登录发请求会拿到 401 并触发拦截器的跳转逻辑
+  if (store.isLoggedIn) store.fetchProfile().catch(() => {})
   handleSidebarResize()
   window.addEventListener('resize', handleSidebarResize)
 })
@@ -245,6 +282,24 @@ onBeforeUnmount(() => {
   justify-content: center;
   padding: 12px 0;
 }
+.user-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 2px 4px;
+  transition: background-color 0.2s ease;
+}
+.user-entry:hover {
+  background-color: rgba(64,158,255,0.1);
+}
+.user-box.collapsed .user-entry {
+  flex: 0;
+  justify-content: center;
+}
 .user-avatar {
   width: 34px;
   height: 34px;
@@ -257,6 +312,11 @@ onBeforeUnmount(() => {
   font-weight: 600;
   font-size: 16px;
   flex-shrink: 0;
+}
+/* 头像图片：object-fit 保证非正方形图片不变形 */
+.user-avatar-img {
+  object-fit: cover;
+  background: none;
 }
 .user-meta {
   flex: 1;

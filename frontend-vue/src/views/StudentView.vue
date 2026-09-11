@@ -831,6 +831,31 @@ function syncUrlToContext() {
   router.replace({ path: '/student', query })
 }
 
+/**
+ * 课程中心改造：课程必须是我已加入的（store.courses 后端已收敛为「我的课程」）。
+ *
+ * 目的：书签 / 外部链接里可能残留别人课程的 course_id，改造后这类访问一律 4003，
+ * 若不拦在这里，图谱 / 问答 / 路径等 Tab 会连环弹「无权限」错误。
+ * 课程列表尚未加载完成时不误判（返回 true，交给后端最终裁决）。
+ */
+function isMyCourse(cid) {
+  if (!cid) return false
+  // 仅在「课程列表还没加载完」时豁免，避免误拦；加载完就以列表为准——
+  // 注意不能把「列表为空」也当成豁免条件，那正好是「一门课都没加入」的学生，
+  // 恰恰是最需要被拦下的人。
+  if (!store.coursesLoaded) return true
+  return store.courses.some((c) => String(c.course_id) === String(cid))
+}
+
+/** 命中「不属于我的课程」时的统一处理：清空上下文并引导去课程中心加入 */
+function rejectForeignCourse() {
+  store.clearLearningDocument()
+  store.setLearningContext({ courseId: null, documentId: null })
+  activeTab.value = 'overview'
+  ElMessage.warning('你尚未加入该课程，请先在「课程中心」加入后再学习')
+  router.replace({ path: '/course-center', query: { tab: 'join' } })
+}
+
 // 进入学习 Tab 前校验上下文：URL → learningContext → 不猜测
 function ensureContext() {
   const cid = route.query.course_id
@@ -862,6 +887,16 @@ function ensureCourseOnly() {
 // 进入指定 Tab（学习 Tab 缺上下文时不猜测，回退到选择态并提示）
 function enterTab(tab) {
   const target = tab || 'overview'
+
+  // 课程中心改造：需要课程的 Tab 先拦「不属于我的课程」（书签/外链里可能残留别人课程的 id），
+  // 否则后端会一律 4003，表现为图谱/问答/路径连环弹「无权限」，很难理解。
+  const needsCourse = COURSE_ONLY_TABS.includes(target) || LEARNING_TABS.includes(target)
+  const cid = route.query.course_id || currentCourseId.value
+  if (needsCourse && cid && !isMyCourse(cid)) {
+    rejectForeignCourse()
+    return
+  }
+
   if (COURSE_ONLY_TABS.includes(target)) {
     if (!ensureCourseOnly()) {
       activeTab.value = 'overview'
@@ -897,8 +932,10 @@ watch(
   }
 )
 
-onMounted(() => {
-  store.fetchCourses().catch(() => {})
+onMounted(async () => {
+  // 先等课程列表就绪再进入 Tab：这样 isMyCourse() 才能可靠判断 URL 里的 course_id
+  // 是否属于我（书签/外链里的旧课程 id 会被拦下并引导去课程中心加入）
+  await store.fetchCourses().catch(() => {})
   enterTab(route.query.tab || 'overview')
   if (currentCourseId.value) store.fetchDocuments(currentCourseId.value).catch(() => {})
 })

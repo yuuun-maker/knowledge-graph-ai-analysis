@@ -25,10 +25,13 @@ export const useAppStore = defineStore('app', {
     healthChecked: false,
     // 右下角后端服务状态浮窗是否已被用户关闭（会话级，下次登录重新显示）
     backendStatusDismissed: sessionStorage.getItem(STATUS_DISMISS_KEY) === '1',
-    courses: [], // [{course_id, course_name, node_count, ...}] 后端课程列表
+    courses: [], // [{course_id, course_name, node_count, ...}] 后端课程列表（= 我可访问的课程）
     currentCourseId: '', // 当前选中的课程 ID（字符串）
     isLoading: false,
     coursesLoaded: false,
+    // 个人资料（课程中心改造）：t_user_profile 的可编辑字段 + 身份信息
+    // 未登录或尚未拉取时为 null，消费方一律走 getters.displayName / avatarUrl 兜底
+    profile: null,
     // 学生端统一学习上下文（Phase 7）：Course → Document 后建立，所有学习 Tab 共享
     learningContext: {
       currentCourseId: null, // 当前课程 ID（字符串）
@@ -41,7 +44,16 @@ export const useAppStore = defineStore('app', {
     isLoggedIn: (state) => !!state.token,
     // 角色由登录用户决定；未登录时默认 student（仅兜底，受路由守卫保护不会真正用到）
     role: (state) => state.user?.role || 'student',
+    isTeacher: (state) => (state.user?.role || 'student') === 'teacher',
     username: (state) => state.user?.username || '',
+    /** 展示名：昵称 > 真实姓名 > 登录响应里的 display_name > 用户名 */
+    displayName: (state) =>
+      state.profile?.nickname || state.profile?.real_name
+      || state.user?.nickname || state.user?.real_name || state.user?.display_name
+      || state.user?.username || '',
+    /** 头像直链；无头像返回空串，由调用方回退为姓名首字母色块 */
+    avatarUrl: (state) =>
+      state.profile?.avatar_url || state.user?.avatar_url || '',
     courseById: (state) => (id) =>
       state.courses.find((c) => String(c.course_id) === String(id)),
   },
@@ -52,6 +64,17 @@ export const useAppStore = defineStore('app', {
       this.user = user
       localStorage.setItem(TOKEN_KEY, token)
       localStorage.setItem(USER_KEY, JSON.stringify(user))
+      // 登录响应已带 display_name / nickname / real_name / avatar_url，
+      // 先据此填充 profile，侧边栏首屏就有正确昵称与头像（随后 fetchProfile 再补全完整资料）
+      this.profile = this.profile || {
+        user_id: user?.user_id,
+        username: user?.username,
+        role: user?.role,
+        nickname: user?.nickname || null,
+        real_name: user?.real_name || null,
+        display_name: user?.display_name || null,
+        avatar_url: user?.avatar_url || null,
+      }
       // 重新登录后，右下角后端服务状态浮窗重新显示
       this.backendStatusDismissed = false
       sessionStorage.removeItem(STATUS_DISMISS_KEY)
@@ -69,11 +92,17 @@ export const useAppStore = defineStore('app', {
     logout() {
       this.token = ''
       this.user = null
+      this.profile = null
       localStorage.removeItem(TOKEN_KEY)
       localStorage.removeItem(USER_KEY)
       this.courses = []
       this.coursesLoaded = false
       this.currentCourseId = ''
+      // 学习上下文也一并清空，避免下一个登录的账号看到上一个账号的课程/文档
+      this.learningContext.currentCourseId = null
+      this.learningContext.currentDocumentId = null
+      this.learningContext.courseList = []
+      this.learningContext.documentList = []
       // 退出后回到登录页，状态浮窗重新显示
       this.backendStatusDismissed = false
       sessionStorage.removeItem(STATUS_DISMISS_KEY)
@@ -124,6 +153,75 @@ export const useAppStore = defineStore('app', {
       const data = await api.deleteCourse(id, true)
       this.fetchCourses(true).catch(() => {})
       if (String(this.currentCourseId) === String(id)) this.currentCourseId = ''
+      return data
+    },
+
+    // ---- 个人资料（课程中心改造） ----
+    /**
+     * 拉取当前用户完整资料；失败不抛错（资料拿不到不应阻断任何页面）。
+     *
+     * 未登录时必须直接返回：登录页也会挂载 App，若无脑请求 /profile 会拿到 401，
+     * 而 axios 拦截器对 401 的处理是「清 token + 跳登录页」，在登录页上会造成多余跳转。
+     */
+    async fetchProfile(force = false) {
+      if (!this.token) return null
+      if (this.profile && this.profile.__full && !force) return this.profile
+      const data = await api.getProfile()
+      this.profile = { ...data, __full: true }
+      return this.profile
+    },
+    /** 资料保存后立即生效：侧边栏/头像无需刷新页面即可更新 */
+    applyProfile(profile) {
+      this.profile = { ...(this.profile || {}), ...profile, __full: true }
+      if (this.user) {
+        this.user = {
+          ...this.user,
+          nickname: this.profile.nickname,
+          real_name: this.profile.real_name,
+          avatar_url: this.profile.avatar_url,
+        }
+        localStorage.setItem(USER_KEY, JSON.stringify(this.user))
+      }
+    },
+
+    // ---- 课程中心：加入 / 申请 / 退出 / 邀请 ----
+    /** 任何「成员关系发生变化」的操作之后统一调用：让课程列表与已选上下文保持一致 */
+    async refreshAfterMembershipChange() {
+      await this.fetchCourses(true).catch(() => {})
+      // 若当前上下文指向的课程已不在我的课程里（被移除/已退出），清空上下文
+      const cid = this.learningContext.currentCourseId
+      if (cid && !this.courses.some((c) => String(c.course_id) === String(cid))) {
+        this.learningContext.currentCourseId = null
+        this.learningContext.currentDocumentId = null
+        this.learningContext.documentList = []
+      }
+      if (this.currentCourseId
+          && !this.courses.some((c) => String(c.course_id) === String(this.currentCourseId))) {
+        this.currentCourseId = ''
+      }
+      return this.courses
+    },
+    /** 用加课码加入课程（返回 {status:'approved'|'pending'}） */
+    async joinByCode(joinCode, reason = null) {
+      const data = await api.joinByCode(joinCode, reason)
+      await this.refreshAfterMembershipChange()
+      return data
+    },
+    /** 申请加入公开课程 */
+    async applyToCourse(courseId, reason = null) {
+      const data = await api.applyToCourse(courseId, reason)
+      return data
+    },
+    /** 学生退出课程（软移除，学习记录与收藏保留） */
+    async leaveCourse(courseId) {
+      const data = await api.removeMember(courseId, this.user?.user_id, true)
+      await this.refreshAfterMembershipChange()
+      return data
+    },
+    /** 接受邀请加入课程 */
+    async acceptInvite(token) {
+      const data = await api.acceptInvite(token)
+      await this.refreshAfterMembershipChange()
       return data
     },
 

@@ -75,6 +75,11 @@ def login(user: UserLogin):
     if not db_user or not verify_password(user.password, db_user["password_hash"]):
         return error(2002, "用户名或密码错误")
 
+    # 课程中心改造：登录响应追加 display_name / nickname / avatar_url，
+    # 让侧边栏首屏就能显示昵称与头像，不必等 /api/v1/profile 返回。
+    # 纯新增字段：JWT 载荷本身不变（老 token 继续可用），前端按 key 读取，
+    # 新增键不会影响既有逻辑（kg_user 的消费方见 utils/userRole.js 等）。
+    profile = sql_db.get_user_profile(db_user["user_id"]) or {}
     return success({
         "access_token": _issue_token(db_user),
         "token_type": "bearer",
@@ -82,5 +87,9 @@ def login(user: UserLogin):
             "user_id": db_user["user_id"],
             "username": db_user["username"],
             "role": db_user["role"],
+            "display_name": db_user.get("display_name"),
+            "nickname": profile.get("nickname"),
+            "real_name": profile.get("real_name"),
+            "avatar_url": profile.get("avatar_url"),
         },
     })

@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from ..core.database import db
 from ..core.dependencies import get_current_user
+from ..core.permissions import Permissions
 from ..core.response import success, error
 from ..core.sql_database import sql_db
 
@@ -33,7 +34,8 @@ def _coerce_int(value):
 
 class MarkRequest(BaseModel):
     course_id: str
-    document_id: str = None
+    # str | None：Pydantic v2 下 `str = None` 不接受显式 null（前端未选文档时会传 null）
+    document_id: str | None = None
     kp_id: str
     status: str = "MASTERED"     # MASTERED / LEARNING / RECOMMENDED
     mastery_level: int = 100     # 0-100
@@ -41,10 +43,13 @@ class MarkRequest(BaseModel):
 
 @router.post("/mark")
 async def mark_knowledge(request: MarkRequest, current_user: dict = Depends(get_current_user)):
-    """标记/更新知识点掌握状态（默认 MASTERED 表示已掌握）"""
+    """标记/更新知识点掌握状态（默认 MASTERED 表示已掌握；需为课程成员）"""
     cid = _coerce_int(request.course_id)
     if cid is None:
         return error(4001, "参数错误：course_id 必须为整数")
+    perm = Permissions.require_course_content(cid, current_user)
+    if not perm["ok"]:
+        return error(perm["code"], perm["message"])
     did = _coerce_int(request.document_id)
     if did is None:
         return error(4001, "参数错误：document_id 必须为整数")
@@ -88,7 +93,7 @@ async def mark_knowledge(request: MarkRequest, current_user: dict = Depends(get_
 @router.delete("/mark")
 async def unmark_knowledge(course_id: str, document_id: str, kp_id: str,
                            current_user: dict = Depends(get_current_user)):
-    """取消知识点掌握标记（删除对应学习记录）"""
+    """取消知识点掌握标记（删除对应学习记录；刻意不校验成员身份，退出课程后仍可清理自己的记录）"""
     cid = _coerce_int(course_id)
     if cid is None:
         return error(4001, "参数错误：course_id 必须为整数")
@@ -104,8 +109,20 @@ async def unmark_knowledge(course_id: str, document_id: str, kp_id: str,
 @router.get("/progress")
 async def get_progress(course_id: str = None, document_id: str = None,
                        current_user: dict = Depends(get_current_user)):
-    """查询学生学习进度；指定 course_id + document_id 返回该文档进度，否则返回全部学习记录（按课程分组）"""
+    """查询学生学习进度；指定 course_id + document_id 返回该文档进度，否则返回全部学习记录（按课程分组）。
+
+    课程中心改造：指定课程时校验成员身份；「全部学习记录」分支保持原样——
+    那是学生自己的历史数据，退出课程后学习总览仍要能展示。
+    """
     user_id = current_user["user_id"]
+
+    if course_id is not None and course_id != "":
+        cid_check = _coerce_int(course_id)
+        if cid_check is None:
+            return error(4001, "参数错误：course_id 必须为整数")
+        perm = Permissions.require_course_content(cid_check, current_user)
+        if not perm["ok"]:
+            return error(perm["code"], perm["message"])
 
     if course_id is not None and course_id != "" and document_id is not None and document_id != "":
         cid = _coerce_int(course_id)

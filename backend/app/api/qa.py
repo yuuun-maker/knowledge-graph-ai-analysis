@@ -4,8 +4,9 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-from ..core.response import success
+from ..core.response import success, error
 from ..core.dependencies import get_current_user
+from ..core.permissions import Permissions
 from ..services.qa_service import QAService
 
 router = APIRouter(prefix="/api/v1/qa", tags=["智能问答"])
@@ -25,11 +26,28 @@ class QuestionRequest(BaseModel):
 async def ask_question(request: QuestionRequest, current_user: dict = Depends(get_current_user)):
     """
     学生向AI提问（RAG模式；Phase 8C：按 course_id + document_id 限定候选知识点范围）
+
+    课程中心改造：
+    - 显式传了 course_id：先校验课程成员身份，非成员直接 4003（不进入检索）；
+    - 未传 course_id（AI 悬浮窗在未选课程时的调用）：检索范围收敛为
+      「当前用户可访问的课程」，不再退化成全库扫描。
     """
-    answer = await qa_service.ask(request.question, request.course_id, request.document_id)
+    allowed_ids = Permissions.allowed_course_ids(current_user)
+    if request.course_id:
+        try:
+            cid = int(request.course_id)
+        except (TypeError, ValueError):
+            return error(1001, f"course_id 必须为整数，收到: {request.course_id}")
+        perm = Permissions.require_course_content(cid, current_user)
+        if not perm["ok"]:
+            return error(perm["code"], perm["message"])
+
+    answer = await qa_service.ask(request.question, request.course_id, request.document_id,
+                                  allowed_ids=allowed_ids)
 
     # 获取引用来源（结构化：kp_id/name/category/description，供前端"证据链"展示）
-    sources = qa_service.search_related_nodes(request.question, request.course_id, request.document_id)
+    sources = qa_service.search_related_nodes(request.question, request.course_id,
+                                              request.document_id, allowed_ids=allowed_ids)
 
     return success({
         "question": request.question,

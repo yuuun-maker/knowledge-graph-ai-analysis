@@ -4,62 +4,29 @@
 
     <el-tabs v-model="activeTab" @tab-change="onTabChange">
       <!-- ===================== Tab 0：课程列表 ===================== -->
+      <!-- 课程中心改造：卡片视觉与「课程中心 → 我的课程」统一为同一个组件的两种配置，
+           进入课程后仍复用本页既有的 文档 / 图谱预览 / 编辑 / 监测 四个 Tab -->
       <el-tab-pane name="courses">
         <template #label><span class="tab-label"><el-icon><Notebook /></el-icon>课程管理</span></template>
 
         <div class="course-toolbar">
           <span class="stats-text">共 {{ store.courses.length }} 门课程</span>
           <el-button type="primary" :icon="Plus" @click="openCreateCourse">新建课程</el-button>
+          <el-button :icon="Promotion" @click="openInviteForCurrent">邀请学生</el-button>
         </div>
 
-        <div v-loading="store.isLoading" class="course-grid-wrap">
-          <el-empty
-            v-if="!store.isLoading && !store.courses.length"
-            description="暂无课程，点击「新建课程」开始"
-          >
-            <el-button type="primary" :icon="Plus" @click="openCreateCourse">新建课程</el-button>
-          </el-empty>
-
-          <div v-else class="course-grid">
-            <div v-for="c in store.courses" :key="c.course_id" class="course-card">
-              <div class="course-card-head">
-                <span class="course-name" :title="c.course_name">{{ c.course_name }}</span>
-                <el-tag size="small" :type="c.status === 1 ? 'success' : 'info'">
-                  {{ c.status === 1 ? '正常' : '停用' }}
-                </el-tag>
-              </div>
-              <div class="course-desc" :title="c.description">
-                {{ c.course_code ? `【${c.course_code}】` : '' }}{{ c.description || '暂无课程简介' }}
-              </div>
-
-              <div class="course-stats">
-                <div class="course-stat">
-                  <el-icon color="var(--color-primary)"><Document /></el-icon>
-                  <span class="stat-num">{{ c.document_count ?? 0 }}</span>
-                  <span class="stat-label">文档</span>
-                </div>
-                <div class="course-stat">
-                  <el-icon color="var(--color-warning)"><DataAnalysis /></el-icon>
-                  <span class="stat-num">{{ c.node_count ?? 0 }}</span>
-                  <span class="stat-label">知识点</span>
-                </div>
-                <div class="course-stat">
-                  <el-icon color="var(--color-success)"><Connection /></el-icon>
-                  <span class="stat-num">{{ c.edge_count ?? 0 }}</span>
-                  <span class="stat-label">关系</span>
-                </div>
-              </div>
-
-              <div class="course-card-foot">
-                <span class="course-updated"><el-icon><Clock /></el-icon> 更新于 {{ fmtTime(c.updated_at) }}</span>
-                <div class="course-actions">
-                  <el-button size="small" type="primary" plain :icon="Files" @click="manageDocuments(c)">管理文档</el-button>
-                  <el-button size="small" type="danger" plain :icon="Delete" @click="deleteCourse(c)">删除</el-button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MyCourseGrid
+          :courses="store.courses"
+          role="teacher"
+          :loading="store.isLoading"
+          show-create
+          empty-text="暂无课程，点击「新建课程」开始"
+          @create="openCreateCourse"
+          @enter="manageDocuments"
+          @members="goMembers"
+          @settings="openSettings"
+          @delete="deleteCourse"
+        />
       </el-tab-pane>
 
       <!-- ===================== Tab 1：课程文档 ===================== -->
@@ -225,7 +192,66 @@
         </template>
       </el-tab-pane>
 
-      <!-- ===================== Tab 2：文档图谱预览 ===================== -->
+      <!-- ===================== Tab 2：学生管理（课程中心新增） ===================== -->
+      <el-tab-pane name="members">
+        <template #label><span class="tab-label"><el-icon><UserFilled /></el-icon>学生管理</span></template>
+
+        <el-card v-if="!currentCourseId" class="page-card">
+          <el-empty description="请先选择要管理学生的课程">
+            <div class="doc-course-pick">
+              <el-select
+                v-model="currentCourseId"
+                placeholder="选择课程"
+                filterable
+                clearable
+                style="width: 260px"
+                @change="syncDocumentsRoute"
+              >
+                <el-option
+                  v-for="c in store.courses"
+                  :key="c.course_id"
+                  :label="c.course_name"
+                  :value="String(c.course_id)"
+                />
+              </el-select>
+              <el-button :icon="Notebook" @click="goCourses">前往课程管理</el-button>
+            </div>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
+          <div class="context-bar">
+            <el-button text :icon="Back" @click="backToCourses">返回课程列表</el-button>
+            <el-divider direction="vertical" />
+            <span class="context-title">{{ currentCourseName }}</span>
+            <el-select
+              v-model="currentCourseId"
+              class="course-switcher"
+              size="small"
+              filterable
+              clearable
+              placeholder="切换课程"
+              @change="syncDocumentsRoute"
+            >
+              <el-option
+                v-for="c in store.courses"
+                :key="c.course_id"
+                :label="c.course_name"
+                :value="String(c.course_id)"
+              />
+            </el-select>
+            <div class="context-actions">
+              <el-button size="small" :icon="Promotion" @click="openInviteForCurrent">邀请学生</el-button>
+            </div>
+          </div>
+
+          <el-card class="page-card">
+            <CourseMembersPanel :course-id="currentCourseId" @refresh="reloadCoursesSilently" />
+          </el-card>
+        </template>
+      </el-tab-pane>
+
+      <!-- ===================== Tab 3：文档图谱预览 ===================== -->
       <el-tab-pane name="preview">
         <template #label><span class="tab-label"><el-icon><View /></el-icon>图谱预览</span></template>
 
@@ -714,30 +740,19 @@
       </template>
     </el-dialog>
 
-    <!-- 新建课程对话框 -->
-    <el-dialog v-model="createCourseVisible" title="新建课程" width="440px">
-      <el-form label-width="80px">
-        <el-form-item label="课程名称" required>
-          <el-input
-            v-model="createCourseForm.name"
-            placeholder="例如：数据结构"
-            @keyup.enter="submitCreateCourse"
-          />
-        </el-form-item>
-        <el-form-item label="课程简介">
-          <el-input
-            v-model="createCourseForm.description"
-            type="textarea"
-            :rows="3"
-            placeholder="可选"
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="createCourseVisible = false">取消</el-button>
-        <el-button type="primary" :loading="createCourseLoading" @click="submitCreateCourse">创建</el-button>
-      </template>
-    </el-dialog>
+    <!-- 新建课程对话框（课程中心改造：独立组件，含分类/院系/加入方式/是否公开） -->
+    <CreateCourseDialog v-model="createCourseVisible" @created="onCourseCreated" />
+
+    <!-- 课程设置（含加课码刷新与删除课程） -->
+    <CourseSettingsDialog
+      v-model="settingsVisible"
+      :course="settingsCourse"
+      @saved="reloadCoursesSilently"
+      @deleted="onCourseDeleted"
+    />
+
+    <!-- 邀请学生 / 协作教师 -->
+    <InviteDialog v-model="inviteVisible" :course-id="inviteCourseId" />
   </div>
 </template>
 
@@ -749,7 +764,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   UploadFilled, Upload, View, EditPen, Refresh, FullScreen, Plus, Connection, ArrowRight, Search, SuccessFilled,
   Notebook, Document, Delete, DataAnalysis, Clock, User, UserFilled, Back, Files, FolderOpened,
-  Reading, Download,
+  Reading, Download, Promotion,
 } from '@element-plus/icons-vue'
 import { api } from '../api'
 import { fetchDocumentBuffer } from '../utils/documentContent'
@@ -757,12 +772,18 @@ import { useAppStore } from '../stores/app'
 import PageHeader from '../components/PageHeader.vue'
 import GraphCanvas from '../components/GraphCanvas.vue'
 import NodeDetailDrawer from '../components/NodeDetailDrawer.vue'
+import MyCourseGrid from '../components/course/MyCourseGrid.vue'
+import CreateCourseDialog from '../components/course/CreateCourseDialog.vue'
+import CourseSettingsDialog from '../components/course/CourseSettingsDialog.vue'
+import CourseMembersPanel from '../components/course/CourseMembersPanel.vue'
+import InviteDialog from '../components/course/InviteDialog.vue'
 import { edgeTypeLabel, nodeTypeLabel, nodeColor } from '../utils/graphStyle'
 
 const store = useAppStore()
 const route = useRoute()
 const router = useRouter()
-const TEACHER_TABS = ['courses', 'documents', 'preview', 'edit', 'monitor']
+// 课程中心改造：新增 members（学生管理）Tab，既有 5 个 Tab 全部保留
+const TEACHER_TABS = ['courses', 'documents', 'members', 'preview', 'edit', 'monitor']
 const activeTab = ref(TEACHER_TABS.includes(route.query.tab) ? route.query.tab : 'courses')
 
 // ===================== 当前上下文：课程 + 文档（教师端不搬 student learningContext） =====================
@@ -1238,34 +1259,59 @@ function edgeLabel(edge) {
 
 // ===================== 课程管理 =====================
 const createCourseVisible = ref(false)
-const createCourseForm = ref({ name: '', description: '' })
-const createCourseLoading = ref(false)
+// 课程设置 / 邀请 弹窗（课程中心改造）
+const settingsVisible = ref(false)
+const settingsCourse = ref(null)
+const inviteVisible = ref(false)
+const inviteCourseId = ref('')
 
 function openCreateCourse() {
-  createCourseForm.value = { name: '', description: '' }
   createCourseVisible.value = true
 }
 
-async function submitCreateCourse() {
-  const name = createCourseForm.value.name.trim()
-  if (!name) {
-    ElMessage.warning('课程名称不能为空')
+/** 新建课程成功：同步列表；若当前在文档页空状态创建，则直接进入该课程的文档管理 */
+function onCourseCreated(created) {
+  store.fetchCourses(true).catch(() => {})
+  if (activeTab.value === 'documents' && created?.course_id != null) {
+    router.replace({ path: '/teacher', query: { tab: 'documents', course_id: String(created.course_id) } })
+  }
+}
+
+/** 课程被删除：若当前上下文正是它，清空后回到课程列表 */
+function onCourseDeleted(course) {
+  store.fetchCourses(true).catch(() => {})
+  if (String(course?.course_id) === String(currentCourseId.value)) {
+    currentCourseId.value = ''
+    router.replace({ path: '/teacher', query: { tab: 'courses' } })
+  }
+}
+
+/** 学生管理 Tab 的成员变动后静默刷新课程卡片（待审核角标要跟着变） */
+function reloadCoursesSilently() {
+  store.fetchCourses(true).catch(() => {})
+}
+
+function openSettings(course) {
+  settingsCourse.value = course
+  settingsVisible.value = true
+}
+
+/** 从顶部工具条的「邀请学生」进入：需要先有课程上下文 */
+function openInviteForCurrent() {
+  const cid = currentCourseId.value || store.courses[0]?.course_id
+  if (!cid) {
+    ElMessage.warning('请先创建或选择一门课程')
     return
   }
-  createCourseLoading.value = true
-  try {
-    const created = await store.createCourse(name, { description: createCourseForm.value.description.trim() })
-    createCourseVisible.value = false
-    ElMessage.success(`课程「${name}」创建成功`)
-    // 在文档页空状态新建课程后，直接进入该课程的文档管理，省去一次手动选课
-    if (activeTab.value === 'documents' && created?.course_id != null) {
-      router.replace({ path: '/teacher', query: { tab: 'documents', course_id: String(created.course_id) } })
-    }
-  } catch (e) {
-    ElMessage.error(`创建失败：${e.message}`)
-  } finally {
-    createCourseLoading.value = false
-  }
+  const course = store.courses.find((c) => String(c.course_id) === String(cid))
+  settingsCourse.value = course || null
+  inviteCourseId.value = String(cid)
+  inviteVisible.value = true
+}
+
+/** 跳到「学生管理」Tab 并选中该课程 */
+function goMembers(course) {
+  router.push({ path: '/teacher', query: { tab: 'members', course_id: String(course.course_id) } })
 }
 
 async function deleteCourse(c) {
@@ -1619,8 +1665,8 @@ watch(
       // 缺少课程/文档时停留在当前页，由页内级联选择器引导，不再弹窗强制跳回
       currentCourseId.value = cid ? String(cid) : ''
       currentDocumentId.value = did ? String(did) : ''
-    } else if (tab === 'documents') {
-      // 未指定课程时停留在文档页，由页内课程选择器引导，不再弹窗强制跳回课程列表
+    } else if (tab === 'documents' || tab === 'members') {
+      // 这两个 Tab 只需要课程（不需要文档）：未指定课程时停留在页内选择器引导
       currentCourseId.value = cid ? String(cid) : ''
       currentDocumentId.value = ''
     } else {
@@ -2115,6 +2161,13 @@ function isDocInFlight(doc) {
 .course-switcher {
   margin-left: auto;
   width: 200px;
+}
+
+/* 上下文条右侧操作区（学生管理 Tab 的「邀请学生」等） */
+.context-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 /* ===== 响应式：三栏工作区窄屏堆叠 ===== */

@@ -52,7 +52,7 @@ async def list_documents(
     course_id: str = Query(..., description="课程 ID"),
     current_user: dict = Depends(get_current_user),
 ):
-    """某课程的文档列表（教师仅见本人课程；学生可见全部课程文档，沿用当前无选课体系的课程可见性规则）"""
+    """某课程的文档列表（课程成员可见：课程创建者 / 协作教师 / 已加入的学生）"""
     cid = _coerce_int(course_id)
     if cid is None:
         return error(4001, "参数错误：course_id 必须为整数")
@@ -61,9 +61,15 @@ async def list_documents(
 
 
 @router.get("/{doc_id}")
-async def get_document(doc_id: int, current_user: dict = Depends(require_teacher)):
-    """文档详情（仅该文档所属课程的教师）"""
-    result = DocumentService.get_document_detail(doc_id, current_user["user_id"])
+async def get_document(doc_id: int, current_user: dict = Depends(get_current_user)):
+    """文档详情（课程成员可见）。
+
+    课程中心改造：原先限教师（require_teacher），现改为按课程成员关系判定——
+    学生成员也需要读文档元数据（阅读器在缺少 course_id 时会走这条路径），
+    非成员仍由服务层返回 4003。
+    """
+    result = DocumentService.get_document_detail(
+        doc_id, current_user["user_id"], current_user.get("role", "student"))
     return success(result["data"]) if result["ok"] else error(result["code"], result["message"])
 
 
@@ -76,7 +82,7 @@ _CONTENT_ERROR_STATUS = {2001: 404, 2002: 404, 2003: 404, 4003: 403}
 async def get_document_content(doc_id: int, current_user: dict = Depends(get_current_user)):
     """在线阅读：返回文档原始字节流（PDF/TXT/MD/DOCX）。
 
-    - 权限与文档列表口径一致（教师仅本人课程；学生沿用当前「可见全部课程」规则）
+    - 权限与文档列表口径一致（课程成员可见；非成员由服务层返回 4003 → HTTP 403）
     - Content-Type 由文档类型决定；Content-Disposition 为 inline，仅暴露文件名，不含服务器路径
     - 支持 Range 请求（由 FileResponse 处理），PDF 阅读器可分段加载
     - 只读接口，不影响上传 / 解析 / 抽取 / 删除等既有行为

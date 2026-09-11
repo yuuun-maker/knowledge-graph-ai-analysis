@@ -16,22 +16,19 @@ class DashboardService:
     """全局数据总览统计"""
 
     @staticmethod
-    def get_stats() -> dict:
-        stats = {
-            "course_count": sql_db.count_courses(),
-            "teacher_count": sql_db.count_users_by_role("teacher"),
-            "student_count": sql_db.count_users_by_role("student"),
-            "document_count": sql_db.count_documents(),
-            "node_count": 0,
-            "edge_count": 0,
-            "concept_node_count": 0,
-            "category_distribution": {c: 0 for c in CATEGORY_LABELS},
-            "relation_distribution": {l: 0 for l in RELATION_TYPE_LABELS.values()},
-            "per_course": [],
-        }
+    def get_stats(course_ids: list = None) -> dict:
+        """全局统计；传入 course_ids 时收敛到这些课程（课程中心改造）。
 
-        # 每门课程的节点/关系数（图库不可用时保持 0）
-        courses = sql_db.list_courses()
+        收敛的必要性：per_course 条状图与课程总数原先会把别的教师的课程名
+        直接展示给当前教师，与「教师只能查看自己的课程」冲突。
+        Neo4j 聚合仍是全库查询，然后在 Python 侧按课程集合过滤——
+        不改 Cypher、不新增 Neo4j 依赖，风险最小。
+        """
+        allowed = None if course_ids is None else set(course_ids)
+
+        courses = [c for c in sql_db.list_courses()
+                   if allowed is None or c["course_id"] in allowed]
+
         per_course = [
             {
                 "course_id": c["course_id"],
@@ -45,11 +42,30 @@ class DashboardService:
         node_counts = {}
         edge_counts = {}
 
+        stats = {
+            "course_count": len(courses),
+            "teacher_count": sql_db.count_users_by_role("teacher"),
+            "student_count": sql_db.count_users_by_role("student"),
+            "document_count": sum(sql_db.count_documents_by_course(c["course_id"])
+                                  for c in courses),
+            "node_count": 0,
+            "edge_count": 0,
+            "concept_node_count": 0,
+            "category_distribution": {c: 0 for c in CATEGORY_LABELS},
+            "relation_distribution": {l: 0 for l in RELATION_TYPE_LABELS.values()},
+            "per_course": [],
+        }
+
+        def _in_scope(cid) -> bool:
+            return allowed is None or cid in allowed
+
         try:
             # 节点总数 + 每课程节点数
             for r in db.query(
                 "MATCH (n:KnowledgePoint) RETURN n.course_id AS cid, count(n) AS cnt"
             ):
+                if not _in_scope(r["cid"]):
+                    continue
                 stats["node_count"] += r["cnt"]
                 node_counts[r["cid"]] = r["cnt"]
 
@@ -59,19 +75,26 @@ class DashboardService:
                 "WHERE a.course_id = b.course_id "
                 "RETURN a.course_id AS cid, count(r) AS cnt"
             ):
+                if not _in_scope(r["cid"]):
+                    continue
                 stats["edge_count"] += r["cnt"]
                 edge_counts[r["cid"]] = r["cnt"]
 
             # 概念节点数（类别为「概念」的知识点）
-            recs = db.query(
-                "MATCH (n:KnowledgePoint {category: '概念'}) RETURN count(n) AS cnt"
-            )
-            stats["concept_node_count"] = recs[0]["cnt"] if recs else 0
+            for r in db.query(
+                "MATCH (n:KnowledgePoint {category: '概念'}) "
+                "RETURN n.course_id AS cid, count(n) AS cnt"
+            ):
+                if _in_scope(r["cid"]):
+                    stats["concept_node_count"] += r["cnt"]
 
             # 知识点类别分布（动态聚合，未知类别归入「其他」）
             for r in db.query(
-                "MATCH (n:KnowledgePoint) RETURN n.category AS cat, count(n) AS cnt"
+                "MATCH (n:KnowledgePoint) "
+                "RETURN n.course_id AS cid, n.category AS cat, count(n) AS cnt"
             ):
+                if not _in_scope(r["cid"]):
+                    continue
                 cat = r["cat"] or "其他"
                 if cat not in stats["category_distribution"]:
                     stats["category_distribution"][cat] = 0
@@ -79,9 +102,11 @@ class DashboardService:
 
             # 关系类型分布（英文类型 -> 中文标签）
             for r in db.query(
-                "MATCH (:KnowledgePoint)-[r]->(:KnowledgePoint) "
-                "RETURN type(r) AS t, count(r) AS cnt"
+                "MATCH (a:KnowledgePoint)-[r]->(:KnowledgePoint) "
+                "RETURN a.course_id AS cid, type(r) AS t, count(r) AS cnt"
             ):
+                if not _in_scope(r["cid"]):
+                    continue
                 label = RELATION_TYPE_LABELS.get(r["t"], r["t"])
                 if label not in stats["relation_distribution"]:
                     stats["relation_distribution"][label] = 0

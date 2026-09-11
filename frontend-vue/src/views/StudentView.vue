@@ -757,6 +757,8 @@
       @expand-toggle="onExpandToggle"
       @jump-to="onJumpToNode"
     />
+    <!-- AI 助教悬浮窗：任意 Tab 下都可随时唤起问答 -->
+    <AIChatWidget :course-id="currentCourseId" :document-id="currentDocumentId" :course-name="currentCourseName" />
   </div>
 </template>
 
@@ -772,6 +774,7 @@ import PageHeader from '../components/PageHeader.vue'
 import GraphCanvas from '../components/GraphCanvas.vue'
 import CourseDocumentSelector from '../components/CourseDocumentSelector.vue'
 import NodeDetailDrawer from '../components/NodeDetailDrawer.vue'
+import AIChatWidget from '../components/AIChatWidget.vue'
 import { useAppStore } from '../stores/app'
 
 const route = useRoute()

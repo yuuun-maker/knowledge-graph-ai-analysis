@@ -191,6 +191,17 @@
                 <el-tag :type="extractStatusType(row.extract_status)" size="small">{{ extractStatusText(row.extract_status) }}</el-tag>
               </template>
             </el-table-column>
+            <el-table-column label="生成进度" min-width="180">
+              <template #default="{ row }">
+                <el-progress
+                  :percentage="docProgress(row)"
+                  :status="docProgressStatus(row)"
+                  :stroke-width="10"
+                  :striped="isDocInFlight(row)"
+                  :striped-flow="isDocInFlight(row)"
+                />
+              </template>
+            </el-table-column>
             <el-table-column prop="entity_count" label="知识点" width="80" align="center" />
             <el-table-column prop="relation_count" label="关系" width="70" align="center" />
             <el-table-column label="创建时间" width="150">
@@ -198,12 +209,12 @@
             </el-table-column>
             <el-table-column label="操作" width="392" fixed="right">
               <template #default="{ row }">
-                <el-button size="small" type="primary" :icon="Reading" @click="readDocument(row)">在线阅读</el-button>
-                <el-button size="small" :icon="Download" plain @click="downloadDocument(row)">下载</el-button>
-                <el-button size="small" type="primary" plain :icon="View" @click="viewDocumentGraph(row)">查看图谱</el-button>
-                <el-button size="small" type="warning" plain :icon="EditPen" @click="editDocumentGraph(row)">编辑</el-button>
-                <el-button size="small" type="success" plain :icon="UserFilled" @click="monitorDocument(row)">监测</el-button>
-                <el-button size="small" type="danger" plain :icon="Delete" @click="deleteDocument(row)">删除</el-button>
+                <el-button size="small" type="primary" :icon="Reading" :disabled="row.is_placeholder" @click="readDocument(row)">在线阅读</el-button>
+                <el-button size="small" :icon="Download" plain :disabled="row.is_placeholder" @click="downloadDocument(row)">下载</el-button>
+                <el-button size="small" type="primary" plain :icon="View" :disabled="row.is_placeholder" @click="viewDocumentGraph(row)">查看图谱</el-button>
+                <el-button size="small" type="warning" plain :icon="EditPen" :disabled="row.is_placeholder" @click="editDocumentGraph(row)">编辑</el-button>
+                <el-button size="small" type="success" plain :icon="UserFilled" :disabled="row.is_placeholder" @click="monitorDocument(row)">监测</el-button>
+                <el-button size="small" type="danger" plain :icon="Delete" :disabled="row.is_placeholder" @click="deleteDocument(row)">删除</el-button>
               </template>
             </el-table-column>
             <template #empty>
@@ -799,6 +810,85 @@ async function loadDocuments() {
   }
 }
 
+// ===================== 解析/抽取进度自动刷新（驱动下方进度条实时显示） =====================
+let docPollTimer = null
+const DOC_POLL_INTERVAL = 3000
+const DOC_POLL_TIMEOUT = 10 * 60 * 1000
+let docPollStartedAt = 0
+
+// 存在待处理/处理中的文档时才需要轮询（图谱生成进度查看）
+const hasInFlightDoc = computed(() =>
+  documents.value.some(
+    (d) =>
+      ['UPLOADED', 'PARSING'].includes(d.parse_status) ||
+      ['PENDING', 'EXTRACTING'].includes(d.extract_status),
+  ),
+)
+
+function stopDocPolling() {
+  if (docPollTimer) {
+    clearInterval(docPollTimer)
+    docPollTimer = null
+  }
+}
+
+function startDocPolling() {
+  if (docPollTimer) return
+  docPollStartedAt = Date.now()
+  docPollTimer = setInterval(() => {
+    // 离开文档页、无进行中任务或超过 10 分钟兜底时自动停止
+    if (
+      activeTab.value !== 'documents' ||
+      !currentCourseId.value ||
+      !hasInFlightDoc.value ||
+      Date.now() - docPollStartedAt > DOC_POLL_TIMEOUT
+    ) {
+      stopDocPolling()
+      return
+    }
+    pollDocuments()
+  }, DOC_POLL_INTERVAL)
+}
+
+// 静默刷新文档列表（不触发表格 loading 闪烁），状态进入终态时给出提示
+async function pollDocuments() {
+  if (!currentCourseId.value) return
+  try {
+    const prev = new Map(documents.value.map((d) => [d.doc_id, `${d.parse_status}|${d.extract_status}`]))
+    const list = await api.getDocuments(currentCourseId.value)
+    // 保留上传中的本地占位行（后端在解析完成前不会返回该记录，避免进度条被轮询刷掉）
+    const placeholders = documents.value.filter((d) => d.is_placeholder)
+    documents.value = [...placeholders, ...list]
+    for (const d of list) {
+      const key = `${d.parse_status}|${d.extract_status}`
+      if (prev.get(d.doc_id) && prev.get(d.doc_id) !== key) {
+        if (d.extract_status === 'COMPLETED') {
+          ElMessage.success(`「${d.file_name}」知识图谱构建完成`)
+        } else if (d.parse_status === 'FAILED' || d.extract_status === 'FAILED') {
+          ElMessage.error(`「${d.file_name}」处理失败，请检查文件后重试`)
+        }
+      }
+    }
+  } catch {
+    /* 轮询失败静默，下一轮自动重试 */
+  }
+}
+
+// 出现进行中任务且正停留在文档页时自动开启轮询；任务全部结束后停止
+watch(hasInFlightDoc, (v) => {
+  if (v && activeTab.value === 'documents') startDocPolling()
+  else if (!v) stopDocPolling()
+})
+
+// 切回文档页时若有进行中任务则继续轮询，切走即停止
+watch(activeTab, (tab) => {
+  if (tab === 'documents') {
+    if (hasInFlightDoc.value) startDocPolling()
+  } else {
+    stopDocPolling()
+  }
+})
+
 async function doUpload() {
   if (!selectedFile.value) return
   if (!currentCourseId.value) {
@@ -808,6 +898,32 @@ async function doUpload() {
   uploading.value = true
   uploadResult.value = null
   uploadError.value = ''
+
+  // 后端为同步处理（解析+抽取耗时较长，且文档记录在完成后才入库），
+  // 请求返回前列表不会有任何变化。先插入一行本地占位行，让下方进度条立即显示。
+  const placeholderId = `local-${Date.now()}`
+  const placeholder = {
+    doc_id: placeholderId,
+    file_name: selectedFile.value.name,
+    file_type: (selectedFile.value.name.split('.').pop() || '').toUpperCase(),
+    file_size: selectedFile.value.size,
+    parse_status: 'PARSING',
+    extract_status: 'PENDING',
+    entity_count: null,
+    relation_count: null,
+    created_at: new Date().toISOString(),
+    local_stage: 'PARSING',
+    is_placeholder: true,
+  }
+  documents.value = [placeholder, ...documents.value]
+
+  // 处理期间把占位行进度从「解析中」推进到「抽取中」，让进度条持续走动
+  const stageTimer = setTimeout(() => {
+    documents.value = documents.value.map((d) =>
+      d.doc_id === placeholderId ? { ...d, local_stage: 'EXTRACTING' } : d,
+    )
+  }, 8000)
+
   try {
     const formData = new FormData()
     formData.append('file', selectedFile.value)
@@ -815,11 +931,16 @@ async function doUpload() {
     const result = await api.uploadCourse(formData, currentCourseId.value)
     uploadResult.value = result
     ElMessage.success('知识图谱构建完成')
+    // 用真实文档替换占位行；若仍有处理中任务则由轮询继续驱动进度
+    documents.value = documents.value.filter((d) => d.doc_id !== placeholderId)
     await loadDocuments()
+    if (hasInFlightDoc.value) startDocPolling()
   } catch (e) {
+    documents.value = documents.value.filter((d) => d.doc_id !== placeholderId)
     uploadError.value = e.message || '上传失败'
     ElMessage.error(`上传失败：${e.message}`)
   } finally {
+    clearTimeout(stageTimer)
     uploading.value = false
   }
 }
@@ -1546,6 +1667,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleMonitorResize)
   progressDistChart?.dispose()
+  stopDocPolling()
 })
 
 // ===================== 工具函数 =====================
@@ -1569,6 +1691,36 @@ function extractStatusType(s) {
 }
 function extractStatusText(s) {
   return { PENDING: '待抽取', EXTRACTING: '抽取中', COMPLETED: '已完成', FAILED: '抽取失败' }[s] || s
+}
+
+// 图谱生成进度百分比：排队 5% → 解析中 30% → 已解析 50% → 抽取中 75% → 完成 100%
+function docProgress(doc) {
+  if (doc.parse_status === 'FAILED') return 30
+  if (doc.extract_status === 'FAILED') return 75
+  if (doc.extract_status === 'COMPLETED') return 100
+  // 上传请求挂起期间的本地占位行：按阶段推进进度
+  if (doc.local_stage === 'UPLOADING') return 15
+  if (doc.local_stage === 'PARSING') return 30
+  if (doc.local_stage === 'EXTRACTING') return 75
+  if (doc.extract_status === 'EXTRACTING') return 75
+  if (doc.parse_status === 'PARSED') return 50
+  if (doc.parse_status === 'PARSING') return 30
+  return 5
+}
+
+function docProgressStatus(doc) {
+  if (doc.parse_status === 'FAILED' || doc.extract_status === 'FAILED') return 'exception'
+  if (doc.extract_status === 'COMPLETED') return 'success'
+  return ''
+}
+
+// 是否处于处理中（进度条条纹流动动画依据）
+function isDocInFlight(doc) {
+  return (
+    ['UPLOADING', 'PARSING', 'EXTRACTING'].includes(doc.local_stage) ||
+    ['UPLOADED', 'PARSING'].includes(doc.parse_status) ||
+    ['PENDING', 'EXTRACTING'].includes(doc.extract_status)
+  )
 }
 </script>
 

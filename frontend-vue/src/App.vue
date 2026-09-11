@@ -147,7 +147,6 @@ const isStandalone = computed(() => STANDALONE_ROUTES.includes(route.name))
 const TAB_LABELS = {
   overview: '学习总览',
   documents: '课程文档',
-  documents: '课程文档',
   preview: '图谱预览',
   edit: '编辑图谱',
   monitor: '教学监测',

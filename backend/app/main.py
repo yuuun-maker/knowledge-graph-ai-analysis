@@ -9,7 +9,7 @@ from .core.config import settings
 from .core.sql_database import sql_db
 from .api import (auth, courses, knowledge_graph, qa, learning_path, graph, documents,
                   learning, dashboard, favorites, teacher,
-                  course_members, invites, profile)
+                  course_members, invites, profile, questions, practice)
 
 
 @asynccontextmanager
@@ -52,6 +52,9 @@ app.include_router(teacher.router)
 app.include_router(course_members.router)
 app.include_router(invites.router)
 app.include_router(profile.router)
+# 题库：教师手动出题 + 学生练习（合作者 PR #3）
+app.include_router(questions.router)
+app.include_router(practice.router)
 
 
 @app.get("/")

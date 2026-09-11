@@ -30,3 +30,6 @@ neo4j/data/
 # OS
 .DS_Store
 Thumbs.db
+
+# OpenStax 原始教材 PDF（体积大,仅保留本地,不提交）
+backend/data/sample_docs/openstax_*/*.pdf

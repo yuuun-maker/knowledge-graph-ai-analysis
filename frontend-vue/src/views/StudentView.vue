@@ -27,7 +27,7 @@
       </div>
     </el-card>
 
-    <el-tabs v-model="activeTab" @tab-change="onTabChange">
+    <el-tabs v-model="activeTab" class="main-view-tabs" @tab-change="onTabChange">
       <!-- ===================== Tab 0：学习总览（学习驾驶舱，P11：复用统一学习状态，不新建状态源） ===================== -->
       <el-tab-pane name="overview">
         <template #label><span class="tab-label"><el-icon><DataAnalysis /></el-icon>学习总览</span></template>
@@ -1094,7 +1094,10 @@ function ensureContext() {
     return true
   }
   if (currentCourseId.value && currentDocumentId.value) {
-    syncUrlToContext()
+    // 修复左侧菜单点击无响应：此处不能再 syncUrlToContext()。
+    // 左侧菜单跳转只带 ?tab=新Tab，而此刻 activeTab 仍是旧 Tab，
+    // 回写会把 URL 改回旧 Tab 并再次触发路由 watcher，把视图拽回旧页。
+    // URL 补参统一由路由 watcher 在 enterTab 成功后处理。
     return true
   }
   return false
@@ -1153,11 +1156,28 @@ function onTabChange(tab) {
   if (activeTab.value === tab) syncUrlToContext()
 }
 
+// selfSync 标记本次 URL 变化是 watcher 内部「补参回声」：仅当补参会真正改变 URL 时才置位，
+// 回声触发时跳过 enterTab；选择器确认等其他来源的 URL 变化不置位，保持原有重载语义。
+let selfSync = false
 watch(
   () => [route.query.tab, route.query.course_id, route.query.document_id],
   ([tab, cid, did]) => {
+    if (selfSync) {
+      selfSync = false
+      return
+    }
     if (cid && did) store.setLearningContext({ courseId: cid, documentId: did })
-    if (tab) enterTab(tab)
+    if (!tab) return
+    enterTab(tab)
+    const urlCid = String(route.query.course_id || '')
+    const urlDid = String(route.query.document_id || '')
+    if (
+      activeTab.value === tab &&
+      (urlCid !== String(currentCourseId.value || '') || urlDid !== String(currentDocumentId.value || ''))
+    ) {
+      selfSync = true
+      syncUrlToContext()
+    }
   }
 )
 
@@ -2252,6 +2272,12 @@ function overviewAsk(q) {
 </script>
 
 <style scoped>
+/* 顶部标签栏已由左侧菜单接管：隐藏标签头，仅保留面板切换机制。
+   > 子选择器限定最外层 tabs，练习页内嵌的 practiceSubTab 标签头不受影响。 */
+.main-view-tabs > :deep(.el-tabs__header) {
+  display: none;
+}
+
 .toolbar {
   display: flex;
   align-items: center;

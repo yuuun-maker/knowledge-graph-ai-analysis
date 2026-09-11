@@ -2,7 +2,7 @@
   <div>
     <PageHeader title="课程管理" desc="管理课程、课程文档、知识图谱、题库与教学监测" />
 
-    <el-tabs v-model="activeTab" class="main-view-tabs" @tab-change="onTabChange">
+    <el-tabs v-model="activeTab" @tab-change="onTabChange">
       <!-- ===================== Tab 0：课程列表 ===================== -->
       <!-- 课程中心改造：卡片视觉与「课程中心 → 我的课程」统一为同一个组件的两种配置，
            进入课程后仍复用本页既有的 文档 / 图谱预览 / 编辑 / 监测 四个 Tab -->
@@ -2248,11 +2248,6 @@ function isDocInFlight(doc) {
 </script>
 
 <style scoped>
-/* 顶部标签栏已由左侧菜单接管：隐藏标签头，仅保留面板切换机制。 */
-.main-view-tabs > :deep(.el-tabs__header) {
-  display: none;
-}
-
 .toolbar {
   display: flex;
   align-items: center;

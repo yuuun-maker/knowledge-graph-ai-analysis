@@ -1,17 +1,5 @@
 <template>
   <div class="graph-wrap">
-    <!-- 顶部居中：视图切换（树图/环图/网图/个性化图谱，参考智慧树） -->
-    <div class="layout-switch">
-      <button
-        v-for="opt in LAYOUT_OPTIONS"
-        :key="opt.key"
-        type="button"
-        class="layout-btn"
-        :class="{ active: layoutMode === opt.key }"
-        @click="applyLayout(opt.key)"
-      >{{ opt.label }}</button>
-    </div>
-
     <div ref="containerRef" class="graph-container"></div>
 
     <!-- 筛选 / 聚焦控制（右上，轻量悬浮工具条） -->
@@ -183,15 +171,6 @@ const expandedIds = ref([]) // 局部展开：已展开的节点 id
 const focusedId = ref(null) // 当前聚焦节点
 const isolateOn = ref(false) // 仅查看关联节点
 
-// 图谱查看方式（参考智慧树）：net 网图(力导向) / tree 树图(层级) / ring 环图(同心圆) / personal 个性化(以学习者为中心辐射)
-const layoutMode = ref('net')
-const LAYOUT_OPTIONS = [
-  { key: 'tree', label: '树图' },
-  { key: 'ring', label: '环图' },
-  { key: 'net', label: '网图' },
-  { key: 'personal', label: '个性化图谱' },
-]
-
 // 已掌握知识点集合（用于绿色描边高亮）
 function masteredIdSet() {
   return new Set((props.masteredKpIds || []).map(String))
@@ -349,33 +328,17 @@ function clearCanvas() {
 // ---------------------------------------------------------------
 // 渲染
 // ---------------------------------------------------------------
-// 布局配置：按查看方式生成 G6 layout 选项（均为 G6 5.1.1 内置布局，已在 dist 包实证注册）
-function layoutOption(mode, focusNodeId) {
-  if (mode === 'tree') {
-    // 树图：dagre 有向分层，左→右排布，贴合「知识模块 → 知识点」层级
-    return { type: 'dagre', rankdir: 'LR', nodesep: 26, ranksep: 80, align: 'UL' }
-  }
-  if (mode === 'ring') {
-    // 环图：同心圆，度数高的核心知识点靠中心
-    return { type: 'concentric', sortBy: 'degree', preventOverlap: true, nodeSize: 42, minNodeSpacing: 18 }
-  }
-  if (mode === 'personal') {
-    // 个性化：以焦点节点为中心辐射；无焦点时回退同心圆
-    if (focusNodeId) {
-      return { type: 'radial', focusNode: focusNodeId, preventOverlap: true, nodeSize: 34, unitRadius: 110 }
-    }
-    return { type: 'concentric', sortBy: 'degree', preventOverlap: true, nodeSize: 42, minNodeSpacing: 18 }
-  }
-  // 网图：力导向（原默认参数）
-  return { type: 'force', preventOverlap: true, nodeSize: 56, linkDistance: 150 }
-}
-
 async function initGraph() {
   if (graph) return
   graph = new Graph({
     container: containerRef.value,
     autoFit: 'view',
-    layout: layoutOption(layoutMode.value, personalFocusId()),
+    layout: {
+      type: 'force',
+      preventOverlap: true,
+      nodeSize: 56,
+      linkDistance: 150,
+    },
     node: {
       style: {
         size: 34,
@@ -423,51 +386,6 @@ async function initGraph() {
   await graph.render()
 }
 
-// 个性化图谱焦点：优先当前学习知识点，其次首个推荐知识点，兜底取度数最高节点（内联计算）
-function personalFocusId() {
-  const visible = new Set(visibleNodeIds.value.map(String))
-  if (!visible.size) return null
-  if (props.currentKpId && visible.has(String(props.currentKpId))) return String(props.currentKpId)
-  const rec = (props.recommendedKpIds || []).map(String).find((id) => visible.has(id))
-  if (rec) return rec
-  const deg = {}
-  for (const e of visibleEdges.value) {
-    const s = String(e.source)
-    const t = String(e.target)
-    deg[s] = (deg[s] || 0) + 1
-    deg[t] = (deg[t] || 0) + 1
-  }
-  let best = null
-  let bestDeg = -1
-  for (const id of visible) {
-    const d = deg[id] || 0
-    if (d > bestDeg) {
-      bestDeg = d
-      best = id
-    }
-  }
-  return best
-}
-
-// 切换查看方式：换布局并整体重建（失败时回退网图，避免白屏）
-async function applyLayout(mode, force = false) {
-  if (!force && layoutMode.value === mode) return
-  layoutMode.value = mode
-  if (!graph) return
-  try {
-    graph.setLayout(layoutOption(mode, personalFocusId()))
-    await renderGraph()
-    graph.fitView()
-  } catch (e) {
-    layoutMode.value = 'net'
-    try {
-      graph.setLayout(layoutOption('net'))
-      await renderGraph()
-      graph.fitView()
-    } catch (e2) { /* 已回退，忽略 */ }
-  }
-}
-
 // 组装完整渲染数据（含基础样式 + 聚焦/搜索强调），供 setData 与 update 复用
 function buildGraphData() {
   const nodeSet = new Set(visibleNodeIds.value)
@@ -512,10 +430,6 @@ function buildGraphData() {
         haloLineWidth: 3,
         badges: [],
         opacity: 1,
-        // 柔和投影提升层次感（浅色画布上轻微浮起）
-        shadowColor: 'rgba(0, 0, 0, 0.14)',
-        shadowBlur: 6,
-        shadowOffsetY: 2,
       }
       let shape = 'circle'
 
@@ -577,48 +491,18 @@ function buildGraphData() {
         }
       }
 
-      // 树图：圆角矩形卡片（类型色填充 + 白字右置）；当前/推荐保持卡片形态，用描边而非菱形/星形表达
-      if (layoutMode.value === 'tree') {
-        style.size = [Math.max(92, label.length * 14 + 28), 40]
-        style.radius = 20
-        style.labelPlacement = 'right'
-        style.labelFill = '#ffffff'
-        style.labelFontSize = 12
-        style.labelFontWeight = 600
-        if (isCurrent || isRecommended) {
-          style.stroke = STATE_STROKE
-          style.lineWidth = 2
-        }
-      }
-      return { id, type: layoutMode.value === 'tree' ? 'rect' : shape, style, data: n }
+      return { id, type: shape, style, data: n }
     })
 
-  const isTree = layoutMode.value === 'tree'
-  const nodeFill = {}
-  for (const gn of gNodes) nodeFill[gn.id] = gn.style.fill
-
-  const edgeTypeName = isTree ? 'cubic-horizontal' : 'quadratic'
-  // 树图只保留骨架边（包含/前置）， RELATED_TO/APPLIES_TO 等弱关系在树状视图隐藏，避免交叉杂乱
-  const edgesInput = isTree
-    ? visibleEdges.value.filter((e) => e.type === 'CONTAINS' || e.type === 'PRECEDES')
-    : visibleEdges.value
-  const gEdges = edgesInput.map((e) => {
+  const gEdges = visibleEdges.value.map((e) => {
     const src = String(e.source)
     const tgt = String(e.target)
     const inPath = pathEdgeSet.has(`${src}-${tgt}`)
-    const style = isTree
-      ? {
-          // 树图：连线取子节点色，无文字标签，直角水平贝塞尔
-          labelText: '',
-          stroke: inPath ? '#e6a23c' : nodeFill[tgt] || edgeColor(e.type),
-          lineWidth: inPath ? 3 : 1.5,
-          endArrow: true,
-        }
-      : {
-          labelText: edgeTypeLabel(e.type, e.label),
-          stroke: inPath ? '#e6a23c' : edgeColor(e.type),
-          lineWidth: inPath ? 3 : 1.5,
-        }
+    const style = {
+      labelText: edgeTypeLabel(e.type, e.label),
+      stroke: inPath ? '#e6a23c' : edgeColor(e.type),
+      lineWidth: inPath ? 3 : 1.5,
+    }
     if (focusId) {
       const incident =
         src === focusId || tgt === focusId || (fNbr.has(src) && fNbr.has(tgt))
@@ -628,7 +512,6 @@ function buildGraphData() {
       id: String(e.id || `${src}-${tgt}`),
       source: src,
       target: tgt,
-      type: edgeTypeName,
       style,
       data: e,
     }
@@ -636,14 +519,6 @@ function buildGraphData() {
 
   return { nodes: gNodes, edges: gEdges }
 }
-
-// 个性化视图下，当前学习知识点切换时以其为新焦点重建
-watch(
-  () => props.currentKpId,
-  () => {
-    if (layoutMode.value === 'personal' && graph) applyLayout('personal', true)
-  }
-)
 
 // 结构变化（节点/边集合变化）：重新布局
 async function renderGraph() {
@@ -893,40 +768,6 @@ function centerOnSearch() {
 .graph-container {
   position: absolute;
   inset: 0;
-}
-
-/* 顶部居中：视图切换条（参考智慧树 pill 分段控件） */
-.layout-switch {
-  position: absolute;
-  top: var(--space-3);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 11;
-  display: flex;
-  gap: 2px;
-  padding: 3px;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  box-shadow: var(--shadow-card);
-}
-.layout-btn {
-  border: none;
-  background: transparent;
-  padding: 6px 14px;
-  font-size: 13px;
-  color: var(--color-text-secondary, #606266);
-  border-radius: 999px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.2s, color 0.2s;
-}
-.layout-btn:hover {
-  color: var(--el-color-primary, #409eff);
-}
-.layout-btn.active {
-  background: var(--el-color-primary, #409eff);
-  color: #fff;
 }
 
 /* 筛选 / 聚焦控制（右上，轻量悬浮工具条：白底半透明 + 轻描边 + 小圆角 + 微弱阴影） */

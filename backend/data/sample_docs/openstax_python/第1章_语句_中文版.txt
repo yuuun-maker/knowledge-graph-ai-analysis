@@ -1,0 +1,1382 @@
+第1章：语句（Statements）
+
+> 原文：Introduction to Python Programming (OpenStax, CC BY 4.0)，第1章 Statements
+
+> 本书免费获取地址：https://openstax.org/details/books/introduction-python-programming
+
+> 本译文为中文翻译版，章节结构与原文一致,专有名词已保留，原文中的页码页脚已省略。
+
+##第1章 语句(Statements)
+
+##章节大纲
+
+1.1 背景 (Backgrounds)
+1.2 输入/输出 (Input/output)
+1.3 变量 (Variables)
+1.4 字符串基础 (String basics)
+1.5 数字基础 (Number basics)
+1.6 错误信息 (Error messages)
+1.7 注释 (Comments)
+1.8 为什么选择 Python？(Why Python?)
+1.9 章节小结 (Chapter summary)
+
+##引言
+
+在当今世界，计算机和程序无处不在。程序影响着日常生活和社会的许多方面。人们依赖程序进行通信、购物、娱乐、医疗保健以及无数其他需求。学习如何编写计算机程序，为许多职业和建设更美好世界的机会打开了大门。
+
+程序由一条接一条运行的语句组成。语句描述要执行的某个动作。
+
+语句 print("Good morning") 指示 Python 向用户输出消息 "Good morning"。语句 count = 0 指示 Python 将整数 0 赋值给变量 count。
+
+本章介绍用于输入和输出、赋值变量以及基本算术的语句。犯错误是编程的正常组成部分，本章包含关于理解错误信息的建议。本章以 Python 的简短历史结束，并讨论为什么 Python 今天如此流行。
+
+---
+
+##1.1 背景 (Backgrounds)
+学习目标
+在本节结束时，你应该能够：
+· 举出日常生活中计算机程序的两个例子。
+· 解释为什么 Python 是一门值得学习的好编程语言。
+
+##计算机程序
+
+计算机是一种存储和处理信息的电子设备。计算机的例子包括智能手机、平板电脑、笔记本电脑、台式机和服务器。从技术上讲，程序是计算机可以运行的一系列指令。程序帮助人们完成日常任务、创造新技术并享受乐趣。
+
+本书的目标是教授入门编程和问题解决。编写程序是一项创造性活动，本质上是有用的，而且很有回报！阅读本书不需要计算机科学背景。存在许多不同类型的程序，如下图所示。本书将重点介绍通常“在幕后”运行的通用程序。
+
+CHECKPOINT
+
+在线音乐流媒体：第1章，视频1
+
+CONCEPTS IN PRACTICE
+
+##计算机和程序
+
+动画中描述了多少种程序？
+a. 3
+     b. 4
+
+     c. 5
+
+本书将解释如何编写哪种类型的程序？
+a. 总结个人音乐偏好的工具
+     b. 用于管理 and 分享歌曲播放列表的移动应用
+
+     c. 显示过去五年顶级艺术家的网站
+
+以下哪项是计算机的例子？
+a. 插入智能手机的有线耳机
+     b. 暂停或跳过当前歌曲的遥控器
+
+     c. 从 Amazon 流式传输音乐的 Wi-Fi 扬声器
+
+阅读本书需要很强的数学背景。
+a. 正确
+     b. 错误
+
+
+
+
+##EXPLORING FURTHER
+
+本书后面的章节展示如何使用真实数据编写分析程序。提供访问在线流媒体服务的示例库包括 Spotify、Pytube 和 Pydora。与 Python 相关的工具通常名称中带有字母 "py"。
+
+##Python 语言
+
+本书介绍 Python，这是当今顶级的编程语言之一。Google、Apple、NASA、Instagram、Pixar 等领先科技巨头广泛使用 Python。
+
+Python 流行的原因之一是存在许多用于做实际工作的库。库是可以在其他程序中使用的代码集合。Python 附带了一个广泛的标准库，用于解决日常计算问题，例如从文件中提取数据和创建摘要报告。此外，社区为 Python 开发了许多其他库。例如：Pandas 是一个广泛使用的数据分析库。
+
+Python 流行的另一个原因是语法简洁明了。语言的语法定义了代码必须如何组织。语法规则定义了程序中使用的关键字、符号和格式。与其他编程语言相比，Python 更简洁明了。
+
+示例 1.1
+
+Python 和 Java 中的 Hello world
+
+按照传统，Hello World 是学习新语言时要写的第一个程序。这个程序只是向用户显示消息 "Hello, World!"。hello world 程序在 Python 中只有一行：
+
+```python
+
+print("Hello, World!")
+
+```
+
+相比之下，hello world 程序在 Java（另一种语言）中有五行。
+
+```java
+
+public class Hello {
+
+   public static void main(String[] args) {
+
+       System.out.println("Hello, World!")
+
+   }
+
+}
+
+```
+
+然而，简洁性并不是选择使用哪种语言的唯一考虑因素。在不同情况下，不同的语言可能更合适。例如：Java 常用于 Android 开发。
+
+CHECKPOINT
+
+计算文件中的行数：第1章，视频2
+
+CONCEPTS IN PRACTICE
+
+Python 与 Java 语法
+
+一般来说，Python 程序比 Java 程序 ______。
+a. 更快
+     b. 更长
+
+     c. 更短
+
+在上面的示例程序中，Java 要求但 Python 不要求的语法是什么？
+a. 分号
+     b. 括号
+
+     c. 引号
+
+
+
+
+TRY IT
+
+最喜欢的歌曲
+
+下面的程序询问你的名字并显示友好的问候。运行程序，看看会发生什么。在错误信息中，EOF 代表 End of File。
+
+本章的许多程序期望用户输入。在代码下方的 Input 框中输入你的名字。再次运行程序，看看有什么变化。将以下行复制到程序末尾：
+
+```python
+
+print("What is your favorite song?")
+
+song = input()
+
+print("Cool! I like", song, "too.")
+
+```
+
+修改后的程序读取两行输入：name 和 song。在 Input 框中你的名字下方添加你最喜欢的歌曲，然后再次运行程序。
+
+本书的下一节将解释 print() 和 input() 如何工作。在你准备继续之前，随意试验这段代码。
+
+---
+
+###1.2 输入/输出 (Input/output)
+
+##学习目标
+
+在本节结束时，你应该能够：
+· 使用 print() 函数显示输出。
+· 使用 input() 函数获取用户输入。
+
+##基本输出
+
+print() 函数向用户显示输出。输出是程序产生的信息或结果。sep 和 end 选项可用于自定义输出。表 1.1 显示了 sep 和 end 的示例。
+多个值可以用逗号分隔，在同一条语句中打印。默认情况下，每个值在输出中用空格字符分隔。sep 选项可用于更改此行为。
+默认情况下，print() 函数在输出末尾添加换行符。换行符告诉显示器移到下一行。end 选项可用于在同一行继续打印。
+
+表 1.1 print() 的示例用法
+
+##代码 输出
+print("Today is Monday.") print("I like string beans.") Today is Monday. I like string beans.
+print("Today", "is", "Monday") print("Today", "is", "Monday", sep="...") Today is Monday Today...is...Monday
+print("Today is Monday", end=" ") print("I like string beans.") Today is Monday I like string beans.
+print("Today", "is", "Monday", sep="?", end="!") print("I like string beans.") Today?is?Monday!! I like string beans.
+
+CHECKPOINT
+
+向用户显示输出：第1章，视频3
+
+CONCEPTS IN PRACTICE
+
+print() 函数
+
+哪一行代码将 Hello world! 打印为一行输出？
+a. print(Hello world!)
+     b. print("Hello", "world", "!")
+
+     c. print("Hello world!")
+
+哪些行代码将 Hello world! 打印为一行输出？
+a. print("Hello") print("world!")
+     b. print("Hello") print("world!", end="")
+
+     c. print("Hello", end="") print("world!")
+
+以下语句产生什么输出？
+print("555", "0123", sep="-")
+a. 555 0123
+     b. 5550123-
+
+     c. 555-0123
+
+
+
+
+##空格真的重要吗？
+
+空格和换行符本身并不重要。然而，学会精确是编程的一项基本技能。注意小细节，比如单词如何分隔、行如何结束，有助于新程序员变得更好。
+
+##基本输入
+
+计算机程序经常接收用户输入。输入是用户输入到程序中的内容。输入语句 variable = input("prompt") 有三个部分：
+
+变量指的是存储在内存中的值。在上面的语句中，variable 可以替换为程序员选择的任何名称。
+input() 函数从用户读取一行输入。函数是命名的、可重用的代码块，在调用时执行任务。输入存储在计算机内存中，以后可以使用变量访问。
+提示是一条简短消息，表示程序正在等待输入。在上面的语句中，"prompt" 可以省略或替换为任何消息。
+
+CHECKPOINT
+
+获取用户输入：第1章，视频3
+
+CONCEPTS IN PRACTICE
+
+##input() 函数
+
+哪一行代码正确地获取并存储用户输入？
+a. input()
+     b. today_is = input
+
+     c. today_is = input()
+
+一个名叫 Sophia 的人在提示后输入自己的名字：
+```python
+
+  print("Please enter your name: ")
+
+  name = input()
+
+  ```
+print("You entered:", name) 显示什么？
+a. You entered: name
+     b. You entered: Sophia
+
+     c. You entered:
+
+如果用户输入 "six"，输出是什么？
+```python
+
+  print("Please enter a number: ")
+
+  number = input()
+
+  print("Value =", number)
+
+  ```
+a. Value = six
+     b. Value = 6
+
+     c. Value = number
+
+
+
+
+TRY IT
+
+Frost 的诗
+
+编写一个程序，使用多个 print() 语句输出 Robert Frost 的以下诗歌。每个 print() 语句应对应一行输出。
+
+提示：你不需要一次写完整个程序。试着写第一个 print() 语句，然后点击 Run 按钮。然后写下一个 print() 语句，再次点击 Run 按钮。继续增量地编写和测试代码，直到完成程序。
+
+```
+
+I shall be telling this with a sigh
+
+Somewhere ages and ages hence:
+
+Two roads diverged in a wood, and I -
+
+I took the one less traveled by,
+
+And that has made all the difference.
+
+```
+
+TRY IT
+
+姓名和喜好
+
+编写一个程序，询问以下两个问题（示例输入以粗体显示）：
+
+```
+
+What is your name? Shakira
+
+What do you like? singing
+
+```
+
+读取输入后输出一个空行。然后根据输入输出以下消息：
+
+```
+
+Shakira likes singing
+
+```
+
+---
+
+##1.3 变量 (Variables)
+##学习目标
+
+在本节结束时，你应该能够：
+· 赋值变量并打印变量。
+· 解释命名变量的规则。
+
+##赋值语句
+
+变量允许程序使用名称而不是内存位置来引用值。例如：age 指一个人的年龄，birth 指一个人的出生日期。
+
+语句可以使用赋值运算符（=）将变量设置为某个值。注意这与数学中的等号不同。例如：age = 6 或 birth = "May 15"。赋值语句的左侧是变量，右侧是赋给变量的值。
+
+CHECKPOINT
+
+赋值和使用变量：第1章，视频5
+
+CONCEPTS IN PRACTICE
+
+##赋值和使用变量
+
+在以下赋值后，哪一行代码正确地检索变量 city 的值？
+city = "Chicago"
+a. print("In which city do you live?")
+     b. city = "London"
+
+     c. print("The city where you live is", city)
+
+哪个程序正确地存储和检索变量？
+a. print("Total = ", total) total = 6
+     b. total = 6 print("Total = ", total)
+
+     c. print("Total = ", total) total = input()
+
+哪个是赋值运算符？
+a. :
+     b. ==
+
+     c. =
+
+哪个是有效的赋值？
+a. temperature = 98.5
+     b. 98.5 = temperature
+
+     c. temperature - 23.2
+
+
+
+
+##变量命名规则
+
+变量名可以由字母、数字和下划线组成，长度不限。名称不能以数字开头。例如：101class 无效。此外，字母大小写很重要。例如：Total 与 total 不同。Python 的风格指南建议使用 snake case 编写变量名，即全小写，单词之间用下划线分隔，例如 first_name 或 total_price。
+
+名称应该简短且具有描述性，因此在程序中，单词比单个字符更受青睐，以提高可读性。例如：名为 count 的变量比名为 c 的变量更能表明变量的用途。
+
+Python 有保留字，称为关键字，它们具有特殊功能，不能用作变量（或其他对象）的名称。
+
+表：Python 关键字
+
+```
+
+False    await    else     import   pass
+
+None     break    except   in       raise
+
+True     class    finally  is       return
+
+and      continue for      lambda   try
+
+as       def      from     nonlocal while
+
+assert   del      global   not      with
+
+async    elif     if       or       yield
+
+```
+
+CONCEPTS IN PRACTICE
+
+有效的变量名
+
+哪个可以用作变量名？
+a. median
+     b. class
+
+     c. import
+
+为什么名称 2nd_input 不是有效的变量名？
+a. 包含下划线
+     b. 以数字开头
+
+     c. 是关键字
+
+哪个是存储邮政编码的变量的好名称？
+a. z
+     b. var_2
+
+     c. zip_code
+
+给定变量名 DogBreed，哪个改进符合 Python 的风格指南？
+a. dog_breed
+     b. dogBreed
+
+     c. dog- breed
+
+
+
+
+TRY IT
+
+最终比分
+
+编写一个 Python 计算机程序，要求：
+
+· 创建一个变量 team1，赋值为 "Liverpool"。
+· 创建一个变量 team2，赋值为 "Chelsea"。
+· 创建一个变量 score1，赋值为 4。
+· 创建一个变量 score2，赋值为 3。
+· 将 team1、"versus" 和 team2 打印为一行输出。
+· 将 "Final score: "、score1、"to" 和 score2 打印为一行输出。
+
+---
+
+##1.4 字符串基础 (String basics)
+
+##学习目标
+
+在本节结束时，你应该能够：
+· 使用内置的 len() 函数获取字符串的长度。
+· 使用 + 运算符连接字符串字面量和变量。
+
+##引号
+
+字符串是由匹配的单引号（'）或双引号（"）括起来的字符序列。例如："Happy birthday!" 和 '21' 都是字符串。
+要在字符串中包含单引号（'），请用匹配的双引号（"）括起字符串。例如："Won't this work?"。要在字符串中包含双引号（"），请用匹配的单引号（'）括起字符串。例如：'They said "Try it!", so I did'。
+表 1.3 字符串规则
+
+##有效字符串 无效字符串
+"17" 或 '17' 17
+"seventeen" 或 'seventeen' seventeen
+"Where?" 或 'Where?' "Where?'
+"I hope you aren't sad." 'I hope you aren't sad."
+'The teacher said "Correct!"' "The teacher said "Correct!""
+
+CONCEPTS IN PRACTICE
+
+##有效和无效字符串
+
+以下哪项是字符串？
+a. Hello!
+     b. 29
+
+     c. "7 days"
+
+哪一行代码将字符串赋给变量 email？
+a. "fred78@gmail.com"
+     b. "email = fred78@gmail.com"
+
+     c. email = "fred78@gmail.com"
+
+哪个是有效字符串？
+a. I know you'll answer correctly!
+     b. 'I know you'll answer correctly!
+
+     c. "I know you'll answer correctly!"
+
+哪个是有效字符串？
+a. You say "Please" to be polite
+     b. "You say "Please" to be polite'
+
+     c. 'You say "Please" to be polite'
+
+
+
+
+##len() 函数
+
+对字符串对象的一个常见操作是获取字符串长度，即字符串中的字符数。len() 函数在作用于字符串值时返回字符串长度。
+
+CHECKPOINT
+
+使用 len() 获取字符串长度：第1章，视频6
+
+CONCEPTS IN PRACTICE
+
+##将 len() 函数应用于字符串值
+
+len("Hi Ali") 的返回值是什么？
+a. 2
+     b. 5
+
+     c. 6
+
+空字符串变量（""）的长度是多少？
+a. 未定义
+     b. 0
+
+     c. 2
+
+以下代码的输出是什么？
+```python
+
+  number = "12"
+
+  number_of_digits = len(number)
+
+  print("Number", number, "has", number_of_digits, "digits.")
+
+  ```
+a. Number 12 has 12 digits.
+     b. Number 12 has 2 digits.
+
+     c. Number 12 has number_of_digits digits.
+
+
+
+
+##连接
+
+连接是一种使用连接运算符（+）按顺序组合两个或多个字符串的操作。例如："A" + "part" 产生字符串 "Apart"。
+
+CHECKPOINT
+
+连接多个字符串：第1章，视频7
+
+CONCEPTS IN PRACTICE
+
+##字符串连接
+
+哪个产生字符串 "10"？
+a. 1 + 0
+     b. "1" + "0"
+
+     c. 1 + "0"
+
+哪个产生字符串 "Awake"？
+a. "wake" + "A"
+     b. "A + wake"
+
+     c. "A" + "wake"
+
+用户在以下代码后输入 "red"：
+```python
+
+   color = input("What is your favorite color?")
+
+   ```
+哪个产生输出 "Your favorite color is red!"？
+a. print("Your favorite color is " + color + !)
+       b. print("Your favorite color is " + "color" + "!")
+
+       c. print("Your favorite color is " + color + "!")
+
+以下哪项将 "one-sided" 赋给变量 holiday？
+a. holiday = "one" + "sided"
+       b. holiday = one- sided
+
+       c. holiday = "one- " + "sided"
+
+
+
+
+TRY IT
+
+姓名长度
+
+编写一个程序，要求用户分别输入名字和姓氏。使用以下提示（示例输入以粗体显示）：
+
+```
+
+What is your first name? Alan
+
+What is your last name? Turing
+
+```
+
+然后程序应输出每个名字的长度。基于上面的示例输入，输出将是：
+
+```
+
+Your first name is 4 letters long
+
+Your last name is 6 letters long
+
+```
+
+TRY IT
+
+标点符号
+
+编写一个 Python 计算机程序，要求：
+
+· 将字符串 "Freda" 赋给变量 name。
+· 将字符串 "happy" 赋给变量 feel。
+· 使用变量 name，用单个 print() 函数打印字符串 "Hi Freda!"。
+· 使用变量 feel，用单个 print() 函数打印字符串 "I'm glad you feel happy."。
+
+---
+
+##1.5 数字基础 (Number basics)
+
+学习目标
+
+在本节结束时，你应该能够：
+· 使用算术运算符进行计算。
+· 解释算术运算符的优先级。
+
+##数值数据类型
+
+Python 支持两种基本数字格式：整数和浮点数。整数表示整数，浮点格式表示小数。语言用于表示数据的格式称为数据类型。除了整数和浮点类型外，编程语言通常还有用于表示文本的字符串类型。
+
+CHECKPOINT
+
+整数和浮点数：第1章，视频8
+
+CONCEPTS IN PRACTICE
+
+##整数、浮点数和字符串
+
+假设 x = 1，y = 2.0，s = "32"。
+
+以下代码的输出是什么？
+```python
+
+  print(x, type(x))
+
+  ```
+a. 1 int
+     b. 1.0 <class 'float'>
+
+     c. 1 <class 'int'>
+
+以下代码的输出是什么？
+```python
+
+  print(y, type(y))
+
+  ```
+a. 2.0 <class 'int'>
+     b. 2.0 <class 'float'>
+
+     c. 2 <class 'int'>
+
+以下值的类型是什么？
+"12.0"
+a. string
+     b. int
+
+     c. float
+
+
+
+
+##基本算术
+
+算术运算符用于执行数学运算，如加法、减法、乘法和除法。
+Python 中有四种基本算术运算符：
+加法（+）
+减法（-）
+乘法（*）
+除法（/）
+
+CHECKPOINT
+
+算术运算符示例：第1章，视频9
+
+CONCEPTS IN PRACTICE
+
+##应用算术运算符
+
+假设 x = 7，y = 20，z = 2。
+
+给定以下代码行，代码的输出是什么？
+```python
+
+  c = 0
+
+  c = x - z
+
+  c = c + 1
+
+  print(c)
+
+  ```
+a. 1
+     b. 5
+
+     c. 6
+
+a 的值是多少？
+```python
+
+  a = 3.5 - 1.5
+
+  ```
+a. 2
+     b. 2.0
+
+     c. 2.5
+
+print(x / z) 的输出是什么？
+a. 3
+     b. 3.0
+
+     c. 3.5
+
+print(y / z) 的输出是什么？
+a. 0
+     b. 10
+
+     c. 10.0
+
+print(z * 1.5) 的输出是什么？
+a. 2
+     b. 3
+
+     c. 3.0
+
+
+
+
+##运算符优先级
+
+当计算中有多个运算符时，每个运算符按优先级顺序求值。例如：1 + 2 * 3 是 7，因为乘法优先于加法。然而，(1 + 2) * 3 是 9，因为括号优先于乘法。
+
+表 1.4 运算符优先级（从高到低）
+
+运算符 描述 示例 结果
+() 括号 (1 + 2) * 3 9
+** 幂运算 2 ** 4 16
++, - 正、负 -math.pi -3.14159
+*, / 乘法、除法 2 * 3 6
++, - 加法、减法 1 + 2 3
+
+CHECKPOINT
+
+算术表达式中的运算顺序：第1章，视频10
+
+CONCEPTS IN PRACTICE
+
+##多个算术运算符
+
+4 * 3 ** 2 + 1 的值是多少？
+a. 37
+     b. 40
+
+     c. 145
+
+(1 + 3) ** 2 / 4 中哪部分先求值？
+a. 4 ** 2
+       b. 1 + 3
+
+       c. 2 / 4
+
+-4 ** 2 的值是多少？
+a. -16
+       b. 16
+
+以下语句中有多少个运算符？
+result = - 2 ** 3
+a. 1
+       b. 2
+
+       c. 3
+
+
+
+
+TRY IT
+
+值和类型
+
+编写一个 Python 计算机程序，要求：
+
+定义一个整数变量 int_a，赋值为 10。
+定义一个浮点变量 float_a，赋值为 10.0。
+定义一个字符串变量 string_a，赋值为字符串 "10"。
+打印这三个变量中每个变量的值及其类型。
+
+TRY IT
+
+米到英尺
+
+编写一个 Python 计算机程序，要求：
+
+将整数值 10 赋给变量 meters。
+将浮点值 3.28 赋给变量 meter2feet。
+通过将 meters 乘以 meter2feet 计算 10 米等于多少英尺。将结果存储在变量 feet 中。
+在输出中打印变量 feet 的内容。
+
+---
+
+##1.6 错误信息 (Error messages)
+
+学习目标
+
+在本节结束时，你应该能够：
+· 识别错误信息中的错误类型和行号。
+· 纠正语法错误、名称错误和缩进错误。
+
+#如何阅读错误
+
+犯错误是编程的自然组成部分。即使是经验丰富的程序员在编写代码时也会犯错误。编写代码时犯错误可能会导致错误。计算机需要非常具体的指令来告诉它该做什么。如果指令不清楚，计算机就不知道该怎么办，并返回错误。
+
+当发生错误时，Python 显示一条包含以下信息的信息：
+错误的行号。
+错误类型（例如：SyntaxError）。
+关于错误的额外细节。
+
+例如：输入 print "Hello!" 而没有括号是语法错误。在 Python 中，使用 print 需要括号。当尝试运行 print "Hello!" 时，Python 显示以下错误：
+```
+
+Traceback (most recent call last):
+
+ File "/home/student/Desktop/example.py", line 1
+
+   print "Hello"
+
+         ^
+
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print("Hello")?
+
+```
+
+插入符字符（^）显示 Python 发现错误的位置。有时错误可能位于插入符符号所示位置的前一两行，因为 Python 可能直到那时才发现错误。Traceback 是 Python 对错误位置和类型的报告。traceback 这个词建议程序员在代码中回溯以找到错误，如果错误没有立即看到的话。
+
+仔细阅读错误信息是一项重要技能。技术术语的数量一开始可能让人不知所措。但这些信息非常有用。
+
+CHECKPOINT
+
+错误的变量名：第1章，视频11
+
+CONCEPTS IN PRACTICE
+
+##错误的组成部分
+
+给定以下错误信息：
+
+```
+
+Traceback (most recent call last):
+
+ File "/home/student/Desktop/example.py", line 2
+
+   print "test"
+
+         ^
+
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print("test")?
+
+```
+
+程序的文件名是什么？
+a. Desktop
+     b. example.py
+
+     c. test
+
+错误在第几行被发现？
+a. 1
+     b. 2
+
+     c. 3
+
+发现了什么类型的错误？
+a. 缺少括号
+     b. SyntaxError
+
+     c. traceback
+
+
+
+
+##常见错误类型
+
+运行 Python 程序时可能会发生不同类型的错误。当发生错误时，了解错误类型有助于了解如何纠正错误。下表显示了任何人都可能犯的编程错误示例。
+
+表 1.5 简单错误
+
+错误 错误信息 解释
+print("Have a nice day!" SyntaxError: unexpected EOF while parsing 缺少右括号。Python 在行完成之前到达文件末尾（EOF）时感到惊讶。
+word = input("Type a word:" SyntaxError: EOL while scanning string literal 缺少右引号。结果，字符串在行尾（EOL）之前没有终止。
+print("You typed:", wird) NameError: name "wird" is not defined 单词拼写错误。程序员不小心按错了键。
+prints("You typed:", word) NameError: name "prints" is not defined print 拼写错误。程序员不小心多输入了一个字母。
+print("Hello") IndentationError: unexpected indent 程序员不小心在行首输入了一个空格。
+print("Goodbye") IndentationError: unexpected indent 程序员不小心在行首按了 Tab 键。
+
+CONCEPTS IN PRACTICE
+
+##错误类型
+
+对于下面的每个程序，会发生什么类型的错误？
+
+```python
+
+  print("Breakfast options:")
+print("Breakfast options:")
+print("A. Cereal")
+print("B. Eggs")
+print("C. Yogurt")
+choice = input("What would you like?")
+```
+
+  a. IndentationError
+
+     b. NameError
+
+     c. SyntaxError
+
+5. ```python
+
+  birth = input("Enter your birth date: )
+
+  print("Happy birthday on ", birth)
+
+  ```
+a. IndentationError
+     b. NameError
+
+     c. SyntaxError
+
+```python
+
+  print("Breakfast options:")
+print("Breakfast options:")
+print(" A. Cereal")
+print(" B. Eggs")
+print(" C. Yogurt")
+choice = input("What would you like? ")
+```
+
+  a. IndentationError
+
+     b. NameError
+
+     c. SyntaxError
+
+
+
+TRY IT
+
+
+
+三个错误
+
+
+
+以下程序有三个错误。
+
+
+
+运行程序以找到第一个错误，并纠正相应的代码行。然后再次运行程序以找到并纠正第二个错误。继续运行和纠正程序，直到没有错误。
+
+
+
+TRY IT
+
+
+
+错误的符号
+
+
+
+这段代码基于前面的示例，但代码包含几个错误。
+
+
+
+一行缺少必需的标点符号，另一行使用了不正确的符号。运行程序以找到第一个错误，并纠正相应的代码行。继续运行和纠正程序，直到没有错误。
+
+
+
+---
+
+
+
+##1.7 注释 (Comments)
+
+
+
+学习目标
+
+
+
+在本节结束时，你应该能够：
+
+· 编写简洁、有意义的注释，解释代码的预期功能。
+
+· 编写 docstring（更详细的注释），描述程序功能。
+
+
+
+##井号字符
+
+
+
+注释是解释代码在做什么的简短短语。例如：以下程序中的第 1、8 和 10 行包含注释。每个注释以井号字符（#）开头。从井号字符到行末的所有文本在运行程序时都被忽略。相反，字符串内的井号字符被视为常规文本。例如：字符串 "Item #1: " 不包含注释。
+
+
+
+编写注释时：
+
+
+
+· # 字符后应跟一个空格。例如：# End of menu 比 #End of menu 更易读。
+
+· 注释应解释代码的目的，而不仅仅是重复代码本身。例如：# Get the user's preferences 比 # Input item1 and item2 更具描述性。
+
+
+
+示例 1.2
+
+
+
+带三个注释的程序
+
+
+
+```python
+
+1  # Display the menu options
+
+2  print("Lunch Menu")
+
+3  print("----------")
+
+4  print("Burrito")
+
+5  print("Enchilada")
+
+6  print("Taco")
+
+7  print("Salad")
+
+8  print()  # End of menu
+
+9
+
+10  # Get the user's preferences
+
+11  item1 = input("Item #1: ")
+
+12  item2 = input("Item #2: ")
+
+```
+
+CONCEPTS IN PRACTICE
+
+##简单注释
+
+编写注释的主要目的是
+a. 避免语法错误
+     b. 解释代码做什么
+
+     c. 使代码运行更快
+
+Python 中使用哪个符号表示注释？
+a. #
+     b. /*
+
+     c. //
+
+哪个注释格式正确？
+a. 0 个空格：#Get the user input
+     b. 1 个空格：# Get the user input
+
+     c. 2 个空格：#  Get the user input
+
+
+
+
+##代码质量
+
+上面的示例程序有两部分：（1）显示菜单选项，（2）获取用户偏好。空行和注释一起显示了程序的整体结构。
+程序员花在阅读代码上的时间比编写代码多。因此，使代码更容易被他人阅读和理解很重要。提高代码质量有两种方法：
+
+· 用空行分隔每个部分（具有相似目的的行）。
+· 在每个部分之前写注释。
+· 不是每一行都需要注释。
+
+CHECKPOINT
+
+程序中的注释：第1章，视频12
+
+CONCEPTS IN PRACTICE
+
+##代码质量
+
+以下代码最有用的注释是哪个？
+```python
+
+  print("You said:", adj1 + " " + noun1)
+
+  ```
+a. # Append adj1 and noun1
+     b. # Print out a bunch of stuff
+
+     c. # Show the resulting phrase
+
+空行应该插入哪里？
+```python
+
+  1  name = input("whose birthday is today?")
+
+  2  print("Happy birthday to", name)
+
+  3  print("Everyone cheer for", name)
+
+  ```
+a. 第 1 行后
+     b. 第 2 行后
+
+     c. 第 3 行后
+
+要暂时阻止一行运行，可以...
+a. 在该行中引入语法错误。
+     b. 从程序中删除该行。
+
+     c. 在该行开头插入 #。
+
+
+
+
+##文档
+
+Python 程序可以选择以称为 docstring 的字符串开头。Docstring 是为将使用程序但不一定阅读源代码的人编写的文档。大多数官方文档都是从 docstring 生成的。
+文档可能很长，因此 docstring 通常写成多行字符串（"""）。docstring 的常见元素包括一行摘要、一个空行和更长的描述。
+
+CHECKPOINT
+
+假期 docstring：第1章，视频13
+
+CONCEPTS IN PRACTICE
+
+##文档
+
+编写 docstring 的主要目的是...
+a. 总结程序的目的或用法。
+     b. 解释代码的每个部分如何工作。
+
+     c. 维护新功能的想法列表。
+
+以下哪项不是 docstring？
+a. """Vacations Madlib."""
+     b. """Vacations Madlib. This program asks the user for two adjectives and two nouns, which are then used to print a funny story about a vacation."""
+
+     c. # Vacations Madlib.
+
+        #
+
+        # This program asks the user for two adjectives
+
+        # and two nouns, which are then used to print
+
+        # a funny story about a vacation.
+
+哪个 docstring 对这个程序最有用？
+a. """Vacations Madlib."""
+     b. """Vacations Madlib. This program asks the user for two adjectives and two nouns, which are then used to print a funny story about a vacation."""
+
+     c. """Vacations Madlib. This program asks the user for two adjectives and two nouns, which are then used to print a funny story about a vacation. The code uses four variables to store the user input: two for the adjectives, and two for the nouns. The output is displayed on seven lines, beginning with a blank line after the input."""
+
+
+
+
+TRY IT
+
+谁的生日
+
+向以下程序添加两个注释：一个用于输入，一个用于输出。用空行分隔输入和输出。然后，将你的注释与示例解决方案进行比较，并问自己以下问题：
+
+· 你的注释更长还是更短？为什么？
+· 你的注释格式是否正确？
+
+TRY IT
+
+重力计算
+
+为以下程序编写一个 docstring。docstring 的第一行应该用一句简短的话解释程序是什么。第二行应该为空。第三行及后续行应包含对程序功能的更长解释。在 docstring 末尾，添加一行 Author:  后跟你的名字。
+
+---
+
+##1.8 为什么选择 Python？(Why Python?)
+学习目标
+
+在本节结束时，你应该能够：
+· 说出关于 Python 最初如何创建的两个历史事实。
+· 描述 Python 被认为是流行语言的两种方式。
+
+##历史背景
+
+Python 有一段有趣的历史。1982 年，Python 的创造者 Guido van Rossum 开始在一家荷兰国家研究机构 CWI 工作。他加入了一个团队，该团队正在设计一种新的编程语言，名为 ABC，用于教学和原型设计。ABC 的简单性非常适合初学者，但该语言缺乏编写高级程序所需的功能。
+
+几年后，van Rossum 加入了 CWI 的另一个团队，从事操作系统工作。该团队需要一种更简单的方法来编写用于监控计算机和分析数据的程序。20 世纪 80 年代常见的语言（现在仍然如此）很难用于这类程序。van Rossum 设想了一种新语言，它具有像 ABC 一样简单的语法，但也提供专业人士需要的高级功能。
+
+起初，van Rossum 将这种新语言作为业余爱好在空闲时间开发。他将该语言命名为 Python，因为他是英国喜剧团体 Monty Python 的粉丝。在接下来的一年里，他和同事成功地多次将 Python 用于实际工作。van Rossum 最终决定在网上与更广泛的编程社区分享 Python。他免费分享了 Python 的整个源代码，以便任何人都可以编写和运行 Python 程序。
+
+Python 的第一个版本，称为 Version 0.9.0，出现在 1991 年，比 C++ 晚约六年，比 Java 早四年。van Rossum 决定使该语言简单而高级、适合日常任务并在网上免费提供，这些决定促成了 Python 的长期成功。
+
+CHECKPOINT
+
+关键决策：第1章，视频14
+
+CONCEPTS IN PRACTICE
+
+##Python 历史
+
+Python 编程语言是以 ______ 命名的。
+a. 英国喜剧团体
+     b. 荷兰程序员
+
+     c. 无毒蛇
+
+哪种编程语言先出现？
+a. Java
+     b. Python
+
+哪句话最好地描述了 Python 的开端？
+a. CWI 雇佣 Guido van Rossum 设计一种新编程语言来与 C++ 竞争。
+     b. Python 最初是一个业余爱好，经过几年开发后成为开源。
+
+     c. van Rossum 在开发该语言一年后将 Python 的源代码发布到网上。
+
+
+
+
+##EXPLORING FURTHER
+
+有关 Python 历史的更多细节，请参阅 Vasilisa Sheromova 的 "A brief history of Python" 和 Bernd Klein 的 "History and Philosophy of Python"。
+
+##Python 的流行度
+
+多年来，Python 已成为一个拥有蓬勃发展的社区的非营利组织。全世界数百万程序员使用 Python 进行各种有趣的项目。数十万个 Python 库已作为开源软件发布。Python 社区非常活跃和支持，在线回答问题并分享代码。
+了解 Python 流行度的一种方式是 TIOBE 指数。TIOBE 是一家荷兰公司，提供测量软件代码质量的产品和服务。自 2001 年以来，TIOBE 一直跟踪编程语言的流行度并将结果发布在网上。图 1.2 显示了五种最流行语言的 TIOBE 指数随时间的变化。
+TIOBE 指数基于每种语言的搜索引擎结果数量。百分比指的是有多少结果属于该语言。自 2004 年以来，Python 每年都位列前 10 种语言。2021 年 10 月，Python 成为 TIOBE 指数上的第 1 名语言。在前 20 年中，除 C 和 Java 外，没有其他语言曾排名第 1。
+了解 Python 流行度的另一种方式是分析 Python 在网上被讨论的频率。Stack Overflow 是一个面向程序员的问题解答网站。图 1.3 显示了每月标记为 Python、JavaScript 等的问题数量。近年来，Python 已成为编程论坛中提问最多的语言。
+
+图 1.2 TIOBE 编程社区指数。来源：www.tiobe.com
+
+图 1.3 Stack Overflow 每月问题数。来源：data.stackexchange.com
+
+CONCEPTS IN PRACTICE
+
+##Python 流行度
+
+根据 TIOBE 指数，2001 年至 2021 年最流行的两种语言是哪两种？
+a. C 和 C++
+     b. Java 和 C
+
+     c. Python 和 JavaScript
+
+Python 在哪一年成为 Stack Overflow 上提问最多的语言？
+a. 2018
+     b. 2019
+
+     c. 2020
+
+TIOBE 跟踪编程语言流行度多久了？
+a. 自 1991 年以来
+     b. 自 2001 年以来
+
+     c. 自 2015 年以来
+
+
+
+
+---
+
+##1.9 章节小结 (Chapter summary)
+
+本章介绍了 Python 编程的基础知识，包括：
+· print() 和 input()。
+· 变量和赋值。
+· 字符串、整数和浮点数。
+· 算术、连接。
+· 常见错误信息。
+· 注释和 docstring。
+
+此时，你应该能够编写询问输入、执行简单计算并输出结果的程序。下面的编程练习将本章介绍的大部分主题结合在一起。
+
+表 1.6 第1章参考
+
+##函数 描述
+print(values) 向用户输出一个或多个值，每个值用空格分隔。
+input(prompt) 如果存在，prompt 输出给用户。然后函数从用户读取一行输入。
+len(string) 返回字符串的长度（字符数）。
+type(value) 返回值的类型（或类）。例如：type(123) 是 <class 'int'>。
+
+##运算符 描述
+=（赋值） 赋值（或更新）变量的值。在 Python 中，变量在第一次赋值时开始存在。
++（连接） 将两个字符串的内容追加，产生一个新字符串。
++（加法） 将两个数字的值相加。
+-（减法） 从一个数字的值中减去另一个数字的值。
+*（乘法） 将两个数字的值相乘。
+/（除法） 将一个数字的值除以另一个数字的值。
+（幂运算） 将数字提高到某个幂。例如：32 是三的平方。
+
+##语法 描述
+#（注释） 从 # 符号到行末的所有文本都被忽略。
+' 或 "（字符串） 字符串可以使用任一种引号编写。例如：'A' 和 "A" 表示同一个字符串。按照惯例，本书大多数字符串使用双引号（"）。
+""" 或 '''（Docstring） 用于文档，通常是多行字符串，用于总结程序的目的或用法。
+
+TRY IT
+
+有趣的事实
+
+编写一个程序，将名为 number 的变量赋值为你选择的任何整数。例如：number = 74。然后，使用此变量计算并输出以下结果：
+
+```
+
+74 squared is 5476
+
+74 cubed is 405224
+
+One tenth of 74 is 7.4
+
+74 plus 123 is 197
+
+74 minus 456 is -382
+
+```
+
+多次运行程序，每次使用不同的整数。对于你选择的任何整数，输出都应在数学上正确。
+
+这个练习的重点是在 print 语句中执行基本算术。除了 number 之外，不要使用任何其他变量。你的程序应该只有一个赋值语句（在开头）。
+
+TRY IT
+
+Mad lib
+
+Mad lib 是一种文字游戏，一个人要求其他人为预先写好的故事提供单词。然后大声朗读故事，目的是让人发笑。
+
+本练习基于 MadLibs.com 的 Printables 部分提供的 Vacations Mad Lib。编写一个程序，要求用户输入两个形容词和两个名词（用户输入以粗体显示）：
+
+```
+
+Adjective: tranquil
+
+Adjective: scandalous
+
+Noun: pancake
+
+Noun: field
+
+```
+
+使用 input() 显示每个提示，完全如上所示。用户输入应与提示在同一行。每个冒号后必须正好有一个空格。读取输入后，程序应输出以下三行：
+
+```
+
+A vacation is when you take a trip to some tranquil place with your scandalous family.
+
+Usually you go to some place that is near a/an pancake or up on a/an field.
+
+```
+
+注意第一行应完全为空。将粗体单词（来自上面的示例）替换为用户输入的实际单词。
+
+你的最终程序应该有四个输入语句、三个打印语句和至少两个注释。为了完整起见，在程序顶部写一个适当的 docstring。

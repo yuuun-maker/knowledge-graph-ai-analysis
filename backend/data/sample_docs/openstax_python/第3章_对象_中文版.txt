@@ -1,0 +1,687 @@
+第3章：对象（Objects）
+> 原文：Introduction to Python Programming (OpenStax, CC BY 4.0)，第3章 Objects
+> 本书免费获取地址：https://openstax.org/details/books/introduction-python-programming
+> 本译文为中文翻译版，章节结构与原文一致，专有名词已保留，原文中的页码页脚已省略。
+
+##第3章：对象（Objects）
+
+##章节大纲
+
+3.1 重新审视字符串（Strings revisited）
+3.2 格式化字符串（Formatted strings）
+3.3 重新审视变量（Variables revisited）
+3.4 列表基础（List basics）
+3.5 元组基础（Tuple basics）
+3.6 章节小结（Chapter summary）
+
+##引言
+
+对象是 Python 程序中的单个数据单元。到目前为止，本书介绍了三种类型的对象：字符串、整数和浮点数。本章更仔细地研究字符串如何表示，以及整数和浮点数如何格式化。为了更好地理解对象实际上是什么，本章强调变量和对象之间的关系。本章还介绍两种类型的容器：列表和元组。容器是可以容纳任意数量其他对象的对象。在本章结束时，你将能够使用更少的变量解决更复杂的问题。
+
+---
+
+##3.1 重新审视字符串（Strings revisited）
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 使用索引从字符串中提取特定字符。
+· 使用转义序列表示特殊字符。
+
+##索引
+
+字符串是零个或多个字符的序列。每个字符都有一个索引，指字符的位置。索引从左到右编号，从 0 开始。索引也从右到左编号，从 -1 开始。
+
+CHECKPOINT
+
+字符串索引：第3章，视频1
+
+CONCEPTS IN PRACTICE
+
+索引
+
+1. 字符串中第二个字符的索引是什么？
+   a. 1
+      b. 2
+      c. -2
+2. 如果 s = "Python!"，s[1] + s[-1] 的值是什么？
+   a. "p!"
+      b. "y!"
+      c. "yn"
+3. 如果 s = "Python!"，s[0] 是什么类型的对象？
+   a. 字符
+      b. 整数
+      c. 字符串
+
+##Unicode
+
+Python 使用 Unicode，这是计算机上表示文本的国际标准。Unicode 为每个可能的字符定义了一个唯一的数字，称为码点。例如："P" 的码点是 80，"!" 的码点是 33。
+
+内置的 ord() 函数将字符转换为码点。例如：ord("P") 返回整数 80。类似地，内置的 chr() 函数将码点转换为字符。例如：chr(33) 返回字符串 "!"。Unicode 是 ASCII（美国信息交换标准代码）的扩展。最初，ASCII 只定义了 128 个码点，足以支持英语。Unicode 定义了超过一百万个码点。
+
+表 3.1 字符值（码点 32 到 127）
+
+码点 字符 码点 字符 码点 字符
+32 (空格) 64 @ 96 `
+33 ! 65 A 97 a
+34 " 66 B 98 b
+35 # 67 C 99 c
+36 $ 68 D 100 d
+37 % 69 E 101 e
+38 & 70 F 102 f
+39 ' 71 G 103 g
+40 ( 72 H 104 h
+41 ) 73 I 105 i
+42  *  74 J 106 j
+43 + 75 K 107 k
+44 , 76 L 108 l
+45 - 77 M 109 m
+46 . 78 N 110 n
+47 / 79 O 111 o
+48 0 80 P 112 p
+49 1 81 Q 113 q
+50 2 82 R 114 r
+51 3 83 S 115 s
+52 4 84 T 116 t
+53 5 85 U 117 u
+54 6 86 V 118 v
+55 7 87 W 119 w
+56 8 88 X 120 x
+57 9 89 Y 121 y
+58 : 90 Z 122 z
+59 ; 91 [ 123 {
+60 < 92 \ 124 \|
+61 = 93 ] 125 }
+62  94 ^ 126 ~
+63 ? 95  _  127 (delete)
+
+码点 0 到 31 是不可打印字符，曾用于电信。
+
+CONCEPTS IN PRACTICE
+
+ord() 和 chr()
+
+4. 字母 A 的码点是什么？
+   a. 1
+      b. 65
+      c. 97
+5. ord("0") 返回什么值？
+   a. 0
+      b. 48
+      c. Error
+6. chr(126) 返回什么？
+   a. ~
+      b. "~"
+      c. Error
+
+##特殊字符
+
+转义序列使用反斜杠（\）表示字符串中的特殊字符。
+
+表 3.2 常见转义序列
+
+转义序列 含义 示例 屏幕输出
+\n 换行符，表示一行文本的结束。 print("Escape\nsequence!") Escape sequence!
+\t 制表符；用于缩进段落或对齐多行文本。 print("Escape\tsequence!") Escape    sequence!
+\' 单引号；用双引号括起字符串的替代方法。 print("I\'ll try my best!") I'll try my best!
+\" 双引号；用单引号括起字符串的替代方法。 print("I heard you said \"Yes\"") I heard you said "Yes"
+\\ 反斜杠字符。 print("This prints a \\") This prints a \
+
+CONCEPTS IN PRACTICE
+
+##制表符和换行符
+
+7. 以下哪项是转义序列？
+   a. t
+      b. \t
+      c. \t\
+8. 哪个语句打印反斜杠（\）到屏幕？
+   a. print(\)
+      b. print("\\")
+      c. print("\")
+9. 哪个语句将 Enter 和 here 打印在不同行？
+   a. print("Enter here")
+      b. print("Enter" + \n + "here")
+      c. print("Enter" + "\n" + "here")
+
+TRY IT
+
+Hopper 名言
+
+Grace Hopper（1906-1992）是一位著名的计算机科学家（也是美国海军少将！），她提出了机器无关编程语言的想法。她设想了一种基于英语的编程语言，并做出了许多贡献，为包括 Python 在内的现代编程语言铺平了道路。
+
+编写一个程序，打印以下文本，包括引号。你的程序不得在任何地方使用单引号（'）。最后一行必须用制表符缩进。
+
+```
+"To me programming is more than an important practical art. It is also a gigantic undertaking in the foundations of knowledge."
+    - Grace Hopper
+```
+
+TRY IT
+
+移位密码
+
+在罗马帝国时期，Julius Caesar（公元前 100-44 年）使用一种简单的技术来加密私人信息。消息的每个字母都被替换为字母表中后面的第三个字母。例如：如果消息是 CAT，C 变成 F，A 变成 D，T 变成 W，结果是消息 FDW。这种技术称为移位密码，因为每个字母都移位了某个量。在 Caesar 的情况下，量是三，但其他量（除了 0）也可以。
+
+编写一个程序，提示用户输入以下两个值（示例输入以粗体显示）：
+
+```
+Enter a 3-letter word: CAT
+Shift by how many letters? 3
+```
+
+然后程序应将单词的每个字母移位所需的量。基于上面的示例，输出将是：
+
+```
+The secret message is: FDW
+```
+
+提示：使用 ord() 函数将每个字母转换为整数，将移位量加到每个整数，使用 chr() 函数将每个整数转换为字符，并连接结果字符。
+
+---
+
+##3.2 格式化字符串（Formatted strings）
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 使用 f-string 简化多值输出。
+· 使用前导零和固定精度格式化数字。
+
+##F-string
+
+格式化字符串字面量（或 f-string）是以 "f" 或 "F" 为前缀的字符串字面量。替换字段是 f-string 中花括号（{}）内的表达式。例如：字符串 f"Good morning, {first} {last}!" 有两个替换字段：一个用于名字，一个用于姓氏。F-string 提供了一种方便的方法将多个值组合成一个字符串。
+
+CHECKPOINT
+
+打印 f-string：第3章，视频2
+
+CONCEPTS IN PRACTICE
+
+##基本 f-string
+
+1. 以下代码的输出是什么？
+   ```python
+   animal = "dog"
+   says = "bark"
+   print(f"My {animal} says {says} {says} {says}")
+   ```
+   a. My dog bark bark bark bark
+      b. My dog says bark bark bark
+      c. Error
+2. 以下代码的输出是什么？
+   ```python
+   temp = "hot"
+   food = "soup"
+   print(f"This {temp} {food} is {temp}!")
+   ```
+   a. This hot soup is hot!
+      b. This {temp} {food} is {temp}!
+      c. Error
+3. 如何使用 f-string 重写以下代码？
+   ```python
+   print(x, "+", y, "=", x + y)
+   ```
+   a. print(f"x+y={x+y}")
+      b. print(f"{x}+{y}={x+y}")
+      c. print(f"{x}+{y}={x+y}")
+
+##格式化数字
+
+程序经常需要以特定格式显示数字。例如：显示时间时，分钟格式化为两位整数。如果小时是 9，分钟是 5，那么时间是 "9:05"（不是 "9:5"）。
+
+在 f-string 中，替换字段可以包含由冒号引入的格式说明符。格式说明符定义值应如何格式化以显示。例如：在字符串 f"{hour}:{minute:02d}" 中，minute 的格式说明符是 02d。
+
+表 3.3 示例格式说明符
+
+格式 描述 示例 结果
+d 十进制整数（默认整数格式）。 f"{12345678:d}" '12345678'
+,d 十进制整数，带逗号分隔符。 f"{12345678:,d}" '12,345,678'
+10d 十进制整数，至少 10 个字符宽。 f"{12345678:10d}" '  12345678'
+010d 十进制整数，至少 10 个字符宽，带前导零。 f"{12345678:010d}" '0012345678'
+f 定点（默认 6 位小数）。 f"{math.pi:f}" '3.141593'
+.4f 定点，四舍五入到 4 位小数。 f"{math.pi:.4f}" '3.1416'
+8.4f 定点，四舍五入到 4 位小数，至少 8 个字符宽。 f"{math.pi:8.4f}" '  3.1416'
+08.4f 定点，四舍五入到 4 位小数，至少 8 个字符宽，带前导零。 f"{math.pi:08.4f}" '003.1416'
+
+该表显示了数字格式化的常见方式。更多格式选项可在 Python 的 Format Specification Mini-Language 中找到。
+
+CONCEPTS IN PRACTICE
+
+##格式化数字
+
+4. 哪个 f-string 将日期格式化为 MM/DD/YYYY？
+   a. f"{month:02d}/{day:02d}/{year}"
+      b. f"{month:2d}/{day:2d}/{year}"
+      c. f"{month}/{day}/{year}"
+5. 哪个语句将变量 money 显示为四舍五入到两位小数？
+   a. print(f"{money:2d}")
+      b. print(f"{money:2f}")
+      c. print(f"{money:.2f}")
+6. 哪个格式说明符将浮点数显示为带逗号分隔符并四舍五入到两位小数？
+   a. .2,f
+      b. .2f
+      c. .d.2f
+
+TRY IT
+
+Mad lib（f-string）
+
+Mad lib 是一个使用用户提供的单词的有趣故事。以下 mad lib 基于四个单词（用户输入以粗体显示）：
+
+```
+Enter a name: Buster
+Enter a noun: dog
+Enter an adjective: super
+Verb ending in -ing: swimming
+```
+
+```
+Buster, the super dog, likes to go swimming.
+```
+
+这个 mad lib 的大部分代码已经写好。通过编写 f-string 完成下面的代码。
+
+TRY IT
+
+工资计算器
+
+你刚找到一份兼职工作，想计算你会赚多少钱。编写一个程序，输入开始工作的时间、停止工作的时间和时薪（示例输入以粗体显示）：
+
+```
+Starting hour: 9
+Starting minute: 30
+Stopping hour: 11
+Stopping minute: 0
+Hourly rate: 15
+```
+
+根据用户输入，你的程序应计算并显示以下结果：
+
+```
+Worked 9:30 to 11:00
+Total hours: 1.5
+Payment: $22.50
+```
+
+对于这个练习，你需要编写代码：（1）计算总工资，（2）格式化三行输出。使用 f-string 和格式说明符显示两位分钟、一位小数的小时和两位小数的工资。输入代码已作为起点提供。
+
+假设使用 24 小时制。例如：使用 16:15 而不是下午 4:15。
+
+---
+
+##3.3 重新审视变量（Variables revisited）
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 区分变量、对象和引用。
+· 绘制整数、浮点数和字符串的内存图。
+
+##对象的引用
+
+在 Python 中，每个变量都引用一个对象。赋值语句 message = "Hello" 使变量 message 引用对象 "Hello"。多个变量可以引用同一个对象。例如：greeting = message 使 greeting 引用与 message 相同的对象。内存图显示变量和对象之间的关系。
+
+CHECKPOINT
+
+示例内存图：第3章，视频3
+
+CONCEPTS IN PRACTICE
+
+##变量和对象
+
+1. 上面的动画中有多少个赋值语句？
+   a. 2
+      b. 3
+      c. 4
+2. 以下哪项最好地描述了所赋的对象？
+   a. 两个浮点对象
+      b. 两个整数对象，一个浮点对象
+      c. 一个整数对象，一个浮点对象
+3. 用什么符号显示变量的当前值？
+   a. 箭头
+      b. 小黑框
+      c. 圆角框
+
+EXPLORING FURTHER
+
+Python Tutor 是一个免费的在线工具，用于可视化代码执行。用户可以输入任何 Python 代码，点击 Visualize Execution，然后点击 Next 按钮一次运行一行代码。这是上面动画中的评分和分数示例。
+
+Python Tutor 也可用于绘制与本书类似的内存图。在点击 Visualize Execution 之前，将中间选项从 "inline primitives, don't nest objects [default]" 更改为 "render all objects on the heap (Python/Java)"。
+
+##对象的属性
+
+每个对象都有一个身份、一个类型和一个值：
+
+· 对象的身份是与该对象关联的唯一整数。通常，这个整数指对象存储的内存位置。一旦创建，对象的身份永远不会改变。内置的 id() 函数返回对象的身份。
+· 对象的类型决定对象的可能值和操作。例如：整数和浮点数可以使用 / 运算符"相除"，但字符串不能。内置的 type() 函数返回对象的类型。
+· 对象的值表示对象的当前状态。许多对象，如数字和字符串，一旦创建就无法修改。一些对象，如列表（稍后介绍），设计为可修改。
+
+CHECKPOINT
+
+身份、类型和值：第3章，视频4
+
+CONCEPTS IN PRACTICE
+
+##身份、类型和值
+
+4. id(rating) 可能返回哪个值？
+   a. 9793344
+      b. <class 'float'>
+      c. 10.0
+5. type(rating) 可能返回哪个值？
+   a. 10.0
+      b. "float"
+      c. <class 'float'>
+6. 什么表达式返回对象的值？
+   a. value(rating)
+      b. rating
+      c. "rating"
+
+##EXPLORING FURTHER
+
+如内存图所示，变量和对象是两个独立的概念。调用 id() 或 type() 等函数返回关于对象的信息，而不是关于变量的信息。事实上，变量没有身份或类型，如下例所示：
+
+```python
+>>> rating = 10  # 内存中某处的整数对象。
+>>> type(rating)
+<class 'int'>
+>>> id(rating)
+9793344
+>>> rating = "ten"  # 内存中另一处的字符串对象。
+>>> type(rating)
+<class 'str'>
+>>> id(rating)
+140690967388272
+```
+
+有人可能错误地认为 rating 变量的类型或身份发生了变化。然而，唯一改变的是 rating 变量引用的对象。
+
+TRY IT
+
+三个变量
+
+1. 为以下代码绘制内存图：
+   ```python
+   a = 1
+   b = 2
+   c = a + b
+   ```
+2. 在 Python Tutor 上运行代码以检查你的答案。
+3. 基于你的图，回答以下问题：
+   · a、b 和 c 的最终值是什么？
+   · 创建了多少个整数对象？
+
+TRY IT
+
+不同类型
+
+1. 为以下代码绘制内存图：
+   ```python
+   name = "Chocolate"
+   length = len(name)
+   price = 1.99
+   lower = min(length, price)
+   product = name
+   name = name * 2
+   ```
+2. 在 Python Tutor 上运行代码以检查你的答案。
+3. 基于你的图，回答以下问题：
+   · 每个对象的类型和值是什么？
+   · 每个变量引用哪个对象？
+
+---
+
+##3.4 列表基础（List basics）
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 使用索引访问列表中的单个元素。
+· 使用索引修改列表中的单个元素。
+· 使用 len() 函数查找列表的长度。
+· 证明列表在创建后可以更改。
+
+##列表
+
+列表对象可用于在 Python 中将元素捆绑在一起。列表通过使用方括号 [] 和方括号内逗号分隔的值来定义。例如：list_1 = [1, 2, 4]。
+
+空列表可以通过两种方式定义：
+
+```python
+list_1 = []
+list_1 = list()
+```
+
+列表可以由任何类型的元素组成。列表可以包含整数、字符串、浮点数或任何其他类型。列表也可以包含类型的组合。例如：[2, "Hello", 2.5] 是有效列表。
+
+Python 列表允许程序员以各种方式更改列表的内容。
+
+CONCEPTS IN PRACTICE
+
+##列表基础
+
+1. 创建数字 3、4 和 5 的列表的正确方法是什么？
+   a. new_list == [3, 4, 5]
+      b. new_list = [3, 4, 5]
+      c. new_list == (3, 4, 5)
+2. 以下哪项不是在 Python 中指定列表的有效方式？
+   a. my_list = [2, 2 3, 23]
+      b. my_list = ["Jimmy", 2, "times"]
+      c. my_list = ["C", "C++", "Python", "Java", "Rust", "Scala"]
+
+##使用索引
+
+单个列表元素可以使用索引直接访问。索引从 0 开始，到序列长度减一结束。例如：对于 50 个元素的序列，第一个位置是 0，最后一个位置是 49。
+
+索引号放在方括号 [] 中，并附加到列表名称的末尾以访问所需元素。例如：new_list[3] 访问 new_list 中的第 4 个元素。求值为整数的表达式也可以用作索引。与字符串类似，负索引也可用于寻址单个元素。例如：索引 -1 指最后一个元素，-2 指倒数第二个元素。
+
+len() 函数在作用于列表时返回列表的长度。
+
+示例 3.1
+
+##列表索引和 len() 函数
+
+以下代码演示了列表索引和 len() 函数的使用。第 6 行显示使用 len() 函数获取列表长度。第 10 行显示如何使用索引访问元素。第 14 行显示如何使用索引修改列表元素。
+
+```python
+ 1  # 设置数字列表
+ 2  num_list = [2, 3, 5, 9, 11]
+ 3  print(num_list)
+ 4
+ 5  # 打印列表长度
+ 6  print("Length:", len(num_list))
+ 7
+ 8  # 打印列表中的第 4 个元素
+ 9  # 数字 3 用于指第 4 个元素
+10  print("4th element:", num_list[3])
+11
+12  # 第 4 个元素的期望值实际上是 7
+13  # 将第 4 个元素的值更新为 7
+14  num_list[3] = 7
+15
+16  # 前 5 个质数的列表
+17  print(num_list)
+```
+
+上面代码的输出是：
+
+```
+[2, 3, 5, 9, 11]
+Length: 5
+4th element: 9
+[2, 3, 5, 7, 11]
+```
+
+CONCEPTS IN PRACTICE
+
+##列表索引和 len() 函数
+
+3. 访问名为 cardList 的列表中第 17 个元素的正确方法是什么？
+   a. card_list[17]
+      b. card_list(16)
+      c. card_list[16]
+4. 在以下列表中将元素 "Tom" 修改为 "Tim" 的正确方法是什么？
+   ```python
+   name_list = ["Carla", "Monique", "Westin", "Tom"]
+   ```
+   a. name_list[-1] = "Tim"
+      b. name_list[4] = "Tim"
+      c. name_list[end] = "Tim"
+
+TRY IT
+
+列表基础
+
+编写一个程序完成以下任务：
+
+1. 创建一个包含以下元素的列表：2, 23, 39, 6, -5。
+2. 将列表的第三个元素（索引 2）更改为 35。
+3. 打印结果列表和列表的长度。
+
+---
+
+##3.5 元组基础
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 描述元组的特征和优点。
+· 开发一个成功创建和使用元组的程序。
+· 识别并讨论元组的可变性。
+
+##创建元组和访问元素
+
+元组是逗号分隔的值的序列，可以包含不同类型的元素。元组必须用值之间的逗号创建，按照惯例，序列用括号括起。每个元素通过索引访问，从第一个元素在索引 0 开始。
+
+表 3.4 示例元组
+
+```python
+tuple_1 = (2, 3, 4)
+print(f'tuple_1: {tuple_1}')
+print(tuple_1[1])
+print()
+data_13 = ('Aimee Perry', 96, [94, 100, 97, 93])
+print(f'data_13: {data_13}')
+print(data_13[2])
+```
+
+输出：
+
+```
+tuple_1: (2, 3, 4)
+3
+
+data_13: ('Aimee Perry', 96, [94, 100, 97, 93])
+[94, 100, 97, 93]
+```
+
+CONCEPTS IN PRACTICE
+
+##创建元组和访问元素
+
+1. 考虑上面的示例。哪个访问 tuple_1 的第一个元素？
+   a. tuple_1[0]
+      b. tuple_1[1]
+      c. tuple_1[2]
+2. 哪个创建有效元组？
+   a. tuple_2 = (42, 26, 13)
+      b. tuple_3 = (42, 26, 13.5)
+      c. 两者都是
+3. 哪个创建包含三个元素的元组？
+   a. my_tuple = 'a', 'b', 'c'
+      b. my_tuple = ['a', 'b', 'c']
+      c. my_tuple = ('a', 'b', 'c')
+
+##元组属性
+
+元组与列表相比如何？元组是有序的，允许重复，像列表一样，但可变性不同。不可变对象在创建后无法修改。可变对象在创建后可以修改。元组是不可变的，而列表是可变的。
+
+CHECKPOINT
+
+元组与列表的可变性：第3章，视频6
+
+CONCEPTS IN PRACTICE
+
+##使用元组
+
+4. 考虑上面示例中的最终程序。my_tuple 的值是什么？
+   a. (0.693, 0.414, 3.142)
+      b. (0.693, 1.414, 3.142)
+      c. Error
+5. 为什么以下代码产生错误？
+   ```python
+   tuple_1 = ('alpha', 'bravo', 'charlie')
+   tuple_1.append('charlie')
+   ```
+   a. 不允许 append。
+      b. 不允许重复。
+      c. 不允许字符串。
+6. 程序员想要创建一组常量以便于参考，并且在程序中的任何地方都不能更改。哪种序列最合适？
+   a. list
+      b. tuple
+
+##可变性和性能
+
+元组是不可变的且大小固定，因此元组使用更少的内存。总体而言，元组创建和访问更快，从而带来更好的性能，在处理大量数据时可能很明显。
+
+TRY IT
+
+从列表创建元组
+
+假设程序员想要从列表创建元组以防止未来更改。tuple() 函数从列表等对象创建元组。例如：my_tuple = tuple(my_list) 从列表 my_list 创建元组。更新下面的程序，从列表 grades 创建元组 final_grades。
+
+TRY IT
+
+使用用户输入创建元组
+
+编写一个程序，从输入读取两个字符串和两个整数，并创建一个包含四个值的元组 my_data。
+
+给定输入：
+
+```
+x
+y
+15
+20
+```
+
+输出是：
+
+```
+my_data: ('x', 'y', 15, 20)
+```
+
+---
+
+##3.6 章节小结
+
+本章的重点包括：
+
+· 字符串是表示 Unicode 码点的值序列。
+· 索引指序列（字符串、列表、元组）中值的位置。正索引范围从 0 到长度减 1。负索引范围从 -1 到负长度。
+· F-string 是打印多个输出并格式化整数和浮点数的便捷方式。
+· 变量引用对象。内存图可用于绘制变量和对象。
+· 列表对象可用于通过索引使用同一变量引用多个对象。
+· 元组类似于列表，但使用括号，且创建后无法更改。
+
+表 3.5 第3章参考
+
+代码 描述
+ord(c) 获取表示字符的 Unicode 码点的整数。
+chr(i) 将 Unicode 码点（整数）转换为单字符字符串。
+'\n' 换行符的转义序列。
+'\t' 制表符的转义序列。
+f'{number:.02d}' 通过将整数格式化为至少两位数字来创建字符串。
+f'{number:.2f}' 通过将浮点数格式化为两位小数来创建字符串。
+id(object) 获取对象的身份（内存位置）。
+type(object) 获取对象的类型（类名）。
+my_list = ["a", "b", "c"] 创建包含三个字符串的列表。
+my_tuple = ("a", "b", "c") 创建包含三个字符串的元组。
+my_list[0] 获取 my_list 的第一个元素（'a'）。
+my_tuple[-1] 获取 my_tuple 的最后一个元素（'c'）。

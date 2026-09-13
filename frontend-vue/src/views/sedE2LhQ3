@@ -1166,12 +1166,7 @@ watch(
       return
     }
     if (cid && did) store.setLearningContext({ courseId: cid, documentId: did })
-    // URL 不带 tab（如侧边栏「学习总览」跳 /student）：复位到 overview，
-    // 否则内部 activeTab 停留在旧 Tab，表现为点击「学习总览」无响应
-    if (!tab) {
-      if (activeTab.value !== 'overview') enterTab('overview')
-      return
-    }
+    if (!tab) return
     enterTab(tab)
     const urlCid = String(route.query.course_id || '')
     const urlDid = String(route.query.document_id || '')
@@ -2029,7 +2024,7 @@ watch(ctxKey, (key) => {
     myQuestionFavs.value = []
     practiceFavoriteIds.value = []
   }
-}, { immediate: true }) // 挂载时若已有持久化学习上下文（如课程中心往返/刷新），立即加载数据
+})
 
 const pathProgress = computed(() => {
   const total = pathGraphNodes.value.length

@@ -1587,7 +1587,7 @@ const progressBins = [
 const monitorKpis = computed(() => {
   const d = monitorData.value
   return [
-    { label: '已开始学习人数', value: d?.student_count ?? 0, color: '#409eff' },
+    { label: '已开始学习人数', value: d?.student_count ?? 0, color: '#4f6ef7' },
     { label: '平均学习进度', value: (d?.avg_progress ?? 0) + '%', color: '#e6a23c' },
     { label: '课程知识点总数', value: d?.total_knowledge ?? 0, color: '#67c23a' },
   ]
@@ -1723,8 +1723,8 @@ function renderProgressDist() {
       itemStyle: {
         borderRadius: [6, 6, 0, 0],
         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#409eff' },
-          { offset: 1, color: '#79bbff' },
+          { offset: 0, color: '#4f6ef7' },
+          { offset: 1, color: '#8aa3f9' },
         ]),
       },
       data: counts,
@@ -1945,15 +1945,42 @@ function emptyOptions() {
   return ['A', 'B', 'C', 'D'].map((k) => ({ key: k, text: '' }))
 }
 
-/** 关联知识点下拉数据：来自当前文档图谱（图谱不可用时降级为空，不影响新增课程通用题） */
+/** 关联知识点下拉数据：题库可能跨文档展示题目，因此聚合课程下全部文档的图谱节点，
+ *  保证「知识点」列与新增题下拉都能显示名称而不是原始 kp_id（图谱不可用时降级为空） */
 async function loadQuestionKpOptions() {
-  if (!currentCourseId.value || !currentDocumentId.value) {
+  if (!currentCourseId.value) {
+    questionKpOptions.value = []
+    return
+  }
+  // 文档列表尚未加载时先补齐（题库 Tab 可能是用户进入课程后的第一个 Tab）
+  let docs = documents.value || []
+  if (!docs.length) {
+    try {
+      docs = await api.getDocuments(currentCourseId.value)
+      documents.value = docs
+    } catch {
+      docs = []
+    }
+  }
+  if (!docs.length) {
     questionKpOptions.value = []
     return
   }
   try {
-    const g = await api.getGraphV1(currentCourseId.value, currentDocumentId.value, { limit: 500 })
-    questionKpOptions.value = (g.nodes || []).map((n) => ({ id: n.id, label: n.label }))
+    const graphs = await Promise.all(
+      docs.map((d) =>
+        api
+          .getGraphV1(currentCourseId.value, d.doc_id, { limit: 500 })
+          .catch(() => ({ nodes: [] })),
+      ),
+    )
+    const map = new Map()
+    graphs.forEach((g) => {
+      ;(g.nodes || []).forEach((n) => {
+        if (n.id && !map.has(n.id)) map.set(n.id, { id: n.id, label: n.label })
+      })
+    })
+    questionKpOptions.value = Array.from(map.values())
   } catch {
     questionKpOptions.value = []
   }
@@ -2366,7 +2393,7 @@ function isDocInFlight(doc) {
   background: #f5f9ff;
 }
 .node-item.active {
-  background: #ecf5ff;
+  background: #eef1fe;
 }
 .node-dot {
   width: 10px;
@@ -2588,7 +2615,7 @@ function isDocInFlight(doc) {
   font-weight: 400;
 }
 .current-name {
-  color: #409eff;
+  color: #4f6ef7;
 }
 .cell-empty {
   color: #c0c4cc;
@@ -2665,4 +2692,118 @@ function isDocInFlight(doc) {
     margin-bottom: var(--space-3);
   }
 }
+
+/* ============================================================
+   v2 视觉增强（靛蓝科技体系）——同优先级后置覆盖
+   ============================================================ */
+
+/* 上下文条：浅色渐变 + 胶囊 */
+.context-bar {
+  background: linear-gradient(120deg, rgba(91,141,239,.07), rgba(139,92,246,.06));
+  border: 1px solid var(--brand-100);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+}
+.context-title { color: var(--brand-700); }
+
+/* 文档表格表头 */
+.doc-table :deep(.el-table__header th) {
+  background: #f4f6fc !important;
+  color: var(--text-secondary);
+  letter-spacing: .3px;
+}
+
+/* 三栏工作区 */
+.panel-card { border-radius: var(--radius-lg); overflow: hidden; }
+.panel-header {
+  font-size: 14px;
+  color: var(--text-primary);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 4px;
+}
+.node-item { border-radius: var(--radius-sm); transition: all .16s; }
+.node-item:hover { background: var(--brand-50); }
+.node-item.active {
+  background: linear-gradient(120deg, rgba(91,141,239,.12), rgba(139,92,246,.08));
+  box-shadow: inset 3px 0 0 var(--brand-500);
+}
+.node-dot {
+  box-shadow: 0 0 0 3px rgba(255,255,255,.9), 0 2px 6px -1px rgba(0,0,0,.25);
+}
+.detail-name { color: var(--text-primary); }
+.prereq-list li:last-child { border-bottom: none; }
+
+/* 课程管理卡（教师课程管理 Tab 内联卡，与 MyCourseGrid 风格对齐） */
+.course-card { border-radius: var(--radius-lg); transition: transform .25s ease, box-shadow .25s ease; }
+.course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--brand-200); }
+.course-stat {
+  background: var(--bg-soft);
+  border-radius: var(--radius-sm);
+  transition: background .2s;
+}
+.course-stat:hover { background: var(--brand-50); }
+.stat-num { color: var(--brand-600); }
+
+/* 教学监测 KPI */
+.chart-title-line { color: var(--text-primary); }
+.chart-title-line::before {
+  content: '';
+  width: 4px;
+  height: 15px;
+  border-radius: 2px;
+  background: var(--gradient-brand);
+  margin-right: 2px;
+}
+.class-kpi {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: transform .22s;
+}
+.class-kpi:hover { transform: translateY(-2px); }
+.class-kpi-value { color: var(--brand-600); font-family: var(--font-family-number); }
+.current-name { color: var(--brand-600); }
+
+/* 题库/成员表格统一表头底色（全局 EP 表格已处理，这里保证 scoped 下一致） */
+:deep(.el-table__header-wrapper th) { letter-spacing: .3px; }
+.rec-tag { border-radius: 999px; }
+.rec-list li:last-child { border-bottom: none; }
+.result-card { border-left-color: var(--success); border-radius: var(--radius-md); }
+
+/* 上传拖拽区 */
+.upload-card :deep(.el-upload-dragger) {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: 1.5px dashed var(--brand-300);
+  background:
+    radial-gradient(60% 80% at 50% 0, rgba(91,141,239,.06), transparent 70%),
+    #fbfcff;
+  padding: 26px 20px;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.upload-card :deep(.el-upload-dragger:hover) {
+  border-color: var(--brand-500);
+  background:
+    radial-gradient(60% 80% at 50% 0, rgba(91,141,239,.1), transparent 70%),
+    var(--brand-50);
+  box-shadow: 0 10px 26px -16px rgba(79,110,247,.5);
+}
+.upload-card :deep(.el-icon--upload) {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 10px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-brand);
+  color: #fff;
+  font-size: 26px;
+  box-shadow: 0 10px 22px -10px rgba(79,110,247,.7);
+}
+.upload-card :deep(.el-icon--upload svg) { color: #fff; }
+.upload-card :deep(.el-upload__text) { color: var(--text-secondary); font-size: 13.5px; }
+.upload-card :deep(.el-upload__text em) { color: var(--brand-600); font-style: normal; font-weight: 600; }
 </style>

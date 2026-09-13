@@ -328,8 +328,8 @@ function setPref(key, value) {
   background: #f5f7fa;
 }
 .dsb-tab.is-on {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
   font-weight: 600;
 }
 .dsb-close {
@@ -344,7 +344,7 @@ function setPref(key, value) {
 }
 .dsb-close:hover {
   background: #f5f7fa;
-  color: #409eff;
+  color: #4f6ef7;
 }
 
 .dsb-body {
@@ -389,11 +389,11 @@ function setPref(key, value) {
 }
 .dsb-outline-item:hover {
   background: #f5f7fa;
-  color: #409eff;
+  color: #4f6ef7;
 }
 .dsb-outline-item.is-active {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
   font-weight: 600;
 }
 .dsb-outline-item.depth-1 { padding-left: 22px; }
@@ -431,10 +431,10 @@ function setPref(key, value) {
   max-width: 100%;
 }
 .dsb-thumb:hover {
-  border-color: #a0cfff;
+  border-color: #b3c2fb;
 }
 .dsb-thumb.is-active {
-  border-color: #409eff;
+  border-color: #4f6ef7;
   box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.18);
 }
 .dsb-thumb-canvas {
@@ -462,7 +462,7 @@ function setPref(key, value) {
 }
 .dsb-progress-head b {
   font-size: 16px;
-  color: #409eff;
+  color: #4f6ef7;
 }
 .dsb-progress-bar {
   height: 6px;
@@ -473,7 +473,7 @@ function setPref(key, value) {
 }
 .dsb-progress-fill {
   height: 100%;
-  background: #409eff;
+  background: #4f6ef7;
   border-radius: 3px;
   transition: width 0.2s ease;
 }
@@ -487,7 +487,7 @@ function setPref(key, value) {
 .dsb-link {
   border: none;
   background: transparent;
-  color: #409eff;
+  color: #4f6ef7;
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
@@ -565,17 +565,17 @@ function setPref(key, value) {
   cursor: pointer;
 }
 .dsb-pref-btn:hover:not(:disabled) {
-  border-color: #c6e2ff;
-  color: #409eff;
+  border-color: #d4ddfc;
+  color: #4f6ef7;
 }
 .dsb-pref-btn:disabled {
   color: #c0c4cc;
   cursor: not-allowed;
 }
 .dsb-pref-btn.is-on {
-  background: #ecf5ff;
-  border-color: #c6e2ff;
-  color: #409eff;
+  background: #eef1fe;
+  border-color: #d4ddfc;
+  color: #4f6ef7;
   font-weight: 600;
 }
 .dsb-pref-btn.wide {

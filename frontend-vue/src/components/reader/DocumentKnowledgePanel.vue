@@ -824,8 +824,8 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   background: #f5f7fa;
 }
 .dkp-tab.is-on {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
   font-weight: 600;
 }
 .dkp-tab-count {
@@ -837,8 +837,8 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   line-height: 15px;
 }
 .dkp-tab.is-on .dkp-tab-count {
-  background: #d9ecff;
-  color: #409eff;
+  background: #dde4fc;
+  color: #4f6ef7;
 }
 .dkp-close {
   margin-left: auto;
@@ -853,7 +853,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
 }
 .dkp-close:hover {
   background: #f5f7fa;
-  color: #409eff;
+  color: #4f6ef7;
 }
 
 /* ---------- 工具行 ---------- */
@@ -877,7 +877,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   background: #fafbfc;
 }
 .dkp-filter:focus-within {
-  border-color: #409eff;
+  border-color: #4f6ef7;
   background: #fff;
 }
 .dkp-filter-icon {
@@ -911,17 +911,17 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   gap: 4px;
   height: 30px;
   padding: 0 10px;
-  border: 1px solid #c6e2ff;
+  border: 1px solid #d4ddfc;
   border-radius: 6px;
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
   white-space: nowrap;
 }
 .dkp-graph-btn:hover {
-  background: #d9ecff;
+  background: #dde4fc;
 }
 .dkp-graph-btn.ghost {
   background: #fff;
@@ -929,9 +929,9 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   color: #606266;
 }
 .dkp-graph-btn.ghost:hover {
-  border-color: #c6e2ff;
-  color: #409eff;
-  background: #ecf5ff;
+  border-color: #d4ddfc;
+  color: #4f6ef7;
+  background: #eef1fe;
 }
 
 /* ---------- 列表 ---------- */
@@ -996,7 +996,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   background: #f5f7fa;
 }
 .dkp-row-head.is-open {
-  background: #f0f7ff;
+  background: #f4f6fe;
 }
 .dkp-dot {
   width: 7px;
@@ -1006,7 +1006,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   flex-shrink: 0;
 }
 /* 与图谱页面的类别配色保持一致 */
-.dkp-dot.cat-概念 { background: #409eff; }
+.dkp-dot.cat-概念 { background: #4f6ef7; }
 .dkp-dot.cat-定理 { background: #e6a23c; }
 .dkp-dot.cat-公式 { background: #67c23a; }
 .dkp-dot.cat-方法 { background: #a06cd5; }
@@ -1041,8 +1041,8 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   color: #e6a23c;
 }
 .dkp-flag.is-here {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
 }
 
 .dkp-detail {
@@ -1074,14 +1074,14 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   cursor: pointer;
 }
 .dkp-act:hover {
-  border-color: #c6e2ff;
-  color: #409eff;
-  background: #ecf5ff;
+  border-color: #d4ddfc;
+  color: #4f6ef7;
+  background: #eef1fe;
 }
 .dkp-act.is-on {
-  border-color: #c6e2ff;
-  color: #409eff;
-  background: #ecf5ff;
+  border-color: #d4ddfc;
+  color: #4f6ef7;
+  background: #eef1fe;
 }
 .dkp-act.danger:hover {
   border-color: #fde2e2;
@@ -1130,7 +1130,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   word-break: break-word;
 }
 .dkp-msg.is-user .dkp-msg-body {
-  background: #409eff;
+  background: #4f6ef7;
   color: #fff;
 }
 .dkp-msg.is-ai .dkp-msg-body {
@@ -1144,9 +1144,9 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   flex-direction: column;
   align-items: flex-end;
   gap: 3px;
-  background: #ecf5ff;
-  color: #337ecc;
-  border: 1px solid #d9ecff;
+  background: #eef1fe;
+  color: #3f5ce0;
+  border: 1px solid #dde4fc;
 }
 .dkp-act-tag {
   font-size: 12px;
@@ -1156,7 +1156,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   max-width: 100%;
   font-size: 11px;
   line-height: 1.6;
-  color: #79bbff;
+  color: #8aa3f9;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -1202,10 +1202,10 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   white-space: nowrap;
 }
 .dkp-src-wrap:hover {
-  border-color: #c6e2ff;
+  border-color: #d4ddfc;
 }
 .dkp-src-chip:hover {
-  color: #409eff;
+  color: #4f6ef7;
 }
 .dkp-src-fav {
   display: inline-flex;
@@ -1249,9 +1249,9 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   cursor: pointer;
 }
 .dkp-quick-btn:hover:not(:disabled) {
-  border-color: #c6e2ff;
-  color: #409eff;
-  background: #ecf5ff;
+  border-color: #d4ddfc;
+  color: #4f6ef7;
+  background: #eef1fe;
 }
 .dkp-quick-btn:disabled {
   color: #c0c4cc;
@@ -1270,14 +1270,14 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   gap: 6px;
   margin: 8px 12px 0;
   padding: 6px 8px;
-  border: 1px solid #d9ecff;
+  border: 1px solid #dde4fc;
   border-radius: 6px;
-  background: #f4f9ff;
+  background: #f4f6fe;
   flex-shrink: 0;
 }
 .dkp-selection-label {
   font-size: 11px;
-  color: #79bbff;
+  color: #8aa3f9;
   flex-shrink: 0;
 }
 .dkp-selection-text {
@@ -1292,7 +1292,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
 .dkp-selection-act {
   border: none;
   background: transparent;
-  color: #409eff;
+  color: #4f6ef7;
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
@@ -1323,7 +1323,7 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   outline: none;
 }
 .dkp-ask-input:focus {
-  border-color: #409eff;
+  border-color: #4f6ef7;
 }
 .dkp-ask-btn {
   width: 100%;
@@ -1331,17 +1331,17 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   height: 30px;
   border: none;
   border-radius: 6px;
-  background: #409eff;
+  background: #4f6ef7;
   color: #fff;
   font-size: 13px;
   font-family: inherit;
   cursor: pointer;
 }
 .dkp-ask-btn:hover:not(:disabled) {
-  background: #66b1ff;
+  background: #7d96fa;
 }
 .dkp-ask-btn:disabled {
-  background: #c6e2ff;
+  background: #d4ddfc;
   cursor: not-allowed;
 }
 
@@ -1369,8 +1369,8 @@ defineExpose({ runAction, askWithContext, saveSelectionNote })
   line-height: 15px;
   padding: 0 5px;
   border-radius: 3px;
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
 }
 .dkp-note-page {
   font-size: 11px;

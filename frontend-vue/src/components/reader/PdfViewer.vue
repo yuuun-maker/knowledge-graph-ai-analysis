@@ -773,7 +773,7 @@ defineExpose({ search, searchNext, searchPrev, goToPage, revealText, getCurrentP
 }
 .pdfv-spin {
   animation: pdfv-rotate 1.1s linear infinite;
-  color: #409eff;
+  color: #4f6ef7;
 }
 @keyframes pdfv-rotate {
   to { transform: rotate(360deg); }

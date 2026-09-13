@@ -3,7 +3,7 @@
   <div class="invite-page">
     <div class="invite-box">
       <div class="brand">
-        <el-icon :size="30" color="#409eff"><DataAnalysis /></el-icon>
+        <el-icon :size="30" color="#4f6ef7"><DataAnalysis /></el-icon>
         <div class="brand-text">
           <div class="brand-title">智育数据</div>
           <div class="brand-sub">课程知识图谱智能系统</div>

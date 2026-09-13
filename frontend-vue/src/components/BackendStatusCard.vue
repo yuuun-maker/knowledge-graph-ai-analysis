@@ -1,103 +1,105 @@
 <script setup>
 import { useAppStore } from '../stores/app'
-import { Close } from '@element-plus/icons-vue'
-import statusImage from '../phtotos/A10赛题项目理解(1).png'
+import { Close, CircleCheckFilled, WarningFilled, Loading } from '@element-plus/icons-vue'
 
 const store = useAppStore()
 </script>
 
 <template>
   <!-- 右下角后端服务状态浮窗（App 全局 + 登录页共用，行为与数据来源不变） -->
-  <div
-    v-if="!store.backendStatusDismissed"
-    class="backend-status"
-    :class="store.backendOnline ? 'online' : store.healthChecked ? 'offline' : 'checking'"
-  >
-    <img :src="statusImage" class="status-avatar" alt="服务状态" />
-    <div class="status-meta">
-      <div class="status-title">
-        <i class="status-dot"></i>
-        <span>
-          {{ store.backendOnline ? '后端服务在线' : store.healthChecked ? '后端服务离线' : '检查后端服务…' }}
-        </span>
-      </div>
-      <div class="status-desc">
-        {{
-          store.backendOnline
-            ? '所有功能可正常使用'
-            : '请启动后端：python -m uvicorn app.main:app --reload'
-        }}
-      </div>
-    </div>
-    <button
-      class="status-close"
-      type="button"
-      aria-label="关闭"
-      title="关闭"
-      @click="store.dismissBackendStatus()"
+  <transition name="bs-pop">
+    <div
+      v-if="!store.backendStatusDismissed"
+      class="backend-status"
+      :class="store.backendOnline ? 'online' : store.healthChecked ? 'offline' : 'checking'"
     >
-      <el-icon :size="12"><Close /></el-icon>
-    </button>
-  </div>
+      <div class="status-icon">
+        <el-icon v-if="store.backendOnline"><CircleCheckFilled /></el-icon>
+        <el-icon v-else-if="store.healthChecked"><WarningFilled /></el-icon>
+        <el-icon v-else class="is-spin"><Loading /></el-icon>
+      </div>
+      <div class="status-meta">
+        <div class="status-title">
+          {{ store.backendOnline ? '后端服务在线' : store.healthChecked ? '后端服务离线' : '检查后端服务…' }}
+        </div>
+        <div class="status-desc">
+          {{
+            store.backendOnline
+              ? '所有功能可正常使用'
+              : '请启动后端：python -m uvicorn app.main:app --reload'
+          }}
+        </div>
+      </div>
+      <button
+        class="status-close"
+        type="button"
+        aria-label="关闭"
+        title="关闭"
+        @click="store.dismissBackendStatus()"
+      >
+        <el-icon :size="12"><Close /></el-icon>
+      </button>
+    </div>
+  </transition>
 </template>
 
 <style scoped>
 .backend-status {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 22px;
+  right: 22px;
   z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 32px 12px 12px;
-  background: #fff;
+  gap: 10px;
+  padding: 10px 30px 10px 10px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
   border-radius: 14px;
   border: 1px solid #eef0f6;
-  box-shadow: 0 10px 30px rgba(31, 48, 92, 0.16);
+  box-shadow: 0 12px 32px rgba(31, 48, 92, 0.18);
+  max-width: 320px;
 }
-.status-avatar {
-  width: 42px;
-  height: 42px;
+.status-icon {
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
-  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  color: #fff;
   flex-shrink: 0;
 }
+.online .status-icon {
+  background: linear-gradient(135deg, #2bd493, #18b87a);
+  box-shadow: 0 6px 14px -6px rgba(24, 184, 122, 0.7);
+}
+.offline .status-icon {
+  background: linear-gradient(135deg, #ff7a8a, #f5475d);
+  box-shadow: 0 6px 14px -6px rgba(245, 71, 93, 0.7);
+}
+.checking .status-icon {
+  background: linear-gradient(135deg, #ffc24b, #f5a623);
+  box-shadow: 0 6px 14px -6px rgba(245, 166, 35, 0.7);
+}
+.is-spin { animation: bs-rotate 1.1s linear infinite; }
+@keyframes bs-rotate { to { transform: rotate(360deg); } }
+
 .status-meta {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+  min-width: 0;
 }
 .status-title {
-  display: flex;
-  align-items: center;
-  gap: 7px;
   font-size: 13px;
   font-weight: 600;
-  color: #303133;
-}
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #909399;
-  flex-shrink: 0;
-}
-.backend-status.online .status-dot {
-  background: #67c23a;
-  box-shadow: 0 0 6px #67c23a;
-}
-.backend-status.offline .status-dot {
-  background: #f56c6c;
-  box-shadow: 0 0 6px #f56c6c;
-}
-.backend-status.checking .status-dot {
-  background: #e6a23c;
+  color: #1f2a44;
 }
 .status-desc {
   font-size: 11px;
-  color: #909399;
-  max-width: 320px;
+  color: #94a0b8;
   line-height: 1.5;
 }
 .status-close {
@@ -118,7 +120,16 @@ const store = useAppStore()
   transition: all 0.2s;
 }
 .status-close:hover {
-  color: #f56c6c;
-  background: #fef0f0;
+  color: #f5475d;
+  background: #fef0f2;
+}
+.bs-pop-enter-active,
+.bs-pop-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.bs-pop-enter-from,
+.bs-pop-leave-to {
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
 }
 </style>

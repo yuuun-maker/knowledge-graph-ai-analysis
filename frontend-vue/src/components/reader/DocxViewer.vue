@@ -208,7 +208,7 @@ defineExpose({ getVisibleText, goToOutlineItem })
 }
 .dxv-spin {
   animation: dxv-rotate 1.1s linear infinite;
-  color: #409eff;
+  color: #4f6ef7;
 }
 @keyframes dxv-rotate {
   to { transform: rotate(360deg); }

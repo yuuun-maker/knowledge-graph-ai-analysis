@@ -255,9 +255,9 @@ defineExpose({
   transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
 .rtb-back:hover {
-  color: #409eff;
-  border-color: #c6e2ff;
-  background: #ecf5ff;
+  color: #4f6ef7;
+  border-color: #d4ddfc;
+  background: #eef1fe;
 }
 
 /* 标题与文档切换下拉在 DocumentSwitcher 内部，此处只保留返回按钮 */
@@ -283,7 +283,7 @@ defineExpose({
   transition: border-color 0.15s, background 0.15s;
 }
 .rtb-search:focus-within {
-  border-color: #409eff;
+  border-color: #4f6ef7;
   background: #fff;
 }
 .rtb-search.is-disabled {
@@ -354,8 +354,8 @@ defineExpose({
   transition: background 0.15s, color 0.15s;
 }
 .rtb-icon-btn:hover:not(:disabled) {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
 }
 .rtb-icon-btn:disabled {
   color: #c0c4cc;
@@ -367,8 +367,8 @@ defineExpose({
   font-size: 13px;
 }
 .rtb-icon-btn.is-on {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
 }
 
 .rtb-page-input {
@@ -383,7 +383,7 @@ defineExpose({
   outline: none;
 }
 .rtb-page-input:focus {
-  border-color: #409eff;
+  border-color: #4f6ef7;
 }
 .rtb-page-total {
   font-size: 12px;
@@ -404,8 +404,8 @@ defineExpose({
   cursor: pointer;
 }
 .rtb-zoom-label:hover {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
 }
 
 .rtb-text-btn {
@@ -421,12 +421,12 @@ defineExpose({
   white-space: nowrap;
 }
 .rtb-text-btn:hover {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
 }
 .rtb-text-btn.is-on {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
   font-weight: 600;
 }
 
@@ -438,7 +438,7 @@ defineExpose({
 }
 .rtb-progress-fill {
   height: 100%;
-  background: #409eff;
+  background: #4f6ef7;
   transition: width 0.2s ease;
 }
 .rtb-progress-text {

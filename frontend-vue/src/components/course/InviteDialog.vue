@@ -229,7 +229,7 @@ watch(() => props.modelValue, (v) => {
 
 .fresh-link {
   margin-top: var(--space-3);
-  border: 1px solid var(--color-primary-light, #c6e2ff);
+  border: 1px solid var(--color-primary-light, #d4ddfc);
   background: var(--color-bg-soft);
   border-radius: var(--radius-md);
   padding: 12px 14px;

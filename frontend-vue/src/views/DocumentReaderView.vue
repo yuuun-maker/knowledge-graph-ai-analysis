@@ -922,16 +922,16 @@ watch(docId, () => { void onDocumentChange() })
   align-items: center;
   gap: 8px;
   padding: 7px 16px;
-  background: #ecf5ff;
-  border-bottom: 1px solid #d9ecff;
-  color: #337ecc;
+  background: #eef1fe;
+  border-bottom: 1px solid #dde4fc;
+  color: #3f5ce0;
   font-size: 13px;
   flex-shrink: 0;
 }
 .drv-resume-btn {
   border: none;
   background: transparent;
-  color: #409eff;
+  color: #4f6ef7;
   font-size: 13px;
   font-family: inherit;
   text-decoration: underline;
@@ -942,7 +942,7 @@ watch(docId, () => { void onDocumentChange() })
   margin-left: auto;
   border: none;
   background: transparent;
-  color: #79bbff;
+  color: #8aa3f9;
   cursor: pointer;
   display: inline-flex;
   padding: 2px;
@@ -992,7 +992,7 @@ watch(docId, () => { void onDocumentChange() })
 }
 .drv-spin {
   animation: drv-rotate 1.1s linear infinite;
-  color: #409eff;
+  color: #4f6ef7;
 }
 @keyframes drv-rotate {
   to { transform: rotate(360deg); }

@@ -4,6 +4,24 @@ import { api } from '../api'
 const TOKEN_KEY = 'kg_token'
 const USER_KEY = 'kg_user'
 const STATUS_DISMISS_KEY = 'kg_backend_status_dismissed'
+const LEARNING_CTX_KEY = 'kg_learning_context'
+
+function readLearningContext() {
+  try {
+    return JSON.parse(localStorage.getItem(LEARNING_CTX_KEY) || 'null') || {}
+  } catch {
+    return {}
+  }
+}
+
+function writeLearningContext(ctx) {
+  try {
+    localStorage.setItem(
+      LEARNING_CTX_KEY,
+      JSON.stringify({ currentCourseId: ctx.currentCourseId, currentDocumentId: ctx.currentDocumentId })
+    )
+  } catch { /* 存储不可用时静默忽略 */ }
+}
 
 function readUser() {
   try {
@@ -34,8 +52,7 @@ export const useAppStore = defineStore('app', {
     profile: null,
     // 学生端统一学习上下文（Phase 7）：Course → Document 后建立，所有学习 Tab 共享
     learningContext: {
-      currentCourseId: null, // 当前课程 ID（字符串）
-      currentDocumentId: null, // 当前文档 ID（字符串）
+      ...readLearningContext(), // 恢复持久化的 { currentCourseId, currentDocumentId }
       courseList: [], // 当前可选课程列表（与 courses 冗余，便于上下文聚合）
       documentList: [], // 当前课程的文档列表
     },
@@ -95,6 +112,7 @@ export const useAppStore = defineStore('app', {
       this.profile = null
       localStorage.removeItem(TOKEN_KEY)
       localStorage.removeItem(USER_KEY)
+      localStorage.removeItem(LEARNING_CTX_KEY)
       this.courses = []
       this.coursesLoaded = false
       this.currentCourseId = ''
@@ -230,11 +248,13 @@ export const useAppStore = defineStore('app', {
     setLearningContext({ courseId = null, documentId = null } = {}) {
       if (courseId !== undefined) this.learningContext.currentCourseId = courseId ? String(courseId) : null
       if (documentId !== undefined) this.learningContext.currentDocumentId = documentId ? String(documentId) : null
+      writeLearningContext(this.learningContext)
     },
     /** 切换课程时清空文档层（必须重新选文档，禁止沿用上一课程的文档） */
     clearLearningDocument() {
       this.learningContext.currentDocumentId = null
       this.learningContext.documentList = []
+      writeLearningContext(this.learningContext)
     },
     /** 拉取某课程文档列表，写入 learningContext.documentList 并返回 */
     async fetchDocuments(courseId) {

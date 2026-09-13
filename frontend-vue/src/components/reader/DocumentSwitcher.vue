@@ -186,8 +186,8 @@ onBeforeUnmount(() => {
 .dsw-badge {
   padding: 0 5px;
   border-radius: 3px;
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
   font-size: 11px;
   font-weight: 600;
   line-height: 15px;
@@ -266,7 +266,7 @@ onBeforeUnmount(() => {
   background: #f5f7fa;
 }
 .dsw-item.is-current {
-  background: #ecf5ff;
+  background: #eef1fe;
 }
 .dsw-item-main {
   flex: 1;
@@ -281,7 +281,7 @@ onBeforeUnmount(() => {
   text-overflow: ellipsis;
 }
 .dsw-item.is-current .dsw-item-name {
-  color: #409eff;
+  color: #4f6ef7;
   font-weight: 600;
 }
 .dsw-item-sub {
@@ -299,13 +299,13 @@ onBeforeUnmount(() => {
   line-height: 15px;
 }
 .dsw-item-progress {
-  color: #409eff;
+  color: #4f6ef7;
 }
 .dsw-item-progress.is-done {
   color: #67c23a;
 }
 .dsw-item-check {
-  color: #409eff;
+  color: #4f6ef7;
   font-size: 14px;
   flex-shrink: 0;
 }

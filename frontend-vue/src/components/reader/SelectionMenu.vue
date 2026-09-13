@@ -106,15 +106,15 @@ const style = computed(() => ({
   transition: background 0.12s, color 0.12s;
 }
 .sm-btn:hover {
-  background: #ecf5ff;
-  color: #409eff;
+  background: #eef1fe;
+  color: #4f6ef7;
 }
 .sm-btn .el-icon {
   font-size: 13px;
   color: #606266;
 }
 .sm-btn:hover .el-icon {
-  color: #409eff;
+  color: #4f6ef7;
 }
 
 .sm-close {

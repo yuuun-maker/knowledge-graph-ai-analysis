@@ -488,4 +488,22 @@ watch(() => props.courseId, () => {
   color: var(--color-text-muted);
   line-height: 1.6;
 }
+
+/* ===== v2 视觉增强 ===== */
+.stat-box {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.stat-box:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.stat-num { color: var(--brand-600); }
+.stat-box.highlight {
+  background: linear-gradient(135deg, rgba(245,71,93,.08), rgba(245,71,93,.03));
+  border-color: rgba(245,71,93,.3);
+}
+.member-cell :deep(.el-avatar) {
+  background: var(--gradient-brand);
+  font-weight: 600;
+}
 </style>

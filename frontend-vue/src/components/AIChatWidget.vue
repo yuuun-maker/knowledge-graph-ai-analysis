@@ -24,7 +24,7 @@
         </div>
         <div class="ai-header-bottom">
           <div class="ai-context-chip" :class="{ empty: !hasContext }">
-            <template v-if="hasContext">当前课程：{{ courseName || courseId }}</template>
+            <template v-if="hasContext">当前课程：{{ effCourseName || effCourseId }}</template>
             <template v-else>未选择课程 · 可在页面上方选择学习资料</template>
           </div>
           <span v-if="messages.length > 1" class="ai-clear" @click="clearChat">清空</span>
@@ -86,11 +86,25 @@
 import { ref, nextTick, computed } from 'vue'
 import { Close, Top } from '@element-plus/icons-vue'
 import { api } from '../api'
+import { useAppStore } from '../stores/app'
+
+const store = useAppStore()
 
 const props = defineProps({
   courseId: { type: [String, Number], default: '' },
   documentId: { type: [String, Number], default: '' },
   courseName: { type: String, default: '' },
+})
+
+// 课程上下文优先取 props（页面内局部挂载场景），否则回退全局学习上下文（App.vue 全局挂载场景），
+// 保证全局实例在页面切换时不会因缺少上下文而闪变
+const effCourseId = computed(() => props.courseId || store.learningContext.currentCourseId || '')
+const effDocumentId = computed(() => props.documentId || store.learningContext.currentDocumentId || '')
+const effCourseName = computed(() => {
+  if (props.courseName) return props.courseName
+  const cid = effCourseId.value
+  const c = store.courseById(cid)
+  return c ? c.course_name : ''
 })
 
 const open = ref(false)
@@ -102,7 +116,7 @@ const chatBoxRef = ref(null)
 const GREETING = '你好！我是你的 AI 助教小智～\n课程学习中遇到任何疑问随时问我，我会结合课程知识图谱为你解答。'
 const messages = ref([{ role: 'ai', content: GREETING, sources: [], greeting: true }])
 
-const hasContext = computed(() => Boolean(props.courseId && props.documentId))
+const hasContext = computed(() => Boolean(effCourseId.value && effDocumentId.value))
 
 function toggle() {
   open.value = !open.value
@@ -123,7 +137,7 @@ async function send() {
   asking.value = true
   scrollToBottom()
   try {
-    const res = await api.ask(q, props.courseId || null, props.documentId || null)
+    const res = await api.ask(q, effCourseId.value || null, effDocumentId.value || null)
     const sources = (res.sources || []).map(normalizeSource)
     // 与主问答页一致：区分「检索成功但 LLM 生成失败」（降级文案）与正常回答
     messages.value.push({
@@ -171,14 +185,14 @@ function scrollToBottom() {
 /* ===== 悬浮入口球 ===== */
 .ai-widget-fab {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
+  right: 26px;
+  bottom: 26px;
   z-index: 1999;
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7c6cf0 0%, #4f8ef7 100%);
-  box-shadow: 0 6px 20px rgba(124, 108, 240, 0.45);
+  background: linear-gradient(135deg, #5b8def 0%, #6a5cf6 100%);
+  box-shadow: 0 8px 24px rgba(91, 108, 246, 0.5), inset 0 1px 0 rgba(255,255,255,.35);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -187,9 +201,23 @@ function scrollToBottom() {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
 }
+/* 未展开时的呼吸光环，吸引注意但不喧宾夺主 */
+.ai-widget-fab:not(.is-open)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(91, 108, 246, .55);
+  animation: ai-fab-pulse 2.4s ease-out infinite;
+}
+@keyframes ai-fab-pulse {
+  0% { transform: scale(1); opacity: .8; }
+  70% { transform: scale(1.45); opacity: 0; }
+  100% { transform: scale(1.45); opacity: 0; }
+}
 .ai-widget-fab:hover {
   transform: scale(1.08);
-  box-shadow: 0 8px 26px rgba(124, 108, 240, 0.6);
+  box-shadow: 0 10px 30px rgba(91, 108, 246, 0.65), inset 0 1px 0 rgba(255,255,255,.35);
 }
 .ai-fab-robot {
   font-size: 26px;

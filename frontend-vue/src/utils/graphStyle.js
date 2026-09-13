@@ -5,10 +5,10 @@
 
 // 节点类别（后端 type 字段为英文，properties.category 为中文）
 export const NODE_TYPES = {
-  concept: { label: '概念', color: '#409EFF' },
-  theorem: { label: '定理', color: '#F56C6C' },
-  formula: { label: '公式', color: '#E6A23C' },
-  method: { label: '方法', color: '#67C23A' },
+  concept: { label: '概念', color: '#4f8df7' },
+  theorem: { label: '定理', color: '#f4587a' },
+  formula: { label: '公式', color: '#f5a623' },
+  method: { label: '方法', color: '#22c08a' },
 }
 
 // 关系类型英文 -> 中文
@@ -21,14 +21,14 @@ export const EDGE_TYPE_LABELS = {
 
 // 关系类型配色（沿用暗色 + 蓝色体系，用于边着色与图例）
 export const EDGE_TYPE_COLORS = {
-  PRECEDES: '#409EFF', // 前置知识：蓝色（学习依赖主结构）
-  CONTAINS: '#67C23A', // 包含：绿色
-  RELATED_TO: '#909399', // 相关概念：灰色
-  APPLIES_TO: '#E6A23C', // 应用：橙色
+  PRECEDES: '#4f8df7', // 前置知识：蓝色（学习依赖主结构）
+  CONTAINS: '#22c08a', // 包含：绿色
+  RELATED_TO: '#94a0b8', // 相关概念：灰色
+  APPLIES_TO: '#f5a623', // 应用：橙色
 }
 
 export function nodeColor(type) {
-  return NODE_TYPES[type]?.color || '#909399'
+  return NODE_TYPES[type]?.color || '#94a0b8'
 }
 
 export function edgeColor(type) {

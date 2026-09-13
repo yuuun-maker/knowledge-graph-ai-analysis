@@ -1,479 +1,546 @@
 <template>
-  <!-- 登录页 / 文档阅读器为独立整页，不套侧边栏布局：
-       阅读器需要 100vh 独占屏幕，套在主框架里会被 header 与内边距挤掉可视高度 -->
-  <router-view v-if="isStandalone" />
+  <!-- 独立整页路由（登录 / 邀请落地 / 文档阅读器）不套主框架，做到真正全屏 -->
+  <router-view v-if="isStandalone" v-slot="{ Component }">
+    <transition name="page" mode="out-in">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 
-  <el-container v-else class="app-layout">
-    <!-- 深色侧边栏（可折叠） -->
-    <el-aside :width="collapsed ? '64px' : '230px'" class="app-aside">
-      <div class="logo">
-        <el-icon class="logo-icon" :size="26"><DataAnalysis /></el-icon>
-        <div v-if="!collapsed" class="logo-text">
-          <div class="logo-title">智育数据</div>
-          <div class="logo-sub">课程知识图谱智能系统</div>
+  <el-container v-else class="app-shell">
+    <el-aside
+      :class="{ collapsed: store.sidebarCollapsed }"
+      :width="store.sidebarCollapsed ? '64px' : '232px'"
+      class="app-sidebar"
+    >
+      <!-- 品牌区 -->
+      <div class="brand" @click="router.push('/course-center')">
+        <div class="brand-logo"><BrandMark :size="30" /></div>
+        <div v-show="!store.sidebarCollapsed" class="brand-text">
+          <div class="brand-name">智育数据</div>
+          <div class="brand-sub">课程知识图谱智能系统</div>
         </div>
       </div>
 
-      <div class="user-box" :class="{ collapsed }">
-        <!-- 头像 / 昵称区域点击进入个人中心（退出按钮保持独立，避免点击冲突） -->
-        <div class="user-entry" :title="collapsed ? '个人中心' : ''" @click="goProfile">
-          <img
-            v-if="store.avatarUrl"
-            class="user-avatar user-avatar-img"
-            :src="store.avatarUrl"
-            alt="头像"
-            @error="avatarFailed = true"
-          />
-          <div v-else class="user-avatar">{{ avatarInitial }}</div>
-          <div v-if="!collapsed" class="user-meta">
-            <div class="user-name">{{ store.displayName }}</div>
-            <el-tag size="small" :type="store.role === 'teacher' ? 'warning' : 'success'" effect="dark">
-              {{ store.role === 'teacher' ? '教师' : '学生' }}
-            </el-tag>
-          </div>
+      <!-- 用户信息 -->
+      <div v-show="!store.sidebarCollapsed" class="sidebar-user">
+        <div class="user-avatar" :class="store.role">{{ avatarText }}</div>
+        <div class="user-meta">
+          <div class="user-name" :title="store.username">{{ store.username }}</div>
+          <div class="user-role" :class="store.role">{{ roleText }}</div>
         </div>
         <el-button
-          v-if="!collapsed"
+          v-if="store.isLoggedIn"
           text
           size="small"
-          type="danger"
-          @click="onLogout"
-          class="logout-btn"
-        >退出</el-button>
+          class="user-logout"
+          title="退出登录"
+          @click="handleLogout"
+        >
+          <el-icon><SwitchButton /></el-icon>
+        </el-button>
+      </div>
+      <div v-show="store.sidebarCollapsed" class="sidebar-user-collapsed">
+        <div class="user-avatar small" :class="store.role">{{ avatarText }}</div>
       </div>
 
+      <!-- 导航菜单 -->
       <el-menu
         :default-active="activeMenu"
-        :collapse="collapsed"
+        :collapse="store.sidebarCollapsed"
         :collapse-transition="false"
+        class="sidebar-menu"
         router
-        class="app-menu"
-        background-color="transparent"
-        text-color="#b0b8d1"
-        active-text-color="#409eff"
       >
-        <!-- 课程中心（教师与学生共用的首页：我的课程 / 发现课程 / 加入课程） -->
-        <el-menu-item index="/course-center?tab=mine">
-          <el-icon><School /></el-icon>
-          <template #title>课程中心</template>
-        </el-menu-item>
-
-        <!-- 数据总览（教师全局统计）/ 学习总览（学生学习驾驶舱） -->
-        <el-menu-item :index="store.role === 'teacher' ? '/dashboard' : '/student?tab=overview'">
-          <el-icon><DataAnalysis /></el-icon>
-          <template #title>{{ store.role === 'teacher' ? '数据总览' : '学习总览' }}</template>
-        </el-menu-item>
-
-        <template v-if="store.role === 'teacher'">
-          <el-menu-item index="/teacher?tab=courses">
-            <el-icon><Notebook /></el-icon>
-            <template #title>课程管理</template>
-          </el-menu-item>
-          <el-menu-item index="/teacher?tab=questions">
-            <el-icon><Collection /></el-icon>
-            <template #title>题库管理</template>
-          </el-menu-item>
-        </template>
-        <template v-else>
-          <el-menu-item index="/student?tab=documents">
-            <el-icon><Document /></el-icon>
-            <template #title>课程文档</template>
-          </el-menu-item>
-          <el-menu-item index="/student?tab=browse">
-            <el-icon><Compass /></el-icon>
-            <template #title>图谱浏览</template>
-          </el-menu-item>
-          <el-menu-item index="/student?tab=qa" class="menu-sub">
-            <el-icon><ChatDotRound /></el-icon>
-            <template #title>智能问答</template>
-          </el-menu-item>
-          <el-menu-item index="/student?tab=path" class="menu-sub">
-            <el-icon><Guide /></el-icon>
-            <template #title>学习路径推荐</template>
-          </el-menu-item>
-          <el-menu-item index="/student?tab=favorites" class="menu-sub">
-            <el-icon><StarFilled /></el-icon>
-            <template #title>收藏夹</template>
-          </el-menu-item>
-          <el-menu-item index="/student?tab=practice" class="menu-sub">
-            <el-icon><Collection /></el-icon>
-            <template #title>做题练习</template>
+        <template v-for="item in menuItems" :key="item.path">
+          <el-sub-menu v-if="item.children" :index="item.path">
+            <template #title>
+              <el-icon><component :is="item.icon" /></el-icon>
+              <span>{{ item.title }}</span>
+            </template>
+            <el-menu-item
+              v-for="child in item.children"
+              :key="child.path"
+              :index="child.path"
+              class="sidebar-menu-item"
+            >
+              <el-icon><component :is="child.icon" /></el-icon>
+              <template #title>{{ child.title }}</template>
+            </el-menu-item>
+          </el-sub-menu>
+          <el-menu-item v-else :index="item.path" class="sidebar-menu-item">
+            <el-icon><component :is="item.icon" /></el-icon>
+            <template #title>{{ item.title }}</template>
           </el-menu-item>
         </template>
-
-        <el-menu-item index="/profile">
-          <el-icon><User /></el-icon>
-          <template #title>个人中心</template>
-        </el-menu-item>
       </el-menu>
 
-      <div class="aside-footer" :class="{ collapsed }">
-        <div v-if="!collapsed" class="health-line">
-          <i class="health-dot" :class="store.backendOnline ? 'on' : 'off'"></i>
-          <span v-if="store.backendOnline">后端服务在线</span>
-          <span v-else-if="store.healthChecked">后端服务离线</span>
-          <span v-else>检查后端中…</span>
+      <!-- 侧栏底部：后端健康状态 + 折叠按钮 -->
+      <div class="sidebar-footer">
+        <div v-show="!store.sidebarCollapsed" class="health-line">
+          <span class="health-dot" :class="healthClass" />
+          <span class="health-text">{{ healthText }}</span>
         </div>
-        <div v-if="!collapsed" class="health-tip">启动后端：<code>python -m uvicorn app.main:app --reload</code></div>
+        <el-button
+          text
+          class="collapse-btn"
+          :title="store.sidebarCollapsed ? '展开侧栏' : '收起侧栏'"
+          @click="store.toggleSidebar()"
+        >
+          <el-icon>
+            <Expand v-if="store.sidebarCollapsed" />
+            <Fold v-else />
+          </el-icon>
+        </el-button>
       </div>
     </el-aside>
 
-    <!-- 右侧：顶部 Header + 主内容 -->
-    <el-container class="app-body">
-      <el-header class="app-header" height="56px">
+    <el-container class="main-container">
+      <el-header class="app-header kg-glass" height="58px">
         <div class="header-left">
-          <el-button
-            text
-            class="collapse-btn"
-            :icon="collapsed ? Expand : Fold"
-            :aria-label="collapsed ? '展开侧边栏' : '折叠侧边栏'"
-            @click="collapsed = !collapsed"
-          />
-          <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>{{ pageBase }}</el-breadcrumb-item>
-            <el-breadcrumb-item v-if="pageTab">{{ pageTab }}</el-breadcrumb-item>
+          <el-breadcrumb separator="/" class="app-breadcrumb">
+            <el-breadcrumb-item :to="{ path: '/course-center' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="(c, i) in breadcrumbs" :key="i">{{ c }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="header-right">
-          <span class="welcome">欢迎，{{ store.username }}</span>
+          <span class="header-greet">
+            <span class="greet-hi">{{ greetText }}，</span>
+            <b>{{ store.username }}</b>
+          </span>
+          <div class="header-avatar user-avatar" :class="store.role" @click="router.push('/profile')">
+            {{ avatarText }}
+          </div>
         </div>
       </el-header>
 
-      <!-- 主内容区（浅色背景） -->
       <el-main class="app-main">
-        <router-view />
+        <router-view v-slot="{ Component }">
+          <transition name="page" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </el-main>
     </el-container>
 
-    <!-- 右下角后端服务状态（教师/学生端） -->
-    <BackendStatusCard />
+    <!-- 全局 AI 助手（仅学生端；教师端不显示。课程上下文由 AIChatWidget 从 store.learningContext 读取） -->
+    <AIChatWidget v-if="store.isLoggedIn && !store.isTeacher" />
   </el-container>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { ElMessageBox } from 'element-plus'
 import {
-  Upload, Compass, DataAnalysis, Search, EditPen, ChatDotRound, Guide, Fold, Expand, Notebook, StarFilled, DataLine,
-  Document, School, User, Collection,
+  HomeFilled, DataAnalysis, Reading, User, EditPen, Notebook, Compass, Fold, Expand, SwitchButton,
 } from '@element-plus/icons-vue'
 import { useAppStore } from './stores/app'
-import BackendStatusCard from './components/BackendStatusCard.vue'
+import AIChatWidget from './components/AIChatWidget.vue'
+import BrandMark from './components/BrandMark.vue'
 
 const store = useAppStore()
-const router = useRouter()
 const route = useRoute()
+const router = useRouter()
 
-const collapsed = ref(window.innerWidth < 768)
-// 头像加载失败（例如未设置头像返回 404）时回退为姓名首字母色块
-const avatarFailed = ref(false)
+// 这些路由自带整页布局，不显示侧边栏 / 顶栏 / 全局 AI 悬浮球
+const STANDALONE_ROUTES = new Set(['login', 'invite', 'reader'])
+const isStandalone = computed(() => STANDALONE_ROUTES.has(route.name))
 
-// 独立整页路由（不套主框架）：邀请落地页在加入课程前不应出现侧边栏与其它课程入口
-const STANDALONE_ROUTES = ['login', 'reader', 'invite']
-const isStandalone = computed(() => STANDALONE_ROUTES.includes(route.name))
+const teacherMenu = [
+  { path: '/course-center', title: '课程中心', icon: HomeFilled },
+  { path: '/dashboard', title: '数据总览', icon: DataAnalysis },
+  { path: '/teacher', title: '课程管理', icon: EditPen },
+  { path: '/teacher?tab=questions', title: '题库管理', icon: Notebook },
+  { path: '/profile', title: '个人中心', icon: User },
+]
+const studentMenu = [
+  { path: '/course-center', title: '课程中心', icon: HomeFilled },
+  { path: '/student', title: '学习总览', icon: DataAnalysis },
+  {
+    // 学习空间分组：课程文档/图谱浏览/做题练习是学习空间内的 Tab，
+    // 收进子菜单避免与「学习总览」平铺混淆（index 仅作唯一标识，不参与跳转）
+    path: '/student-space',
+    title: '学习空间',
+    icon: Compass,
+    children: [
+      { path: '/student?tab=documents', title: '课程文档', icon: Reading },
+      { path: '/student?tab=browse', title: '图谱浏览', icon: Compass },
+      { path: '/student?tab=practice', title: '做题练习', icon: Notebook },
+    ],
+  },
+  { path: '/profile', title: '个人中心', icon: User },
+]
+const menuItems = computed(() => (store.role === 'teacher' ? teacherMenu : studentMenu))
 
-// 展示名首字母（昵称 > 真名 > display_name > 用户名）
-const avatarInitial = computed(() => (store.displayName || '?').slice(0, 1).toUpperCase())
-
-// Tab 子页面中文名（面包屑 + 侧边栏 active 一致）
-// 注：courses 为课程管理默认 Tab，面包屑主级已是「课程管理」，故不再重复显示为第三级
-const TAB_LABELS = {
-  overview: '学习总览',
-  documents: '课程文档',
-  preview: '图谱预览',
-  edit: '编辑图谱',
-  monitor: '教学监测',
-  members: '学生管理',
-  questions: '题库管理',
-  browse: '图谱浏览',
-  qa: '智能问答',
-  path: '学习路径推荐',
-  favorites: '收藏夹',
-  mine: '我的课程',
-  discover: '发现课程',
-  join: '加入课程',
-  practice: '做题练习',
-}
-
-// 侧边栏 active：将 /teacher?tab=upload 等映射为菜单 index，保证 URL / 菜单 / 面包屑三者一致
 const activeMenu = computed(() => {
-  const tab = route.query.tab
-  return tab ? `${route.path}?tab=${tab}` : route.path
+  if (route.path === '/teacher') return route.fullPath.includes('questions') ? '/teacher?tab=questions' : '/teacher'
+  if (route.path === '/student') {
+    const map = { documents: '/student?tab=documents', browse: '/student?tab=browse', practice: '/student?tab=practice' }
+    return map[route.query.tab] || '/student'
+  }
+  return route.path
 })
-const pageBase = computed(() => route.meta?.title || '')
-const pageTab = computed(() => TAB_LABELS[route.query.tab] || '')
 
-function onLogout() {
-  store.logout()
-  router.push('/login')
+const breadcrumbs = computed(() => {
+  const map = {
+    '/dashboard': ['数据总览'],
+    '/teacher': ['课程管理', route.query.tab ? tabTitle(route.query.tab) : '我的课程'],
+    '/student': ['学习空间', route.query.tab ? studentTabTitle(route.query.tab) : '学习总览'],
+    '/course-center': ['课程中心'],
+    '/profile': ['个人中心'],
+    '/reader': ['文档阅读'],
+  }
+  return map[route.path] || []
+})
+function tabTitle(t) {
+  return { courses: '我的课程', documents: '课程文档', preview: '图谱预览', edit: '编辑图谱', monitor: '教学监测', questions: '题库管理', members: '学生管理' }[t] || ''
+}
+function studentTabTitle(t) {
+  return { overview: '学习总览', documents: '课程文档', browse: '图谱浏览', qa: '智能问答', path: '学习路径推荐', favorites: '收藏夹', practice: '做题练习' }[t] || ''
 }
 
-function goProfile() {
-  if (route.name !== 'profile') router.push({ name: 'profile' })
-}
+const avatarText = computed(() => (store.user?.real_name || store.username || 'U').slice(0, 1).toUpperCase())
+const roleText = computed(() => (store.role === 'teacher' ? '教师' : '学生'))
+const greetText = computed(() => {
+  const h = new Date().getHours()
+  if (h < 6) return '夜深了'
+  if (h < 12) return '早上好'
+  if (h < 14) return '中午好'
+  if (h < 18) return '下午好'
+  return '晚上好'
+})
 
-// 窄屏（<768px）自动折叠侧边栏释放横向空间；桌面端保持默认展开宽度
-function handleSidebarResize() {
-  if (window.innerWidth < 768) collapsed.value = true
+const healthClass = computed(() => {
+  if (store.healthChecking) return 'checking'
+  return store.backendOnline ? 'online' : 'offline'
+})
+const healthText = computed(() => {
+  if (store.healthChecking) return '服务检测中…'
+  return store.backendOnline ? '后端服务在线' : '后端服务未连接'
+})
+
+async function handleLogout() {
+  try {
+    await ElMessageBox.confirm('确定要退出登录吗？', '提示', { type: 'warning' })
+    store.logout()
+    await router.replace('/login')
+  } catch { /* 取消 */ }
 }
 
 onMounted(() => {
-  store.checkHealth()
-  setInterval(() => store.checkHealth(), 30000)
-  // 拉取个人资料（昵称/头像）供侧边栏展示；失败不影响任何功能（登录响应里已有兜底字段）
-  // 仅在已登录时请求：登录页也会挂载 App，未登录发请求会拿到 401 并触发拦截器的跳转逻辑
-  if (store.isLoggedIn) store.fetchProfile().catch(() => {})
-  handleSidebarResize()
-  window.addEventListener('resize', handleSidebarResize)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleSidebarResize)
+  if (store.isLoggedIn) {
+    store.fetchProfile().catch(() => {})
+    store.checkHealth().catch(() => {})
+  }
 })
 </script>
 
 <style scoped>
-.app-layout {
+.app-shell {
   height: 100vh;
 }
 
-/* ===== 深色侧边栏（核心风格改动） ===== */
-.app-aside {
-  background: linear-gradient(180deg, #1a1f36 0%, #161b2e 100%);
-  border-right: 1px solid rgba(255,255,255,0.06);
+/* ============ 侧边栏 ============ */
+.app-sidebar {
+  position: relative;
+  background:
+    radial-gradient(120% 60% at 20% 0%, rgba(91, 141, 239, .22) 0%, transparent 55%),
+    radial-gradient(120% 80% at 100% 100%, rgba(139, 92, 246, .16) 0%, transparent 50%),
+    linear-gradient(180deg, #121a3d 0%, #0c1230 100%);
+  transition: width .28s cubic-bezier(.22,.8,.36,1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  color: #b0b8d1;
-  transition: width 0.25s ease;
+  border-right: 1px solid rgba(255,255,255,.05);
+  z-index: 20;
 }
+.app-sidebar::before {
+  /* 细网格纹理 */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 26px 26px;
+  pointer-events: none;
+}
+.app-sidebar > * { position: relative; z-index: 1; }
 
-.logo {
+/* 品牌 */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 18px 14px;
+  cursor: pointer;
+}
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 0 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  height: 56px;
-  box-sizing: border-box;
-}
-.logo-icon {
-  font-size: 26px;
-  color: #409eff;
+  background: linear-gradient(135deg, #5b8def, #8b5cf6);
+  box-shadow: 0 6px 16px -4px rgba(91, 141, 239, .6), inset 0 1px 0 rgba(255,255,255,.25);
   flex-shrink: 0;
 }
-.logo-text {
-  min-width: 0;
-}
-.logo-title {
-  font-weight: 700;
+.brand-text { min-width: 0; }
+.brand-name {
+  color: #fff;
   font-size: 16px;
-  color: #e8ecf4;
+  font-weight: 700;
   letter-spacing: 1px;
-  white-space: nowrap;
+  line-height: 1.2;
 }
-.logo-sub {
-  font-size: 11px;
-  color: #6b7394;
+.brand-sub {
+  color: rgba(200, 208, 238, .55);
+  font-size: 10px;
   margin-top: 2px;
   white-space: nowrap;
 }
 
-.user-box {
+/* 用户块 */
+.sidebar-user {
+  margin: 4px 12px 12px;
+  padding: 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  gap: 9px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.07);
 }
-.user-box.collapsed {
-  justify-content: center;
-  padding: 12px 0;
-}
-.user-entry {
+.sidebar-user-collapsed {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-  cursor: pointer;
-  border-radius: 8px;
-  padding: 2px 4px;
-  transition: background-color 0.2s ease;
-}
-.user-entry:hover {
-  background-color: rgba(64,158,255,0.1);
-}
-.user-box.collapsed .user-entry {
-  flex: 0;
   justify-content: center;
+  margin: 4px 0 12px;
 }
 .user-avatar {
   width: 34px;
   height: 34px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #409eff, #337ecc);
-  color: #fff;
+  border-radius: 10px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 16px;
-  flex-shrink: 0;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  background: linear-gradient(135deg, #5b8def, #6a5cf6);
+  box-shadow: 0 4px 10px -3px rgba(91,141,239,.6);
 }
-/* 头像图片：object-fit 保证非正方形图片不变形 */
-.user-avatar-img {
-  object-fit: cover;
-  background: none;
-}
-.user-meta {
-  flex: 1;
-  min-width: 0;
-}
+.user-avatar.small { width: 32px; height: 32px; font-size: 14px; }
+.user-avatar.teacher { background: linear-gradient(135deg, #f5a623, #f4794d); box-shadow: 0 4px 10px -3px rgba(245,166,35,.55); }
+.user-meta { flex: 1; min-width: 0; }
 .user-name {
+  color: #e8ecfb;
   font-size: 13px;
-  color: #e0e4ef;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 2px;
 }
-.logout-btn {
-  color: #f56c6c !important;
+.user-role {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-weight: 600;
+  background: rgba(34,192,138,.18);
+  color: #4fe0ac;
 }
+.user-role.teacher { background: rgba(245,166,35,.18); color: #ffc266; }
+.user-logout {
+  color: rgba(200,208,238,.6) !important;
+  padding: 4px;
+}
+.user-logout:hover { color: #ff8095 !important; }
 
-/* 菜单样式 */
-.app-menu {
-  border-right: none !important;
+/* 菜单 */
+.sidebar-menu {
   flex: 1;
-  padding: 8px 0;
+  border-right: none;
+  background: transparent;
+  padding: 2px 10px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
-.app-menu .el-menu-item {
+.sidebar-menu::-webkit-scrollbar { width: 0; }
+.sidebar-menu:not(.el-menu--collapse) { width: 100%; }
+.sidebar-menu :deep(.el-menu-item) {
   height: 44px;
   line-height: 44px;
-  margin: 2px 8px;
-  border-radius: 8px;
-  color: #9ba3c4 !important;
+  margin-bottom: 4px;
+  border-radius: 11px;
+  color: #aab3d4;
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 14px !important;
+  position: relative;
+  transition: all .22s ease;
 }
-.app-menu .el-menu-item:hover {
-  background-color: rgba(64,158,255,0.1) !important;
-  color: #409eff !important;
+.sidebar-menu :deep(.el-menu-item .el-icon) {
+  font-size: 17px;
+  color: inherit;
 }
-.app-menu .el-menu-item.is-active {
-  background-color: rgba(64,158,255,0.15) !important;
-  color: #409eff !important;
-  font-weight: 600;
+.sidebar-menu :deep(.el-menu-item:hover) {
+  background: rgba(255,255,255,.07);
+  color: #fff;
 }
-/* 子菜单项（仅展开态缩进，折叠态交由 Element Plus 显示图标 + Tooltip） */
-.app-menu:not(.el-menu--collapse) .menu-sub {
-  height: 38px !important;
-  line-height: 38px !important;
-  padding-left: 52px !important;
+/* 子菜单分组（学习空间）：分组标题与内联面板跟随侧边栏深色主题 */
+.sidebar-menu :deep(.el-sub-menu__title) {
+  height: 44px;
+  line-height: 44px;
+  margin-bottom: 4px;
+  border-radius: 11px;
+  color: #aab3d4;
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 14px !important;
+  transition: all .22s ease;
+}
+.sidebar-menu :deep(.el-sub-menu__title:hover) {
+  background: rgba(255,255,255,.07);
+  color: #fff;
+}
+.sidebar-menu :deep(.el-sub-menu.is-active > .el-sub-menu__title) {
+  color: #fff;
+}
+.sidebar-menu :deep(.el-sub-menu .el-menu) {
+  background: rgba(255,255,255,.04);
+  border-radius: 11px;
+  padding: 4px 0;
+  margin-bottom: 6px;
+}
+.sidebar-menu :deep(.el-sub-menu .el-menu .el-menu-item) {
+  padding-left: 40px !important;
+  height: 38px;
+  line-height: 38px;
   font-size: 13px;
-  color: #7b83a5 !important;
-  margin: 0 8px !important;
 }
-.app-menu:not(.el-menu--collapse) .menu-sub:hover {
-  color: #409eff !important;
-  background-color: transparent !important;
+.sidebar-menu :deep(.el-menu-item.is-active) {
+  color: #fff;
+  font-weight: 600;
+  background: linear-gradient(90deg, rgba(91,141,239,.95), rgba(106,92,246,.85));
+  box-shadow: 0 8px 18px -8px rgba(91,141,239,.8), inset 0 1px 0 rgba(255,255,255,.18);
+}
+.sidebar-menu :deep(.el-menu-item.is-active::before) {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  border-radius: 0 4px 4px 0;
+  background: #8fb0ff;
+  box-shadow: 0 0 10px #8fb0ff;
+}
+/* 折叠态菜单项居中 */
+.app-sidebar.collapsed .sidebar-menu { padding: 2px 8px; }
+.app-sidebar.collapsed .sidebar-menu :deep(.el-menu-item) {
+  padding-left: 0 !important;
+  justify-content: center;
+  border-radius: 11px;
 }
 
-.aside-footer {
-  padding: 12px 16px 16px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  font-size: 12px;
-  color: #6b7394;
-}
-.aside-footer.collapsed {
-  padding: 12px 0;
-}
-.health-line {
+/* 侧栏底部 */
+.sidebar-footer {
+  padding: 10px 14px 12px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #7b83a5;
+  gap: 8px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.health-line {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: rgba(200,208,238,.6);
+  white-space: nowrap;
 }
 .health-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  display: inline-block;
+  flex-shrink: 0;
 }
-.health-dot.on {
-  background: #67c23a;
-  box-shadow: 0 0 6px #67c23a;
+.health-dot.online { background: #3ddc97; box-shadow: 0 0 8px #3ddc97; }
+.health-dot.offline { background: #ff6b81; box-shadow: 0 0 8px #ff6b81; }
+.health-dot.checking { background: #ffc266; box-shadow: 0 0 8px #ffc266; animation: kg-spin-glow 1.4s linear infinite; }
+.collapse-btn {
+  color: rgba(200,208,238,.6) !important;
+  margin-left: auto;
+  padding: 5px;
+  min-height: auto;
+  height: auto;
 }
-.health-dot.off {
-  background: #f56c6c;
-  box-shadow: 0 0 6px #f56c6c;
-}
-.health-tip {
-  margin-top: 6px;
-}
-.health-tip code {
-  font-size: 10px;
-  color: #555c7a;
-  background: rgba(0,0,0,0.2);
-  padding: 1px 4px;
-  border-radius: 3px;
-}
+.collapse-btn:hover { color: #fff !important; background: rgba(255,255,255,.08) !important; }
 
-/* ===== 右侧主体 ===== */
-.app-body {
-  flex: 1;
+/* ============ 主区域 ============ */
+.main-container {
   min-width: 0;
+  background: var(--bg-page);
+  background-image:
+    radial-gradient(60% 40% at 85% -5%, rgba(91,141,239,.06), transparent 70%),
+    radial-gradient(50% 35% at 10% -5%, rgba(139,92,246,.05), transparent 70%);
 }
-
-/* ===== 顶部 Header ===== */
 .app-header {
-  background: #fff;
-  border-bottom: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 22px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.collapse-btn {
-  font-size: 18px;
-  color: var(--text-regular);
+.app-breadcrumb { font-size: 13px; }
+.app-breadcrumb :deep(.el-breadcrumb__inner) { color: var(--text-secondary); font-weight: 500; }
+.app-breadcrumb :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner) {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 .header-right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.welcome {
+.header-greet {
   font-size: 13px;
   color: var(--text-secondary);
 }
+.header-greet b { color: var(--text-primary); font-weight: 600; }
+.header-avatar {
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+.header-avatar:hover { transform: scale(1.08); }
 
-/* ===== 主内容区 ===== */
 .app-main {
-  padding: 20px;
+  padding: 20px 22px 28px;
   overflow-y: auto;
-  background: var(--bg-page);
 }
 
-/* ===== 响应式：窄屏收紧留白、隐藏欢迎语 ===== */
+/* 路由切换动效 */
+.page-enter-active { transition: all .3s cubic-bezier(.22,.8,.36,1); }
+.page-leave-active { transition: all .18s ease; }
+.page-enter-from { opacity: 0; transform: translateY(10px); }
+.page-leave-to { opacity: 0; transform: translateY(-6px); }
+
 @media (max-width: 768px) {
-  .app-main {
-    padding: var(--space-3);
-  }
-  .app-header {
-    padding: 0 var(--space-3);
-  }
-  .welcome {
-    display: none;
-  }
+  .header-greet { display: none; }
+  .app-main { padding: 14px; }
 }
-
 </style>

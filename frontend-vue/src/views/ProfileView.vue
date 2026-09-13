@@ -335,4 +335,19 @@ onMounted(load)
   gap: var(--space-2);
   margin-top: var(--space-4);
 }
+
+/* ===== v2 视觉增强 ===== */
+.avatar-wrap :deep(.el-avatar) {
+  background: var(--gradient-brand);
+  font-size: 38px;
+  font-weight: 700;
+  box-shadow: 0 0 0 4px var(--brand-50), 0 10px 24px -8px rgba(79,110,247,.55);
+}
+.identity-row {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+}
+.identity-label { font-size: 12.5px; }
+.identity-value { font-weight: 500; color: var(--text-primary); }
 </style>

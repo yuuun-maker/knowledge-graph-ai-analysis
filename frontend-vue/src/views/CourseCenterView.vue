@@ -358,7 +358,16 @@ function onTabChange(tab) {
 /** 课程卡片 → 进入课程学习空间（复用既有教师端 / 学生端工作区，不另起一套界面） */
 function enterCourse(c) {
   store.currentCourseId = String(c.course_id)
-  store.setLearningContext({ courseId: c.course_id, documentId: null })
+  // 同一课程重复进入时保留已选的学习资料（否则回到「学习总览」数据会丢失）；
+  // 切换到不同课程才清空文档层，禁止沿用上一课程的文档
+  const sameCourse =
+    String(store.learningContext.currentCourseId || '') === String(c.course_id)
+  if (sameCourse) {
+    store.setLearningContext({ courseId: c.course_id })
+  } else {
+    store.clearLearningDocument()
+    store.setLearningContext({ courseId: c.course_id, documentId: null })
+  }
   if (isTeacher.value) {
     router.push({ path: '/teacher', query: { tab: 'documents', course_id: String(c.course_id) } })
   } else {
@@ -604,5 +613,56 @@ onMounted(() => {
   font-size: 12px;
   color: var(--color-text-secondary);
   margin: 4px 0 var(--space-3);
+}
+
+/* ===== v2 视觉增强 ===== */
+.discover-card {
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.discover-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--gradient-brand);
+  opacity: 0;
+  transition: opacity .25s;
+}
+.discover-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--brand-200);
+}
+.discover-card:hover::before { opacity: 1; }
+.discover-title { font-size: 15px; }
+.discover-stats { border-top-color: var(--border-light); }
+.join-card {
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+}
+.join-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--gradient-brand);
+}
+.join-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+.join-title::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--brand-500);
+  box-shadow: 0 0 0 4px var(--brand-50);
 }
 </style>

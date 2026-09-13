@@ -1,0 +1,524 @@
+第4章 Decisions （决策）—— 测试题与答案（中文版）
+
+> 教材：Introduction to Python Programming(OpenStax, CC BY 4.0)
+
+> 题目来源：各章节CONCEPTS IN PRACTICE（教材自带，共 65 道）
+
+> 答案来源：书末 Answer Key（教材原书仅选答部分题目，未提供答案的题目已附参考解答）
+
+> 本文件为中文翻译版，题目与答案均已译成中文；专有名词，数值与符号保留原文。
+
+第4章 题目
+
+##4.1 布尔值（Boolean values）
+
+1. is_fruit 的数据类型是什么？给定 is_fruit = "True"。
+   a. Boolean
+   b. integer
+   c. string
+2. is_vegetable 的数据类型是什么？给定 is_vegetable = 0。
+   a. Boolean
+   b. integer
+   c. string
+3. is_dessert 的数据类型是什么？给定 is_dessert = False。
+   a. Boolean
+   b. integer
+   c. string
+4. 布尔变量可以表示多少个值？
+   a. 2
+   b. 4
+   c. 8
+5. 哪个是布尔变量的有效值？
+   a. true
+   b. True
+   c. 1
+6. 假设将以下内容添加到上面的代码中：
+   ```python
+   is_dessert = 0
+   print(type(is_dessert))
+   ```
+   输出是什么？
+   a. <class 'bool'>
+
+   b. <class 'int'>
+   c. Error
+7. bool(0.000)
+   a. True
+   b. False
+8. bool(-1)
+   a. True
+   b. False
+9. bool("")
+   a. True
+   b. False
+10. bool("0")
+    a. True
+    b. False
+11. 给定输入 False，bool(input()) 是什么？
+    a. True
+    b. False
+12. float(is_on)
+    a. 0.0
+    b. 1.0
+13. str(is_on)
+    a. "is_on"
+    b. "True"
+14. int(is_on)
+    a. 0
+    b. 1
+15. x = 14，compare_result = (x <= 13)
+    a. True
+    b. False
+16. w = 0，compare_result = (w != 0.4)
+    a. True
+    b. False
+17. v = 4，compare_result = (v < 4.0)
+    a. True
+    b. False
+18. y = 2，compare_result = (y > "ab")
+    a. True
+    b. False
+    c. Error
+19. z = "cilantro"，compare_result = (z == "coriander")
+    a. True
+    b. False
+20. a = "dog"，compare_result = (a < "cat")
+    a. True
+    b. False
+
+##4.2 if-else 语句（If-else statements）
+
+
+21. 给定以下内容，哪部分是条件？
+    ```python
+    if age < 12:
+        print("Discount for children available")
+    ```
+    a. age
+    b. age < 12
+    c. print("Discount for children available")
+22. 给定以下内容，如果条件为真，哪些行执行？
+    ```python
+    1  print("Have a great day.")
+    2  if is_raining:
+    3      print("Don't forget an umbrella!")
+    4  print("See you soon.")
+    ```
+    a. 1, 2, 3
+    b. 1, 2, 4
+    c. 1, 2, 3, 4
+23. 给定以下内容（同上），如果条件为假，哪些行执行？
+    a. 1, 2, 3
+
+    b. 1, 2, 4
+    c. 1, 2, 3, 4
+24. 给定 num = -10，num 的最终值是什么？
+    ```python
+    if num < 0:
+        num = 25
+    if num < 100:
+        num = 75
+    ```
+    a. -10
+    b. 25
+    c. 75
+25. 给定输入 10，positive_num 的最终值是什么？
+    ```python
+    positive_num = int(input("Enter a positive number:"))
+    if positive_num < 0:
+        print("Negative input set to 0")
+    positive_num = 0
+    ```
+    a. 10
+    b. 0
+    c. Error
+26. 给定以下代码，对于哪个范围的 x，采用 else 分支？
+    ```python
+    if x >= 15:
+        # ...
+    else:
+        # ...
+    ```
+    a. x < 15
+    b. x >= 15
+    c. x > 15
+27. 给定 x = 40，y 的最终值是什么？
+    ```python
+    if x > 30:
+        y = x - 10
+    else:
+        y = x + 10
+    ```
+    a. 30
+    b. 40
+    c. 50
+28. 给定 y = 50，哪个不是 y 的可能最终值？
+    ```python
+    if x < 50:
+        y = y / 2
+    else:
+        y = y * 2
+    y = y + 5
+    ```
+    a. 30
+    b. 55
+    c. 105
+
+##4.3 布尔运算（Boolean operations）
+
+29. 考虑上面的示例。Jaden 在容量为 2500 且距离关闭还有 2 小时时尝试进入。Jaden 能进入吗？
+    a. 是
+    b. 否
+30. 考虑上面的示例。Darcy 在容量为 3000 时尝试进入。对于哪些 hrs_to_close 值，Darcy 能够进入？
+    a. hrs_to_close > 1.0
+    b. 没有这样的值
+31. 给定 is_admin = False 和 is_online = True，is_admin and is_online 的值是什么？
+    a. True
+    b. False
+32. 给定 x = 8 和 y = 21，z 的最终值是什么？
+    ```python
+    if (x < 10) and (y > 20):
+        z = 5
+    else:
+        z = 0
+    ```
+    a. 0
+    b. 5
+33. 给定 days = 21 且 is_damaged 为 False，退款是否处理？
+    ```python
+    if (days < 30) or is_damaged:
+        # 处理退款
+    ```
+    a. 是
+    b. 否
+34. 对于哪些 age 值没有折扣？
+    ```python
+    if (age < 12) or (age > 65):
+        # 应用学生/老年人折扣
+    ```
+    a. age = 12
+    b. age <= 65
+    c. (age = 12) and (age <= 65)
+35. 给定 a = 9 和 b = 10，测试是否通过？
+    ```python
+    if (a % 2 == 0 and b % 2 == 1) or (a % 2 == 1 and b % 2 == 0):
+        # 测试通过
+    else:
+        # 测试失败
+    ```
+    a. 是
+    b. 否
+36. 给定 x = 13，not (x < 10) 的值是什么？
+    a. True
+    b. False
+37. 给定 x = 18，x 是否在正确范围内？
+    ```python
+    if not (x > 15 and x < 20):
+        # x 在正确范围内
+    ```
+    a. 是
+    b. 否
+38. 给定 is_turn = False 和 timer = 65，is_turn 的最终值是什么？
+    ```python
+    if timer > 60:
+        is_turn = not is_turn
+    ```
+    a. True
+    b. False
+
+##4.4 运算符优先级（Operator precedence）
+
+
+39. x ** 2 + 6 / 3 中哪部分先求值？
+    a. 6 / 3
+    b. x ** 2
+    c. 2 + 6
+40. not 3 * 5 > 10 中哪部分先求值？
+    a. 3 * 5
+    b. not 3
+    c. 5 > 10
+41. z == 5 and x / 8 < 100 中哪部分先求值？
+    a. 5 and x
+    b. x / 8
+    c. 8 < 100
+42. 10 + 3 * 2 / 4 如何求值？
+    a. 10 + (3 * (2 / 4))
+    b. 10 + ((3 * 2) / 4)
+    c. (10 + 3) * (2 / 4)
+43. 2 ** 2 ** 3 如何求值？
+    a. 2 ** (2 ** 2) * 3
+    b. 2 ** (2 ** 2 ** 3)
+    c. ((2 ** 2) ** 2) * 3
+44. 100 < x > 150 如何求值？
+    a. 100 < x and x < 150
+    b. 100 < x or x > 150
+    c. 100 < x and x > 150
+45. 考虑上面的示例。为什么求值顺序与程序员想要的不同？
+    a. 相等性优先于 and。
+    b. 所有运算符从右到左求值。
+    c. 没有括号时顺序是随机的。
+46. 给定 x = 8 和 y = 9，以下结果是什么？
+    ```python
+    x + 3 * y - 5
+    ```
+    a. 30
+    b. 44
+    c. 94
+47. 给定 x = 8 和 y = 9，以下结果是什么？
+    ```python
+    (x + 3) * (y - 5)
+    ```
+    a. 30
+    b. 44
+    c. 94 
+
+##4.5 链式决策（Chained decisions）
+
+
+48. 填空，使 condition_1 为假且 condition_2 为真时执行 Body 2。
+    ```python
+    if condition_1:
+        # Body 1
+    ______ condition_2:
+        # Body 2
+    ```
+    a. if
+    b. elif
+    c. else
+49. 给定 x = 42 和 y = 0，y 的最终值是什么？
+    ```python
+    if x > 44:
+        y += 2
+    elif x < 50:
+        y += 5
+    ```
+    a. 2
+    b. 5
+    c. 7
+50. 哪些条件完成代码，使得如果 x 小于 0，执行 Body 1，否则如果 x 等于 0，执行 Body 2。
+    ```python
+    if ______:
+        # Body 1
+    elif ______:
+        # Body 2
+    ```
+    a. x < 0、x == 0
+    b. x == 0、x < 0
+    c. x <= 0、[无条件]
+51. 以下哪项是有效的链式决策语句？
+    a. if condition_1: # Body 1 elif condition_2:
+    b. if condition_1: # Body 1 elif condition_2: # Body 2
+    c. elif condition_1: # Body 1 if condition_2: # Body 2
+52. 给定 attendees = 350，rooms 的最终值是什么？
+    ```python
+    rooms = 1
+    if attendees >= 100:
+        rooms += 3
+    if attendees <= 200:
+        rooms += 7
+    elif attendees <= 400:
+        rooms += 14
+    ```
+    a. 4
+    b. 15
+    c. 18
+53. 给定 hour = 12，打印什么？
+    ```python
+    if hour < 8:
+        print("Too early")
+    elif hour < 12:
+        print("Good morning")
+    elif hour < 13:
+        print("Lunchtime")
+    ```
+    a. Too early
+    b. Good morning
+    c. Lunchtime
+54. 在哪里可以添加 elif 语句？
+    ```python
+    1  if condition:
+    2      # Body
+    3  elif condition:
+    4      # Body
+    5  else:
+    6      # Body
+    ```
+    a. 1
+    b. 2
+    c. 3
+    d. 4
+55. 给定 x = -1 和 y = -2，y 的最终值是什么？
+    ```python
+    if x < 0 and y < 0:
+        y = 10
+    elif x < 0 and y > 0:
+        y = 20
+    else:
+        y = 30
+    ```
+    a. 10
+    b. 20
+    c. 30
+56. 以下语句如何重写为链式语句？
+    ```python
+    if price < 9.99:
+        order = 50
+    if 9.99 <= price < 19.99:
+        order = 30
+    if price >= 19.99:
+        order = 10
+    ```
+    a. if price < 9.99: order = 50 else: order = 30 order = 10
+    b. if price < 9.99: order = 50 elif price < 19.99: order = 30 elif price == 19.99: order = 10
+    c. if price < 9.99: order = 50 elif price < 19.99: order = 30 else: order = 10
+
+##4.6 嵌套决策（Nested decisions）
+
+
+57. 考虑上面的示例。给定 leaf_count = 9 和 leaf_shape = "teardrop"，输出是什么？
+    a. 可能是毒葛
+    b. 可能是毒橡树
+    c. 可能是毒漆树
+58. 给定 num_dancers = 49，打印什么？
+    ```python
+    if num_dancers < 0:
+        print("Error: num_dancers is negative")
+    else:
+        if num_dancers % 2 == 1:
+            print("Error: num_dancers is odd")
+        print(num_dancers, "dancers")
+    ```
+    a. Error: num_dancers is odd
+    b. 49 dancers
+    c. Error: num_dancers is odd 49 dancers
+59. 给定 x = 256、y = 513 和 max = 512，以下哪项将执行？
+    ```python
+    if x == y:
+        # Body 1
+    elif x < y:
+        # Body 2
+        if y >= max:
+            # Body 3
+        else:
+            # Body 4
+    ```
+    a. Body 2
+    b. Body 3
+    c. Error
+60. 给定 x = 118、y = 300 和 max = 512，以下哪项将执行？
+    a. Body 2
+    b. Body 3
+    c. Error
+
+##4.7 条件表达式（Conditional expressions）
+
+61. 以下 if-else 语句的条件表达式版本是什么？
+    ```python
+    if x % 2 == 0:
+        response = 'even'
+    else:
+        response = 'odd'
+    ```
+    a. response = if x % 2 == 0 "even" else "odd"
+    b. response = "odd" if x % 2 == 0 else "even"
+    c. response = "even" if x % 2 == 0 else "odd"
+62. 给定 x = 100 和 offset = 10，result 的值是什么？
+    ```python
+    result = x + offset if x < 100 else x - offset
+    ```
+    a. 90
+    b. 100
+    c. 110
+63. 条件表达式的哪部分不正确？
+    ```python
+    min_num = x if x < y else min_num = y
+    ```
+    a. min_num = x
+    b. x < y
+    c. min_num = y
+64. 以下 if-else 语句的改进版本是哪个？
+    ```python
+    if x < 50:
+        result = True
+    else:
+        result = False
+    ```
+    a. result = True if x < 50 else False
+    b. result = x < 50
+65. total 的可能值是什么？
+    ```python
+    total = fee + 10 if hours > 12 else 2
+    ```
+    a. 10, 2
+    b. fee + 10, 2
+    c. fee + 10, fee + 2
+
+---
+
+第4章 答案
+
+1. c
+2. b
+3. a
+4. a
+5. b
+6. b
+7. b
+8. b
+9. b
+10. a
+11. a
+12. b
+13. b
+14. b
+15. b
+16. a
+17. b
+18. c
+19. b
+20. b
+21. b
+22. b
+23. b
+24. b
+25. a
+26. a
+27. b
+28. c
+29. a
+30. b
+31. b
+32. b
+33. b
+34. b
+35. b
+36. a
+37. b
+38. a
+39. b
+40. a
+41. b
+42. a
+43. b
+44. a
+45. a
+46. a
+47. b
+48. b
+49. c
+50. a
+51. b
+52. a
+53. c
+54. b
+55. a
+56. a
+57. c
+58. c
+59. b
+60. a
+61. a
+62. a
+63. b
+64. a
+65. a

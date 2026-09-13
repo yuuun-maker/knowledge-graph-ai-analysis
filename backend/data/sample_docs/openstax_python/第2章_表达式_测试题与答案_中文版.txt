@@ -1,0 +1,332 @@
+第2章：表达式（Expression）—— 测试题与答案（中文版）
+
+> 教材：Introduction to Python Programming(OpenStax, CC BY 4.0)
+
+> 题目来源：各章节CONCEPTS IN PRACTICE（教材自带，共59道）
+
+> 答案来源：书末 Answer Key（教材原书仅选答部分题目，未提供答案的题目已附参考解答）
+
+> 本文件为中文翻译版，题目与答案均已译成中文；专有名词，数值与符号保留原文。
+
+
+第2章 题目
+
+##2.1 Python shell
+
+1. Python 是一种 ______ 语言。
+   a. 高级
+   b. 低级
+2. 以下哪项是解释器可以运行的最基本代码行？
+   a. print(1 + 1)
+   b. 1 + 1
+   c. 1
+3. 运行 name = input() 后，shell 显示什么结果？
+   a. 输入的 name
+   b. 什么都没有（除了 >>>）
+4. 编辑拼写错误需要哪些箭头键？
+   a. 只有向上箭头键
+
+   b. 向上和向下箭头
+   c. 向上和向左箭头
+5. 用户要按什么键才能回到两行之前？
+   a. 按向上箭头两次
+   b. 按向下箭头两次
+   c. 按向左箭头两次
+
+##2.2 类型转换(Type conversion)
+
+6. 在第 7 行，book_rating 的数据类型是什么？
+   a. float
+   b. integer
+7. 如果 update = 1.0 而不是 0.5，book_rating 的数据类型会是什么？
+   a. float
+   b. integer
+8. 以下代码执行后，x 的数据类型是什么？
+   ```python
+   x = 42.0
+   x = x * 1
+   ```
+   a. float
+   b. integer
+9. 哪个函数将输入的切片数量转换为可用于计算的数据类型？
+   a. float()
+   b. input()
+   c. int()
+
+10. 如何更改第 3 行以改进整个程序？
+    a. 使用 float() 而不是 int()。
+    b. 将 int() 的结果加 1。
+    c. 在 int() 周围添加 str()。
+11. y 的值是多少？给定 x = 4.5，y = int(x)。
+    a. 4
+    b. 5
+12. str(x) 的值是多少？给定 x = 4.5。
+    a. 4.5
+    b. "4.5"
+13. float(y) 的值是多少？给定 y = 4。
+    a. 4.0
+    b. 4.5
+
+##2.3 混合数据类型(Mixed data types)
+
+14. 8 * 0.25
+    a. 2
+    b. 2.0
+15. 2 * 9
+    a. 18
+    b. 18.0
+16. 20 / 2
+    a. 10
+    b. 10.0
+17. 7 / 2
+    a. 3.0
+    b. 3.5
+18. 12.0 / 4
+    a. 3
+    b. 3.0
+19. 8 - 1.0
+    a. 7.0
+    b. 7
+20. 5 - 0.25
+    a. 4.5
+    b. 4.75
+
+21. int('34') + 56
+    a. '3456'
+    b. 90
+    c. '90'
+22. str(12) + ' red roses'
+    a. '12 red roses'
+    b. '12'
+    c. Error
+23. '50' * 3
+    a. '150'
+    b. 150
+    c. '505050'
+24. str(5.2) + 7
+    a. 12.2
+    b. '12.2'
+    c. Error
+25. 80.0 + int('100')
+    a. 180
+    b. 180.0
+    c. '180'
+26. str(3.14) + '159'
+    a. 162.14
+    b. '3.14159'
+    c. Error
+27. 2.0 * 'this'
+    a. 'this'
+    b. 'thisthis'
+    c. Error
+
+##2.4 浮点错误(Floating-point errors)
+
+28. 语句 result = 2.0 * (10.0 ** 500) 给变量 result 赋了一个太大的值。
+    a. 舍入
+    b. 溢出
+29. 0.123456789012345678901234567890 * 0.1 产生 0.012345678901234568430878013601。
+    a. 舍入
+    b. 溢出
+30. round(6.6) 的输出是什么？
+    a. 6
+    b. 6.6
+    c. 7
+31. round(3.5, 2) 的输出是什么？
+    a. 3
+    b. 3.5
+
+    c. 3.50
+32. round(12) 的输出是什么？
+    a. 12.0
+    b. 12
+    c. 12.00
+33. round(0.1, 1) 的输出是什么？
+    a. 0.1
+    b. 0.10
+    c. 0.100000000000000055511151231257827021181583404541015625
+
+##2.5 整数除法(Dividing integers)
+
+
+34. 13 / 5
+    a. 2
+    b. 2.6
+    c. 3
+35. 13 % 5
+    a. 2
+    b. 2.6
+    c. 3
+36. 1 // 4
+    a. 0
+    b. 0.25
+    c. 1
+37. 2 % 0
+    a. 0
+    b. 2
+    c. Error
+38. 将分钟转换为小时的模数是多少？
+    a. 40
+    b. 60
+    c. 280
+39. 程序有一行 pounds = ounces // 16。下一行代码可能是什么？
+    a. ounces = ounces % 16
+    b. pounds = ounces % 16
+    c. ounces = ounces - pounds * 16
+
+##2.6 math 模块(The math module)
+
+40. 在上面的示例中，求值 math 时，为什么解释器引发 NameError？
+    a. math 模块不可用。
+    b. 变量 pie 拼写错误。
+    c. math 模块未导入。
+41. 以下哪个函数是内置的，不需要导入？
+    a. log()
+    b. round()
+    c. sqrt()
+42. 哪个表达式导致错误？
+    a. math.abs(1)
+    b. math.log(1)
+    c. math.sqrt(1)
+
+43. math.tau / 2 的值是多少？
+    a. 约 2.718
+    b. 约 3.142
+    c. 约 6.283
+44. math.sqrt(100) 的值是多少？
+    a. 浮点数 10.0
+    b. 整数 10
+    c. ValueError: math domain error
+45. πr² 在 Python 语法中是什么？
+    a. pi * r**2
+    b. math.pi * r**2
+    c. math.pi * r*2
+46. 哪个表达式返回整数 27？
+    a. 3 ** 3
+    b. 3.0 ** 3
+    c. math.pow(3, 3)
+
+##2.7 代码格式化(Formatting code)
+
+47. 哪个语句格式正确？
+    a. name = input("What is your name?")
+    b. name = input ("What is your name?")
+    c. name = input( "What is your name?" )
+48. 哪个语句格式正确？
+    a. name = name + "!"
+    b. name=name+"!"
+    c. name = name+"!"
+49. 哪个语句格式正确？
+    a. print("Hello",name)
+    b. print("Hello", name)
+    c. print( "Hello", name )
+50. 哪个表达式格式正确？
+    a. b**2 - 4*a*c
+    b. b**2-4*a*c
+    c. b ** 2 - 4 * a * c
+51. 哪一行打印单词 "grandmother"？
+    a. print(grandmother)
+    b. print("grand" "mother")
+
+    c. print("grand", "mother")
+52. 哪个字符串等价于 "Today is" "a holiday"？
+    a. 'Today isa holiday'
+    b. 'Today is a holiday'
+    c. 'Today is" "a holiday'
+53. 如果 name 是 "Ada"，print("Hello," name) 输出什么？
+    a. Hello,Ada
+    b. Hello, Ada
+    c. SyntaxError
+54. 显式行连接使用哪个字符？
+    a. /
+    b. \
+    c. |
+55. 打印非常长的字符串的最佳方式是什么？
+    a. 将字符串分解为多个较小的字符串。
+    b. 使用多个 print 语句打印字符串。
+    c. 将字符串赋给变量并打印变量。
+56. 哪个示例由两个语句组成？
+    a. print("Happy "New Year")
+    b. saying = ("Happy "New Year")
+    c. saying="Happy "New Year"
+
+##2.8 Python 职业(Python careers)
+
+57. 以下哪些领域使用 Python 支持其工作？
+    a. 地理学
+    b. 医疗保健
+    c. 政治学
+    d. 以上所有
+
+58. 以下哪个 Python 库创建图表和绘图？
+    a. Matplotlib
+    b. SciPy
+    c. TensorFlow
+59. 以下哪些应用程序是用 Python 构建的？
+    a. Facebook
+    b. Instagram
+    c. WhatsApp
+
+---
+
+第2章 答案
+
+1. a
+2. c
+3. b
+4. c
+5. a
+6. a
+7. a
+8. a
+9. a
+10. b
+11. a
+12. b
+13. a
+14. b
+15. a
+16. b
+17. b
+18. b
+19. a
+20. b
+21. b
+22. a
+23. c
+24. c
+25. b
+26. b
+27. c
+28. b
+29. a
+30. c
+31. c
+32. b
+33. a
+34. b
+35. c
+36. a
+37. c
+38. b
+39. a
+40. c
+41. b
+42. a
+43. b
+44. a
+45. b
+46. a
+47. a
+48. c
+49. b
+50. a
+51. b
+52. a
+53. c
+54. b
+55. a
+56. c
+57. d
+58. a
+59. b

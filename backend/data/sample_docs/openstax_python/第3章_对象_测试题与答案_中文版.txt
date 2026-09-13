@@ -1,0 +1,211 @@
+第3章 ：Objects (对象)—— 测试题与答案（中文版）
+
+> 教材：Introduction to Python Programming(OpenStax, CC BY 4.0)
+
+> 题目来源：各章节CONCEPTS IN PRACTICE（教材自带，共 31 道）
+
+> 答案来源：书末 Answer Key（教材原书仅选答部分题目，未提供答案的题目已附参考解答）
+
+> 本文件为中文翻译版，题目与答案均已译成中文；专有名词，数值与符号保留原文。
+
+
+ ##一、题目（按小结分类）
+
+
+##第3章 题目
+
+##3.1 重新审视字符串（Strings revisited）
+
+1. 字符串中第二个字符的索引是什么？
+   a. 1
+   b. 2
+   c. -2
+2. 如果 s = "Python!"，s[1] + s[-1] 的值是什么？
+   a. "p!"
+   b. "y!"
+   c. "yn"
+3. 如果 s = "Python!"，s[0] 是什么类型的对象？
+   a. 字符
+   b. 整数
+   c. 字符串
+4. 字母 A 的码点是什么？
+   a. 1
+   b. 65
+   c. 97
+5. ord("0") 返回什么值？
+   a. 0
+   b. 48
+   c. Error
+6. chr(126) 返回什么？
+   a. ~
+   b. "~"
+   c. Error
+7. 以下哪项是转义序列？
+   a. t
+   b. \t
+   c. \t\
+
+8. 哪个语句打印反斜杠（\）到屏幕？
+   a. print(\)
+   b. print("\\")
+   c. print("\")
+9. 哪个语句将 Enter 和 here 打印在不同行？
+   a. print("Enter here")
+   b. print("Enter" + \n + "here")
+   c. print("Enter" + "\n" + "here")
+
+##3.2 格式化字符串（Formatted strings）
+
+10. 以下代码的输出是什么？
+    ```python
+    animal = "dog"
+    says = "bark"
+    print(f"My {animal} says {says} {says} {says}")
+    ```
+    a. My dog bark bark bark bark
+    b. My dog says bark bark bark
+    c. Error
+11. 以下代码的输出是什么？
+    ```python
+    temp = "hot"
+    food = "soup"
+    print(f"This {temp} {food} is {temp}!")
+    ```
+    a. This hot soup is hot!
+    b. This {temp} {food} is {temp}!
+    c. Error
+12. 如何使用 f-string 重写以下代码？
+    ```python
+    print(x, "+", y, "=", x + y)
+    ```
+    a. print(f"x+y={x+y}")
+    b. print(f"{x}+{y}={x+y}")
+    c. print(f"{x}+{y}={x+y}")
+13. 哪个 f-string 将日期格式化为 MM/DD/YYYY？
+    a. f"{month:02d}/{day:02d}/{year}"
+    b. f"{month:2d}/{day:2d}/{year}"
+    c. f"{month}/{day}/{year}"
+14. 哪个语句将变量 money 显示为四舍五入到两位小数？
+    a. print(f"{money:2d}")
+    b. print(f"{money:2f}")
+    c. print(f"{money:.2f}")
+15. 哪个格式说明符将浮点数显示为带逗号分隔符并四舍五入到两位小数？
+    a. .2,f
+    b. .2f
+    c. .d.2f
+
+##3.3 重新审视变量（Variables revisited）
+
+16. 上面的动画中有多少个赋值语句？
+    a. 2
+    b. 3
+    c. 4
+17. 以下哪项最好地描述了所赋的对象？
+    a. 两个浮点对象
+    b. 两个整数对象，一个浮点对象
+    c. 一个整数对象，一个浮点对象
+18. 用什么符号显示变量的当前值？
+    a. 箭头
+    b. 小黑框
+    c. 圆角框
+19. id(rating) 可能返回哪个值？
+    a. 9793344
+    b. <class 'float'>
+    c. 10.0
+20. type(rating) 可能返回哪个值？
+    a. 10.0
+    b. "float"
+    c. <class 'float'>
+21. 什么表达式返回对象的值？
+    a. value(rating)
+    b. rating
+    c. "rating"
+
+##3.4 列表基础（List basics）
+
+22. 创建数字 3、4 和 5 的列表的正确方法是什么？
+    a. new_list == [3, 4, 5]
+    b. new_list = [3, 4, 5]
+    c. new_list == (3, 4, 5)
+23. 以下哪项不是在 Python 中指定列表的有效方式？
+    a. my_list = [2, 2 3, 23]
+    b. my_list = ["Jimmy", 2, "times"]
+    c. my_list = ["C", "C++", "Python", "Java", "Rust", "Scala"]
+24. 访问名为 cardList 的列表中第 17 个元素的正确方法是什么？
+    a. card_list[17]
+    b. card_list(16)
+    c. card_list[16]
+25. 在以下列表中将元素 "Tom" 修改为 "Tim" 的正确方法是什么？
+    ```python
+    name_list = ["Carla", "Monique", "Westin", "Tom"]
+    ```
+    a. name_list[-1] = "Tim"
+    b. name_list[4] = "Tim"
+    c. name_list[end] = "Tim"
+
+##3.5 元组基础（Tuple basics）
+
+
+26. 哪个访问 tuple_1 的第一个元素？
+    a. tuple_1[0]
+    b. tuple_1[1]
+    c. tuple_1[2]
+27. 哪个创建有效元组？
+    a. tuple_2 = (42, 26, 13)
+    b. tuple_3 = (42, 26, 13.5)
+    c. 两者都是
+28. 哪个创建包含三个元素的元组？
+    a. my_tuple = 'a', 'b', 'c'
+    b. my_tuple = ['a', 'b', 'c']
+    c. my_tuple = ('a', 'b', 'c')
+29. 考虑上面示例中的最终程序。my_tuple 的值是什么？
+    a. (0.693, 0.414, 3.142)
+    b. (0.693, 1.414, 3.142)
+    c. Error
+30. 为什么以下代码产生错误？
+    ```python
+    tuple_1 = ('alpha', 'bravo', 'charlie')
+    tuple_1.append('charlie')
+    ```
+    a. 不允许 append。
+    b. 不允许重复。
+    c. 不允许字符串。
+31. 程序员想要创建一组常量以便于参考，并且在程序中的任何地方都不能更改。哪种序列最合适？
+    a. list
+    b. tuple
+
+---
+
+第3章 答案
+
+1. a
+2. b
+3. c
+4. b
+5. b
+6. b
+7. c
+8. c
+9. c
+10. b
+11. a
+12. a
+13. c
+14. c
+15. a
+16. b
+17. b
+18. a
+19. a
+20. c
+21. b
+22. b
+23. c
+24. b
+25. a
+26. b
+27. c
+28. b
+29. b
+30. a
+31. b

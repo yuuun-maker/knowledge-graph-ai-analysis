@@ -1,0 +1,1094 @@
+ 第2章：表达式（Expression）
+> 原文：Introduction to Python Programming (OpenStax, CC BY 4.0)，第2章 Expression
+
+> 本书免费获取地址：https://openstax.org/details/books/introduction-python-programming
+
+> 本译文为中文翻译版，章节结构与原文一致,专有名词已保留，原文中的页码页脚已省略。
+
+## 第2章：表达式（Expression）
+
+章节大纲
+
+2.1 Python shell
+2.2 类型转换(Type conversion)
+2.3 混合数据类型(Mixed data types)
+2.4 浮点错误(Floating-point errors)
+2.5 整数除法(Dividing integers)
+2.6 math 模块(The math module)
+2.7 代码格式化(Formatting code)
+2.8 Python 职业(Python careers)
+2.9 章节小结(Chapter summary)
+
+##引言
+
+计算机程序是一系列一个接一个运行的语句。在 Python 中，许多语句由一个或多个表达式组成。表达式表示要计算的单个值。例如：当 x 为 4 时，表达式 3 * x - 5 求值为 7。学会识别表达式为编写各种有趣的计算程序打开了大门。
+
+表达式通常是字面量、变量和运算符的组合。在上面的例子中，3 和 5 是字面量，x 是变量，* 和 - 是运算符。表达式可以任意长，由许多计算组成。表达式也可以短到一个值。例如：在赋值语句 x = 5 中，字面量 5 就是一个表达式。
+
+Statements 章节介绍了像 1 * 2 和 "Hi " + "there" 这样的简单表达式。本章探讨用于处理数字和字符串的其他类型的表达式。第一节展示了使用 Python shell 试验表达式的好方法。后面的小节介绍有关整数和浮点数的更多细节，解释如何导入和使用 math 模块，并展示如何使长代码行更易读。
+
+---
+
+##2.1 Python shell
+
+学习目标
+
+在本节结束时，你应该能够：
+· 使用 Python shell 交互式地运行语句和表达式。
+· 解释向上和向下箭头键盘快捷键的功能。
+
+##解释器
+
+Python 是一种高级语言，这意味着源代码是供人类理解的。另一方面，计算机只理解由 1 和 0 组成的低级机器码。用高级语言编写的程序必须翻译成机器码才能运行。这个翻译过程可以一次全部发生，也可以根据语言的不同一次发生一点。
+
+Python 是一种解释型语言：源代码在程序运行时逐行翻译。Python 解释器将源代码翻译成机器码并运行生成的程序。如果发生错误，解释器停止翻译源代码并显示错误信息。
+
+大多数开发环境都包含一个 Python shell，用于交互式地试验代码。Shell，也称为控制台或终端，是一种允许直接与解释器交互的程序。解释器通常一次运行整个程序。但在 Python shell 中，解释器可以一次运行一行代码。
+
+CHECKPOINT
+
+运行 Python shell：第2章，视频1
+
+CONCEPTS IN PRACTICE
+
+##使用 Python shell
+
+1. Python 是一种 ______ 语言。
+   a. 高级
+      b. 低级
+2. 以下哪项是解释器可以运行的最基本代码行？
+   a. print(1 + 1)
+      b. 1 + 1
+      c. 1
+3. 运行 name = input() 后，shell 显示什么结果？
+   a. 输入的 name
+      b. 什么都没有（除了 >>>）
+
+##箭头键
+
+Python shell 便于探索和排除代码故障。用户可以尝试一些东西，查看结果，然后尝试其他东西。当发生错误时，会显示错误信息，但程序继续运行。这样，用户可以编辑上一行并交互式地纠正错误。
+
+```
+1. 读取/输入一些代码
+2. 求值/运行代码
+3. 打印任何结果
+4. 循环回步骤 1
+```
+
+大多数 shell 维护用户输入的每一行代码的历史记录。按键盘上的向上或向下箭头键会显示历史记录。向上箭头显示上一行；向下箭头显示下一行。这样，用户可以重复一行，而不必再次输入该行。
+
+CHECKPOINT
+
+纠正拼写错误：第2章，视频2
+
+CONCEPTS IN PRACTICE
+
+##使用箭头键
+
+4. 编辑拼写错误需要哪些箭头键？
+   a. 只有向上箭头键
+      b. 向上和向下箭头
+      c. 向上和向左箭头
+5. 用户要按什么键才能回到两行之前？
+   a. 按向上箭头两次
+      b. 按向下箭头两次
+      c. 按向左箭头两次
+
+TRY IT
+
+##探索 shell
+
+交互式运行代码是学习 Python 工作原理的好方法。在你的计算机上打开 Python shell，或使用 python.org/shell 上的 shell。然后一次输入一行 Python 代码，查看结果。以下是一些可以尝试的表达式：
+
+```python
+x = 5
+3 * x - 5
+3 * (x - 5)
+x
+type(1)
+type('1')
+str(1)
+int('1')
+abs(-5)
+abs(5)
+len("Yo")
+len("HoHo")
+round(9.49)
+round(9.50)
+```
+
+注意：这些函数（type、str、int、len 和 round）将在本章后面更详细地探讨。你可以在 Python 文档中阅读有关内置函数的更多信息。
+
+TRY IT
+
+##纠正错误
+
+在你的计算机上打开 Python shell，或使用 python.org/shell 上的 shell。在 shell 中运行以下两个语句：
+
+```python
+x = 123
+x = 456
+```
+
+在 shell 中输入时犯错误很常见。以下行包括拼写错误和其他错误。对于每一行：（1）在 shell 中运行该行以查看结果，（2）按向上箭头重复该行，（3）编辑该行以获得正确结果。
+
+```python
+print("Easy as", X)
+print("y divided by 2 is", y / 0)
+name = input("What is your name?")
+print(name, "is", int(name), "letters long.")
+print("That's all folks!)
+```
+
+纠正拼写错误后，预期输出应如下所示：
+
+```
+Easy as 123
+y divided by 2 is 228.0
+(no error/output)
+Stacie is 6 letters long.
+That's all folks!
+```
+
+---
+
+##2.2 类型转换(Type conversion)
+
+学习目标
+
+在本节结束时，你应该能够：
+· 解释解释器如何使用隐式类型转换。
+· 使用 int()、float() 和 str() 进行显式类型转换。
+
+##隐式类型转换
+
+常见操作会更新变量，使得变量的数据类型需要更改。例如：GPS 首先将 distance 赋值为 250，一个整数。在走错路后，GPS 将 distance 赋值为 252.5，一个浮点数。Python 解释器使用隐式类型转换自动将一种数据类型转换为另一种。一旦 distance 被赋值为 252.5，解释器将 distance 从整数转换为浮点数，而不需要程序员指定转换。
+
+CHECKPOINT
+
+示例：图书评分：第2章，视频3
+
+CONCEPTS IN PRACTICE
+
+##实践中的隐式类型转换
+
+考虑上面的示例。
+
+1. 在第 7 行，book_rating 的数据类型是什么？
+   a. float
+      b. integer
+2. 如果 update = 1.0 而不是 0.5，book_rating 的数据类型会是什么？
+   a. float
+      b. integer
+3. 以下代码执行后，x 的数据类型是什么？
+   ```python
+   x = 42.0
+   x = x * 1
+   ```
+   a. float
+      b. integer
+
+##显式类型转换
+
+程序员经常需要更改数据类型以执行操作。例如：程序应使用 input() 读取两个值并对这些值求和。记住 input() 将值作为字符串读取。程序员可以使用显式类型转换将一种数据类型转换为另一种。
+
+· int() 将数据类型转换为整数。任何小数部分都被移除。例如：int(5.9) 产生 5。
+· float() 将数据类型转换为浮点数。例如：float(2) 产生 2.0。
+· str() 将数据类型转换为字符串。例如：str(3.14) 产生 "3.14"。
+
+CHECKPOINT
+
+示例：订购披萨：第2章，视频4
+
+CONCEPTS IN PRACTICE
+
+示例：订购披萨
+
+考虑上面的示例。
+
+4. 哪个函数将输入的切片数量转换为可用于计算的数据类型？
+   a. float()
+      b. input()
+      c. int()
+5. 如何更改第 3 行以改进整个程序？
+   a. 使用 float() 而不是 int()。
+      b. 将 int() 的结果加 1。
+      c. 在 int() 周围添加 str()。
+
+CONCEPTS IN PRACTICE
+
+##使用 int()、float() 和 str()
+
+给定 x = 4.5 和 y = int(x)，每个表达式的值是多少？
+
+6. y
+   a. 4
+      b. 5
+7. str(x)
+   a. 4.5
+      b. "4.5"
+8. float(y)
+   a. 4.0
+      b. 4.5
+
+TRY IT
+
+成绩平均分
+
+以下程序计算三个预定义考试分数的平均值，并打印两次平均值。改进程序，从输入读取三个成绩，并先打印浮点数平均值，然后使用显式类型转换打印整数平均值。忽略因四舍五入而产生的任何差异。
+
+TRY IT
+
+喝了几杯水
+
+以下程序应读取用户今天喝的盎司水量，并计算喝了多少杯以及根据每日目标还剩多少杯。假设一杯含 8 盎司。修复代码以计算 cups_drank 和 cups_left，并匹配以下内容：
+
+· ounces 是表示用户喝的盎司数的整数。
+· cups_drank 是表示喝了多少杯水的浮点数。
+· cups_left 是表示在每日目标 8 杯中还剩多少杯水（向下取整）的整数。
+
+TRY IT
+
+乘积作为浮点数
+
+以下程序将两个整数作为字符串读入。计算两个整数的乘积，并将结果打印为浮点数。
+
+---
+
+##2.3 混合数据类型(Mixed data types)
+
+学习目标
+
+在本节结束时，你应该能够：
+· 识别整数、浮点数和字符串运算产生的数据类型。
+· 使用运算符和类型转换组合整数、浮点数和字符串。
+
+##组合整数和浮点数
+
+程序员经常需要组合不同数据类型的数字。例如：程序计算在线购物订单的总价：
+
+```python
+quantity = int(input())
+price = float(input())
+total = quantity * price
+print(total)
+```
+
+quantity 是整数，price 是浮点数。那么 total 的数据类型是什么？对于输入 3 和 5.0，total 是浮点数，程序打印 15.0。
+
+组合整数和浮点数产生浮点数。浮点数默认打印时小数点后至少有一位数字，并根据需要有多位数字来表示该值。注意：使用 / 运算符的除法总是产生浮点数。
+
+CHECKPOINT
+
+组合整数和浮点数的运算：第2章，视频5
+
+CONCEPTS IN PRACTICE
+
+##组合整数和浮点数的运算
+
+1. 8 * 0.25
+   a. 2
+      b. 2.0
+2. 2 * 9
+   a. 18
+      b. 18.0
+3. 20 / 2
+   a. 10
+      b. 10.0
+4. 7 / 2
+   a. 3.0
+      b. 3.5
+5. 12.0 / 4
+   a. 3
+      b. 3.0
+6. 8 - 1.0
+   a. 7.0
+      b. 7
+7. 5 - 0.25
+   a. 4.5
+      b. 4.75
+
+##组合数字类型和字符串
+
+Python 中简单的类型转换可能导致程序员假设任何数据类型都可以与另一种数据类型组合。例如：Noor 的程序从输入读取一个数字，并在计算中使用该数字。这会导致程序错误，因为 input() 函数默认将数字存储为字符串。字符串和数字数据类型在加法、减法和除法中不兼容。需要根据算术或字符串连接的目标显式转换其中一个操作数。
+
+* 运算符还用作重复运算符，它接受一个字符串操作数和一个整数操作数并重复该字符串。例如："banjo" * 3 产生 "banjobanjobanjo"。
+
+CHECKPOINT
+
+添加字符串和整数：第2章，视频6
+
+CONCEPTS IN PRACTICE
+
+##组合数字类型和字符串的运算
+
+8. int('34') + 56
+   a. '3456'
+      b. 90
+      c. '90'
+9. str(12) + ' red roses'
+   a. '12 red roses'
+      b. '12'
+      c. Error
+10. '50' * 3
+    a. '150'
+        b. 150
+        c. '505050'
+11. str(5.2) + 7
+    a. 12.2
+        b. '12.2'
+        c. Error
+12. 80.0 + int('100')
+    a. 180
+        b. 180.0
+        c. '180'
+13. str(3.14) + '159'
+    a. 162.14
+        b. '3.14159'
+        c. Error
+14. 2.0 * 'this'
+    a. 'this'
+        b. 'thisthis'
+        c. Error
+
+TRY IT
+
+小数点后
+
+编写一个程序，读取一个表示数字 num 小数点后数字的字符串。将输入字符串与 '.' 和 num 连接，并打印结果。例如：如果输入是 345，程序将打印 2.345。
+
+TRY IT
+
+打印 n 次
+
+编写一个程序，读取两个字符串 str1 和 str2，以及一个整数 count。将两个字符串与中间的空格和末尾的换行符（"\n"）连接。将结果字符串打印 count 次。
+
+---
+
+##2.4 浮点错误(Floating-point errors )
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 解释与浮点表示相关的数值不准确。
+· 使用 round() 函数减轻输出中的浮点错误。
+
+##浮点错误
+
+计算机使用 0 和 1 存储信息。所有信息都必须转换为 0 和 1 的字符串。例如：5 被转换为 101。由于只允许两个值 0 或 1，该格式称为二进制。
+
+浮点值由 Python 以二进制存储。将浮点数转换为底层二进制会导致特定类型的浮点错误。
+
+舍入误差发生在浮点值被错误地存储为近似值时。计算中使用的值的近似值与正确（真实）值之间的差称为舍入误差。
+
+例如：存储浮点数 (0.1)₁₀ 会导致二进制值，转换回来时实际上产生 (0.100000000000000055511151231257827021181583404541015625)₁₀，这不完全等于 (0.1)₁₀。
+
+```python
+# 打印带 30 位小数的浮点数
+print(f'{0.1:.30f}')  # 打印 0.1
+print(f'{0.2:.30f}')  # 打印 0.2
+print(f'{0.4:.30f}')  # 打印 0.4
+```
+
+输出：
+
+```
+0.10000000000000005551115123126
+0.200000000000000011102230246252
+0.400000000000000022204460492503
+```
+
+溢出错误发生在值太大而无法存储时。可以表示的最大和最小浮点值分别为 1.8 × 10³⁰⁸ 和 -1.8 × 10³⁰⁸。尝试存储超出范围 (-1.8 × 10³⁰⁸, 1.8 × 10³⁰⁸) 的浮点值会导致溢出错误。
+
+下面，3.0 ** 256 和 3.0 ** 512 可以表示，但 3.0 ** 1024 太大并导致溢出错误。
+
+```python
+print('3.0 to the power of 256 =', 3.0**256)
+print('3.0 to the power of 512 =', 3.0**512)
+print('3.0 to the power of 1024 =', 3.0**1024)
+```
+
+输出：
+
+```
+3.0 to the power of 256 = 1.3900845237714473e+122
+3.0 to the power of 512 = 1.9323349832288915e+244
+3.0 to the power of 1024 =
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+OverflowError: (34, 'Numerical result out of range')
+```
+
+CONCEPTS IN PRACTICE
+
+##浮点错误
+
+对于每种情况，发生哪种错误？
+
+1. 语句 result = 2.0 * (10.0 ** 500) 给变量 result 赋了一个太大的值。
+   a. 舍入
+      b. 溢出
+2. 0.123456789012345678901234567890 * 0.1 产生 0.012345678901234568430878013601。
+   a. 舍入
+      b. 溢出
+
+##浮点 round() 函数
+
+Python 的 round() 函数用于将浮点数四舍五入到给定的小数位数。该函数需要两个参数。第一个参数是要四舍五入的数字。第二个参数决定数字四舍五入到的小数位数。如果未提供第二个参数，数字将四舍五入到最接近的整数。round() 函数可用于减轻浮点错误。
+
+例如：
+
+· round(2.451, 2) = 2.45
+· round(2.451) = 2
+
+CHECKPOINT
+
+round() 函数示例：第2章，视频7
+
+CONCEPTS IN PRACTICE
+
+##round() 函数示例
+
+3. round(6.6) 的输出是什么？
+   a. 6
+      b. 6.6
+      c. 7
+4. round(3.5, 2) 的输出是什么？
+   a. 3
+      b. 3.5
+      c. 3.50
+5. round(12) 的输出是什么？
+   a. 12.0
+      b. 12
+      c. 12.00
+6. round(0.1, 1) 的输出是什么？
+   a. 0.1
+      b. 0.10
+      c. 0.100000000000000055511151231257827021181583404541015625
+
+TRY IT
+
+不准确的小费
+
+以下代码根据账单金额和小费比例计算小费金额。尝试以下账单金额和小费比例，看看计算小费金额时是否会产生不准确。
+
+· 账单金额：22.70 和 33.33
+· 小费比例：0.15、0.18 和 0.20
+
+TRY IT
+
+三角形面积
+
+完成以下步骤以计算三角形面积，并打印每一步的结果。三角形面积为 bh/2，其中 b 是底，h 是高。
+
+1. 计算底为 7、高为 3.5 的三角形面积。
+2. 将三角形面积四舍五入到一位小数。
+3. 将三角形面积四舍五入到最接近的整数值。
+
+---
+
+##2.5 整数除法(Dividing integers)
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 求值涉及向下取整除法和取模的表达式。
+· 使用取模运算符在度量单位之间转换。
+
+##除法和取模
+
+Python 提供了两种除以数字的方法：
+
+· 真除法（/）在除法前将数字转换为浮点数。例如：7 / 4 变成 7.0 / 4.0，结果为 1.75。
+· 向下取整除法（//）计算商，即除的次数。例如：7 // 4 是 1，因为 4 进入 7 一次，余数为 3。取模运算符（%）计算余数。例如：7 % 4 是 3。
+
+注意：% 运算符传统上发音为 "mod"（modulo 的缩写）。例如：当大声读 7 % 4 时，程序员会说 "seven mod four"。
+
+CHECKPOINT
+
+商和余数：第2章，视频8
+
+CONCEPTS IN PRACTICE
+
+##除法和取模
+
+每个表达式的值是多少？
+
+1. 13 / 5
+   a. 2
+      b. 2.6
+      c. 3
+2. 13 % 5
+   a. 2
+      b. 2.6
+      c. 3
+3. 1 // 4
+   a. 0
+      b. 0.25
+      c. 1
+4. 2 % 0
+   a. 0
+      b. 2
+      c. Error
+
+##单位转换
+
+除法可用于将一种度量单位转换为另一种。要将厘米转换为米，变量除以 100。例如：300 厘米除以 100 是 3 米。
+
+数量作为整数通常不能均匀除尽。193 厘米是 1.93 米，或 1 米 93 厘米。程序可以使用向下取整除法和取模来分离单位：
+
+· 商，1 米，是 193 // 100。
+· 余数，93 厘米，是 193 % 100。
+
+程序经常一起使用向下取整除法和取模。如果一行代码向下取整除以 m，下一行很可能对 m 取模。用于除某个量的单位 m 称为模数。例如：将厘米转换为米时，模数是 100。
+
+CHECKPOINT
+
+金钱和时间：第2章，视频9
+
+CONCEPTS IN PRACTICE
+
+##单位转换
+
+5. 将分钟转换为小时的模数是多少？
+   a. 40
+      b. 60
+      c. 280
+6. 程序有一行 pounds = ounces // 16。下一行代码可能是什么？
+   a. ounces = ounces % 16
+      b. pounds = ounces % 16
+      c. ounces = ounces - pounds * 16
+
+TRY IT
+
+到达时间
+
+在长途公路旅行中，拥有移动设备可以救命。像 Google Maps 这样的程序会找到最短路线并估计到达时间。到达时间基于当前时间加上旅行需要多长时间。
+
+编写一个程序，（1）输入当前时间和估计的旅行长度，（2）计算到达时间，（3）以小时和分钟输出结果。你的程序应使用以下提示（用户输入以粗体显示）：
+
+```
+Current hour (0-23)? 13
+Current minute (0-59)? 25
+Trip time (in minutes)? 340
+```
+
+在此示例中，当前时间是 13:25（下午 1:25）。旅行时间是 340 分钟（5 小时 40 分钟）。13:25 后 340 分钟是 19:05（下午 7:05）。你的程序应以以下格式输出结果：
+
+```
+Arrival hour is 19
+Arrival minute is 5
+```
+
+到达小时必须在 0 到 23 之间。例如：将 120 分钟加到 23:00 应该是 1:00，而不是 25:00。到达分钟必须在 0 到 59 之间。例如：将 20 分钟加到 8:55 应该是 9:15，而不是 8:75。
+
+提示：将当前小时乘以 60 转换为分钟。然后，将到达时间（以总分钟为单位）计算为整数。
+
+你的代码不得使用后面章节中的 Python 关键字，如 if 或 while。解决方案只需要加法、乘法、除法和取模。
+
+TRY IT
+
+零钱机
+
+自助结账通道在杂货店越来越受欢迎。顾客自己扫描商品，计算机确定总购买金额。以现金支付的顾客插入美元纸币，机器自动以硬币形式找零。
+
+这就是这个程序的故事背景。你的任务是计算每种硬币应该发放多少。你的程序应使用以下提示（用户输入以粗体显示）：
+
+```
+Total amount? 18.76
+Cash payment? 20
+```
+
+你可以假设支付的现金始终是整数（代表美元纸币），且大于或等于总金额。程序应计算并输出应找零的金额以及应发放的美元、25 美分、10 美分、5 美分和 1 美分硬币数量：
+
+```
+Change Due $1.24
+
+Dollars: 1
+Quarters: 0
+Dimes: 2
+Nickels: 0
+Pennies: 4
+```
+
+提示：将总找零以分为单位计算为整数。使用 round() 函数避免浮点错误。
+
+---
+
+##2.6 math 模块(The math module)
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 区分内置函数和 math 函数。
+· 使用 math 模块中定义的函数和常量。
+
+##导入模块
+
+Python 附带了一个广泛的标准库模块。模块是可以在程序中导入的先前编写的代码。import 语句定义一个变量，用于访问模块中的代码。导入语句通常出现在程序开头。
+
+标准库还定义了内置函数，如 print()、input() 和 float()。内置函数始终可用，不需要导入。完整的内置函数列表可在 Python 官方文档中找到。
+
+标准库中常用的模块是 math 模块。该模块定义了诸如 sqrt()（平方根）之类的函数。要调用 sqrt()，程序必须导入 math 并使用结果 math 变量后跟一个点。例如：math.sqrt(25) 求值为 5.0。
+
+以下程序导入并使用 math 模块，并使用内置函数进行输入和输出。
+
+示例 2.1
+
+计算两点之间的距离
+
+```python
+import math
+
+x1 = float(input("Enter x1: "))
+y1 = float(input("Enter y1: "))
+x2 = float(input("Enter x2: "))
+y2 = float(input("Enter y2: "))
+
+distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+print("The distance is", distance)
+```
+
+CHECKPOINT
+
+在 Python shell 中导入 math：第2章，视频10
+
+CONCEPTS IN PRACTICE
+
+##内置函数和 math 模块
+
+1. 在上面的示例中，求值 math 时，为什么解释器引发 NameError？
+   a. math 模块不可用。
+      b. 变量 pie 拼写错误。
+      c. math 模块未导入。
+2. 以下哪个函数是内置的，不需要导入？
+   a. log()
+      b. round()
+      c. sqrt()
+3. 哪个表达式导致错误？
+   a. math.abs(1)
+      b. math.log(1)
+      c. math.sqrt(1)
+
+##数学函数
+
+常用的数学函数和常量如下所示。完整的 math 模块列表可在 Python 官方文档中找到。
+
+表 2.3 math 模块中的示例常量
+
+常量 值 描述
+math.e e = 2.71828... 欧拉数：自然对数的底。
+math.pi π = 3.14159... 圆的周长与直径之比。
+math.tau τ = 6.28318... 圆的周长与半径之比。Tau 等于 2π。
+
+表 2.4 math 模块中的示例函数
+
+函数 描述 示例
+math.ceil(x) x 的上限：大于或等于 x 的最小整数。 math.ceil(7.4) → 8 math.ceil(-7.4) → -7
+math.floor(x) x 的下限：小于或等于 x 的最大整数。 math.floor(7.4) → 7 math.floor(-7.4) → -8
+math.log(x) x 的自然对数（以 e 为底）。 math.log(math.e) → 1.0 math.log(0) → ValueError: math domain error
+math.log(x, base) x 以给定 base 为底的对数。 math.log(8, 2) → 3.0 math.log(10000, 10) → 4.0
+math.pow(x, y) x 的 y 次幂。与 ** 运算符不同，math.pow() 将 x 和 y 转换为 float 类型。 math.pow(3, 0) → 1.0 math.pow(3, 3) → 27.0
+math.sqrt(x) x 的平方根。 math.sqrt(9) → 3.0 math.sqrt(-9) → ValueError: math domain error
+math.cos(x) x 弧度（以弧度为单位）的余弦。 math.cos(0) → 1.0 math.cos(math.pi) → -1.0
+math.sin(x) x 弧度的正弦。 math.sin(0) → 0.0 math.sin(math.pi/2) → 1.0
+math.tan(x) x 弧度的正切。 math.tan(0) → 0.0 math.tan(math.pi/4) → 0.999 （舍入误差；结果应为 1.0。）
+
+CONCEPTS IN PRACTICE
+
+##使用 math 函数和常量
+
+4. math.tau / 2 的值是多少？
+   a. 约 2.718
+      b. 约 3.142
+      c. 约 6.283
+5. math.sqrt(100) 的值是多少？
+   a. 浮点数 10.0
+      b. 整数 10
+      c. ValueError: math domain error
+6. πr² 在 Python 语法中是什么？
+   a. pi * r**2
+      b. math.pi * r**2
+      c. math.pi * r*2
+7. 哪个表达式返回整数 27？
+   a. 3 ** 3
+      b. 3.0 ** 3
+      c. math.pow(3, 3)
+
+TRY IT
+
+二次公式
+
+在代数中，二次方程写作 ax² + bx + c = 0。系数 a、b 和 c 是已知值。变量 x 表示未知值。例如：2x² + 3x - 5 = 0 的系数为 a = 2、b = 3、c = -5。二次公式提供了一种快速简便的方法来求解 x：
+
+x = (-b ± √(b² - 4ac)) / 2a
+
+正负号表示方程有两个解。然而，Python 没有正负运算符。要在 Python 中使用此公式，必须将公式分开：
+
+· x₁ = (-b + √(b² - 4ac)) / 2a
+· x₂ = (-b - √(b² - 4ac)) / 2a
+
+在下面的程序中编写二次公式的代码。使用以下 a、b 和 c 值测试你的程序：
+
+a b c x1 x2
+1 0 -4 2.0 -2.0
+1 2 -3 1.0 -3.0
+2 1 -1 0.5 -1.0
+0 1 1 division by zero 
+1 0 1 math domain error 
+
+TRY IT
+
+圆柱公式
+
+在几何中，右圆柱的表面积和体积可以计算如下：
+
+· A = 2πrh + 2πr²
+· V = πr²h
+
+在下面的程序中编写这两个公式的代码。提示：你的解决方案应同时使用 math.pi 和 math.tau。使用以下 r 和 h 值测试你的程序：
+
+r h area volume
+0 0 0.0 0.0
+1 1 12.57 3.14
+1 2 18.85 6.28
+2.5 4.8 114.67 94.25
+3 1 7.0 196.73
+2 11.33  
+
+如果遇到错误，试着查找该错误的含义。
+
+---
+
+##2.7 代码格式化(Formatting code)
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 识别表达式和语句的良好间距。
+· 使用隐式行连接编写多行语句。
+
+##推荐的间距
+
+Python 代码中的大多数空格在运行程序时被忽略；然而，行首的空格非常重要。以下两个程序是等价的：
+
+良好间距：
+
+```python
+name = input("Enter someone's name:")
+place = input("Enter a famous place:")
+print(name, "should visit", place + "!")
+```
+
+差间距：
+
+```python
+name=input("Enter someone's name:")
+place=input("Enter a famous place:")
+print(name,"should visit",place+"!")
+```
+
+有人可能会说，缺少或多余的空格无关紧要。毕竟，上面两个程序运行方式完全相同。然而，"差间距"版本更难阅读。像 name=input 和 place+"!" 这样的代码可能会导致混淆。
+
+优秀的程序员编写的代码尽可能易读。这样，其他程序员更有可能理解代码。为了鼓励一致性，Python 社区有一套关于在哪里放置空格和空行、如何命名变量、如何分解长行以及其他重要主题的指南。
+
+##PYTHON 风格指南
+
+PEP 8 是 Python 的官方风格指南。PEP 代表 Python Enhancement Proposal。Python 社区的成员编写 PEP 来记录最佳实践并提出新功能。下表基于 PEP 8 中 "Whitespace in Expressions and Statements" 标题下的指南。
+
+表 2.7 空格指南
+
+指南 示例 常见错误
+括号：前后无空格。 print("Go team!") print( "Go team!" )
+逗号：前无空格，后一个空格。 print("Hello", name) print("Hello",name)
+赋值：= 前后各一个空格。 name = input("Your name?") name=input("Your name?")
+连接：+ 前后各一个空格。 print("Hi", name + "!") print("Hi", name+"!")
+算术：使用空格显示较低优先级。 x**2 + 5*x - 8 x**2+5*x-8
+
+CONCEPTS IN PRACTICE
+
+##推荐的间距
+
+1. 哪个语句格式正确？
+   a. name = input("What is your name?")
+      b. name = input ("What is your name?")
+      c. name = input( "What is your name?" )
+2. 哪个语句格式正确？
+   a. name = name + "!"
+      b. name=name+"!"
+      c. name = name+"!"
+3. 哪个语句格式正确？
+   a. print("Hello",name)
+      b. print("Hello", name)
+      c. print( "Hello", name )
+4. 哪个表达式格式正确？
+   a. b**2 - 4*a*c
+      b. b**2-4*a*c
+      c. b ** 2 - 4 * a * c
+
+##自动连接
+
+长字符串使 Python 程序难以阅读。例如：这个程序打印美国独立宣言的第一句话：
+
+```python
+print("The unanimous Declaration of the thirteen united States of America, When in the Course of human events, it becomes necessary for one people to dissolve the political bands which have connected them with another, and to assume among the powers of the earth, the separate and equal station to which the Laws of Nature and of Nature's God entitle them, a decent respect to the opinions of mankind requires that they should declare the causes which impel them to the separation.")
+```
+
+PEP 8 建议每行代码少于 80 个字符。这样，程序员就不需要水平滚动来阅读代码。上面的程序可以通过分解原始字符串来重写：
+
+```python
+print("The unanimous Declaration of the thirteen united States of "
+      "America, When in the Course of human events, it becomes "
+      "necessary for one people to dissolve the political bands "
+      "which have connected them with another, and to assume among "
+      "the powers of the earth, the separate and equal station to "
+      "which the Laws of Nature and of Nature's God entitle them, a "
+      "decent respect to the opinions of mankind requires that they "
+      "should declare the causes which impel them to the separation.")
+```
+
+为了方便，Python 自动连接多个字符串。在这种情况下不需要 + 运算符。
+
+CHECKPOINT
+
+字符串连接：第2章，视频11
+
+CONCEPTS IN PRACTICE
+
+##字符串字面量连接
+
+5. 哪一行打印单词 "grandmother"？
+   a. print(grandmother)
+      b. print("grand" "mother")
+      c. print("grand", "mother")
+6. 哪个字符串等价于 "Today is" "a holiday"？
+   a. 'Today isa holiday'
+      b. 'Today is a holiday'
+      c. 'Today is" "a holiday'
+7. 如果 name 是 "Ada"，print("Hello," name) 输出什么？
+   a. Hello,Ada
+      b. Hello, Ada
+      c. SyntaxError
+
+##多行语句
+
+Python 程序中的大多数语句只需要一行代码。但偶尔较长的语句需要跨越多行。Python 提供了两种编写多行语句的方法：
+
+显式行连接，使用 \ 字符：
+
+```python
+decl = "The unanimous Declaration of the thirteen united States of " \
+       "America, When in the Course of human events, it becomes " \
+       "necessary for one people to dissolve the political bands..."
+```
+
+隐式行连接，使用括号：
+
+```python
+decl = ("The unanimous Declaration of the thirteen united States of "
+        "America, When in the Course of human events, it becomes "
+        "necessary for one people to dissolve the political bands...")
+```
+
+隐式行连接更常见，因为许多语句和表达式本来就使用括号。PEP 8 建议尽可能避免使用显式行连接。
+
+CONCEPTS IN PRACTICE
+
+##多行语句
+
+8. 显式行连接使用哪个字符？
+   a. /
+      b. \
+      c. |
+9. 打印非常长的字符串的最佳方式是什么？
+   a. 将字符串分解为多个较小的字符串。
+   ```python
+      print("... "  # 字符串第一部分
+            "... ")  # 字符串下一部分
+   ```
+   b. 使用多个 print 语句打印字符串。
+   ```python
+      print("...")  # 字符串第一部分
+      print("...")  # 字符串下一部分
+   ```
+   c. 将字符串赋给变量并打印变量。
+   ```python
+      text = "..."  # 整个字符串
+      print(text)
+   ```
+10. 哪个示例由两个语句组成？
+    a. print("Happy "New Year")
+        b. saying = ("Happy "New Year")
+        c. saying="Happy "New Year"
+
+TRY IT
+
+间距
+
+以下代码工作正常，但格式很差。特别是，代码没有包含 PEP 8 推荐的空格。此外，其中两行约有 90 个字符长。按照本节中的指南重新格式化代码。注意不要改变代码本身的行为。
+
+TRY IT
+
+五句名言
+
+编写一个程序，打印以下五句 Guido van Rossum（Python 创造者）的名言（来源：BrainyQuote）。你的程序应该正好有五个 print 语句，每句一个：
+
+1. "If you're talking about Java in particular, Python is about the best fit you can get amongst all the other languages. Yet the funny thing is, from a language point of view, JavaScript has a lot in common with Python, but it is sort of a restricted subset."
+2. "The second stream of material that is going to come out of this project is a programming environment and a set of programming tools where we really want to focus again on the needs of the newbie. This environment is going to have to be extremely user-friendly."
+3. "I have this hope that there is a better way. Higher-level tools that actually let you see the structure of the software more clearly will be of tremendous value."
+4. "Now, it's my belief that Python is a lot easier than to teach to students programming and teach them C or C++ or Java at the same time because all the details of the languages are so much harder. Other scripting languages really don't work very well there either."
+5. "I would guess that the decision to create a small special purpose language or use an existing general purpose language is one of the toughest decisions that anyone facing the need for a new language must make."
+
+注意所有这些行都超过 80 个字符，有些包含单引号。根据需要，使用多行语句和转义序列格式化代码。
+
+---
+
+##2.8 Python 职业(Python careers)
+
+学习目标
+
+在本节结束时，你应该能够：
+
+· 总结 Python 如何在 CS 和 IT 以外的领域中使用。
+· 描述用 Python 制作的两种不同类型的应用程序。
+
+##领域和应用
+
+学习 Python 为许多与编程相关的职业打开了大门。示例职位包括软件工程师、数据科学家、Web 开发人员和系统分析师。这些工作通常需要计算机科学（CS）、信息技术（IT）或相关领域的学位。然而，编程并不局限于这些领域和职业。
+
+许多专业人士使用 Python 来支持他们的工作。Python 程序可以自动执行任务并快速解决问题。表 2.8 显示了计算领域之外的一些 Python 示例。知道如何编程是一项有用的技能，可以增强任何职业。
+
+Python 是一种多用途语言，支持多种应用程序。表 2.9 显示了可以用 Python 编写的一些程序示例。鉴于 Python 的实用性和流行性，Python 是一门值得学习的好语言。一个由专业人士和爱好者组成的支持性社区随时准备提供帮助。
+
+表 2.8 CS 和 IT 之外的 Python
+
+领域 Python 的示例用途
+商业 会计师编写 Python 程序生成自定义销售报告。
+教育 教师编写 Python 程序整理作业提交。
+美术 艺术家编写 Python 程序操作互动艺术展示。
+人文学科 语言学家编写 Python 程序分析俚语用法的变化。
+科学 生物学家编写 Python 程序分析癌症 DNA 序列。
+
+表 2.9 用 Python 构建的应用程序
+
+应用 Python 的示例用途
+人工智能 工程师开发支持图像和语音识别的模型。例如：TensorFlow 库。
+数据可视化 统计学家创建图表以理解大量数据。例如：Matplotlib 库。
+通用 本书中的大多数程序是通用的。例如：读取输入、执行计算、打印结果。
+科学计算 Python 非常适用于进行实验和分析数据。例如：SciPy 项目。
+Web 开发 Python 可以运行交互式网站。例如：Instagram 是用 Django（一个 Python 框架）构建的。
+
+CONCEPTS IN PRACTICE
+
+##领域和应用
+
+1. 以下哪些领域使用 Python 支持其工作？
+   a. 地理学
+      b. 医疗保健
+      c. 政治学
+      d. 以上所有
+2. 以下哪个 Python 库创建图表和绘图？
+   a. Matplotlib
+      b. SciPy
+      c. TensorFlow
+3. 以下哪些应用程序是用 Python 构建的？
+   a. Facebook
+      b. Instagram
+      c. WhatsApp
+
+EXPLORING FURTHER
+
+有关可以用 Python 构建的应用程序的更多示例，请参阅 Rohit Sharma 的 "Top 12 Fascinating Python Applications in Real-World"。有关 Python 相关职业的更多信息，请参阅 BrainStation 职业指南中的 "What Does a Python Developer Do?"。
+
+---
+
+##2.9 章节小结(Chapter summary)
+
+本章的重点包括：
+
+· 表达式和语句可以使用 shell 交互式运行。
+· 输入字符串可以转换为其他类型。例如：int(input())。
+· 字符串可以与其他类型连接。例如：" $" + str(cost)。
+· 浮点数容易受到舍入和溢出错误的影响。
+· 整数可以使用 // 和 % 精确除法。
+· 像 math 这样的模块提供了许多有用的函数。
+· 格式化长行有助于提高可读性。
+
+此时，你应该能够编写询问混合类型输入、执行数学计算并以更好格式输出结果的程序。下面的编程练习将本章介绍的大部分主题结合在一起。
+
+表 2.10 第2章参考
+
+函数 描述
+abs(x) 返回 x 的绝对值。
+int(x) 将 x（字符串或浮点数）转换为整数。
+float(x) 将 x（字符串或整数）转换为浮点数。
+str(x) 将 x（浮点数或整数）转换为字符串。
+round(x, ndigits) 将 x 四舍五入到小数点后 ndigits 位。如果省略 ndigits，则返回最接近 x 的整数。
+
+运算符 描述
+s * n（重复） 创建包含 s 的 n 个副本的字符串。例如："Ha" * 3 是 "HaHaHa"。
+x / y（真除法） 将 x 除以 y 并将整个结果作为浮点数返回。例如：7 / 4 是 1.75。
+x // y（向下取整除法） 将 x 除以 y 并将商作为整数返回。例如：7 // 4 是 1。
+x % y（取模） 将 x 除以 y 并将余数作为整数返回。例如：7 % 4 是 3。
+
+TRY IT
+
+烤面包
+
+假期临近，你需要购买食材来烤许多条面包。根据 King Arthur Flour 的食谱，每一条面包需要以下食材：
+
+· 1 1/2 茶匙速溶酵母
+· 1 1/2 茶匙盐
+· 1 1/2 茶匙糖
+· 2 1/2 杯通用面粉
+· 2 杯酸面团起子
+· 1/2 杯温水
+
+编写一个程序，输入以下变量：bread_weight（浮点数）、serving_size（浮点数）和 num_guests（整数）。输出将如下所示：
+
+注意：程序得出的量是精确的，但要烘焙，面包师必须使用一些近似值。例如：9.765625 杯通用面粉实际上意味着 9 又 3/4 杯。
+
+```
+For 25 people, you will need 3.90625 loaves of bread:
+
+  5.859375 teaspoons instant yeast
+  5.859375 teaspoons salt
+  5.859375 teaspoons sugar
+  9.765625 cups all-purpose flour
+  7.8125 cups sourdough starter
+  1.953125 cups lukewarm water
+```
+
+在上面的输出中，bread_weight 是 16.0 盎司，serving_size 是 2.5 盎司，num_guests 是 25 人。使用这三个变量计算所需的面包条数。
+
+确保你的输出与上面的示例完全匹配。注意每种食材行以两个空格开头。
+
+TRY IT
+
+小费计算器
+
+Google 有各种搜索技巧，可以为用户呈现即时结果。如果你在 Google 上搜索 "tip calculator"，结果顶部会包含一个交互式工具。本练习的目标是实现一个类似的小费计算器。
+
+首先提示用户输入以下值（用户输入以粗体显示）：
+
+```
+Enter bill amount: 43.21
+Percentage to tip: 18
+Number of people: 2
+```
+
+然后根据用户输入计算账单的小费金额和总金额。使用以下格式输出结果：
+
+```
+Tip amount: $ 7.78
+Total amount: $ 50.99
+
+Tip per person: $ 3.89
+Total per person: $ 25.49
+```
+
+你的程序应输出所有美元金额，四舍五入到两位小数。输出应正好是六行，如上所示。注意每个输出部分前有一个空行。还要注意美元符号前有空格，符号后没有空格。

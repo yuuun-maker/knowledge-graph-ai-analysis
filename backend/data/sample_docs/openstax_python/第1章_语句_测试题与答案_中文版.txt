@@ -1,0 +1,856 @@
+第1章：Statements（语句）—— 测试题与答案（中文版）
+
+> 教材：Introduction to Python Programming(OpenStax, CC BY 4.0)
+
+> 题目来源：各章节CONCEPTS IN PRACTICE（教材自带，共 64 道）
+
+> 答案来源：书末 Answer Key（教材原书仅选答部分题目，未提供答案的题目已附参考解答）
+
+> 本文件为中文翻译版，题目与答案均已译成中文；专有名词，数值与符号保留原文。
+
+
+
+第1章 题目
+
+
+ ##1.1 背景 (Backgrounds)
+
+
+
+1 . 动画中描述了多少种程序？
+
+   a. 3
+
+      b. 4
+
+      c. 5
+
+2 . 本书将解释如何编写哪种类型的程序？
+
+   a. 总结个人音乐偏好的工具
+
+      b. 用于管理 and 分享歌曲播放列表的移动应用
+
+      c. 显示过去五年顶级艺术家的网站
+
+3 . 以下哪项是计算机的例子？
+
+   a. 插入智能手机的有线耳机
+
+      b. 暂停或跳过当前歌曲的遥控器
+
+      c. 从 Amazon 流式传输音乐的 Wi-Fi 扬声器
+
+4 . 阅读本书需要很强的数学背景。
+
+   a. 正确
+
+      b. 错误
+
+5 . 一般来说，Python 程序比 Java 程序  _ _ _ _ _ _。
+
+   a. 更快
+
+      b. 更长
+
+      c. 更短
+
+6 . 在上面的示例程序中，Java 要求但 Python 不要求的语法是什么？
+
+   a. 分号
+
+      b. 括号
+
+      c. 引号
+
+
+
+ ##1.2 输入/输出 (Input/output)
+
+
+
+7. 哪一行代码将 Hello world! 打印为一行输出？
+
+   a. print(Hello world!)
+
+      b. print("Hello", "world", "!")
+
+      c. print("Hello world!")
+
+8. 哪些行代码将 Hello world! 打印为一行输出？
+
+   a. print("Hello") print("world!")
+
+      b. print("Hello") print("world!", end="")
+
+      c. print("Hello", end="") print("world!")
+
+9. 以下语句产生什么输出？
+
+   print("555", "0123", sep="-")
+
+   a. 555 0123
+
+      b. 5550123-
+
+      c. 555-0123
+
+10. 哪一行代码正确地获取并存储用户输入？
+
+   a. input()
+
+      b. today _is = input
+
+      c. today _is = input()
+
+11. 一个名叫 Sophia 的人在提示后输入自己的名字：
+
+   ```python
+
+   print("Please enter your name: ")
+
+   name = input()
+
+   ```
+
+   print("You entered:", name) 显示什么？
+
+   a. You entered: name
+
+      b. You entered: Sophia
+
+      c. You entered:
+
+12 如果用户输入 "six"，输出是什么？
+
+   ```python
+
+   print("Please enter a number: ")
+
+   number = input()
+
+   print("Value =", number)
+
+   ```
+
+   a. Value = six
+
+      b. Value = 6
+
+      c. Value = number
+
+ ##1.3 变量 (Variables)
+
+
+
+13. 在以下赋值后，哪一行代码正确地检索变量 city 的值？
+
+   city = "Chicago"
+
+   a. print("In which city do you live?")
+
+      b. city = "London"
+
+      c. print("The city where you live is", city)
+
+14. 哪个程序正确地存储和检索变量？
+
+   a. print("Total = ", total) total = 6
+
+      b. total = 6 print("Total = ", total)
+
+      c. print("Total = ", total) total = input()
+
+15. 哪个是赋值运算符？
+
+   a. :
+
+      b. ==
+
+      c. =
+
+16. 哪个是有效的赋值？
+
+   a. temperature = 98.5
+
+      b. 98.5 = temperature
+
+      c. temperature - 23.2
+
+17. 哪个可以用作变量名？
+
+   a. median
+
+      b. class
+
+      c. import
+
+18 . 为什么名称 2nd _input 不是有效的变量名？
+
+   a. 包含下划线
+
+      b. 以数字开头
+
+      c. 是关键字
+
+19 . 哪个是存储邮政编码的变量的好名称？
+
+   a. z
+
+      b. var _2
+
+      c. zip _code
+
+20 .给定变量名 DogBreed，哪个改进符合 Python 的风格指南？
+
+   a. dog _breed
+
+      b. dogBreed
+
+      c. dog- breed
+
+
+
+ ##1.4 字符串基础 (String basics)
+
+21. 以下哪项是字符串？
+
+   a. Hello!
+
+      b. 29
+
+      c. "7 days"
+
+22. 哪一行代码将字符串赋给变量 email？
+
+   a. "fred78@gmail.com"
+
+      b. "email = fred78@gmail.com"
+
+      c. email = "fred78@gmail.com"
+
+23. 哪个是有效字符串？
+
+   a. I know you'll answer correctly!
+
+      b. 'I know you'll answer correctly!
+
+      c. "I know you'll answer correctly!"
+
+24. 哪个是有效字符串？
+
+   a. You say "Please" to be polite
+
+      b. "You say "Please" to be polite'
+
+      c. 'You say "Please" to be polite'
+
+25. len("Hi Ali") 的返回值是什么？
+
+   a. 2
+
+      b. 5
+
+      c. 6
+
+26. 空字符串变量（""）的长度是多少？
+
+   a. 未定义
+
+      b. 0
+
+      c. 2
+
+27. 以下代码的输出是什么？
+
+   ```python
+
+   number = "12"
+
+   number _of _digits = len(number)
+
+   print("Number", number, "has", number _of _digits, "digits.")
+
+   ```
+
+   a. Number 12 has 12 digits.
+
+      b. Number 12 has 2 digits.
+
+      c. Number 12 has number _of _digits digits.
+
+28. 哪个产生字符串 "10"？
+
+   a. 1 + 0
+
+      b. "1" + "0"
+
+      c. 1 + "0"
+
+29. 哪个产生字符串 "Awake"？
+
+   a. "wake" + "A"
+
+      b. "A + wake"
+
+      c. "A" + "wake"
+
+30. 用户在以下代码后输入 "red"：
+
+    ```python
+
+    color = input("What is your favorite color?")
+
+    ```
+
+    哪个产生输出 "Your favorite color is red!"？
+
+    a. print("Your favorite color is " + color + !)
+
+        b. print("Your favorite color is " + "color" + "!")
+
+        c. print("Your favorite color is " + color + "!")
+
+31. 以下哪项将 "one-sided" 赋给变量 holiday？
+
+    a. holiday = "one" + "sided"
+
+        b. holiday = one- sided
+
+        c. holiday = "one- " + "sided"
+
+
+
+ ##1.5 数字基础 (Number basics)
+
+假设 x = 1，y = 2.0，s = "32"。
+
+
+
+32. 以下代码的输出是什么？
+
+   ```python
+
+   print(x, type(x))
+
+   ```
+
+   a. 1 int
+
+      b. 1.0 <class 'float'>
+
+      c. 1 <class 'int'>
+
+33. 以下代码的输出是什么？
+
+   ```python
+
+   print(y, type(y))
+
+   ```
+
+   a. 2.0 <class 'int'>
+
+      b. 2.0 <class 'float'>
+
+      c. 2 <class 'int'>
+
+34. 以下值的类型是什么？
+
+   "12.0"
+
+   a. string
+
+      b. int
+
+      c. float
+
+假设 x = 7，y = 20，z = 2。
+
+
+
+35. 给定以下代码行，代码的输出是什么？
+
+   ```python
+
+   c = 0
+
+   c = x - z
+
+   c = c + 1
+
+   print(c)
+
+   ```
+
+   a. 1
+
+      b. 5
+
+      c. 6
+
+36. a 的值是多少？
+
+   ```python
+
+   a = 3.5 - 1.5
+
+   ```
+
+   a. 2
+
+      b. 2.0
+
+      c. 2.5
+
+37. print(x / z) 的输出是什么？
+
+   a. 3
+
+      b. 3.0
+
+      c. 3.5
+
+38. print(y / z) 的输出是什么？
+
+   a. 0
+
+      b. 10
+
+      c. 10.0
+
+39. print(z  * 1.5) 的输出是什么？
+
+   a. 2
+
+      b. 3
+
+      c. 3.0
+
+40. 4  * 3  * * 2 + 1 的值是多少？
+
+   a. 37
+
+      b. 40
+
+      c. 145
+
+41. (1 + 3)  * * 2 / 4 中哪部分先求值？
+
+    a. 4  * * 2
+
+        b. 1 + 3
+
+        c. 2 / 4
+
+42. -4  * * 2 的值是多少？
+
+    a. -16
+
+        b. 16
+
+43. 以下语句中有多少个运算符？
+
+    result = - 2  * * 3
+
+    a. 1
+
+        b. 2
+
+        c. 3
+
+
+
+ ##1.6 错误信息 (Error messages)
+
+
+
+给定以下错误信息：
+
+
+
+```
+
+Traceback (most recent call last):
+
+   File "/home/student/Desktop/example.py", line 2
+
+     print "test"
+
+           ^
+
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print("test")?
+
+```
+
+
+
+44. 程序的文件名是什么？
+
+   a. Desktop
+
+      b. example.py
+
+      c. test
+
+45. 错误在第几行被发现？
+
+   a. 1
+
+      b. 2
+
+      c. 3
+
+46. 发现了什么类型的错误？
+
+   a. 缺少括号
+
+      b. SyntaxError
+
+      c. traceback
+
+对于下面的每个程序，会发生什么类型的错误？
+
+
+
+47. ```python
+
+   print("Breakfast options:")
+
+   print("A. Cereal")
+
+   print("B. Eggs")
+
+   print("C. Yogurt")
+
+   choice = input("What would you like?")
+
+   ```
+
+   a. IndentationError
+
+      b. NameError
+
+      c. SyntaxError
+
+48. ```python
+
+   birth = input("Enter your birth date: )
+
+   print("Happy birthday on ", birth)
+
+   ```
+
+   a. IndentationError
+
+      b. NameError
+
+      c. SyntaxError
+
+49. ```python
+
+   print("Breakfast options:")
+
+   print(" A. Cereal")
+
+   print(" B. Eggs")
+
+   print(" C. Yogurt")
+
+   choice = input("What would you like? ")
+
+   ```
+
+   a. IndentationError
+
+      b. NameError
+
+      c. SyntaxError
+
+
+
+ ##1.7 注释 (Comments)
+
+
+50. 编写注释的主要目的是
+
+   a. 避免语法错误
+
+      b. 解释代码做什么
+
+      c. 使代码运行更快
+
+51. Python 中使用哪个符号表示注释？
+
+   a. #
+
+      b. / *
+
+      c. //
+
+52. 哪个注释格式正确？
+
+   a. 0 个空格：#Get the user input
+
+      b. 1 个空格：# Get the user input
+
+      c. 2 个空格：#  Get the user input
+
+53. 以下代码最有用的注释是哪个？
+
+```python
+
+   print("You said:", adj1 + " " + noun1)
+
+   ```
+
+   a. # Append adj1 and noun1
+
+      b. # Print out a bunch of stuff
+
+      c. # Show the resulting phrase
+
+54 . 空行应该插入哪里？
+
+   ```python
+
+   1  name = input("whose birthday is today?")
+
+   2  print("Happy birthday to", name)
+
+   3  print("Everyone cheer for", name)
+
+   ```
+
+   a. 第 1 行后
+
+      b. 第 2 行后
+
+      c. 第 3 行后
+
+55. 要暂时阻止一行运行，可以...
+
+   a. 在该行中引入语法错误。
+
+      b. 从程序中删除该行。
+
+      c. 在该行开头插入 #。
+
+56. 编写 docstring 的主要目的是...
+
+   a. 总结程序的目的或用法。
+
+      b. 解释代码的每个部分如何工作。
+
+      c. 维护新功能的想法列表。
+
+57. 以下哪项不是 docstring？
+
+   a. """Vacations Madlib."""
+
+      b. """Vacations Madlib. This program asks the user for two adjectives and two nouns, which are then used to print a funny story about a vacation."""
+
+      c. # Vacations Madlib.
+
+         #
+
+         # This program asks the user for two adjectives
+
+         # and two nouns, which are then used to print
+
+         # a funny story about a vacation.
+
+58. 哪个 docstring 对这个程序最有用？
+
+   a. """Vacations Madlib."""
+
+      b. """Vacations Madlib. This program asks the user for two adjectives and two nouns, which are then used to print a funny story about a vacation."""
+
+      c. """Vacations Madlib. This program asks the user for two adjectives and two nouns, which are then used to print a funny story about a vacation. The code uses four variables to store the user input: two for the adjectives, and two for the nouns. The output is displayed on seven lines, beginning with a blank line after the input."""
+
+
+
+1.8 为什么选择 Python？(Why Python?)
+
+59. Python 编程语言是以  _ _ _ _ _ _ 命名的。
+
+   a. 英国喜剧团体
+
+      b. 荷兰程序员
+
+      c. 无毒蛇
+
+60. 哪种编程语言先出现？
+
+   a. Java
+
+      b. Python
+
+61. 哪句话最好地描述了 Python 的开端？
+
+  a. CWI 雇佣 Guido van Rossum 设计一种新编程语言来与 C++ 竞争。
+
+      b. Python 最初是一个业余爱好，经过几年开发后成为开源。
+
+      c. van Rossum 在开发该语言一年后将 Python 的源代码发布到网上。
+
+62. 根据 TIOBE 指数，2001 年至 2021 年最流行的两种语言是哪两种？
+
+   a. C 和 C++
+
+      b. Java 和 C
+
+      c. Python 和 JavaScript
+
+63. Python 在哪一年成为 Stack Overflow 上提问最多的语言？
+
+   a. 2018
+
+      b. 2019
+
+     c. 2020
+
+64. TIOBE 跟踪编程语言流行度多久了？
+
+   a. 自 1991 年以来
+
+      b. 自 2001 年以来
+
+      c. 自 2015 年以来
+
+
+
+ ##答案
+
+  1.b
+
+  2.a
+
+  3.c
+
+  4.b
+
+  5.c
+
+  6.a
+
+  7.c
+
+  8.c
+
+  9.c
+
+  10.c
+
+  11.b
+
+  12.a
+
+  13.c
+
+  14.b
+
+  15.c
+
+  16.a
+
+  17.a
+
+  18.b
+
+  19.c
+
+  20.a
+
+  21.c
+
+  22.c
+
+  23.c
+
+  24.c
+
+  25.c
+
+  26.b
+
+  27.b
+
+  28.c
+
+  29.c
+
+  30.c
+
+  31.c
+
+  32.c
+
+  33.b
+
+  34.a
+
+  35.c
+
+  36.b
+
+  37.c
+
+  38.c
+
+  39.c
+
+  40.a
+
+  41.b
+
+  42.a
+
+  43.c
+
+  44.b
+
+  45.b
+
+  46.b
+
+  47.a
+
+  48.c
+
+  49.b
+
+  50.b
+
+  51.a
+
+  52.b
+
+  53.c
+
+  54.a
+
+  55.c
+
+  56.a
+
+  57.c
+
+  58.b
+
+  59.a
+
+  60.b
+
+  61.c
+
+  62.b
+
+  63.a
+
+  64.b
+
+
+
+
+

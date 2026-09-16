@@ -11,10 +11,8 @@
 
         <div class="course-toolbar">
           <span class="stats-text">共 {{ store.courses.length }} 门课程</span>
-          <div class="toolbar-actions">
-            <el-button type="primary" :icon="Plus" @click="openCreateCourse">新建课程</el-button>
-            <el-button :icon="Promotion" @click="openInviteForCurrent">邀请学生</el-button>
-          </div>
+          <el-button type="primary" :icon="Plus" @click="openCreateCourse">新建课程</el-button>
+          <el-button :icon="Promotion" @click="openInviteForCurrent">邀请学生</el-button>
         </div>
 
         <MyCourseGrid
@@ -26,7 +24,6 @@
           @create="openCreateCourse"
           @enter="manageDocuments"
           @members="goMembers"
-          @leave="leaveCourse"
           @settings="openSettings"
           @delete="deleteCourse"
         />
@@ -1211,29 +1208,6 @@ async function deleteDocument(doc) {
     await loadDocuments()
   } catch (e) {
     ElMessage.error(`删除失败：${e.message}`)
-  }
-}
-
-async function leaveCourse(c) {
-  const id = String(c.course_id)
-  try {
-    await ElMessageBox.confirm(
-      `确定退出课程「${c.course_name}」吗？退出后将无法查看该课程内容。`,
-      '退出课程',
-      { type: 'warning', confirmButtonText: '退出', cancelButtonText: '取消' }
-    )
-  } catch {
-    return
-  }
-  try {
-    await store.leaveCourse(id)
-    ElMessage.success('已退出课程')
-    if (String(currentCourseId.value) === id) {
-      currentCourseId.value = ''
-      currentDocumentId.value = ''
-    }
-  } catch (e) {
-    ElMessage.error(`退出失败：${e.message}`)
   }
 }
 
@@ -2487,12 +2461,6 @@ function isDocInFlight(doc) {
   gap: var(--space-2);
   flex-wrap: wrap;
   margin-bottom: var(--space-3);
-}
-.course-toolbar .toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-left: auto;
 }
 .course-grid-wrap {
   min-height: 200px;

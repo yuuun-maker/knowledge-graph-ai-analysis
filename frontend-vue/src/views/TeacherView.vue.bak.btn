@@ -11,10 +11,8 @@
 
         <div class="course-toolbar">
           <span class="stats-text">共 {{ store.courses.length }} 门课程</span>
-          <div class="toolbar-actions">
-            <el-button type="primary" :icon="Plus" @click="openCreateCourse">新建课程</el-button>
-            <el-button :icon="Promotion" @click="openInviteForCurrent">邀请学生</el-button>
-          </div>
+          <el-button type="primary" :icon="Plus" @click="openCreateCourse">新建课程</el-button>
+          <el-button :icon="Promotion" @click="openInviteForCurrent">邀请学生</el-button>
         </div>
 
         <MyCourseGrid
@@ -2487,12 +2485,6 @@ function isDocInFlight(doc) {
   gap: var(--space-2);
   flex-wrap: wrap;
   margin-bottom: var(--space-3);
-}
-.course-toolbar .toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-left: auto;
 }
 .course-grid-wrap {
   min-height: 200px;

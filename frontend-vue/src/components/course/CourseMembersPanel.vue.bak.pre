@@ -25,7 +25,56 @@
     </div>
 
     <el-tabs v-model="activeTab" @tab-change="reload">
-<!-- 全部成员 -->
+      <!-- 待审核申请 -->
+      <el-tab-pane name="pending">
+        <template #label>
+          <span class="tab-label">
+            待审核申请
+            <el-badge v-if="stats.pending > 0" :value="stats.pending" type="danger" />
+          </span>
+        </template>
+
+        <el-table :data="pendingRows" v-loading="loading" size="small" empty-text="暂无待审核申请">
+          <el-table-column label="学生" min-width="150">
+            <template #default="{ row }">
+              <div class="member-cell">
+                <el-avatar :size="30" :src="row.avatar_url || undefined">
+                  {{ (row.name || '?').slice(0, 1) }}
+                </el-avatar>
+                <div class="member-name">
+                  <div>{{ row.name || row.username }}</div>
+                  <div class="member-sub">@{{ row.username }}</div>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="学号 / 工号" min-width="110">
+            <template #default="{ row }">{{ row.student_no || row.teacher_no || '—' }}</template>
+          </el-table-column>
+          <el-table-column label="学校" min-width="120">
+            <template #default="{ row }">{{ row.school || '—' }}</template>
+          </el-table-column>
+          <el-table-column label="申请时间" width="140">
+            <template #default="{ row }">{{ fmtTime(row.created_at) }}</template>
+          </el-table-column>
+          <el-table-column label="申请理由" min-width="150" show-overflow-tooltip>
+            <template #default="{ row }">{{ row.applied_reason || '—' }}</template>
+          </el-table-column>
+          <el-table-column label="来源" width="92">
+            <template #default="{ row }">
+              <el-tag size="small" effect="plain">{{ sourceText(row.join_source) }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="150" fixed="right">
+            <template #default="{ row }">
+              <el-button size="small" type="primary" @click="approve(row)">同意</el-button>
+              <el-button size="small" type="danger" plain @click="openReject(row)">拒绝</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+
+      <!-- 全部成员 -->
       <el-tab-pane label="全部成员" name="approved">
         <div class="toolbar">
           <el-input
@@ -102,8 +151,14 @@
           </el-table-column>
           <el-table-column label="操作" width="160" fixed="right">
             <template #default="{ row }">
-              <el-button v-if="row.role !== 'teacher' && row.user_id !== ownerId" size="small" text type="primary" @click="openDetail(row)">查看学习情况</el-button>
-              <el-button v-if="row.user_id !== ownerId" size="small" text type="danger" @click="remove(row)">移除</el-button>
+              <el-button size="small" text type="primary" @click="openDetail(row)">查看学习情况</el-button>
+              <el-button
+                size="small"
+                text
+                type="danger"
+                :disabled="row.user_id === ownerId"
+                @click="remove(row)"
+              >移除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -118,56 +173,7 @@
           @current-change="onPageChange"
         />
       </el-tab-pane>
-    <!-- 待审核申请 -->
-      <el-tab-pane name="pending">
-        <template #label>
-          <span class="tab-label">
-            待审核申请
-            <el-badge v-if="stats.pending > 0" :value="stats.pending" type="danger" />
-          </span>
-        </template>
-
-        <el-table :data="pendingRows" v-loading="loading" size="small" empty-text="暂无待审核申请">
-          <el-table-column label="学生" min-width="150">
-            <template #default="{ row }">
-              <div class="member-cell">
-                <el-avatar :size="30" :src="row.avatar_url || undefined">
-                  {{ (row.name || '?').slice(0, 1) }}
-                </el-avatar>
-                <div class="member-name">
-                  <div>{{ row.name || row.username }}</div>
-                  <div class="member-sub">@{{ row.username }}</div>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="学号 / 工号" min-width="110">
-            <template #default="{ row }">{{ row.student_no || row.teacher_no || '—' }}</template>
-          </el-table-column>
-          <el-table-column label="学校" min-width="120">
-            <template #default="{ row }">{{ row.school || '—' }}</template>
-          </el-table-column>
-          <el-table-column label="申请时间" width="140">
-            <template #default="{ row }">{{ fmtTime(row.created_at) }}</template>
-          </el-table-column>
-          <el-table-column label="申请理由" min-width="150" show-overflow-tooltip>
-            <template #default="{ row }">{{ row.applied_reason || '—' }}</template>
-          </el-table-column>
-          <el-table-column label="来源" width="92">
-            <template #default="{ row }">
-              <el-tag size="small" effect="plain">{{ sourceText(row.join_source) }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="150" fixed="right">
-            <template #default="{ row }">
-              <el-button size="small" type="primary" @click="approve(row)">同意</el-button>
-              <el-button size="small" type="danger" plain @click="openReject(row)">拒绝</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-
-      </el-tabs>
+    </el-tabs>
 
     <!-- 拒绝理由 -->
     <el-dialog v-model="rejectVisible" title="拒绝申请" width="420px">
@@ -260,7 +266,7 @@ const emit = defineEmits(['refresh'])
 
 const store = useAppStore()
 
-const activeTab = ref('approved')
+const activeTab = ref('pending')
 const pendingRows = ref([])
 const memberRows = ref([])
 const stats = ref({})

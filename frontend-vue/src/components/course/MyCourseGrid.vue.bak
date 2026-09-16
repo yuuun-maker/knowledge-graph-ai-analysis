@@ -132,7 +132,6 @@
               <el-button size="small" @click="$emit('members', c)">学生管理</el-button>
               <el-button size="small" text @click="$emit('settings', c)">设置</el-button>
               <el-button v-if="c.is_owner !== false" size="small" type="danger" text @click="$emit('delete', c)">删除</el-button>
-              <el-button v-else size="small" text @click="$emit('leave', c)">退出</el-button>
             </template>
             <template v-else>
               <el-button size="small" type="primary" @click="$emit('enter', c)">
@@ -180,9 +179,8 @@
           <div class="row-stat"><b>{{ c.node_count ?? 0 }}</b><span>知识点</span></div>
           <div class="row-stat"><b>{{ c.member_count ?? 0 }}</b><span>成员</span></div>
         </div>
-        <div v-if="role !== 'teacher'" class="row-progress">
+        <div v-if="role !== 'teacher' && c.progress != null" class="row-progress">
           <el-progress
-            v-if="c.progress != null"
             type="circle"
             :percentage="Number(c.progress) || 0"
             :width="46"
@@ -213,7 +211,6 @@
             <el-button size="small" @click="$emit('members', c)">学生管理</el-button>
             <el-button size="small" text @click="$emit('settings', c)">设置</el-button>
             <el-button v-if="c.is_owner !== false" size="small" type="danger" text @click="$emit('delete', c)">删除</el-button>
-            <el-button v-else size="small" text @click="$emit('leave', c)">退出</el-button>
           </template>
           <template v-else>
             <el-button size="small" type="primary" @click="$emit('enter', c)">
@@ -584,7 +581,8 @@ async function copyText(text) {
 .course-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+  flex-wrap: wrap;
   padding: 12px 16px;
   background: #fff;
   border: 1px solid var(--border-light);
@@ -611,8 +609,8 @@ async function copyText(text) {
 }
 .row-cover img { width: 100%; height: 100%; object-fit: cover; }
 .row-main {
-  flex: 1 1 auto;
-  min-width: 0;
+  flex: 1;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -633,8 +631,8 @@ async function copyText(text) {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.row-stats { display: flex; flex: 0 0 216px; gap: 0; }
-.row-stat { flex: 1 1 0; text-align: center; min-width: 0; }
+.row-stats { display: flex; gap: 18px; flex-shrink: 0; }
+.row-stat { text-align: center; min-width: 44px; }
 .row-stat b {
   display: block;
   font-size: 16px;
@@ -643,13 +641,13 @@ async function copyText(text) {
   line-height: 1.1;
 }
 .row-stat span { font-size: 11px; color: var(--text-muted); }
-.row-progress { flex: 0 0 56px; display: flex; align-items: center; justify-content: center; }
+.row-progress { flex-shrink: 0; }
 .row-extra {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 6px;
-  flex: 0 0 140px;
+  flex-shrink: 0;
 }
 .row-time { font-size: 11px; color: var(--text-muted); }
 .row-joincode {
@@ -670,12 +668,10 @@ async function copyText(text) {
 }
 .row-actions {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 6px;
-  flex: 0 0 auto;
-  min-width: 236px;
+  flex-shrink: 0;
   justify-content: flex-end;
 }
-.row-actions .is-hidden { visibility: hidden; pointer-events: none; }
 .row-actions :deep(.el-button + .el-button) { margin-left: 0; }
 </style>

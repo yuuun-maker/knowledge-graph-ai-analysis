@@ -110,13 +110,15 @@ class CourseService:
             course_ids=course_ids, exclude_course_ids=exclude_course_ids,
         )
 
-        # 可管理该课程 => 可以看加课码
+        # 可管理该课程 => 可以看加课码；同时记录当前用户成员关系，供前端区分主讲/协作教师
         manageable = set()
+        membership_map = {}
         if viewer:
             for c in rows:
                 if c["teacher_id"] == viewer["user_id"]:
                     manageable.add(c["course_id"])
             for m in sql_db.list_memberships_by_user(viewer["user_id"]):
+                membership_map[m["course_id"]] = m
                 if m["role"] == "teacher" and m["status"] == "approved":
                     manageable.add(m["course_id"])
 
@@ -162,6 +164,13 @@ class CourseService:
             if cid in manageable:
                 item["join_code"] = r.get("join_code")
             item.update(_member_summary(member_counts.get(cid)))
+            if viewer:
+                # 与 list_my_courses 同一套约定：创建者即使没有成员行也算教师
+                is_owner = r["teacher_id"] == viewer["user_id"]
+                m = membership_map.get(cid) or {}
+                item["is_owner"] = is_owner
+                item["my_role"] = m.get("role") or ("teacher" if is_owner else None)
+                item["my_status"] = m.get("status") or ("approved" if is_owner else None)
             items.append(item)
 
         return {"ok": True, "code": 0, "message": "success",

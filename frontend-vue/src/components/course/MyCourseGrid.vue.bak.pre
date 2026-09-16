@@ -132,7 +132,6 @@
               <el-button size="small" @click="$emit('members', c)">学生管理</el-button>
               <el-button size="small" text @click="$emit('settings', c)">设置</el-button>
               <el-button v-if="c.is_owner !== false" size="small" type="danger" text @click="$emit('delete', c)">删除</el-button>
-              <el-button v-else size="small" text @click="$emit('leave', c)">退出</el-button>
             </template>
             <template v-else>
               <el-button size="small" type="primary" @click="$emit('enter', c)">
@@ -212,8 +211,7 @@
             <el-button size="small" type="primary" @click="$emit('enter', c)">进入课程</el-button>
             <el-button size="small" @click="$emit('members', c)">学生管理</el-button>
             <el-button size="small" text @click="$emit('settings', c)">设置</el-button>
-            <el-button v-if="c.is_owner !== false" size="small" type="danger" text @click="$emit('delete', c)">删除</el-button>
-            <el-button v-else size="small" text @click="$emit('leave', c)">退出</el-button>
+            <el-button :class="{ 'is-hidden': c.is_owner === false }" size="small" type="danger" text @click="$emit('delete', c)">删除</el-button>
           </template>
           <template v-else>
             <el-button size="small" type="primary" @click="$emit('enter', c)">

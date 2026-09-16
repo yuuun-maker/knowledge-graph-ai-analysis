@@ -249,7 +249,7 @@
           </div>
 
           <el-card class="page-card">
-            <CourseMembersPanel :course-id="currentCourseId" @refresh="reloadCoursesSilently" />
+            <CourseMembersPanel :course-id="currentCourseId" :teacher-id="currentCourse?.teacher_id" @refresh="reloadCoursesSilently" />
           </el-card>
         </template>
       </el-tab-pane>

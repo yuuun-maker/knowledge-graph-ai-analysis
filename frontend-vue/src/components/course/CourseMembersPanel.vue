@@ -103,7 +103,7 @@
           <el-table-column label="操作" width="160" fixed="right">
             <template #default="{ row }">
               <el-button v-if="row.role !== 'teacher' && row.user_id !== ownerId" size="small" text type="primary" @click="openDetail(row)">查看学习情况</el-button>
-              <el-button v-if="row.user_id !== ownerId" size="small" text type="danger" @click="remove(row)">移除</el-button>
+              <el-button v-if="row.user_id !== ownerId && row.user_id !== selfId" size="small" text type="danger" @click="remove(row)">移除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -255,6 +255,9 @@ import { useAppStore } from '../../stores/app'
 
 const props = defineProps({
   courseId: { type: [String, Number], required: true },
+  // 课程创建者 id（后端下发的 teacher_id）。「主讲」判定必须用它；
+  // 不传时回退为当前登录用户，仅兼容旧调用方。
+  teacherId: { type: [String, Number], default: null },
 })
 const emit = defineEmits(['refresh'])
 
@@ -277,7 +280,13 @@ const detailVisible = ref(false)
 const current = ref(null)
 const acting = ref(false)
 
-const ownerId = computed(() => store.user?.user_id)
+// 「主讲」必须按课程创建者（teacher_id）判定，而不是当前登录用户：
+// 否则协作教师（如 admin 之于数据结构课程）打开面板时会把自己显示成主讲、
+// 把真正的创建者显示成协作教师——角色恰好搞反。
+const ownerId = computed(() => props.teacherId ?? store.user?.user_id)
+// 当前登录用户 id：任何人（含协作教师）都不能移除自己——自己的行不显示「移除」按钮；
+// 主讲移除协作教师（撤销误邀请）的场景不受影响，因为那一行不是「自己」。
+const selfId = computed(() => store.user?.user_id)
 
 const progressColor = [
   { color: '#f56c6c', percentage: 30 },

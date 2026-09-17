@@ -18,6 +18,9 @@ import json
 
 from ..core.database import db
 from ..core.sql_database import sql_db
+from .question_recommender import (
+    QuestionRecommender, VALID_MODES as VALID_RECOMMEND_MODES,
+)
 
 # 题型（Scope A：仅三型客观题，全部可自动判分）
 VALID_TYPES = ("SINGLE", "MULTI", "JUDGE")
@@ -259,6 +262,40 @@ def _check_document(course_id: int, document_id):
     return did, None
 
 
+def _check_kp_exists(course_id: int, kp_id: str) -> tuple:
+    """校验 kp_id 是否存在于该课程的图谱中，返回 (ok, error_dict, checked)。
+
+    为什么是「课程级」校验（不带 document_id）：教师端的「关联知识点」下拉是
+    **聚合该课程全部文档**的图谱节点（见 TeacherView.loadQuestionKpOptions），
+    因此题目挂在哪个文档与知识点属于哪个文档允许不一致（课程通用题尤其如此）。
+
+    三种结果：
+    - kp_id 为空 → (True, None, True)：题目允许不挂知识点；
+    - 图谱可用但查无此点 → (False, 4002, True)：拦住悬空 kp_id
+      （手输/复制了别的课程的 id、或图谱重建后旧 id 失效）；
+    - 图谱不可用（连接异常等）→ (True, None, False)：**放行**并标记未真正校验，
+      避免图库宕机时教师完全无法建题（返回值里 checked=False 会透出给前端）。
+    """
+    kp_id = (kp_id or "").strip()
+    if not kp_id:
+        return True, None, True
+    try:
+        recs = db.query(
+            "MATCH (n:KnowledgePoint {course_id: $cid, kp_id: $kp_id}) RETURN n.kp_id AS kp_id",
+            {"cid": course_id, "kp_id": kp_id},
+        )
+    except Exception:
+        return True, None, False
+
+    if not recs:
+        return False, {
+            "ok": False, "code": 4002,
+            "message": (f"知识点不存在：course_id={course_id}, kp_id={kp_id}"
+                        "（请从「关联知识点」下拉中选择本课程图谱中的知识点）"),
+        }, True
+    return True, None, True
+
+
 def _teacher_view(question: dict, stats: dict = None, favorite_count: int = 0) -> dict:
     """教师视角：在库行基础上补充解析后的 options/answer 与作答统计（学生接口绝不复用本函数）"""
     data = dict(question)
@@ -297,6 +334,11 @@ class QuestionService:
         if err:
             return err
 
+        # kp_id 完整性校验（图谱可用时拦住悬空知识点；图库不可用时放行并标记 kp_checked=False）
+        ok_kp, kp_err, kp_checked = _check_kp_exists(course_id, normalized["kp_id"])
+        if not ok_kp:
+            return kp_err
+
         question_id = sql_db.create_question(
             course_id=course_id, document_id=did, kp_id=normalized["kp_id"],
             q_type=normalized["q_type"], stem=normalized["stem"],
@@ -309,12 +351,17 @@ class QuestionService:
             "course_id": course_id,
             "document_id": did,
             "created": True,
+            "kp_checked": kp_checked,
             "question": _teacher_view(sql_db.get_question(question_id)),
         }}
 
     @staticmethod
     def update_question(user_id: int, question_id: int, payload: dict) -> dict:
-        """修改题目：未传的字段沿用原值（支持只改解析、只改难度等局部编辑）"""
+        """修改题目：未传的字段沿用原值（支持只改解析、只改难度等局部编辑）。
+
+        与 document_id 同一套「清空」语义：**显式传 kp_id=null 表示解除知识点关联**
+        （前端表单就是这么发的），未传该键才保持原值。
+        """
         question, err = _question_for_teacher(question_id, user_id)
         if err:
             return err
@@ -330,8 +377,8 @@ class QuestionService:
                         else question.get("analysis"),
             "difficulty": payload.get("difficulty") if payload.get("difficulty") is not None
                           else question.get("difficulty", 3),
-            "kp_id": payload.get("kp_id") if payload.get("kp_id") is not None
-                     else question.get("kp_id"),
+            # kp_id 可空：只有「传了该键」才改（含显式 null = 清空关联）
+            "kp_id": payload.get("kp_id") if "kp_id" in payload else question.get("kp_id"),
         }
         if "document_id" in payload:
             merged["document_id"] = payload.get("document_id")
@@ -348,6 +395,15 @@ class QuestionService:
             # document_id 的「清空」语义用独立方法表达（update_question 对 None = 不修改）
             sql_db.set_question_document(question_id, did)
 
+        # kp_id 完整性校验：只在校验「本次显式传入 kp_id」时执行——
+        # 历史数据里可能已有悬空 kp_id，教师仅改解析/难度时不应被拦住；
+        # 显式传 null（清空关联）也不校验。
+        kp_checked = True
+        if payload.get("kp_id") is not None:
+            ok_kp, kp_err, kp_checked = _check_kp_exists(question["course_id"], normalized["kp_id"])
+            if not ok_kp:
+                return kp_err
+
         sql_db.update_question(
             question_id,
             q_type=normalized["q_type"],
@@ -361,6 +417,7 @@ class QuestionService:
         return {"ok": True, "code": 0, "message": "success", "data": {
             "question_id": question_id,
             "updated": True,
+            "kp_checked": kp_checked,
             "question": _teacher_view(sql_db.get_question(question_id)),
         }}
 
@@ -483,6 +540,94 @@ class QuestionService:
         }}
 
     @staticmethod
+    def coverage(user_id: int, course_id: int, document_id=None) -> dict:
+        """知识点题目覆盖率：无题知识点清单 + 悬空 kp_id（教师「该补哪些题」的指引）。
+
+        作用域：course_id 必填；传 document_id 时只统计「该文档题目 + 课程通用题」
+        （与出题/列表口径一致），知识点侧按该文档过滤（图谱按 course+document 隔离）。
+
+        统计口径与价值：
+        - 只数**启用中**的题目（停用的题出不出来，等同于没有题）；
+        - `unmatched`：本作用域内还没有任何启用题的知识点 → 教师补题清单；
+        - `dangling`：题目引用了「本课程图谱中已不存在」的 kp_id（图谱重建/跨课程复制导致）
+          → 这类题在「按知识点出题」里永远选不到，需要教师修正；
+        - `unlinked_question_count`：压根没挂知识点的题目数。
+
+        图谱不可用时降级（`graph_available=False`）：仍返回 SQLite 能算出的题量统计，
+        但给不出"无题知识点 / 悬空 kp_id"（两者都需要图谱），不整页报错。
+        """
+        _, err = _course_for_teacher(course_id, user_id)
+        if err:
+            return err
+
+        did = None
+        if document_id not in (None, "", 0, "0"):
+            did, err = _check_document(course_id, document_id)
+            if err:
+                return err
+
+        q_by_kp, unlinked = sql_db.count_questions_grouped_by_kp(
+            course_id, document_id=did, only_active=True,
+        )
+
+        graph_available, kps = True, []
+        try:
+            cypher = ("MATCH (n:KnowledgePoint {course_id: $cid"
+                      + (", document_id: $did" if did is not None else "") + "}) "
+                      "RETURN n.kp_id AS kp_id, n.name AS name, n.category AS category, "
+                      "       n.document_id AS document_id")
+            params = {"cid": course_id}
+            if did is not None:
+                params["did"] = did
+            kps = db.query(cypher, params)
+        except Exception:
+            graph_available = False
+
+        items, unmatched = [], []
+        for kp in kps:
+            kp_id = kp.get("kp_id")
+            count = q_by_kp.get(kp_id, 0)
+            item = {
+                "kp_id": kp_id,
+                "name": kp.get("name") or kp_id,
+                "category": kp.get("category") or "",
+                "document_id": kp.get("document_id"),
+                "question_count": count,
+                "covered": count > 0,
+            }
+            items.append(item)
+            if count == 0:
+                unmatched.append(item)
+        unmatched.sort(key=lambda x: (x["category"], x["name"]))
+
+        dangling = []
+        if graph_available:
+            known_ids = {kp.get("kp_id") for kp in kps}
+            dangling = [
+                {"kp_id": kp_id, "question_count": cnt}
+                for kp_id, cnt in sorted(q_by_kp.items(), key=lambda x: -x[1])
+                if kp_id not in known_ids
+            ]
+
+        total_kp = len(kps)
+        covered_kp = total_kp - len(unmatched)
+        return {"ok": True, "code": 0, "message": "success", "data": {
+            "course_id": course_id,
+            "document_id": did,
+            "graph_available": graph_available,
+            "total_kp": total_kp,
+            "kp_with_question": covered_kp,
+            "kp_without_question": len(unmatched),
+            "coverage_rate": round(covered_kp / total_kp * 100, 1) if total_kp else 0.0,
+            "question_count": sum(q_by_kp.values()),
+            "unlinked_question_count": unlinked,
+            "dangling_count": len(dangling),
+            "dangling": dangling[:50],
+            "unmatched": unmatched,
+            "items": items,
+        }}
+
+    @staticmethod
     def favorites(user_id: int, course_id: int, question_id: int = None) -> dict:
         """题目收藏情况：哪些学生收藏了哪道题（教师端「查看题目收藏情况」）"""
         _, err = _course_for_teacher(course_id, user_id)
@@ -551,6 +696,80 @@ class PracticeService:
             "count": len(items),
             "total_in_bank": sql_db.count_questions_by_course(course_id),
             "items": items,
+        }}
+
+    @staticmethod
+    def recommend_questions(user_id: int, course_id: int, document_id=None, kp_id: str = None,
+                            q_type: str = None, count: int = 10, mode: str = "mixed",
+                            seed: int = None) -> dict:
+        """智能推荐出题：按 8 个信号选卷（薄弱度 / 遗忘到期 / 难度适配 / 新颖度 /
+        最近答错 / 图谱重要性 / 题目区分度 / 知识点与题型配额）。
+
+        - 与 `get_questions` 同一套作用域与**防泄题纪律**：返回体走 `_public_view()` 白名单投影；
+        - 每题附带 `reason`（推荐理由）与 `bucket`（分层：薄弱强化/复习巩固/路径新知识/进阶提升），
+          前端可直接展示"为什么推这题"；
+        - 推荐过程若异常，**降级为随机出题**（meta.degraded=True），保证学生端不至于点不动。
+        """
+        course = sql_db.get_course(course_id)
+        if course is None:
+            return {"ok": False, "code": 2001, "message": f"课程不存在: course_id={course_id}"}
+
+        did = None
+        if document_id not in (None, "", 0, "0"):
+            try:
+                did = int(document_id)
+            except (TypeError, ValueError):
+                return {"ok": False, "code": 4001, "message": "参数错误：document_id 必须为整数"}
+
+        try:
+            count = int(count or 10)
+        except (TypeError, ValueError):
+            count = 10
+        count = min(max(1, count), 50)
+
+        mode = (mode or "mixed").strip().lower()
+        if mode not in VALID_RECOMMEND_MODES:
+            return {"ok": False, "code": 4001,
+                    "message": f"参数错误：mode 取值应为 {sorted(VALID_RECOMMEND_MODES)}"}
+
+        degraded = False
+        try:
+            result = QuestionRecommender.recommend(
+                user_id, course_id, document_id=did, kp_id=kp_id, q_type=q_type,
+                count=count, mode=mode, seed=seed,
+            )
+        except Exception:
+            degraded = True
+            result = {
+                "items": [{"row": r} for r in sql_db.list_practice_questions(
+                    course_id, document_id=did, kp_id=(kp_id or "").strip() or None,
+                    q_type=(q_type or "").strip().upper() or None, limit=count)],
+                "meta": {"mode": mode, "buckets": {}, "mastery_available": False,
+                         "graph_available": False},
+            }
+
+        fav_ids = sql_db.list_question_favorite_ids(user_id, course_id)
+        items = []
+        for it in result["items"]:
+            view = _public_view(it["row"], it["row"]["question_id"] in fav_ids)
+            view.update({
+                "reason": it.get("reason"),
+                "bucket": it.get("bucket"),
+                "bucket_label": it.get("bucket_label"),
+                "kp_name": it.get("kp_name"),
+                "mastery": it.get("mastery"),
+                "attempts": it.get("attempts"),
+                "score": it.get("score"),
+            })
+            items.append(view)
+
+        meta = dict(result.get("meta") or {})
+        meta.update({"count": len(items), "degraded": degraded,
+                     "total_in_bank": sql_db.count_questions_by_course(course_id),
+                     "requested": count})
+        return {"ok": True, "code": 0, "message": "success", "data": {
+            "course_id": course_id, "document_id": did, "count": len(items),
+            "total_in_bank": meta["total_in_bank"], "items": items, "meta": meta,
         }}
 
     @staticmethod

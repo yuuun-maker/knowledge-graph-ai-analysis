@@ -4,6 +4,7 @@
 - POST   /api/v1/questions                        新增题目
 - GET    /api/v1/questions                        列表（分页 + 课程/文档/知识点/题型/关键词筛选）
 - GET    /api/v1/questions/stats                  题库总览
+- GET    /api/v1/questions/coverage               知识点题目覆盖率（无题知识点 / 悬空 kp_id）
 - GET    /api/v1/questions/favorites              题目收藏情况（哪些学生收藏了哪道题）
 - GET    /api/v1/questions/{question_id}          题目详情
 - PUT    /api/v1/questions/{question_id}          修改题目（未传字段沿用原值）
@@ -118,6 +119,25 @@ async def question_favorites(course_id: str = Query(..., description="课程 ID"
         return error(4001, "参数错误：course_id 必须为整数")
     qid = _coerce_int(question_id) if question_id not in (None, "") else None
     return _wrap(QuestionService.favorites(current_user["user_id"], cid, qid))
+
+
+@router.get("/coverage")
+async def question_coverage(
+    course_id: str = Query(..., description="课程 ID"),
+    document_id: str = Query(None, description="文档 ID（可选；含课程通用题）"),
+    current_user: dict = Depends(require_teacher),
+):
+    """知识点题目覆盖率：无题知识点清单 + 悬空 kp_id（教师补题指引）。
+
+    口径：只数启用中的题目；document_id 传入时统计「该文档题目 + 课程通用题」。
+    图谱不可用时返回 graph_available=False（仍给出题量统计），不整页报错。
+    """
+    cid = _coerce_int(course_id)
+    if cid is None:
+        return error(4001, "参数错误：course_id 必须为整数")
+    return _wrap(QuestionService.coverage(
+        current_user["user_id"], cid, document_id=document_id,
+    ))
 
 
 @router.get("/{question_id}")

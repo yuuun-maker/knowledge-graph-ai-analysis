@@ -674,7 +674,78 @@
             </div>
           </el-card>
 
-          <!-- 第二层：题目列表 -->
+          <!-- 第二层：知识点题目覆盖率（无题知识点 = 补题清单；点击可直接出题） -->
+          <el-card class="page-card">
+            <div class="chart-title-line">
+              <el-icon><Aim /></el-icon> 知识点题目覆盖率
+              <span class="class-note">（只统计启用中的题目；点击无题知识点可直接出题）</span>
+            </div>
+
+            <el-alert
+              v-if="questionCoverage && !questionCoverage.graph_available"
+              class="coverage-alert"
+              type="warning"
+              :closable="false"
+              show-icon
+              title="图谱不可用，暂时只能给出题量统计"
+              description="启动 Neo4j 后刷新，才能看到「无题知识点清单」与「悬空知识点」。"
+            />
+
+            <div v-loading="questionCoverageLoading" class="class-summary">
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionCoverage?.total_kp ?? 0 }}</div>
+                <div class="class-kpi-label">知识点总数</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionCoverage?.kp_with_question ?? 0 }}</div>
+                <div class="class-kpi-label">已有题知识点</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionCoverage?.kp_without_question ?? 0 }}</div>
+                <div class="class-kpi-label">无题知识点</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionCoverage?.coverage_rate ?? 0 }}%</div>
+                <div class="class-kpi-label">覆盖率</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionCoverage?.unlinked_question_count ?? 0 }}</div>
+                <div class="class-kpi-label">未挂知识点题</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionCoverage?.dangling_count ?? 0 }}</div>
+                <div class="class-kpi-label">悬空知识点</div>
+              </div>
+            </div>
+
+            <div v-if="questionCoverage?.dangling_count" class="coverage-warn">
+              <el-icon><WarningFilled /></el-icon>
+              <span>
+                有 {{ questionCoverage.dangling_count }} 个题目引用的知识点已不在本课程图谱中
+                （「按知识点出题」永远选不到这些题），建议重挂知识点：
+                <b>{{ danglingKpText }}</b>
+              </span>
+            </div>
+
+            <div v-if="questionCoverage?.unmatched?.length" class="coverage-list">
+              <div class="coverage-list-title">无题知识点（点击直接为它出题）：</div>
+              <el-tag
+                v-for="kp in questionCoverage.unmatched"
+                :key="kp.kp_id"
+                class="coverage-tag"
+                type="warning"
+                effect="plain"
+                @click="createQuestionForKp(kp)"
+              >
+                {{ kp.name }}
+              </el-tag>
+            </div>
+            <div v-else-if="questionCoverage?.graph_available" class="coverage-ok">
+              <el-icon><CircleCheckFilled /></el-icon> 本课程所有知识点都已有启用中的题目
+            </div>
+          </el-card>
+
+          <!-- 第三层：题目列表 -->
           <el-card class="page-card">
             <div class="chart-title-line"><el-icon><Files /></el-icon> 题目列表</div>
 
@@ -984,7 +1055,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   UploadFilled, Upload, View, EditPen, Refresh, FullScreen, Plus, Connection, ArrowRight, Search, SuccessFilled,
   Notebook, Document, Delete, DataAnalysis, Clock, User, UserFilled, Back, Files, FolderOpened,
-  Reading, Download, Promotion, Collection, Star,
+  Reading, Download, Promotion, Collection, Star, Aim, WarningFilled, CircleCheckFilled,
 } from '@element-plus/icons-vue'
 import { api } from '../api'
 import { fetchDocumentBuffer } from '../utils/documentContent'
@@ -1926,6 +1997,14 @@ const questionPageSize = ref(10)
 const questionStats = ref(null)
 const questionDocFilter = ref('')
 const questionFilters = reactive({ q_type: '', keyword: '', is_active: '' })
+/** 知识点题目覆盖率（无题知识点 / 悬空 kp_id；图谱不可用时 graph_available=false） */
+const questionCoverage = ref(null)
+const questionCoverageLoading = ref(false)
+const danglingKpText = computed(() => {
+  const list = questionCoverage.value?.dangling || []
+  const names = list.slice(0, 5).map((d) => d.kp_id)
+  return names.join('、') + (list.length > 5 ? ` 等 ${list.length} 个` : '')
+})
 
 const questionFormVisible = ref(false)
 const questionFormLoading = ref(false)
@@ -2030,13 +2109,43 @@ async function loadQuestionStats() {
   }
 }
 
-/** 进入题库 Tab / 切换筛选时统一刷新（列表 + 总览 + 知识点下拉） */
+/** 知识点题目覆盖率：无题知识点清单 + 悬空 kp_id（图谱不可用时后端返回 graph_available=false） */
+async function loadQuestionCoverage() {
+  if (!currentCourseId.value) {
+    questionCoverage.value = null
+    return
+  }
+  questionCoverageLoading.value = true
+  try {
+    questionCoverage.value = await api.getQuestionCoverage(
+      currentCourseId.value,
+      questionDocFilter.value || undefined,
+    )
+  } catch (e) {
+    questionCoverage.value = null
+    ElMessage.warning(`覆盖率加载失败：${e.message}`)
+  } finally {
+    questionCoverageLoading.value = false
+  }
+}
+
+/** 覆盖率卡片里点击「无题知识点」→ 打开新增表单并预填该知识点（补题闭环） */
+function createQuestionForKp(kp) {
+  openQuestionForm(null)
+  questionForm.kp_id = kp?.kp_id || ''
+  if (kp?.document_id) questionForm.document_id = String(kp.document_id)
+  if (!questionKpOptions.value.some((n) => String(n.id) === String(questionForm.kp_id))) {
+    loadQuestionKpOptions()
+  }
+}
+
+/** 进入题库 Tab / 切换筛选时统一刷新（列表 + 总览 + 覆盖率 + 知识点下拉） */
 async function loadQuestionsTab() {
   questionPage.value = 1
   // 题库的「所属文档」下拉与知识点下拉都依赖文档列表；用户可能从未进过文档 Tab
   if (currentCourseId.value && !documents.value.length) loadDocuments()
   loadQuestionKpOptions()
-  await Promise.all([loadQuestions(), loadQuestionStats()])
+  await Promise.all([loadQuestions(), loadQuestionStats(), loadQuestionCoverage()])
 }
 
 /** 打开新增（row=null）或编辑表单：回填题型/选项/答案/文档/知识点 */
@@ -2594,6 +2703,49 @@ function isDocInFlight(doc) {
   color: #909399;
   margin-top: 4px;
 }
+
+/* ===== 知识点题目覆盖率 ===== */
+.coverage-alert {
+  margin-bottom: 12px;
+}
+.coverage-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fdf6ec;
+  border: 1px solid #f5dab1;
+  color: #b88230;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.coverage-warn b {
+  color: #a5691a;
+  word-break: break-all;
+}
+.coverage-list {
+  margin-top: 12px;
+}
+.coverage-list-title {
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #909399;
+}
+.coverage-tag {
+  margin: 0 8px 8px 0;
+  cursor: pointer;
+}
+.coverage-ok {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: #67c23a;
+  font-size: 13px;
+}
+
 .dist-chart {
   height: 220px;
 }

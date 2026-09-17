@@ -1138,30 +1138,33 @@ class SQLDatabase:
         作用域规则：传入 document_id 时默认同时包含「该文档题目」与「课程通用题
         （document_id IS NULL，即题目挂课程不挂具体文档）」；include_course_level=False
         时退化为精确匹配该文档（用于文档级清理/统计）。
+
+        注意：WHERE 条件里的列一律带 `q.` 前缀——`t_user` 也有 `is_active` 列，
+        裸写会报 `ambiguous column name: is_active`（教师端「启用状态」筛选曾因此报错）。
         """
-        where, params = ["course_id = ?"], [course_id]
+        where, params = ["q.course_id = ?"], [course_id]
         if document_id is not None:
             if include_course_level:
-                where.append("(document_id = ? OR document_id IS NULL)")
+                where.append("(q.document_id = ? OR q.document_id IS NULL)")
             else:
-                where.append("document_id = ?")
+                where.append("q.document_id = ?")
             params.append(document_id)
         if kp_id:
-            where.append("kp_id = ?")
+            where.append("q.kp_id = ?")
             params.append(kp_id)
         if q_type:
-            where.append("q_type = ?")
+            where.append("q.q_type = ?")
             params.append(q_type)
         if keyword:
-            where.append("stem LIKE ?")
+            where.append("q.stem LIKE ?")
             params.append(f"%{keyword}%")
         if is_active is not None:
-            where.append("is_active = ?")
+            where.append("q.is_active = ?")
             params.append(1 if is_active else 0)
         where_sql = "WHERE " + " AND ".join(where)
 
         total = self._query_one(
-            f"SELECT count(*) AS cnt FROM t_question {where_sql}", tuple(params),
+            f"SELECT count(*) AS cnt FROM t_question q {where_sql}", tuple(params),
         )["cnt"]
         rows = self._query(
             f"""
@@ -1379,6 +1382,40 @@ class SQLDatabase:
             "SELECT count(*) AS cnt FROM t_question WHERE course_id = ? AND document_id = ?",
             (course_id, document_id),
         )["cnt"]
+
+    def count_questions_grouped_by_kp(self, course_id: int, document_id=None,
+                                      include_course_level: bool = True,
+                                      only_active: bool = False):
+        """按知识点统计题目数，返回 (grouped, unlinked)。
+
+        - grouped：{kp_id: 题目数}，只含**挂了知识点**的题；
+        - unlinked：kp_id 为空（未挂知识点）的题目数。
+
+        作用域口径与 list_questions 一致：document_id 传入时默认含课程通用题
+        （document_id IS NULL）；only_active=True 时只数启用中的题（覆盖率报表用）。
+        """
+        where, params = ["course_id = ?"], [course_id]
+        if document_id is not None:
+            if include_course_level:
+                where.append("(document_id = ? OR document_id IS NULL)")
+            else:
+                where.append("document_id = ?")
+            params.append(document_id)
+        if only_active:
+            where.append("is_active = 1")
+
+        rows = self._query(
+            f"SELECT kp_id, count(*) AS c FROM t_question WHERE {' AND '.join(where)} "
+            f"GROUP BY kp_id",
+            tuple(params),
+        )
+        grouped, unlinked = {}, 0
+        for r in rows:
+            if r["kp_id"]:
+                grouped[r["kp_id"]] = r["c"]
+            else:
+                unlinked = r["c"]              # 唯一一行：kp_id IS NULL
+        return grouped, unlinked
 
     def question_answer_stats(self, course_id: int) -> dict:
         """按题统计作答人次与正确数，返回 {question_id: {"attempts": n, "correct": n}}"""

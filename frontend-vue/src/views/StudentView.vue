@@ -757,6 +757,10 @@
                 <el-option :value="20" label="20 题" />
               </el-select>
               <el-button type="primary" :icon="Opportunity" :loading="practiceLoading" @click="startPractice">开始练习</el-button>
+              <el-button :icon="MagicStick" :loading="practiceLoading" @click="startSmartPractice">智能推荐出题</el-button>
+              <el-select v-model="practiceMode" style="width: 130px" :disabled="practiceLoading">
+                <el-option v-for="m in PRACTICE_MODES" :key="m.value" :label="m.label" :value="m.value" />
+              </el-select>
               <el-button :icon="MagicStick" @click="practiceByRecommendation">按推荐知识点出题</el-button>
             </div>
             <div v-loading="practiceStatsLoading" class="practice-kpis">
@@ -785,6 +789,9 @@
               <template #label><span class="tab-label"><el-icon><EditPen /></el-icon>练习答题</span></template>
 
               <el-card class="page-card">
+                <div v-if="practiceRecommendHint" class="practice-reco-hint">
+                  <el-icon><DataAnalysis /></el-icon> {{ practiceRecommendHint }}
+                </div>
                 <el-empty
                   v-if="!practiceList.length && !practiceLoading"
                   description="还没有题目。请在上方设置出题条件后点击「开始练习」"
@@ -795,6 +802,17 @@
                   <div class="practice-head">
                     <el-tag size="small" effect="plain">{{ currentPracticeQuestion.q_type_label }}</el-tag>
                     <el-tag size="small" type="info" effect="plain">难度 {{ '★'.repeat(currentPracticeQuestion.difficulty || 0) }}</el-tag>
+                    <el-tag
+                      v-if="currentPracticeQuestion.bucket_label"
+                      size="small"
+                      type="warning"
+                      effect="plain"
+                    >智能推荐 · {{ currentPracticeQuestion.bucket_label }}</el-tag>
+                    <el-tag
+                      v-if="currentPracticeQuestion.kp_name"
+                      size="small"
+                      effect="plain"
+                    >{{ currentPracticeQuestion.kp_name }}</el-tag>
                     <span class="practice-progress">第 {{ practiceIndex + 1 }} / {{ practiceList.length }} 题</span>
                     <div class="practice-head-actions">
                       <el-button
@@ -804,6 +822,10 @@
                       >{{ isPracticeFavorited(currentPracticeQuestion) ? '已收藏' : '收藏' }}</el-button>
                       <el-button size="small" @click="viewPracticeKp(currentPracticeQuestion)">查看知识点</el-button>
                     </div>
+                  </div>
+
+                  <div v-if="currentPracticeQuestion.reason" class="practice-reason">
+                    <el-icon><MagicStick /></el-icon> {{ currentPracticeQuestion.reason }}
                   </div>
 
                   <div class="practice-stem">{{ currentPracticeQuestion.stem }}</div>
@@ -1758,6 +1780,31 @@ const practiceList = ref([])
 const practiceIndex = ref(0)
 const practiceLoading = ref(false)
 const practiceSubmitting = ref(false)
+/** 智能推荐（P2）：出题模式 + 最近一次的推荐元信息（分桶/掌握度证据/是否回填） */
+const PRACTICE_MODES = [
+  { value: 'mixed', label: '分层组卷' },
+  { value: 'weak', label: '薄弱强化' },
+  { value: 'review', label: '复习巩固' },
+  { value: 'new', label: '路径新知识' },
+  { value: 'advanced', label: '进阶提升' },
+  { value: 'random', label: '随机练习' },
+]
+const practiceMode = ref('mixed')
+const practiceRecommendMeta = ref(null)
+const practiceRecommendHint = computed(() => {
+  const meta = practiceRecommendMeta.value
+  if (!meta) return ''
+  const label = PRACTICE_MODES.find((m) => m.value === meta.mode)?.label || meta.mode
+  const buckets = Object.entries(meta.buckets || {})
+    .filter(([k, v]) => v > 0 && k !== 'quota_relaxed')
+    .map(([k, v]) => `${({ weak: '薄弱', review: '复习', new: '新知识', advanced: '进阶', filled: '回填', random: '随机' })[k] || k} ${v}`)
+    .join(' / ')
+  const parts = [`智能推荐（${label}）`, buckets && `构成：${buckets}`,
+    meta.mastery_available ? '依据：掌握度+作答历史' : '依据：证据不足（按摸底推荐）']
+  if (meta.bucket_empty) parts.push('该类型当前无题，已用其他类型回填')
+  if (!meta.graph_available) parts.push('图谱不可用（未纳入知识点重要性）')
+  return parts.filter(Boolean).join(' · ')
+})
 const practiceStats = ref(null)
 const practiceStatsLoading = ref(false)
 const practiceAnswers = reactive({})     // question_id -> 单选/判断为字符串，多选为数组
@@ -1833,16 +1880,8 @@ async function startPractice() {
       q_type: practiceQType.value || undefined,
       count: practiceCount.value,
     })
-    practiceList.value = data.items || []
-    practiceIndex.value = 0
-    // 清空上一组作答与判定，避免串题（v-model 绑定的是同一对象，必须显式清理）
-    Object.keys(practiceAnswers).forEach((k) => delete practiceAnswers[k])
-    Object.keys(practiceResults).forEach((k) => delete practiceResults[k])
-    practiceList.value.forEach((q) => {
-      practiceAnswers[q.question_id] = q.q_type === 'MULTI' ? [] : ''
-    })
-    practiceFavoriteIds.value = practiceList.value.filter((q) => q.is_favorited).map((q) => q.question_id)
-    practiceSubTab.value = 'doing'
+    applyPracticeQuestions(data.items || [])
+    practiceRecommendMeta.value = null          // 普通出题没有推荐元信息
     if (!practiceList.value.length) {
       ElMessage.info('该范围内暂无题目，请更换出题范围或联系教师添加题目')
     }
@@ -1851,6 +1890,48 @@ async function startPractice() {
   } finally {
     practiceLoading.value = false
   }
+}
+
+/** 智能推荐出题（P2）：按学情选卷（掌握度/遗忘/难度适配/错题/图谱重要性…） */
+async function startSmartPractice() {
+  if (!currentCourseId.value) {
+    ElMessage.warning('请先选择课程和学习资料')
+    return
+  }
+  practiceLoading.value = true
+  try {
+    const data = await api.recommendQuestions({
+      course_id: currentCourseId.value,
+      document_id: practiceScope.value === 'document' ? currentDocumentId.value : undefined,
+      kp_id: practiceKpId.value || undefined,
+      q_type: practiceQType.value || undefined,
+      count: practiceCount.value,
+      mode: practiceMode.value,
+    })
+    applyPracticeQuestions(data.items || [])
+    practiceRecommendMeta.value = data.meta || null
+    const label = PRACTICE_MODES.find((m) => m.value === practiceMode.value)?.label
+    if (data.count) ElMessage.success(`已按「${label}」推荐 ${data.count} 道题`)
+    else ElMessage.info('该范围内暂无可用题目')
+  } catch (e) {
+    ElMessage.error(`智能推荐失败：${e.message}`)
+  } finally {
+    practiceLoading.value = false
+  }
+}
+
+/** 把一批题目装载为当前练习（出题 / 智能推荐共用：清空上一组作答与判定，避免串题） */
+function applyPracticeQuestions(items) {
+  practiceList.value = items
+  practiceIndex.value = 0
+  Object.keys(practiceAnswers).forEach((k) => delete practiceAnswers[k])
+  Object.keys(practiceResults).forEach((k) => delete practiceResults[k])
+  practiceList.value.forEach((q) => {
+    practiceAnswers[q.question_id] = q.q_type === 'MULTI' ? [] : ''
+  })
+  practiceFavoriteIds.value = practiceList.value
+    .filter((q) => q.is_favorited).map((q) => q.question_id)
+  practiceSubTab.value = 'doing'
 }
 
 /** 按学习路径推荐的知识点出题（推荐 → 练题闭环） */
@@ -2028,6 +2109,7 @@ watch(ctxKey, (key) => {
     wrongList.value = []
     myQuestionFavs.value = []
     practiceFavoriteIds.value = []
+    practiceRecommendMeta.value = null
   }
 }, { immediate: true }) // 挂载时若已有持久化学习上下文（如课程中心往返/刷新），立即加载数据
 
@@ -3416,6 +3498,31 @@ function overviewAsk(q) {
   align-items: center;
   gap: 8px;
   margin-bottom: 14px;
+}
+/* 智能推荐（P2）：推荐理由与组卷说明 */
+.practice-reco-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #ecf5ff;
+  border: 1px solid #d9ecff;
+  color: #3a71c1;
+  font-size: 12px;
+}
+.practice-reason {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fdf6ec;
+  border: 1px solid #f5dab1;
+  color: #b88230;
+  font-size: 13px;
 }
 .practice-progress {
   color: #909399;

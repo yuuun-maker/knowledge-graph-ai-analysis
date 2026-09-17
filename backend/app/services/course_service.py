@@ -9,6 +9,7 @@ import os
 from ..core.codes import gen_join_code
 from ..core.database import db
 from ..core.sql_database import JOIN_MODES, sql_db
+from ..core.storage import resolve_document_path
 from .profile_service import ProfileService
 
 
@@ -364,9 +365,10 @@ class CourseService:
             return {"ok": False, "code": 2008, "message": "删除课程需二次确认（confirm=true）"}
 
         # 1. 删除文档文件（本地文件系统）
+        # 路径解析见 core/storage：历史行的 file_path 可能是其他机器的路径，需回退定位
         docs = sql_db.list_documents_by_course(course_id)
         for d in docs:
-            p = d.get("file_path")
+            p = resolve_document_path(d)
             if p and os.path.exists(p):
                 try:
                     os.remove(p)

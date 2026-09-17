@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test'
 
-/** 被测站点地址：优先用环境变量，默认指向 vite dev server */
-export const BASE = process.env.KGU_BASE || 'http://localhost:5174'
+/** 被测站点地址：优先用环境变量，默认指向 vite dev server（端口见 vite.config.js） */
+export const BASE = process.env.KGU_BASE || 'http://localhost:5173'
 
 /** 本轮测试创建的数据统一带该前缀，便于识别与清理 */
 export const RUN = process.env.KGU_RUN || String(Date.now()).slice(-6)
@@ -27,35 +27,32 @@ async function tokenOrFail(page: Page) {
  * 幂等的「确保已登录」：先按已有账号登录，失败再注册。
  * 同一 spec 里多个用例共用同一账号，因此必须可重复调用。
  *
- * 注意：Element Plus 的 el-tabs 会把两个 pane 都渲染进 DOM，
- * 登录与注册表单的占位符相同，必须用 pane 容器（#pane-login / #pane-register）限定作用域。
+ * 注意：登录与注册现在是两个独立路由（/login、/register），不再是同一页的 el-tabs，
+ * 因此各自 goto 到对应页面即可，无需再用 pane 容器限定作用域。
  */
 export async function registerAndLogin(page: Page, username: string, role: 'teacher' | 'student') {
   await page.goto(`${BASE}/login`)
 
   // 1) 先试登录（账号通常已存在）
-  const loginPane = page.locator('#pane-login')
-  await loginPane.getByPlaceholder('请输入用户名').fill(username)
-  await loginPane.getByPlaceholder('请输入密码').fill(PASSWORD)
-  await loginPane.getByRole('button', { name: '登 录' }).click()
+  await page.getByPlaceholder('请输入用户名').fill(username)
+  await page.getByPlaceholder('请输入密码').fill(PASSWORD)
+  await page.getByRole('button', { name: '登 录' }).click()
   if (await waitForCenter(page, 10000)) return tokenOrFail(page)
 
-  // 2) 登录失败 → 注册（注册成功会直接进课程中心）
-  await page.getByRole('tab', { name: '注册' }).click()
-  const reg = page.locator('#pane-register')
-  await reg.getByPlaceholder('请输入用户名').fill(username)
-  await reg.getByPlaceholder('至少 6 位').fill(PASSWORD)
-  await reg.getByPlaceholder('再次输入密码').fill(PASSWORD)
-  await clickRadio(reg, role === 'teacher' ? '教师' : '学生')
-  await reg.getByRole('button', { name: '注册并登录' }).click()
+  // 2) 登录失败 → 去注册页注册（注册成功会自动登录并进入课程中心）
+  await page.goto(`${BASE}/register`)
+  await page.getByPlaceholder('请输入用户名').fill(username)
+  await page.getByPlaceholder('至少 6 位').fill(PASSWORD)
+  await page.getByPlaceholder('再次输入密码').fill(PASSWORD)
+  await clickRadio(page, role === 'teacher' ? '教师' : '学生')
+  await page.getByRole('button', { name: '注 册' }).click()
   if (await waitForCenter(page, 25000)) return tokenOrFail(page)
 
   // 3) 注册也失败（例如并发下已被创建）→ 回落再登录一次
   await page.goto(`${BASE}/login`)
-  const retry = page.locator('#pane-login')
-  await retry.getByPlaceholder('请输入用户名').fill(username)
-  await retry.getByPlaceholder('请输入密码').fill(PASSWORD)
-  await retry.getByRole('button', { name: '登 录' }).click()
+  await page.getByPlaceholder('请输入用户名').fill(username)
+  await page.getByPlaceholder('请输入密码').fill(PASSWORD)
+  await page.getByRole('button', { name: '登 录' }).click()
   await page.waitForURL(/course-center/, { timeout: 25000 })
   return tokenOrFail(page)
 }
@@ -63,10 +60,9 @@ export async function registerAndLogin(page: Page, username: string, role: 'teac
 /** 用已存在的账号登录，返回 access_token */
 export async function login(page: Page, username: string, password: string) {
   await page.goto(`${BASE}/login`)
-  const pane = page.locator('#pane-login')
-  await pane.getByPlaceholder('请输入用户名').fill(username)
-  await pane.getByPlaceholder('请输入密码').fill(password)
-  await pane.getByRole('button', { name: '登 录' }).click()
+  await page.getByPlaceholder('请输入用户名').fill(username)
+  await page.getByPlaceholder('请输入密码').fill(password)
+  await page.getByRole('button', { name: '登 录' }).click()
   await page.waitForURL(/course-center/, { timeout: 25000 })
   return tokenOrFail(page)
 }

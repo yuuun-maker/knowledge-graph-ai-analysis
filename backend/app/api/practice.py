@@ -2,6 +2,7 @@
 学生端做题练习 API
 
 - GET    /api/v1/practice/questions              出题（**不含答案**，提交后才下发）
+- POST   /api/v1/practice/recommend              智能推荐出题（按学情选卷，**同样不含答案**）
 - POST   /api/v1/practice/submit                 提交作答（服务端判分 + 落答题记录）
 - GET    /api/v1/practice/records                我的答题记录（only_wrong=true 即错题原始记录）
 - GET    /api/v1/practice/wrong-book             错题本（每题最近一次错误 + 关联知识点）
@@ -38,6 +39,17 @@ class SubmitRequest(BaseModel):
     user_answer: object = None     # 单选/判断：字符串；多选：数组；未作答可传 null
 
 
+class RecommendRequest(BaseModel):
+    """智能推荐出题入参（mode 见 services/question_recommender.py 模块文档）"""
+    course_id: str
+    document_id: str | None = None
+    kp_id: str | None = None
+    q_type: str | None = None
+    count: int = 10
+    mode: str = "mixed"            # weak/review/new/advanced/mixed/random
+    seed: int | None = None        # 固定随机种子（便于复现与 A/B）
+
+
 class QuestionFavoriteRequest(BaseModel):
     course_id: str
     question_id: int
@@ -59,6 +71,23 @@ async def practice_questions(
     return _wrap(PracticeService.get_questions(
         current_user["user_id"], cid, document_id=document_id,
         kp_id=kp_id, q_type=q_type, count=count,
+    ))
+
+
+@router.post("/recommend")
+async def recommend_questions(body: RecommendRequest,
+                              current_user: dict = Depends(get_current_user)):
+    """智能推荐出题：按学情（掌握度/遗忘/难度适配/错题…）选卷。
+
+    与 `/questions` 同一套防泄题纪律：返回体**不含 answer/analysis**，提交后才下发答案与解析。
+    每题附带 `reason`（推荐理由）与 `bucket`（薄弱强化/复习巩固/路径新知识/进阶提升）。
+    """
+    cid = _coerce_int(body.course_id)
+    if cid is None:
+        return error(4001, "参数错误：course_id 必须为整数")
+    return _wrap(PracticeService.recommend_questions(
+        current_user["user_id"], cid, document_id=body.document_id, kp_id=body.kp_id,
+        q_type=body.q_type, count=body.count, mode=body.mode, seed=body.seed,
     ))
 
 

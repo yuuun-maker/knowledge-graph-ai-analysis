@@ -4,6 +4,7 @@
 检索链路：问题 embedding → 与课程知识点向量做余弦相似度 → top_k 上下文 → LLM 生成。
 未配置 embedding key 或向量检索失败时，自动退回关键词检索（保证功能可用）。
 """
+import logging
 import math
 from typing import List
 
@@ -13,6 +14,8 @@ from ..core.config import settings
 from ..core.database import db
 from ..core.sql_database import sql_db
 from .embedding import EmbeddingClient, KnowledgeEmbedder
+
+_logger = logging.getLogger(__name__)
 
 
 QA_SYSTEM_PROMPT = """你是一个课程学习助手。请基于提供的课程知识图谱内容回答学生的问题。
@@ -104,8 +107,12 @@ class QAService:
             if not rows:
                 return []
             q_vec = self.embedder.embed([question])[0]
-        except Exception:
-            return []  # embedding 不可用（未配置 key / 网络异常等），退回关键词
+        except Exception as e:
+            # embedding 不可用（未配置 key / 网络异常等）退回关键词检索。
+            # 这里必须留下日志：静默吞掉会让「向量检索整条失效」伪装成「知识库为空」，
+            # 排查时无从下手。
+            _logger.warning("向量检索不可用，本次退回关键词检索: %s", e, exc_info=True)
+            return []
 
         ranked = sorted(rows, key=lambda r: -_cosine(q_vec, r["embedding"]))[:top_k]
 

@@ -147,8 +147,9 @@
       </el-main>
     </el-container>
 
-    <!-- 全局 AI 助手（仅学生端；教师端不显示。课程上下文由 AIChatWidget 从 store.learningContext 读取） -->
-    <AIChatWidget v-if="store.isLoggedIn && !store.isTeacher" />
+    <!-- 全局 AI 助手（教师 / 学生共用；课程上下文由 AIChatWidget 从 store.learningContext 读取，
+         教师端的选中态由 TeacherView 同步写入） -->
+    <AIChatWidget v-if="store.isLoggedIn" />
   </el-container>
 </template>
 

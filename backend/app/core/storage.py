@@ -1,7 +1,8 @@
 """上传文件路径解析（t_document.file_path 的只读场景共用）。
 
-背景：file_path 是上传时写入的绝对路径，而 app.db 与 data/uploads/ 随仓库在多台机器
-间流转，历史行里存在三种形态：
+背景：file_path 是上传时写入的绝对路径。app.db 与 data/uploads/ 都曾在 git 跟踪下
+随仓库在多台机器间流转（app.db 已移出跟踪，见 .gitignore；uploads 的历史文件仍在），
+历史行里因此存在三种形态：
 
   1. 本机绝对路径（上传时正常写入的形态）
   2. 相对 backend/ 的路径（如 ./data/uploads/5/x.pdf）

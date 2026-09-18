@@ -52,13 +52,31 @@ class KnowledgeEmbedder:
     def __init__(self):
         self.embedding = EmbeddingClient()
 
+    @staticmethod
+    def _current_kp_ids(course_id, document_id) -> set:
+        """该文档当前在 Neo4j 里的 kp_id 集合（向量索引的新鲜度基准）"""
+        recs = db.query(
+            "MATCH (n:KnowledgePoint {course_id: $cid, document_id: $did}) "
+            "RETURN n.kp_id AS kp_id",
+            {"cid": course_id, "did": document_id},
+        )
+        return {r["kp_id"] for r in recs if r.get("kp_id")}
+
     def ensure_index(self, course_id, document_id) -> int:
-        """确保文档知识点向量已构建；缺失时现场构建，返回向量条数"""
+        """确保文档知识点向量与图谱一致；不一致时重建，返回向量条数。
+
+        「有向量就跳过」是错的：重新抽取会让 kp_id 全部更换，教师增删改节点也会
+        改变知识点集合，此时旧向量全部指向已不存在的节点 —— 向量检索会一直返回空，
+        而因为表里「非空」，索引永远不会重建。故改为比对 kp_id 集合是否一致。
+        """
         if course_id is None or document_id is None:
             return 0
-        existing = sql_db.get_embeddings_by_document(course_id, document_id)
-        if existing:
-            return len(existing)
+        current = self._current_kp_ids(course_id, document_id)
+        if not current:
+            return 0  # 图谱为空（节点尚未抽取），交给关键词检索兜底
+        stored = {r["kp_id"] for r in sql_db.get_embeddings_by_document(course_id, document_id)}
+        if stored == current:
+            return len(stored)
         return self.build_index(course_id, document_id)
 
     def build_index(self, course_id, document_id) -> int:
@@ -71,6 +89,9 @@ class KnowledgeEmbedder:
             "n.description AS description",
             {"cid": course_id, "did": document_id},
         )
+        # 重建前先清空该文档的旧向量：kp_id 已变的过期行若留着，
+        # 上面的 kp_id 集合比对会永远判定「不一致」，每次提问都重复重建
+        sql_db.delete_embeddings_by_document(course_id, document_id)
         if not recs:
             return 0
         texts = [

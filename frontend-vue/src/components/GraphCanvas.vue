@@ -929,20 +929,33 @@ function centerOnSearch() {
   color: #fff;
 }
 
-/* 筛选 / 聚焦控制（右上，轻量悬浮工具条：白底半透明 + 轻描边 + 小圆角 + 微弱阴影） */
+/* 筛选 / 聚焦控制（右上，轻量悬浮工具条：白底半透明 + 轻描边 + 小圆角 + 微弱阴影）
+   竖排而非横排：编辑模式下图谱只占中间一栏（sm=13），横排时整条会向左伸出约 300px，
+   压到顶部居中的视图切换条（.layout-switch，z-index 更高，表现为被盖住）。
+   竖排后宽度收敛到最宽按钮的宽度（约 100px），两者互不干涉。
+   顺序即 DOM 顺序：筛选在上、只看前置知识在下。 */
 .graph-controls {
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
   z-index: 10;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--space-1);
   padding: var(--space-1);
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
+}
+/* 列内按钮等宽：stretch 让每个按钮撑满列宽（列宽 = 最宽按钮），
+   width/margin 覆盖 Element 的默认值——相邻按钮的 margin-left 在竖排下会顶出列外 */
+.graph-controls :deep(.el-button) {
+  width: 100%;
+  margin: 0;
+  justify-content: center;
+  white-space: nowrap;
 }
 .filter-panel {
   display: flex;

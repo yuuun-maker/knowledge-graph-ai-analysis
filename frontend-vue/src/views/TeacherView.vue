@@ -1990,6 +1990,15 @@ watch(currentCourseId, (cid) => {
   else documents.value = []
 })
 
+// 教师端也复用全局 AI 悬浮窗（App.vue 中挂载），它是从 store.learningContext 读取
+// 「当前课程/文档」的。教师端的选中态是本页局部 ref，故在此同步过去，
+// 否则悬浮窗会一直显示「未选择课程」，提问也退化成跨全部课程检索。
+// immediate 必须加：深链进来时上面的路由 watcher 已在 setup 阶段（immediate）写好
+// currentCourseId，本 watcher 若只在后续变化时触发，就会漏掉这个初始值。
+watch([currentCourseId, currentDocumentId], ([cid, did]) => {
+  store.setLearningContext({ courseId: cid || null, documentId: did || null })
+}, { immediate: true })
+
 // 深链「直接打开图谱」：仅当 URL 带 open=1（总览页点击课程卡片发起）时，
 // 自动选中该课程首个可用文档并打开图谱。手动选择课程不会触发，保证仍可自由选择文档。
 watch(

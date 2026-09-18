@@ -157,7 +157,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import {
-  HomeFilled, DataAnalysis, Reading, User, EditPen, Notebook, Compass, Fold, Expand, SwitchButton,
+  HomeFilled, DataAnalysis, Reading, User, EditPen, Notebook, Compass, Fold, Expand, SwitchButton, Share,
 } from '@element-plus/icons-vue'
 import { useAppStore } from './stores/app'
 import AIChatWidget from './components/AIChatWidget.vue'
@@ -175,6 +175,7 @@ const teacherMenu = [
   { path: '/course-center', title: '课程中心', icon: HomeFilled },
   { path: '/dashboard', title: '数据总览', icon: DataAnalysis },
   { path: '/teacher', title: '课程管理', icon: EditPen },
+  { path: '/teacher?tab=preview', title: '图谱管理', icon: Share },
   { path: '/teacher?tab=questions', title: '题库管理', icon: Notebook },
   { path: '/profile', title: '个人中心', icon: User },
 ]
@@ -198,7 +199,11 @@ const studentMenu = [
 const menuItems = computed(() => (store.role === 'teacher' ? teacherMenu : studentMenu))
 
 const activeMenu = computed(() => {
-  if (route.path === '/teacher') return route.fullPath.includes('questions') ? '/teacher?tab=questions' : '/teacher'
+  if (route.path === '/teacher') {
+    if (route.query.tab === 'questions') return '/teacher?tab=questions'
+    if (route.query.tab === 'preview' || route.query.tab === 'edit') return '/teacher?tab=preview'
+    return '/teacher'
+  }
   if (route.path === '/student') {
     const map = { documents: '/student?tab=documents', browse: '/student?tab=browse', practice: '/student?tab=practice' }
     return map[route.query.tab] || '/student'
@@ -218,7 +223,7 @@ const breadcrumbs = computed(() => {
   return map[route.path] || []
 })
 function tabTitle(t) {
-  return { courses: '我的课程', documents: '课程文档', preview: '图谱预览', edit: '编辑图谱', monitor: '教学监测', questions: '题库管理', members: '学生管理' }[t] || ''
+  return { courses: '我的课程', documents: '课程文档', preview: '图谱管理', edit: '图谱管理', monitor: '教学监测', questions: '题库管理', members: '学生管理' }[t] || ''
 }
 function studentTabTitle(t) {
   return { overview: '学习总览', documents: '课程文档', browse: '图谱浏览', qa: '智能问答', path: '学习路径推荐', favorites: '收藏夹', practice: '做题练习' }[t] || ''

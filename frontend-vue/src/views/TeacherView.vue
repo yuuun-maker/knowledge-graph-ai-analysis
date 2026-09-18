@@ -5,7 +5,7 @@
     <el-tabs v-model="activeTab" class="main-view-tabs" @tab-change="onTabChange">
       <!-- ===================== Tab 0：课程列表 ===================== -->
       <!-- 课程中心改造：卡片视觉与「课程中心 → 我的课程」统一为同一个组件的两种配置，
-           进入课程后仍复用本页既有的 文档 / 图谱预览 / 编辑 / 监测 四个 Tab -->
+           进入课程后仍复用本页既有的 文档 / 图谱管理 / 监测 等 Tab -->
       <el-tab-pane name="courses">
         <template #label><span class="tab-label"><el-icon><Notebook /></el-icon>课程管理</span></template>
 
@@ -181,8 +181,6 @@
               <template #default="{ row }">
                 <el-button size="small" type="primary" :icon="Reading" :disabled="row.is_placeholder" @click="readDocument(row)">在线阅读</el-button>
                 <el-button size="small" :icon="Download" plain :disabled="row.is_placeholder" @click="downloadDocument(row)">下载</el-button>
-                <el-button size="small" type="primary" plain :icon="View" :disabled="row.is_placeholder" @click="viewDocumentGraph(row)">查看图谱</el-button>
-                <el-button size="small" type="warning" plain :icon="EditPen" :disabled="row.is_placeholder" @click="editDocumentGraph(row)">编辑</el-button>
                 <el-button size="small" type="success" plain :icon="UserFilled" :disabled="row.is_placeholder" @click="monitorDocument(row)">监测</el-button>
                 <el-button size="small" type="danger" plain :icon="Delete" :disabled="row.is_placeholder" @click="deleteDocument(row)">删除</el-button>
               </template>
@@ -254,13 +252,13 @@
         </template>
       </el-tab-pane>
 
-      <!-- ===================== Tab 3：文档图谱预览 ===================== -->
+      <!-- ===================== Tab 3：图谱管理（查看 + 就地编辑整合） ===================== -->
       <el-tab-pane name="preview">
-        <template #label><span class="tab-label"><el-icon><View /></el-icon>图谱预览</span></template>
+        <template #label><span class="tab-label"><el-icon><View /></el-icon>图谱管理</span></template>
 
         <!-- 未选择课程/文档：页内引导选择（不再弹窗强制跳回） -->
         <el-card v-if="!currentCourseId || !currentDocumentId" class="page-card">
-          <el-empty description="请先选择要预览图谱的课程和文档">
+          <el-empty description="请先选择要管理图谱的课程和文档">
             <div class="doc-course-pick">
               <el-select v-model="currentCourseId" placeholder="选择课程" filterable clearable style="width: 220px" @change="onContextCourseChange">
                 <el-option v-for="c in store.courses" :key="c.course_id" :label="c.course_name" :value="String(c.course_id)" />
@@ -280,8 +278,11 @@
           <el-divider direction="vertical" />
           <span class="context-title">{{ currentCourseName }}</span>
           <el-tag size="small" type="info">{{ currentDocumentName || '文档' }}</el-tag>
+          <el-tag size="small" :type="graphEditMode ? 'warning' : 'success'" effect="plain">{{ graphEditMode ? '编辑模式' : '查看模式' }}</el-tag>
         </div>
 
+        <!-- 查看模式 -->
+        <template v-if="!graphEditMode">
         <el-card class="page-card">
           <div class="toolbar">
             <el-input
@@ -296,6 +297,7 @@
             <span v-if="previewStats" class="stats-text">
               节点 {{ previewStats.nodeCount }} · 关系 {{ previewStats.edgeCount }}
             </span>
+            <el-button type="warning" plain :icon="EditPen" @click="enterGraphEdit">编辑图谱</el-button>
           </div>
         </el-card>
         <el-card class="page-card graph-card">
@@ -309,45 +311,18 @@
           />
         </el-card>
         </template>
-      </el-tab-pane>
 
-      <!-- ===================== Tab 3：编辑图谱（三栏审核） ===================== -->
-      <el-tab-pane name="edit">
-        <template #label><span class="tab-label"><el-icon><EditPen /></el-icon>编辑图谱</span></template>
-
-        <!-- 未选择课程/文档：页内引导选择（不再弹窗强制跳回） -->
-        <el-card v-if="!currentCourseId || !currentDocumentId" class="page-card">
-          <el-empty description="请先选择要编辑图谱的课程和文档">
-            <div class="doc-course-pick">
-              <el-select v-model="currentCourseId" placeholder="选择课程" filterable clearable style="width: 220px" @change="onContextCourseChange">
-                <el-option v-for="c in store.courses" :key="c.course_id" :label="c.course_name" :value="String(c.course_id)" />
-              </el-select>
-              <el-select v-model="currentDocumentId" placeholder="选择文档" filterable clearable style="width: 240px" :disabled="!currentCourseId" @change="onContextDocChange">
-                <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
-              </el-select>
-              <el-button :icon="Notebook" @click="goCourses">前往课程管理</el-button>
-            </div>
-            <p v-if="currentCourseId && !documents.length" class="doc-course-pick-tip">该课程暂无文档，请先到「课程文档」上传</p>
-          </el-empty>
-        </el-card>
-
+        <!-- 编辑模式（保留原编辑图谱三栏审核界面，就地切换） -->
         <template v-else>
-        <div class="context-bar">
-          <el-button text :icon="Back" @click="backToDocuments">返回文档列表</el-button>
-          <el-divider direction="vertical" />
-          <span class="context-title">{{ currentCourseName }}</span>
-          <el-tag size="small" type="info">{{ currentDocumentName || '文档' }}</el-tag>
-        </div>
-
         <el-card class="page-card">
           <div class="toolbar">
+            <el-button :icon="View" @click="exitGraphEdit">返回查看</el-button>
             <el-button type="primary" :icon="Plus" @click="openAddNode">新增知识点</el-button>
             <el-button type="success" plain :icon="Connection" @click="openAddEdge">新增关系</el-button>
             <el-button :icon="Refresh" circle title="刷新" @click="refreshEdit" />
             <span v-if="currentCourseId" class="stats-text">节点 {{ editNodes.length }}</span>
           </div>
         </el-card>
-
         <!-- 三栏：知识点列表 | 图谱 | 详情面板 -->
         <el-row :gutter="12" class="workspace">
           <el-col :xs="24" :sm="5">
@@ -469,6 +444,7 @@
             </el-card>
           </el-col>
         </el-row>
+        </template>
         </template>
       </el-tab-pane>
 
@@ -1078,8 +1054,11 @@ const route = useRoute()
 const router = useRouter()
 // 课程中心改造：新增 members（学生管理）Tab，既有 5 个 Tab 全部保留
 // 合并 PR #3：再并入合作者的 questions（题库管理）Tab
-const TEACHER_TABS = ['courses', 'documents', 'members', 'preview', 'edit', 'monitor', 'questions']
+const TEACHER_TABS = ['courses', 'documents', 'members', 'preview', 'monitor', 'questions']
 const activeTab = ref(TEACHER_TABS.includes(route.query.tab) ? route.query.tab : 'courses')
+
+// 图谱管理：「查看图谱」与「编辑图谱」整合为同一 Tab，graphEditMode 控制就地切换编辑界面
+const graphEditMode = ref(false)
 
 // ===================== 当前上下文：课程 + 文档（教师端不搬 student learningContext） =====================
 const currentCourseId = ref('')
@@ -1752,6 +1731,7 @@ function openMonitorStudentDetail(row) {
 
 function goMonitorGraph() {
   if (!currentCourseId.value || !currentDocumentId.value) return
+  graphEditMode.value = false
   router.push({
     path: '/teacher',
     query: { tab: 'preview', course_id: currentCourseId.value, document_id: currentDocumentId.value },
@@ -1856,11 +1836,17 @@ function backToDocuments() {
     goCourses()
   }
 }
-function viewDocumentGraph(doc) {
-  router.push({
-    path: '/teacher',
-    query: { tab: 'preview', course_id: String(doc.course_id), document_id: String(doc.doc_id) },
-  })
+// 图谱管理：查看态 → 编辑态（就地切换，不换路由）；编辑态加载可编辑知识点列表
+function enterGraphEdit() {
+  graphEditMode.value = true
+  if (currentCourseId.value) loadEditNodes()
+}
+// 编辑态 → 查看态：清空编辑选中；预览画布重新挂载时自动拉取最新图谱
+function exitGraphEdit() {
+  graphEditMode.value = false
+  selectedNode.value = null
+  prereqs.value = []
+  prereqLoaded.value = false
 }
 /** 在线阅读：进入独立的文档阅读器整页（from=teacher 决定返回时回到课程管理） */
 function readDocument(doc) {
@@ -1886,12 +1872,6 @@ async function downloadDocument(doc) {
     ElMessage.error(`下载失败：${e.message}`)
   }
 }
-function editDocumentGraph(doc) {
-  router.push({
-    path: '/teacher',
-    query: { tab: 'edit', course_id: String(doc.course_id), document_id: String(doc.doc_id) },
-  })
-}
 function monitorDocument(doc) {
   router.push({
     path: '/teacher',
@@ -1909,7 +1889,7 @@ function syncDocumentsRoute(id) {
     .catch(() => {})
 }
 
-// 图谱预览/编辑/监测页内选择课程：清空已选文档并重置各页内部状态，避免残留上一个上下文的选中项
+// 图谱管理/监测页内选择课程：清空已选文档并重置各页内部状态，避免残留上一个上下文的选中项
 function onContextCourseChange(id) {
   currentDocumentId.value = ''
   drawerVisible.value = false
@@ -1931,7 +1911,7 @@ function onContextCourseChange(id) {
   }
 }
 
-// 图谱预览/编辑页内选择文档：重置内部状态并同步路由；编辑页需主动拉取知识点列表
+// 图谱管理页内选择文档：重置内部状态并同步路由；编辑模式下需主动拉取知识点列表
 function onContextDocChange(id) {
   drawerVisible.value = false
   drawerNode.value = null
@@ -1944,7 +1924,7 @@ function onContextDocChange(id) {
       query: { tab: activeTab.value, course_id: currentCourseId.value || undefined, document_id: id || undefined },
     })
     .catch(() => {})
-  if (activeTab.value === 'edit' && id) loadEditNodes()
+  if (activeTab.value === 'preview' && graphEditMode.value && id) loadEditNodes()
 }
 
 // 用户直接点击 Tab 头：同步路由（缺失参数的守卫统一由 route watcher 处理）
@@ -1979,15 +1959,18 @@ watch(
       currentDocumentId.value = ''
       return
     }
-    if (!TEACHER_TABS.includes(tab)) {
+    // 图谱管理整合：旧链接 tab=edit 并入 preview 并直接进入编辑模式
+    const targetTab = tab === 'edit' ? 'preview' : tab
+    if (tab === 'edit') graphEditMode.value = true
+    if (!TEACHER_TABS.includes(targetTab)) {
       activeTab.value = 'courses'
       return
     }
-    if (['preview', 'edit', 'monitor'].includes(tab)) {
+    if (['preview', 'monitor'].includes(targetTab)) {
       // 缺少课程/文档时停留在当前页，由页内级联选择器引导，不再弹窗强制跳回
       currentCourseId.value = cid ? String(cid) : ''
       currentDocumentId.value = did ? String(did) : ''
-    } else if (tab === 'documents' || tab === 'members' || tab === 'questions') {
+    } else if (targetTab === 'documents' || targetTab === 'members' || targetTab === 'questions') {
       // 这几个 Tab 只需要课程（不需要文档）：未指定课程时停留在页内选择器引导
       // questions 由 PR #3 并入，与 members 同理——不在此保留 currentCourseId 会永远停在空态
       currentCourseId.value = cid ? String(cid) : ''
@@ -1996,7 +1979,7 @@ watch(
       currentCourseId.value = ''
       currentDocumentId.value = ''
     }
-    activeTab.value = tab
+    activeTab.value = targetTab
   },
   { immediate: true }
 )
@@ -2006,6 +1989,27 @@ watch(currentCourseId, (cid) => {
   if (cid) loadDocuments()
   else documents.value = []
 })
+
+// 深链「直接打开图谱」：仅当 URL 带 open=1（总览页点击课程卡片发起）时，
+// 自动选中该课程首个可用文档并打开图谱。手动选择课程不会触发，保证仍可自由选择文档。
+watch(
+  () => route.query.open,
+  async (open) => {
+    if (open !== '1') return
+    const cid = currentCourseId.value
+    if (!cid) return
+    if (!documents.value.length) await loadDocuments()
+    const usable = documents.value.filter((d) => !d.is_placeholder && !d.local_stage)
+    const first = usable.find((d) => d.extract_status === 'COMPLETED') || usable[0]
+    if (first) {
+      currentDocumentId.value = String(first.doc_id)
+      router.replace({
+        query: { tab: 'preview', course_id: String(cid), document_id: String(first.doc_id) },
+      })
+    }
+  },
+  { immediate: true }
+)
 
 // ===================== 题库管理（Scope A：单选/多选/判断；答案与解析仅教师可见） =====================
 const QUESTION_TYPES = [
@@ -2328,12 +2332,8 @@ watch(activeTab, (tab) => {
   if (tab === 'preview') {
     drawerVisible.value = false
     drawerNode.value = null
-  }
-  if (tab === 'edit') {
-    selectedNode.value = null
-    prereqs.value = []
-    prereqLoaded.value = false
-    if (currentCourseId.value) loadEditNodes()
+    // 图谱管理：编辑模式下进入该页时主动拉取可编辑知识点列表
+    if (graphEditMode.value && currentCourseId.value) loadEditNodes()
   }
   if (tab === 'monitor' && currentCourseId.value) loadMonitorData()
   if (tab === 'questions' && currentCourseId.value) loadQuestionsTab()
@@ -2344,7 +2344,6 @@ onMounted(() => {
   window.addEventListener('resize', handleMonitorResize)
   // 深链直达时 activeTab 初始即等于目标 tab，activeTab watcher 不会触发，需在此补一次加载
   if (activeTab.value === 'documents' && currentCourseId.value) loadDocuments()
-  if (activeTab.value === 'edit' && currentCourseId.value) loadEditNodes()
   if (activeTab.value === 'monitor' && currentCourseId.value) loadMonitorData()
   if (activeTab.value === 'questions' && currentCourseId.value) loadQuestionsTab()
 })

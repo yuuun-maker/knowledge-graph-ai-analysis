@@ -42,12 +42,19 @@
           </div>
         </el-card>
 
-        <!-- 未选择课程 -->
-        <el-empty
-          v-if="!ctxKey"
-          description="请先选择课程和学习资料，查看你的学习驾驶舱"
-          :image-size="90"
-        />
+        <!-- 未选择课程：内联课程/资料选择面板，减少空白 -->
+        <el-card v-if="!ctxKey" class="page-card welcome-card">
+          <div class="welcome-head">
+            <div class="welcome-title">欢迎回来，{{ store.realName || store.username }}</div>
+            <div class="welcome-sub">选择课程和学习资料，立即生成你的学习驾驶舱：掌握情况、继续学习、建议重点一目了然</div>
+          </div>
+          <CourseDocumentSelector
+            :initial-course-id="currentCourseId"
+            :initial-document-id="currentDocumentId"
+            @confirm="applyContext"
+          />
+        </el-card>
+        <!-- /未选择课程 -->
 
         <template v-else>
           <!-- 第一层：学习概况 KPI（知识点总数 / 已掌握 / 学习进度 / 我的收藏） -->
@@ -178,26 +185,6 @@
             </el-col>
           </el-row>
 
-          <!-- 第四层：AI 学习助手（复用现有 QA 能力，自动带入问题） -->
-          <el-card class="page-card ov-card">
-            <template #header>
-              <div class="ov-card-title"><el-icon><MagicStick /></el-icon>AI 学习助手</div>
-            </template>
-            <p class="ov-ai-tip">你可以直接询问当前课程中的知识点问题，例如：</p>
-            <div class="ov-ai-quick">
-              <el-tag
-                v-for="q in overviewQuickQuestions"
-                :key="q"
-                class="ov-ai-chip"
-                effect="plain"
-                @click="overviewAsk(q)"
-              >{{ q }}</el-tag>
-            </div>
-            <div class="ov-ai-input">
-              <el-input v-model="overviewQuestion" placeholder="输入课程问题…" @keyup.enter="overviewAsk()" />
-              <el-button type="primary" @click="overviewAsk()">提问</el-button>
-            </div>
-          </el-card>
         </template>
       </el-tab-pane>
 
@@ -2245,7 +2232,6 @@ function neighborsOf(nodeId) {
 // 统一复用学习状态源（learningContext / masteredCache / favoriteCache / pathRecs /
 // currentKnowledgePointId / recommendedKnowledgePointIds），不新建任何重复状态；
 // 所有数字均来自后端真实数据（图谱 / 学习进度 / 推荐 / 收藏），无伪造指标。
-const overviewQuestion = ref('')
 
 const overviewTotal = computed(() => pathGraphNodes.value.length)
 const overviewMastered = computed(() => pathMasteredIds.value.length)
@@ -2318,12 +2304,6 @@ const overviewStateList = computed(() => {
   ]
 })
 
-const overviewQuickQuestions = computed(() => {
-  const cur = overviewCurrentNode.value?.label
-  const qs = ['本课程有哪些入门知识点？', '如何安排本课程的学习顺序？']
-  if (cur) qs.unshift(`学习「${cur}」之前需要掌握哪些知识？`)
-  return qs
-})
 
 // 继续学习 → 复用 P7 统一定位（切图谱 + kp_id 高亮 + 居中 + 打开详情）
 function overviewContinue() {
@@ -2347,17 +2327,6 @@ function overviewViewFav(node) {
 }
 function overviewGoFavorites() {
   activeTab.value = 'favorites'
-}
-// AI 学习助手：带入问题进入现有 QA tab（复用 sendQuestion 同源 API）
-function overviewAsk(q) {
-  const text = (q || overviewQuestion.value || '').trim()
-  if (!text) {
-    ElMessage.warning('请输入问题')
-    return
-  }
-  question.value = text
-  overviewQuestion.value = ''
-  activeTab.value = 'qa'
 }
 </script>
 
@@ -3242,28 +3211,6 @@ function overviewAsk(q) {
   white-space: nowrap;
 }
 
-/* 第四层：AI 学习助手 */
-.ov-ai-tip {
-  margin: 0 0 10px;
-  font-size: var(--font-size-label);
-  color: var(--color-text-secondary);
-}
-.ov-ai-quick {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-}
-.ov-ai-chip {
-  cursor: pointer;
-}
-.ov-ai-input {
-  display: flex;
-  gap: 10px;
-}
-.ov-ai-input .el-input {
-  flex: 1;
-}
 
 /* ===== Phase 7 统一学习上下文条 ===== */
 .ctx-bar {
@@ -3666,11 +3613,6 @@ function overviewAsk(q) {
   border-color: var(--brand-200);
 }
 .ov-fav-item:hover { background: #fff8ec; border-color: #f5d59a; }
-.ov-ai-chip {
-  border-radius: 999px !important;
-  transition: all .2s;
-}
-.ov-ai-chip:hover { transform: translateY(-1px); color: var(--brand-600); border-color: var(--brand-300); }
 
 /* ---- 智能问答：现代气泡 ---- */
 .qa-side-course {
@@ -3822,5 +3764,25 @@ function overviewAsk(q) {
 .practice-result.bad {
   border-left-color: var(--danger);
   background: rgba(244,88,122,.08);
+}
+
+/* 总览欢迎面板（无学习上下文时内联选择课程/资料，减少空白） */
+.welcome-card {
+  max-width: 860px;
+  margin: 24px auto;
+}
+.welcome-head {
+  margin-bottom: 14px;
+}
+.welcome-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text-primary, #1c2438);
+}
+.welcome-sub {
+  font-size: 12.5px;
+  color: var(--color-text-secondary, #8590a8);
+  margin-top: 4px;
+  line-height: 1.6;
 }
 </style>

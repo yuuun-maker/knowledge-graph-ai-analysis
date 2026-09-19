@@ -6,6 +6,8 @@
 - GET    /api/v1/questions/stats                  题库总览
 - GET    /api/v1/questions/coverage               知识点题目覆盖率（无题知识点 / 悬空 kp_id）
 - GET    /api/v1/questions/favorites              题目收藏情况（哪些学生收藏了哪道题）
+- POST   /api/v1/questions/auto-label             批量知识点自动标注（默认只出建议，不写库）
+- POST   /api/v1/questions/{question_id}/kp-candidates  单题知识点候选（三层证据融合）
 - GET    /api/v1/questions/{question_id}          题目详情
 - PUT    /api/v1/questions/{question_id}          修改题目（未传字段沿用原值）
 - DELETE /api/v1/questions/{question_id}          删除题目（已作答过则软删停用）
@@ -61,6 +63,33 @@ class QuestionUpdate(BaseModel):
 
 class QuestionActive(BaseModel):
     is_active: bool = True
+
+
+class KpCandidatesRequest(BaseModel):
+    top_k: int = 5
+
+
+class AutoLabelRequest(BaseModel):
+    course_id: str
+    document_id: str | None = None
+    question_ids: list | None = None
+    only_missing: bool = True          # 只处理尚未挂知识点的题（默认，不覆盖教师判断）
+    apply: bool = False                # 默认只出建议，不写库
+    top_k: int = 3
+    apply_threshold: float = 0.6       # 自动写库最低分（>= 该分才写入）
+
+
+class ImportPreviewRequest(BaseModel):
+    course_id: str
+    document_id: str
+    max_questions: int | None = None   # 可选：只预览前 N 题
+
+
+class ImportCommitRequest(BaseModel):
+    course_id: str
+    document_id: str
+    items: list                        # 预览里（可能被教师编辑过的）题目条目
+    activate: bool = False             # 默认 False：导入为停用的暂存题
 
 
 @router.post("")
@@ -137,6 +166,74 @@ async def question_coverage(
         return error(4001, "参数错误：course_id 必须为整数")
     return _wrap(QuestionService.coverage(
         current_user["user_id"], cid, document_id=document_id,
+    ))
+
+
+@router.post("/import/preview")
+async def import_preview(body: ImportPreviewRequest,
+                         current_user: dict = Depends(require_teacher)):
+    """从课程文档解析题目候选（**预览，不写库**；Scope D）。
+
+    确定性规则解析：切「题目区/答案区」→ 按题号切块 → 答案映射 → 题型判定与质量标记。
+    每道题返回 q_type/options/answer/warnings/import_status/confidence，供教师复核编辑。
+    """
+    cid = _coerce_int(body.course_id)
+    if cid is None:
+        return error(4001, "参数错误：course_id 必须为整数")
+    return _wrap(await QuestionService.import_preview(
+        current_user["user_id"], cid, body.document_id, max_questions=body.max_questions,
+    ))
+
+
+@router.post("/import/commit")
+async def import_commit(body: ImportCommitRequest,
+                        current_user: dict = Depends(require_teacher)):
+    """提交导入：把教师确认/编辑过的题目入库为**停用的暂存题**（`activate=true` 才直接启用）。
+
+    逐题走 `validate_question_payload`，不合格（如主观题缺参考答案）一律拒绝并回报原因。
+    """
+    cid = _coerce_int(body.course_id)
+    if cid is None:
+        return error(4001, "参数错误：course_id 必须为整数")
+    return _wrap(QuestionService.import_commit(
+        current_user["user_id"], cid, body.document_id, body.items, activate=body.activate,
+    ))
+
+
+@router.get("/import/batch/{batch_id}")
+async def import_batch_detail(batch_id: str,
+                              current_user: dict = Depends(require_teacher)):
+    """导入批次明细（批次信息 + 已入库题目，含答案，教师视角）"""
+    return _wrap(QuestionService.import_batch_detail(current_user["user_id"], batch_id))
+
+
+@router.post("/auto-label")
+async def auto_label_questions(body: AutoLabelRequest,
+                               current_user: dict = Depends(require_teacher)):
+    """批量知识点自动标注（Scope C）。
+
+    默认只返回候选建议、**不写库**；`apply=true` 时只把「分数 >= apply_threshold 且在
+    本课程图谱清单内」的候选写入题目，且默认只处理尚未挂知识点的题（only_missing）。
+    """
+    cid = _coerce_int(body.course_id)
+    if cid is None:
+        return error(4001, "参数错误：course_id 必须为整数")
+    return _wrap(QuestionService.auto_label(
+        current_user["user_id"], cid, document_id=body.document_id,
+        question_ids=body.question_ids, only_missing=body.only_missing,
+        apply=body.apply, top_k=body.top_k, apply_threshold=body.apply_threshold,
+    ))
+
+
+@router.post("/{question_id}/kp-candidates")
+async def question_kp_candidates(question_id: int, body: KpCandidatesRequest,
+                                current_user: dict = Depends(require_teacher)):
+    """单题知识点候选（字面匹配 + 向量召回 + 图谱扩展，融合打分）。
+
+    不可用的证据层不报错，只在 `meta.graph_available / vector_available` 中如实标注。
+    """
+    return _wrap(QuestionService.kp_candidates(
+        current_user["user_id"], question_id, top_k=body.top_k,
     ))
 
 

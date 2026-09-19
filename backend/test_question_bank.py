@@ -130,7 +130,7 @@ def main():
     bad = _single_payload(doc1); bad["stem"] = "   "
     check("空题干被拒", QuestionService.create_question(teacher, course_id, bad)["code"] == 1001)
     bad = _single_payload(doc1); bad["q_type"] = "SHORT"
-    check("非法题型被拒（Scope A 不含简答题）",
+    check("非法题型被拒（不在库的题型白名单内）",
           QuestionService.create_question(teacher, course_id, bad)["code"] == 1001)
     bad = _single_payload(doc1); bad["answer"] = "Z"
     check("答案不在选项内被拒", QuestionService.create_question(teacher, course_id, bad)["code"] == 1001)
@@ -157,8 +157,9 @@ def main():
     exact_total, _ = sql_db.list_questions(course_id, document_id=doc1, include_course_level=False)
     check("DAO 精确过滤（仅该文档题，不含课程通用题）为 2 条", exact_total == 2, str(exact_total))
     stats = QuestionService.stats(teacher, course_id)["data"]
-    check("题库统计：题型分布 1/1/1",
-          stats["by_type"] == {"SINGLE": 1, "MULTI": 1, "JUDGE": 1}, str(stats["by_type"]))
+    check("题库统计：题型分布（Scope B 五类，未用题型为 0）",
+          stats["by_type"] == {"SINGLE": 1, "MULTI": 1, "JUDGE": 1, "FILL": 0, "ESSAY": 0},
+          str(stats["by_type"]))
     check("题库统计：启用 3 题、作答 0 次", stats["active_count"] == 3 and stats["answer_count"] == 0)
 
     # ---------- 5. 学生出题：防泄题硬断言 ----------

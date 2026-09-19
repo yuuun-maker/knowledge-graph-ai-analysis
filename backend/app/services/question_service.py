@@ -17,14 +17,25 @@ kp_id 可空（逻辑外键指向 Neo4j KnowledgePoint，用于「推荐知识�
 import json
 
 from ..core.database import db
-from ..core.sql_database import sql_db
+from ..core.sql_database import (
+    AUTO_GRADE_TYPES, MANUAL_GRADE_TYPES, sql_db,
+)
 from .question_recommender import (
     QuestionRecommender, VALID_MODES as VALID_RECOMMEND_MODES,
 )
 
-# 题型（Scope A：仅三型客观题，全部可自动判分）
-VALID_TYPES = ("SINGLE", "MULTI", "JUDGE")
-TYPE_LABELS = {"SINGLE": "单选题", "MULTI": "多选题", "JUDGE": "判断题"}
+# 题型（Scope B：三型客观题自动判分 + 两型主观题教师批改）
+VALID_TYPES = ("SINGLE", "MULTI", "JUDGE", "FILL", "ESSAY")
+TYPE_LABELS = {"SINGLE": "单选题", "MULTI": "多选题", "JUDGE": "判断题",
+               "FILL": "填空题", "ESSAY": "解答题"}
+# 主观题：提交只落库（grade_status=PENDING）不判分，教师批改后才产生分数
+MANUAL_TYPES = MANUAL_GRADE_TYPES
+# 批改后把 0~100 的分数折算为对/错的阈值（错题本与掌握度依赖 is_correct）
+GRADE_PASS_SCORE = 60.0
+# 填空题空位数量上限（防误传超大数组/超长答案）
+MAX_BLANKS = 20
+MAX_BLANK_ANSWER_LEN = 200
+MAX_ANSWER_LEN = 4000
 
 MAX_STEM_LEN = 1000
 MAX_ANALYSIS_LEN = 1000
@@ -97,30 +108,109 @@ def _parse_options(question: dict) -> list:
     return options
 
 
+def _as_int(value, default: int = 0) -> int:
+    """安全转 int（脏数据/缺省返回 default），用于空位编号与分值"""
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _parse_blanks(question: dict) -> list:
+    """解析填空题空位（**教师视角，含参考答案**）。
+
+    存储形态（复用 options 列作「空位定义」）：
+      [{"key": 1, "label": "第1空", "hint": "单位：kg", "score": 50, "answer": "浮点数"}]
+    兼容简写：options 为字符串数组时按顺序编号，答案取 answer 的同位元素
+    （历史/手工导入数据可能出现这种形态）。
+    """
+    raw = _loads(question.get("options"), [])
+    fallback = _loads(question.get("answer"), [])
+    if not isinstance(fallback, list):
+        fallback = [fallback]
+    blanks = []
+    if isinstance(raw, list):
+        for i, item in enumerate(raw):
+            if isinstance(item, dict):
+                blanks.append({
+                    "key": _as_int(item.get("key"), i + 1) or (i + 1),
+                    "label": (str(item.get("label") or f"第{i + 1}空")).strip(),
+                    "hint": (str(item.get("hint") or "")).strip(),
+                    "score": _as_int(item.get("score"), 0),
+                    "answer": (str(item.get("answer") or "")).strip(),
+                })
+            elif isinstance(item, str):
+                blanks.append({
+                    "key": i + 1,
+                    "label": f"第{i + 1}空",
+                    "hint": "",
+                    "score": 0,
+                    "answer": str(fallback[i] if i < len(fallback) else "").strip(),
+                })
+    blanks.sort(key=lambda b: b["key"])
+    return blanks
+
+
+def _blanks_public(question: dict) -> list:
+    """填空题空位的**学生视角**投影：只给 key/label/hint，绝不下发每空答案"""
+    return [{"key": b["key"], "label": b["label"], "hint": b["hint"]}
+            for b in _parse_blanks(question)]
+
+
 def _public_view(question: dict, favorited: bool = False) -> dict:
-    """学生视角投影：**白名单**，刻意不包含 answer / analysis（防泄题的关键实现）"""
+    """学生视角投影：**白名单**，刻意不包含 answer / analysis（防泄题的关键实现）。
+
+    Scope B：
+    - 填空题只下发空位定义（key/label/hint），**每空参考答案绝不下发**；
+    - 解答题 options 恒为空数组；
+    - auto_graded 供前端决定是否显示"待教师批改"提示（主观题提交后不判分）。
+    """
+    q_type = question["q_type"]
+    if q_type == "FILL":
+        options = _blanks_public(question)
+    elif q_type == "ESSAY":
+        options = []
+    else:
+        options = _parse_options(question)
     return {
         "question_id": question["question_id"],
         "course_id": question["course_id"],
         "document_id": question.get("document_id"),
         "kp_id": question.get("kp_id"),
-        "q_type": question["q_type"],
-        "q_type_label": TYPE_LABELS.get(question["q_type"], question["q_type"]),
+        "q_type": q_type,
+        "q_type_label": TYPE_LABELS.get(q_type, q_type),
         "stem": question["stem"],
-        "options": _parse_options(question),
+        "options": options,
         "difficulty": question.get("difficulty", 3),
+        "auto_graded": q_type in AUTO_GRADE_TYPES,
         "is_favorited": bool(favorited),
     }
 
 
 def grade(question: dict, user_answer) -> dict:
-    """自动判分（Scope A 三型客观题），返回 {is_correct, score, correct_answer, analysis}。
+    """判分分发（Scope B），返回 {is_correct, score, grade_status, pending, correct_answer, analysis}。
 
+    客观题（SINGLE/MULTI/JUDGE）：提交即判分。
     - SINGLE：归一化后严格相等
     - MULTI ：归一化后的键集合严格相等（顺序无关；少选/多选任一情况判错）
     - JUDGE ：布尔归一化后相等（对/正确/true/T/1 等价）
+
+    主观题（FILL/ESSAY）：**不判分** —— 学生的解答只作为记录落库（grade_status=PENDING），
+    等教师批改后才产生分数（grade_source 变更为 TEACHER）。
+    参考答案与解析也压到批改后才可见：主观题的「解答」本身是教学资源，
+    提交即给会让学生失去反思动力，也削弱批改的意义。
     """
     q_type = question["q_type"]
+    if q_type in MANUAL_TYPES:
+        return {
+            "is_correct": False,          # 占位：未批改不判对错，统计口径按 grade_status 过滤
+            "score": 0.0,
+            "grade_status": "PENDING",
+            "pending": True,
+            "correct_answer": None,       # 批改后才下发
+            "analysis": None,
+        }
+
     correct = _loads(question.get("answer"), None)
 
     if q_type == "JUDGE":
@@ -138,6 +228,8 @@ def grade(question: dict, user_answer) -> dict:
     return {
         "is_correct": is_correct,
         "score": 100.0 if is_correct else 0.0,
+        "grade_status": "GRADED",
+        "pending": False,
         "correct_answer": correct,
         "analysis": question.get("analysis") or "",
     }
@@ -203,13 +295,57 @@ def validate_question_payload(payload: dict) -> tuple:
             normalized["answer"] = sorted(answer_keys)
         else:
             normalized["answer"] = answer[0] if isinstance(answer, list) else answer
-    else:  # JUDGE
+    elif q_type == "JUDGE":
         judge = _normalize_judge(answer)
         if judge not in ("true", "false"):
             return False, "判断题答案必须为 true/false（或 对/错）", None
         normalized["options"] = []
         normalized["answer"] = judge
 
+    elif q_type == "FILL":
+        # 填空题：options 复用为「空位定义」，每空必须给出参考答案（教师批改依据）
+        raw = payload.get("options") or []
+        if not isinstance(raw, list) or not raw:
+            return False, "填空题至少需要 1 个空位", None
+        if len(raw) > MAX_BLANKS:
+            return False, f"空位过多（最多 {MAX_BLANKS} 个）", None
+        blanks, seen_keys = [], set()
+        for i, item in enumerate(raw):
+            if not isinstance(item, dict):
+                return False, f"第 {i + 1} 个空位格式不合法（应为对象）", None
+            blank_answer = str(item.get("answer") or "").strip()
+            if not blank_answer:
+                return False, f"第 {i + 1} 空未填写参考答案", None
+            if len(blank_answer) > MAX_BLANK_ANSWER_LEN:
+                return False, (f"第 {i + 1} 空参考答案过长"
+                               f"（最大 {MAX_BLANK_ANSWER_LEN} 字符）"), None
+            key = _as_int(item.get("key"), i + 1) or (i + 1)
+            if key in seen_keys:
+                return False, f"空位编号重复：{key}", None
+            seen_keys.add(key)
+            score = _as_int(item.get("score"), 0)
+            if not (0 <= score <= 100):
+                return False, f"第 {i + 1} 空分值应在 0-100 之间", None
+            blanks.append({
+                "key": key,
+                "label": str(item.get("label") or f"第{i + 1}空").strip()[:50],
+                "hint": str(item.get("hint") or "").strip()[:100],
+                "score": score,
+                "answer": blank_answer,
+            })
+        blanks.sort(key=lambda b: b["key"])
+        normalized["options"] = blanks
+        # 参考答案另存一份数组：与多选答案同构，教师端展示与批改台可直接引用
+        normalized["answer"] = [b["answer"] for b in blanks]
+
+    else:  # ESSAY（解答题）
+        reference = answer.strip() if isinstance(answer, str) else ""
+        if not reference:
+            return False, "解答题必须填写参考答案（供教师批改对照）", None
+        if len(reference) > MAX_ANSWER_LEN:
+            return False, f"参考答案过长（最大 {MAX_ANSWER_LEN} 字符）", None
+        normalized["options"] = []
+        normalized["answer"] = reference
     normalized["q_type"] = q_type
     normalized["stem"] = stem
     normalized["analysis"] = analysis
@@ -297,15 +433,23 @@ def _check_kp_exists(course_id: int, kp_id: str) -> tuple:
 
 
 def _teacher_view(question: dict, stats: dict = None, favorite_count: int = 0) -> dict:
-    """教师视角：在库行基础上补充解析后的 options/answer 与作答统计（学生接口绝不复用本函数）"""
+    """教师视角：在库行基础上补充解析后的 options/answer 与作答统计（学生接口绝不复用本函数）。
+
+    Scope B：填空题用 _parse_blanks（**保留每空参考答案**，教师批改对照需要），
+    解答题的 answer 即参考答案正文。
+    """
     data = dict(question)
-    data["options"] = _parse_options(question)
+    if question["q_type"] == "FILL":
+        data["options"] = _parse_blanks(question)
+    else:
+        data["options"] = _parse_options(question)
     data["answer"] = _loads(question.get("answer"), question.get("answer"))
     if question["q_type"] == "JUDGE":
         # 兼容历史行：旧数据里判断题答案可能被存成裸 JSON（回读为布尔 True），
         # 这里统一归一化为 "true"/"false" 字符串，保证教师端展示口径一致。
         data["answer"] = _normalize_judge(data["answer"])
     data["q_type_label"] = TYPE_LABELS.get(question["q_type"], question["q_type"])
+    data["auto_graded"] = question["q_type"] in AUTO_GRADE_TYPES
     st = stats or {}
     attempts = st.get("attempts", 0)
     correct = st.get("correct", 0)
@@ -370,7 +514,8 @@ class QuestionService:
             "q_type": payload.get("q_type") if payload.get("q_type") is not None else question["q_type"],
             "stem": payload.get("stem") if payload.get("stem") is not None else question["stem"],
             "options": payload.get("options") if payload.get("options") is not None
-                       else _parse_options(question),
+                       else (_parse_blanks(question) if question["q_type"] == "FILL"
+                             else _parse_options(question)),
             "answer": payload.get("answer") if payload.get("answer") is not None
                       else _loads(question.get("answer"), question.get("answer")),
             "analysis": payload.get("analysis") if payload.get("analysis") is not None
@@ -524,7 +669,10 @@ class QuestionService:
                 active += 1
 
         answers = sql_db.list_answer_records_by_course(course_id)
-        correct = sum(1 for a in answers if a["is_correct"])
+        # 口径（Scope B）：正确率只算已批改记录；未批改的主观题单列 pending_count，
+        # 并把批改进度（grading）一并下发，供教师端「批改」入口显示角标。
+        graded = [a for a in answers if (a.get("grade_status") or "GRADED") == "GRADED"]
+        correct = sum(1 for a in graded if a["is_correct"])
         fav_total = sum(sql_db.count_question_favorites_grouped(course_id).values())
 
         return {"ok": True, "code": 0, "message": "success", "data": {
@@ -534,9 +682,12 @@ class QuestionService:
             "inactive_count": len(rows) - active,
             "by_type": by_type,
             "answer_count": len(answers),
-            "correct_rate": round(correct / len(answers) * 100, 1) if answers else 0.0,
+            "graded_count": len(graded),
+            "pending_count": len(answers) - len(graded),
+            "correct_rate": round(correct / len(graded) * 100, 1) if graded else 0.0,
             "student_count": len({a["user_id"] for a in answers}),
             "favorite_total": fav_total,
+            "grading": sql_db.answer_grading_summary(course_id),
         }}
 
     @staticmethod
@@ -625,6 +776,166 @@ class QuestionService:
             "dangling": dangling[:50],
             "unmatched": unmatched,
             "items": items,
+        }}
+
+    @staticmethod
+    def kp_candidates(user_id: int, question_id: int, top_k: int = 5) -> dict:
+        """单题知识点候选（教师端「自动标注」按钮）
+
+        内部走三层证据（字面匹配 / 向量召回 / 图谱扩展）并做融合打分；
+        任一路不可用都降级而不是报错，`meta` 里如实标注（graph_available / vector_available）。
+        """
+        from .kp_labeler import label_one            # 延迟导入：避免与 embedding 形成导入顺序耦合
+
+        question, err = _question_for_teacher(question_id, user_id)
+        if err:
+            return err
+        top_k = min(max(1, int(top_k or 5)), 20)
+        res = label_one(question, top_k=top_k)
+        return {"ok": True, "code": 0, "message": "success", "data": {
+            "question_id": question_id,
+            "stem": question.get("stem") or "",
+            "q_type": question.get("q_type"),
+            "current_kp_id": question.get("kp_id") or "",
+            "candidates": res["candidates"],
+            "meta": res["meta"],
+        }}
+
+    @staticmethod
+    def auto_label(user_id: int, course_id: int, document_id=None, question_ids=None,
+                   only_missing: bool = True, apply: bool = False, top_k: int = 3,
+                   apply_threshold: float = 0.6) -> dict:
+        """批量知识点标注：默认只出建议（apply=False）；apply=True 时只写达到阈值的题
+
+        - 默认 `only_missing=True`：只处理尚未挂知识点的题（不覆盖教师已有的判断）；
+        - 写库阈值默认 0.60（`kp_labeler.APPLY_MIN_SCORE`），且候选必须在本课程图谱清单内。
+        """
+        from .kp_labeler import label_questions
+
+        _, err = _course_for_teacher(course_id, user_id)
+        if err:
+            return err
+        did, err = _check_document(course_id, document_id)
+        if err:
+            return err
+        try:
+            top_k = min(max(1, int(top_k or 3)), 10)
+        except (TypeError, ValueError):
+            top_k = 3
+        try:
+            threshold = float(apply_threshold)
+        except (TypeError, ValueError):
+            threshold = 0.6
+        return label_questions(
+            course_id, document_id=did, question_ids=question_ids,
+            only_missing=bool(only_missing), apply=bool(apply), top_k=top_k,
+            apply_threshold=min(max(threshold, 0.0), 1.0),
+        )
+
+    @staticmethod
+    async def import_preview(user_id: int, course_id: int, document_id, max_questions=None) -> dict:
+        """解析课程文档 → 题目候选**预览**（不写库；Scope D / P2）
+
+        走确定性规则解析（零 LLM 成本）；每道题带 q_type/options/answer/warnings/
+        import_status/confidence，教师在预览里可编辑后再提交。
+        """
+        from .document_parser import DocumentParser
+        from .question_importer import parse_text
+        from .document_service import _resolve_stored_path
+
+        _, err = _course_for_teacher(course_id, user_id)
+        if err:
+            return err
+        did, err = _check_document(course_id, document_id)
+        if err:
+            return err
+        doc = sql_db.get_document(did)
+        try:
+            text = await DocumentParser.parse(_resolve_stored_path(doc["file_path"]))
+        except Exception as e:
+            return {"ok": False, "code": 2005, "message": f"文档解析失败：{e}"}
+        result = parse_text(text, max_questions=max_questions)
+        return {"ok": True, "code": 0, "message": "success", "data": {
+            "course_id": course_id, "document_id": did,
+            "file_name": doc.get("file_name"), "source": result["source"],
+            "stats": result["stats"], "items": result["items"],
+        }}
+
+    @staticmethod
+    def import_commit(user_id: int, course_id: int, document_id, items: list,
+                      activate: bool = False) -> dict:
+        """把（教师确认/编辑过的）候选题目入库为**暂存题**（默认 is_active=0）
+
+        逐题复用 validate_question_payload 校验：主观题缺参考答案、选项不足等一律拒绝并回报原因，
+        绝不把不合格内容写进题库（宁缺毋滥）。
+        """
+        _, err = _course_for_teacher(course_id, user_id)
+        if err:
+            return err
+        did, err = _check_document(course_id, document_id)
+        if err:
+            return err
+        if not isinstance(items, list) or not items:
+            return {"ok": False, "code": 4001, "message": "参数错误：items 不能为空"}
+        doc = sql_db.get_document(did)
+        batch_id = sql_db.create_import_batch(
+            course_id, did, (doc or {}).get("file_name") or "", source="RULE",
+            total=len(items), created_by=user_id, meta={"activate": bool(activate)},
+        )
+
+        imported, skipped, needs_review = 0, [], 0
+        for idx, raw in enumerate(items):
+            if not isinstance(raw, dict):
+                skipped.append({"index": idx, "reason": "条目格式非法"})
+                continue
+            payload = {
+                "q_type": raw.get("q_type"), "stem": raw.get("stem"),
+                "options": raw.get("options") or [], "answer": raw.get("answer"),
+                "analysis": raw.get("analysis") or "", "difficulty": raw.get("difficulty") or 3,
+                "kp_id": raw.get("kp_id"),
+            }
+            ok, message, normalized = validate_question_payload(payload)
+            if not ok:
+                skipped.append({"index": idx, "number": raw.get("number"), "reason": message})
+                continue
+            status = raw.get("import_status") or "READY"
+            if status == "READY" and raw.get("warnings"):
+                status = "NEEDS_REVIEW"
+            if status != "READY":
+                needs_review += 1
+            sql_db.create_question(
+                course_id=course_id, document_id=did, kp_id=normalized["kp_id"],
+                q_type=normalized["q_type"], stem=normalized["stem"],
+                options=normalized["options"], answer=normalized["answer"],
+                analysis=normalized["analysis"], difficulty=normalized["difficulty"],
+                created_by=user_id, source="IMPORT", is_active=1 if activate else 0,
+                import_batch_id=batch_id, import_status=status,
+            )
+            imported += 1
+
+        sql_db.update_import_batch(batch_id, imported=imported, needs_review=needs_review,
+                                   status="COMMITTED")
+        return {"ok": True, "code": 0, "message": "success", "data": {
+            "batch_id": batch_id, "course_id": course_id, "document_id": did,
+            "total": len(items), "imported": imported, "skipped": skipped,
+            "needs_review": needs_review, "activated": bool(activate),
+            "hint": "导入的题目默认「停用」进入暂存区，请在题库列表中复核后启用",
+        }}
+
+    @staticmethod
+    def import_batch_detail(user_id: int, batch_id: str) -> dict:
+        """批次明细：批次信息 + 已入库题目（含答案，教师视角）"""
+        batch = sql_db.get_import_batch(batch_id)
+        if batch is None:
+            return {"ok": False, "code": 2002, "message": f"导入批次不存在: {batch_id}"}
+        _, err = _course_for_teacher(batch["course_id"], user_id)
+        if err:
+            return err
+        total, rows = sql_db.list_questions_by_batch(batch_id, page=1, page_size=500)
+        stats = sql_db.question_answer_stats(batch["course_id"])
+        return {"ok": True, "code": 0, "message": "success", "data": {
+            "batch": batch, "total": total,
+            "items": [_teacher_view(r, stats.get(r["question_id"])) for r in rows],
         }}
 
     @staticmethod
@@ -782,11 +1093,13 @@ class PracticeService:
             return {"ok": False, "code": 2004, "message": "该题已停用，无法作答"}
 
         result = grade(question, user_answer)
+        pending = bool(result.get("pending"))
         record_id = sql_db.add_answer_record(
             user_id=user_id, course_id=question["course_id"],
             document_id=question.get("document_id"), question_id=question_id,
             user_answer=user_answer, is_correct=result["is_correct"],
             score=result["score"], grade_source="AUTO",
+            grade_status=result.get("grade_status", "GRADED"),
         )
         return {"ok": True, "code": 0, "message": "success", "data": {
             "record_id": record_id,
@@ -795,10 +1108,13 @@ class PracticeService:
             "document_id": question.get("document_id"),
             "kp_id": question.get("kp_id"),
             "user_answer": user_answer,
-            "is_correct": result["is_correct"],
-            "score": result["score"],
+            # 主观题未批改：不给分数也不判对错（前端据此显示"已提交，等待教师批改"）
+            "is_correct": None if pending else result["is_correct"],
+            "score": None if pending else result["score"],
+            "grade_status": result.get("grade_status", "GRADED"),
+            "pending": pending,
             "correct_answer": result["correct_answer"],
-            "analysis": result["analysis"],
+            "analysis": result["analysis"] or "",
         }}
 
     @staticmethod
@@ -813,10 +1129,12 @@ class PracticeService:
                 return {"ok": False, "code": 4001, "message": "参数错误：document_id 必须为整数"}
 
         rows = sql_db.list_answer_records(user_id, course_id=course_id, document_id=did,
-                                          only_wrong=only_wrong)
+                                          only_wrong=only_wrong,
+                                          include_pending=not only_wrong)
         items = []
         for r in rows[:max(1, limit)]:
             q = sql_db.get_question(r["question_id"])
+            pending = (r.get("grade_status") or "GRADED") == "PENDING"
             items.append({
                 "record_id": r["record_id"],
                 "question_id": r["question_id"],
@@ -826,17 +1144,25 @@ class PracticeService:
                 "q_type": (q or {}).get("q_type"),
                 "q_type_label": TYPE_LABELS.get((q or {}).get("q_type"), ""),
                 "user_answer": _loads(r.get("user_answer"), r.get("user_answer")),
-                "is_correct": bool(r["is_correct"]),
-                "score": r["score"],
+                "is_correct": None if pending else bool(r["is_correct"]),
+                "score": None if pending else r["score"],
+                "grade_status": "PENDING" if pending else "GRADED",
+                "pending": pending,
+                "comment": r.get("comment"),
+                "graded_at": r.get("graded_at"),
                 "answered_at": r["answered_at"],
-                "correct_answer": _loads((q or {}).get("answer"), None),
-                "analysis": (q or {}).get("analysis") or "",
+                # 待批改的主观题不下发参考答案与解析（与提交接口同一口径）
+                "correct_answer": None if pending else _loads((q or {}).get("answer"), None),
+                "analysis": "" if pending else ((q or {}).get("analysis") or ""),
             })
-        correct = sum(1 for r in rows if r["is_correct"])
+        graded = [r for r in rows if (r.get("grade_status") or "GRADED") == "GRADED"]
+        correct = sum(1 for r in graded if r["is_correct"])
         return {"ok": True, "code": 0, "message": "success", "data": {
             "total": len(rows),
+            "graded_count": len(graded),
+            "pending_count": len(rows) - len(graded),
             "correct_count": correct,
-            "correct_rate": round(correct / len(rows) * 100, 1) if rows else 0.0,
+            "correct_rate": round(correct / len(graded) * 100, 1) if graded else 0.0,
             "items": items,
         }}
 
@@ -851,7 +1177,8 @@ class PracticeService:
                 return {"ok": False, "code": 4001, "message": "参数错误：document_id 必须为整数"}
 
         rows = sql_db.list_answer_records(user_id, course_id=course_id,
-                                          document_id=did, only_wrong=True)
+                                          document_id=did, only_wrong=True,
+                                          include_pending=False)
         wrong_counts = {}
         for r in rows:
             wrong_counts[r["question_id"]] = wrong_counts.get(r["question_id"], 0) + 1
@@ -874,6 +1201,10 @@ class PracticeService:
                 "correct_answer": _loads(q.get("answer"), None),
                 "analysis": q.get("analysis") or "",
                 "kp_name": None,
+                # Scope B 批改结果可见性：主观题由教师批改后才有分值/评语（客观题为 AUTO 判分）
+                "last_score": r.get("score"),
+                "last_comment": r.get("comment") or "",
+                "grade_source": r.get("grade_source"),
             })
             items.append(view)
 
@@ -910,14 +1241,20 @@ class PracticeService:
                 return {"ok": False, "code": 4001, "message": "参数错误：document_id 必须为整数"}
 
         rows = sql_db.list_answer_records(user_id, course_id=course_id, document_id=did)
-        correct = sum(1 for r in rows if r["is_correct"])
-        wrong_questions = {r["question_id"] for r in rows if not r["is_correct"]}
+        # 口径（Scope B）：正确率与错题数只看「已批改」记录——主观题提交后是 PENDING，
+        # 若混入统计会把"老师还没批"当成"答错"，学生会看到莫名下降的正确率。
+        graded = [r for r in rows if (r.get("grade_status") or "GRADED") == "GRADED"]
+        pending = [r for r in rows if (r.get("grade_status") or "GRADED") == "PENDING"]
+        correct = sum(1 for r in graded if r["is_correct"])
+        wrong_questions = {r["question_id"] for r in graded if not r["is_correct"]}
         return {"ok": True, "code": 0, "message": "success", "data": {
             "course_id": course_id,
             "document_id": did,
             "answer_count": len(rows),
+            "graded_count": len(graded),
+            "pending_count": len(pending),
             "correct_count": correct,
-            "correct_rate": round(correct / len(rows) * 100, 1) if rows else 0.0,
+            "correct_rate": round(correct / len(graded) * 100, 1) if graded else 0.0,
             "wrong_question_count": len(wrong_questions),
             "favorite_count": len(sql_db.list_question_favorites(user_id, course_id)),
         }}

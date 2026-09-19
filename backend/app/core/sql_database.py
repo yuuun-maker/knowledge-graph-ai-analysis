@@ -15,6 +15,7 @@ SQLite 关系型数据库访问层（对齐规划文档 4.2 节：t_user / t_cou
 import os
 import json
 import sqlite3
+import uuid
 from datetime import datetime
 
 from .config import settings
@@ -36,8 +37,13 @@ MEMBER_JOIN_SOURCE = ("create", "code", "invite", "apply", "import")
 JOIN_MODES = ("auto", "approval", "closed")          # 直接加入 / 审核后加入 / 关闭加入
 INVITE_STATUS = ("active", "used", "revoked")
 GENDERS = ("male", "female", "other", "unknown")
-# 题库枚举（Scope A：仅三型客观题，全部可自动判分）
-QUESTION_TYPES = ("SINGLE", "MULTI", "JUDGE")
+# 题库枚举（Scope B：三型客观题自动判分 + 两型主观题由教师批改）
+QUESTION_TYPES = ("SINGLE", "MULTI", "JUDGE", "FILL", "ESSAY")
+# 判分边界：客观题提交即判分（grade_source=AUTO）；主观题提交只落库、由教师批改（TEACHER）
+AUTO_GRADE_TYPES = ("SINGLE", "MULTI", "JUDGE")
+MANUAL_GRADE_TYPES = ("FILL", "ESSAY")
+# 答题记录批改状态：PENDING=待教师批改（不判分），GRADED=已判分（自动或人工）
+ANSWER_GRADE_STATUS = ("PENDING", "GRADED")
 QUESTION_SOURCE = ("MANUAL", "AI", "IMPORT")
 ANSWER_GRADE_SOURCE = ("AUTO", "LLM", "TEACHER")
 
@@ -49,6 +55,34 @@ def _now() -> str:
     """返回当前本地时间字符串（MySQL DATETIME 兼容格式）"""
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+
+# t_question 建表 DDL（抽成模块常量：Scope B 迁移需用它重建新表——SQLite 无法修改 CHECK 约束——
+# 抽出来可避免「建表 DDL」与「迁移 DDL」两份定义各自漂移）。
+_T_QUESTION_DDL = """
+CREATE TABLE IF NOT EXISTS t_question (
+    question_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id    INTEGER NOT NULL,
+    document_id  INTEGER,
+    kp_id        TEXT,
+    q_type       TEXT NOT NULL CHECK (q_type IN ('SINGLE', 'MULTI', 'JUDGE', 'FILL', 'ESSAY')),
+    stem         TEXT NOT NULL,
+    options      TEXT,
+    answer       TEXT NOT NULL,
+    analysis     TEXT,
+    difficulty   INTEGER NOT NULL DEFAULT 3 CHECK (difficulty BETWEEN 1 AND 5),
+    source       TEXT NOT NULL DEFAULT 'MANUAL' CHECK (source IN ('MANUAL', 'AI', 'IMPORT')),
+    created_by   INTEGER NOT NULL,
+    is_active    INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
+    -- Scope D：导入批次与暂存状态（READY / NEEDS_REVIEW / ANSWER_MISSING）
+    -- 旧库由 _migrate_question_bank 用 ADD COLUMN 补齐（SQLite 的 ADD COLUMN 不能带 CHECK，应用层校验）
+    import_batch_id TEXT,
+    import_status   TEXT DEFAULT 'READY',
+    created_at   TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    updated_at   TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    FOREIGN KEY (course_id) REFERENCES t_course(course_id),
+    FOREIGN KEY (created_by) REFERENCES t_user(user_id)
+)
+"""
 
 # 建表 DDL（含索引、CHECK 约束、外键）。顺序敏感：先建被引用的父表。
 _SCHEMA_SQL = [
@@ -251,29 +285,9 @@ _SCHEMA_SQL = [
 
     # ---------- 题库（合作者 PR #3：教师出题 / 学生练习） ----------
     # 4.2.7 题目表（题库唯一事实来源；kp_id 为逻辑外键 → Neo4j KnowledgePoint）
-    # options / answer 用 JSON 文本存储：题型差异大（单选/多选/判断），拆表会产生大量空列；
+    # options / answer 用 JSON 文本存储：题型差异大（选择/判断/填空/解答），拆表会产生大量空列；
     # 与 t_kp_embedding.embedding 存 JSON 同一先例，迁 MySQL 时 TEXT/JSON 均可，业务代码零改动。
-    """
-    CREATE TABLE IF NOT EXISTS t_question (
-        question_id  INTEGER PRIMARY KEY AUTOINCREMENT,
-        course_id    INTEGER NOT NULL,
-        document_id  INTEGER,
-        kp_id        TEXT,
-        q_type       TEXT NOT NULL CHECK (q_type IN ('SINGLE', 'MULTI', 'JUDGE')),
-        stem         TEXT NOT NULL,
-        options      TEXT,
-        answer       TEXT NOT NULL,
-        analysis     TEXT,
-        difficulty   INTEGER NOT NULL DEFAULT 3 CHECK (difficulty BETWEEN 1 AND 5),
-        source       TEXT NOT NULL DEFAULT 'MANUAL' CHECK (source IN ('MANUAL', 'AI', 'IMPORT')),
-        created_by   INTEGER NOT NULL,
-        is_active    INTEGER NOT NULL DEFAULT 1 CHECK (is_active IN (0, 1)),
-        created_at   TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
-        updated_at   TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
-        FOREIGN KEY (course_id) REFERENCES t_course(course_id),
-        FOREIGN KEY (created_by) REFERENCES t_user(user_id)
-    )
-    """,
+    _T_QUESTION_DDL,
     "CREATE INDEX IF NOT EXISTS idx_q_course_doc ON t_question(course_id, document_id);",
     "CREATE INDEX IF NOT EXISTS idx_q_kp ON t_question(kp_id);",
     "CREATE INDEX IF NOT EXISTS idx_q_type ON t_question(course_id, q_type);",
@@ -292,6 +306,12 @@ _SCHEMA_SQL = [
         is_correct   INTEGER NOT NULL DEFAULT 0 CHECK (is_correct IN (0, 1)),
         score        REAL NOT NULL DEFAULT 0,
         grade_source TEXT NOT NULL DEFAULT 'AUTO' CHECK (grade_source IN ('AUTO', 'LLM', 'TEACHER')),
+        -- Scope B：主观题提交即 PENDING（不判分），教师批改后就地更新为 GRADED；
+        -- 默认值取 GRADED，保证历史记录与三类客观题行为完全不变（回归零差异的关键）
+        grade_status TEXT NOT NULL DEFAULT 'GRADED' CHECK (grade_status IN ('PENDING', 'GRADED')),
+        graded_by    INTEGER,   -- 批改教师 user_id（逻辑外键，不设 FK：教师注销不应破坏答题记录）
+        graded_at    TEXT,
+        comment      TEXT,      -- 教师评语
         answered_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
         FOREIGN KEY (user_id) REFERENCES t_user(user_id),
         FOREIGN KEY (course_id) REFERENCES t_course(course_id),
@@ -317,6 +337,58 @@ _SCHEMA_SQL = [
     )
     """,
     "CREATE INDEX IF NOT EXISTS idx_qfav_user_course ON t_question_favorite(user_id, course_id);",
+
+    # ---------- Scope C：试题知识点自动标注（题目向量 + 知识点文本缓存） ----------
+    # 4.2.13 题目向量表（题干+选项的 embedding；与 t_kp_embedding 同构：向量存 JSON 文本）
+    # text_hash 用于判断题面是否变更（变了才需要重算向量），避免每次标注都调 embedding。
+    """
+    CREATE TABLE IF NOT EXISTS t_question_embedding (
+        question_id INTEGER PRIMARY KEY,
+        course_id   INTEGER NOT NULL,
+        document_id INTEGER,
+        text_hash   TEXT NOT NULL,
+        embedding   TEXT NOT NULL,
+        updated_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_q_emb_scope ON t_question_embedding(course_id, document_id);",
+
+    # 4.2.14 知识点文本缓存（图谱不可用时的降级数据源：名称/类别/描述）
+    # 每次从 Neo4j 成功取到知识点清单后覆盖写入，使「字面匹配」路在无图库时仍可用。
+    # 主键与 t_kp_embedding 保持同一先例：(course_id, kp_id)；document_id 为普通列（避免 NULL 进主键）。
+    """
+    CREATE TABLE IF NOT EXISTS t_kp_text (
+        course_id   INTEGER NOT NULL,
+        kp_id       TEXT NOT NULL,
+        document_id INTEGER,
+        name        TEXT NOT NULL,
+        category    TEXT,
+        description TEXT,
+        updated_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        PRIMARY KEY (course_id, kp_id)
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_kp_text_scope ON t_kp_text(course_id, document_id);",
+
+    # ---------- Scope D：试题文档导入（批次 + 暂存题） ----------
+    # 4.2.15 导入批次表：一次"从文档导入题目"的记录（预览→提交→复核都挂在批次上）
+    """
+    CREATE TABLE IF NOT EXISTS t_question_import_batch (
+        batch_id    TEXT PRIMARY KEY,
+        course_id   INTEGER NOT NULL,
+        document_id INTEGER,
+        file_name   TEXT,
+        source      TEXT NOT NULL DEFAULT 'RULE' CHECK (source IN ('RULE', 'LLM', 'MIXED')),
+        total       INTEGER NOT NULL DEFAULT 0,
+        imported    INTEGER NOT NULL DEFAULT 0,
+        needs_review INTEGER NOT NULL DEFAULT 0,
+        status      TEXT NOT NULL DEFAULT 'PREVIEW' CHECK (status IN ('PREVIEW', 'COMMITTED')),
+        created_by  INTEGER,
+        created_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+        meta        TEXT
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_import_batch_course ON t_question_import_batch(course_id, document_id);",
 ]
 
 
@@ -343,6 +415,9 @@ class SQLDatabase:
                 conn.execute(stmt)
             conn.commit()
         self._migrate()
+        # Scope B 题型扩展：t_question 的 q_type CHECK 需重建表（SQLite 不能改 CHECK）。
+        # 该步骤要用「关闭外键的独立连接」执行，故放在 _migrate（共用连接）之外。
+        self._migrate_question_types()
 
     def _migrate(self):
         """幂等迁移：为旧库补齐 document_id 列并回填（文档作用域改造）。
@@ -370,6 +445,7 @@ class SQLDatabase:
                     f"SELECT d.doc_id FROM t_document d WHERE d.course_id = {table}.{fk} LIMIT 1"
                     f") WHERE document_id IS NULL"
                 )
+            self._migrate_question_bank(conn)
             self._migrate_course_center(conn)
             conn.commit()
 
@@ -436,6 +512,143 @@ class SQLDatabase:
             WHERE c.teacher_id IS NOT NULL
             """
         )
+
+    # t_answer_record 在 Scope B（主观题）新增的列（全部可空或带默认值，历史行不受影响）
+    _ANSWER_NEW_COLUMNS = (
+        ("grade_status", "TEXT NOT NULL DEFAULT 'GRADED'"),
+        ("graded_by", "INTEGER"),
+        ("graded_at", "TEXT"),
+        ("comment", "TEXT"),
+    )
+
+    # t_question 在 Scope D（试题文档导入）新增的列
+    _QUESTION_NEW_COLUMNS = (
+        ("import_batch_id", "TEXT"),
+        ("import_status", "TEXT DEFAULT 'READY'"),
+    )
+
+    def _migrate_question_bank(self, conn: sqlite3.Connection):
+        """幂等迁移：题库 Scope B —— 为 t_answer_record 补「批改」相关列。
+
+        为什么默认值是 'GRADED'：历史记录（已判分的客观题）必须保持原口径，
+        只有主观题提交时才会显式写 'PENDING'；否则正确率 / 错题本 / 掌握度全线漂移。
+
+        注意：SQLite 的 ALTER TABLE ADD COLUMN 不允许带 CHECK 约束，旧库补出来的
+        grade_status 没有 CHECK（新库由 _SCHEMA_SQL 建出带 CHECK 的列），
+        取值合法性由应用层 ANSWER_GRADE_STATUS 白名单兜底。
+        """
+        cols = {row["name"] for row in
+                conn.execute("PRAGMA table_info(t_answer_record)").fetchall()}
+        for name, decl in self._ANSWER_NEW_COLUMNS:
+            if name not in cols:
+                conn.execute(f"ALTER TABLE t_answer_record ADD COLUMN {name} {decl}")
+
+        # Scope D：t_question 的导入批次/暂存状态列（先于 _migrate_question_types 执行，
+        # 这样重建表时能把这些列一起拷过去，见下面的动态列清单）
+        qcols = {row["name"] for row in conn.execute("PRAGMA table_info(t_question)").fetchall()}
+        for name, decl in self._QUESTION_NEW_COLUMNS:
+            if name not in qcols:
+                conn.execute(f"ALTER TABLE t_question ADD COLUMN {name} {decl}")
+
+    # 重建 t_question 时保留的列（显式列名 INSERT…SELECT，避免历史列序差异）
+    _QUESTION_COLUMNS = (
+        "question_id", "course_id", "document_id", "kp_id", "q_type", "stem",
+        "options", "answer", "analysis", "difficulty", "source", "created_by",
+        "is_active", "created_at", "updated_at",
+    )
+
+    def _migrate_question_types(self) -> bool:
+        """幂等迁移：把 t_question.q_type 的 CHECK 从 3 类扩到 5 类（+FILL/ESSAY）。
+
+        为什么必须重建表：SQLite 不支持修改 CHECK 约束。
+        为什么用独立连接且关闭外键：t_question 是 t_answer_record 与 t_question_favorite
+        的父表（两个外键指向它），而 _connect() 默认 `PRAGMA foreign_keys = ON`，
+        直接 DROP 父表会触发外键检查而失败；另外 `PRAGMA foreign_keys` 在事务内是空操作，
+        必须在 BEGIN 之前设置，故这里自建连接并显式控制事务。
+
+        流程（对齐 SQLite 官方 rebuild-table 建议）：
+          关外键 → BEGIN → 清理残留新表 → 建新表 → 拷数据（行数校验）→ 删旧表 → 改名 →
+          重建 3 个索引 → 修正 AUTOINCREMENT 续号 → foreign_key_check → COMMIT。
+        任一步失败即 ROLLBACK，原表原样保留。
+
+        返回 True = 本次执行了重建；False = 已是最新（幂等跳过）。
+        """
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 't_question'"
+            ).fetchone()
+        if row is None or not row["sql"]:
+            return False                     # 空库：首次由 _SCHEMA_SQL 直接建出 5 类 CHECK
+        if "'FILL'" in row["sql"] or '"FILL"' in row["sql"]:
+            return False                     # 已迁移（CHECK 文本里能看到 FILL）
+
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+        conn.isolation_level = None          # 显式控制事务，保证 PRAGMA 生效时机可控
+        try:
+            conn.execute("PRAGMA foreign_keys = OFF")
+            conn.execute("BEGIN IMMEDIATE")
+            # 先记下旧续号：重建后必须保留，见下方「续号取 max(旧续号, 最大 id)」
+            old_seq_row = conn.execute(
+                "SELECT seq FROM sqlite_sequence WHERE name = 't_question'"
+            ).fetchone()
+            old_seq = old_seq_row["seq"] if old_seq_row else 0
+            conn.execute("DROP TABLE IF EXISTS t_question_new")
+            conn.execute(_T_QUESTION_DDL.replace(
+                "CREATE TABLE IF NOT EXISTS t_question (",
+                "CREATE TABLE t_question_new (",
+            ))
+            # 动态列清单：只拷贝「当前表实际存在的列」，使重建对列增删保持健壮
+            # （_migrate_question_bank 已先补 Scope D 的新列，故这里能一起拷过去）
+            existing = {r["name"] for r in
+                        conn.execute("PRAGMA table_info(t_question)").fetchall()}
+            wanted = list(self._QUESTION_COLUMNS) + [n for n, _ in self._QUESTION_NEW_COLUMNS]
+            cols = ", ".join(c for c in wanted if c in existing)
+            conn.execute(f"INSERT INTO t_question_new ({cols}) SELECT {cols} FROM t_question")
+            old_cnt = conn.execute("SELECT count(*) AS c FROM t_question").fetchone()["c"]
+            new_cnt = conn.execute("SELECT count(*) AS c FROM t_question_new").fetchone()["c"]
+            if old_cnt != new_cnt:
+                raise RuntimeError(
+                    f"t_question 重建行数不一致：旧 {old_cnt} 行 / 新 {new_cnt} 行"
+                )
+            conn.execute("DROP TABLE t_question")
+            conn.execute("ALTER TABLE t_question_new RENAME TO t_question")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_q_course_doc ON t_question(course_id, document_id)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_q_kp ON t_question(kp_id)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_q_type ON t_question(course_id, q_type)")
+            # AUTOINCREMENT 续号：必须取 max(旧续号, 当前最大 id)。
+            # 单取 max(question_id) 是错的——历史上有物理删除过题目时，旧续号会更大，
+            # 那样新题就会复用「已删除的 question_id」，历史遗留引用会静默串到新题上。
+            max_id = conn.execute(
+                "SELECT COALESCE(MAX(question_id), 0) AS m FROM t_question"
+            ).fetchone()["m"]
+            next_seq = old_seq if old_seq >= max_id else max_id
+            seq = conn.execute(
+                "SELECT seq FROM sqlite_sequence WHERE name = 't_question'"
+            ).fetchone()
+            if seq is None:
+                conn.execute(
+                    "INSERT INTO sqlite_sequence (name, seq) VALUES ('t_question', ?)",
+                    (next_seq,),
+                )
+            elif seq["seq"] != next_seq:
+                conn.execute(
+                    "UPDATE sqlite_sequence SET seq = ? WHERE name = 't_question'",
+                    (next_seq,),
+                )
+            issues = conn.execute("PRAGMA foreign_key_check").fetchall()
+            if issues:
+                raise RuntimeError(f"外键校验失败，已回滚：{[tuple(r) for r in issues]}")
+            conn.execute("COMMIT")
+            return True
+        except Exception:
+            try:
+                conn.execute("ROLLBACK")
+            except Exception:
+                pass
+            raise
+        finally:
+            conn.close()
 
     def _execute(self, sql: str, params: tuple = ()) -> int:
         """执行写操作，返回 lastrowid（INSERT 时的自增主键）"""
@@ -616,10 +829,18 @@ class SQLDatabase:
         历史实现整课删除会残留孤儿向量，故在此显式删除。
         题库（题目/答题记录/题目收藏）同样无级联，必须在删 t_course 前显式清理，
         否则会留下指向已删课程的孤儿题目。
+        Scope C 的 t_question_embedding（题目向量）与 t_kp_text（知识点文本缓存）同理。
         """
         doc_count = self.count_documents_by_course(course_id)
         with self._connect() as conn:
             conn.execute("DELETE FROM t_kp_embedding WHERE course_id = ?", (course_id,))
+            # Scope C：题目向量与知识点文本缓存同样无外键，需显式清理（否则留孤儿）
+            conn.execute(
+                "DELETE FROM t_question_embedding WHERE question_id IN "
+                "(SELECT question_id FROM t_question WHERE course_id = ?)", (course_id,),
+            )
+            conn.execute("DELETE FROM t_question_import_batch WHERE course_id = ?", (course_id,))
+            conn.execute("DELETE FROM t_kp_text WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_student_favorite WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_learning_record WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_course_invite WHERE course_id = ?", (course_id,))
@@ -891,6 +1112,16 @@ class SQLDatabase:
             conn.commit()
             return cur.rowcount
 
+    def get_embeddings_by_course(self, course_id: int) -> list:
+        """返回该课程全部知识点向量（跨文档），[{kp_id, document_id, embedding(list)}]"""
+        rows = self._query(
+            "SELECT kp_id, document_id, embedding FROM t_kp_embedding WHERE course_id = ?",
+            (course_id,),
+        )
+        for r in rows:
+            r["embedding"] = self._loads_json(r["embedding"])
+        return rows
+
     def count_embeddings_by_course(self, course_id: int) -> int:
         """某课程全部知识点向量数量（供整课删除前统计与报告）"""
         return self._query_one(
@@ -993,7 +1224,188 @@ class SQLDatabase:
             conn.commit()
             return cur.rowcount
 
-    # ---------- 题库：题目（题库唯一事实来源） ----------
+    # ---------- Scope C：知识点文本缓存 + 题目向量（试题知识点自动标注） ----------
+
+    def upsert_kp_text_batch(self, course_id: int, items: list) -> int:
+        """批量写入/更新知识点文本缓存，返回写入条数。
+
+        items: [{"kp_id", "name", "category", "description", "document_id"}]
+        每次从图谱成功取到清单后调用（覆盖式更新），供图谱不可用时降级使用。
+        """
+        rows = [
+            (course_id, it.get("kp_id"), it.get("document_id"), it.get("name") or "",
+             it.get("category") or "", it.get("description") or "", _now())
+            for it in items
+            if it.get("kp_id")
+        ]
+        if not rows:
+            return 0
+        with self._connect() as conn:
+            conn.executemany(
+                "INSERT INTO t_kp_text (course_id, kp_id, document_id, name, category, "
+                "description, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?) "
+                "ON CONFLICT(course_id, kp_id) DO UPDATE SET "
+                "document_id = excluded.document_id, name = excluded.name, "
+                "category = excluded.category, description = excluded.description, "
+                "updated_at = excluded.updated_at",
+                rows,
+            )
+            conn.commit()
+        return len(rows)
+
+    def list_kp_text(self, course_id: int, document_id=None) -> list:
+        """读取知识点文本缓存；document_id 传入时只取该文档（缓存无 document_id 的也一并返回）"""
+        where, params = ["course_id = ?"], [course_id]
+        if document_id is not None:
+            where.append("(document_id = ? OR document_id IS NULL)")
+            params.append(document_id)
+        return self._query(
+            f"SELECT kp_id, document_id, name, category, description FROM t_kp_text "
+            f"WHERE {' AND '.join(where)} ORDER BY name",
+            tuple(params),
+        )
+
+    def count_kp_text(self, course_id: int) -> int:
+        return self._query_one(
+            "SELECT count(*) AS cnt FROM t_kp_text WHERE course_id = ?", (course_id,),
+        )["cnt"]
+
+    def upsert_question_embedding(self, question_id: int, course_id: int, document_id,
+                                  text_hash: str, embedding: list) -> int:
+        """写入/更新题目向量（embedding 序列化为 JSON 文本）"""
+        with self._connect() as conn:
+            conn.execute(
+                "INSERT INTO t_question_embedding "
+                "(question_id, course_id, document_id, text_hash, embedding, updated_at) "
+                "VALUES (?, ?, ?, ?, ?, ?) "
+                "ON CONFLICT(question_id) DO UPDATE SET "
+                "course_id = excluded.course_id, document_id = excluded.document_id, "
+                "text_hash = excluded.text_hash, embedding = excluded.embedding, "
+                "updated_at = excluded.updated_at",
+                (question_id, course_id, document_id, text_hash,
+                 self._json_text(embedding), _now()),
+            )
+            conn.commit()
+        return 1
+
+    def get_question_embedding(self, question_id: int) -> dict:
+        """取单题向量行（含 text_hash，供判断是否需要重算）"""
+        row = self._query_one(
+            "SELECT question_id, course_id, document_id, text_hash, embedding "
+            "FROM t_question_embedding WHERE question_id = ?", (question_id,),
+        )
+        if row is None:
+            return None
+        row["embedding"] = self._loads_json(row["embedding"])
+        return row
+
+    def get_question_embeddings_by_document(self, course_id: int, document_id=None) -> list:
+        """取某课程（可限文档）的全部题目向量"""
+        where, params = ["course_id = ?"], [course_id]
+        if document_id is not None:
+            where.append("document_id = ?")
+            params.append(document_id)
+        rows = self._query(
+            f"SELECT question_id, course_id, document_id, text_hash, embedding "
+            f"FROM t_question_embedding WHERE {' AND '.join(where)}",
+            tuple(params),
+        )
+        for r in rows:
+            r["embedding"] = self._loads_json(r["embedding"])
+        return rows
+
+    def delete_question_embeddings_by_document(self, course_id: int, document_id) -> int:
+        """删除该文档的题目向量（文档删除时清理）"""
+        with self._connect() as conn:
+            cur = conn.execute(
+                "DELETE FROM t_question_embedding WHERE course_id = ? AND document_id = ?",
+                (course_id, document_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    @staticmethod
+    def _loads_json(value):
+        """把库内 JSON 文本解析回对象（解析失败返回空列表）"""
+        if isinstance(value, (list, dict)):
+            return value
+        try:
+            return json.loads(value)
+        except (TypeError, ValueError):
+            return []
+
+    # ---------- Scope D：试题文档导入（批次） ----------
+
+    def create_import_batch(self, course_id: int, document_id, file_name: str,
+                            source: str = "RULE", total: int = 0,
+                            created_by: int = None, meta: dict = None) -> str:
+        """创建导入批次，返回 batch_id（形如 imp_xxxxxxxxxxxx）"""
+        batch_id = f"imp_{uuid.uuid4().hex[:12]}"
+        self._execute(
+            "INSERT INTO t_question_import_batch "
+            "(batch_id, course_id, document_id, file_name, source, total, created_by, meta) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (batch_id, course_id, document_id, file_name, source, total, created_by,
+             json.dumps(meta or {}, ensure_ascii=False)),
+        )
+        return batch_id
+
+    def get_import_batch(self, batch_id: str) -> dict:
+        return self._query_one(
+            "SELECT * FROM t_question_import_batch WHERE batch_id = ?", (batch_id,)
+        )
+
+    def update_import_batch(self, batch_id: str, **fields) -> int:
+        """更新批次（白名单字段）"""
+        allowed = {"imported", "needs_review", "status", "total", "meta", "source"}
+        sets, params = [], []
+        for key, val in fields.items():
+            if key not in allowed:
+                continue
+            if key == "meta" and not isinstance(val, str):
+                val = json.dumps(val, ensure_ascii=False)
+            sets.append(f"{key} = ?")
+            params.append(val)
+        if not sets:
+            return 0
+        params.append(batch_id)
+        return self._execute(
+            f"UPDATE t_question_import_batch SET {', '.join(sets)} WHERE batch_id = ?",
+            tuple(params),
+        )
+
+    def list_import_batches(self, course_id: int, document_id=None, limit: int = 20) -> list:
+        where, params = ["course_id = ?"], [course_id]
+        if document_id is not None:
+            where.append("document_id = ?")
+            params.append(document_id)
+        params.append(limit)
+        return self._query(
+            f"SELECT * FROM t_question_import_batch WHERE {' AND '.join(where)} "
+            f"ORDER BY created_at DESC, batch_id DESC LIMIT ?",
+            tuple(params),
+        )
+
+    def list_questions_by_batch(self, batch_id: str, page: int = 1, page_size: int = 200):
+        """批次内已入库的题目（分页），返回 (total, rows)"""
+        total = self._query_one(
+            "SELECT count(*) AS cnt FROM t_question WHERE import_batch_id = ?", (batch_id,),
+        )["cnt"]
+        rows = self._query(
+            "SELECT * FROM t_question WHERE import_batch_id = ? ORDER BY question_id LIMIT ? OFFSET ?",
+            (batch_id, page_size, (page - 1) * page_size),
+        )
+        return total, rows
+
+    def count_questions_by_import_status(self, course_id: int) -> dict:
+        """课件/课程级：按导入状态统计（教师端"待复核导入题"角标）"""
+        rows = self._query(
+            "SELECT import_status, count(*) AS cnt FROM t_question "
+            "WHERE course_id = ? AND import_batch_id IS NOT NULL GROUP BY import_status",
+            (course_id,),
+        )
+        return {r["import_status"] or "READY": r["cnt"] for r in rows}
+
 
     @staticmethod
     def _json_text(value):
@@ -1012,16 +1424,23 @@ class SQLDatabase:
     def create_question(self, course_id: int, document_id, kp_id, q_type: str,
                         stem: str, options, answer, analysis: str = None,
                         difficulty: int = 3, created_by: int = None,
-                        source: str = "MANUAL") -> int:
-        """新增题目，返回 question_id（options/answer 自动序列化为 JSON 文本）"""
+                        source: str = "MANUAL", is_active: int = 1,
+                        import_batch_id: str = None,
+                        import_status: str = None) -> int:
+        """新增题目，返回 question_id（options/answer 自动序列化为 JSON 文本）。
+
+        Scope D：导入的题目一律 is_active=0 进「暂存区」，并带上 import_batch_id /
+        import_status（READY / NEEDS_REVIEW / ANSWER_MISSING），教师复核后才启用。
+        """
         return self._execute(
             "INSERT INTO t_question "
             "(course_id, document_id, kp_id, q_type, stem, options, answer, analysis, "
-            " difficulty, source, created_by) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            " difficulty, source, created_by, is_active, import_batch_id, import_status) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (course_id, document_id, kp_id, q_type, stem,
              self._json_text(options), self._json_text(answer),
-             analysis, difficulty, source, created_by),
+             analysis, difficulty, source, created_by, 1 if is_active else 0,
+             import_batch_id, import_status or "READY"),
         )
 
     def get_question(self, question_id: int) -> dict:
@@ -1132,12 +1551,16 @@ class SQLDatabase:
     def list_questions(self, course_id: int, document_id=None, kp_id: str = None,
                        q_type: str = None, keyword: str = None, is_active=None,
                        page: int = 1, page_size: int = 10,
-                       include_course_level: bool = True):
+                       include_course_level: bool = True,
+                       auto_grade_only: bool = False):
         """分页查询题目（LEFT JOIN 取创建人姓名），返回 (total, rows)。
 
         作用域规则：传入 document_id 时默认同时包含「该文档题目」与「课程通用题
         （document_id IS NULL，即题目挂课程不挂具体文档）」；include_course_level=False
         时退化为精确匹配该文档（用于文档级清理/统计）。
+
+        auto_grade_only=True 时排除主观题（FILL/ESSAY）——推荐器候选池用该口径实现
+        "自动组卷不硬插入主观题"；教师端题库列表保持 False（要能看到主观题）。
 
         注意：WHERE 条件里的列一律带 `q.` 前缀——`t_user` 也有 `is_active` 列，
         裸写会报 `ambiguous column name: is_active`（教师端「启用状态」筛选曾因此报错）。
@@ -1155,6 +1578,10 @@ class SQLDatabase:
         if q_type:
             where.append("q.q_type = ?")
             params.append(q_type)
+        elif auto_grade_only:
+            marks = ", ".join("?" for _ in MANUAL_GRADE_TYPES)
+            where.append(f"q.q_type NOT IN ({marks})")
+            params.extend(MANUAL_GRADE_TYPES)
         if keyword:
             where.append("q.stem LIKE ?")
             params.append(f"%{keyword}%")
@@ -1348,8 +1775,12 @@ class SQLDatabase:
         return self._query_one("SELECT count(*) AS cnt FROM t_user_profile")["cnt"]
     def list_practice_questions(self, course_id: int, document_id=None, kp_id: str = None,
                                 q_type: str = None, limit: int = 10,
-                                exclude_ids=None) -> list:
-        """出题查询：仅取启用题目，随机排序；document_id 传入时含「该文档题 + 课程通用题」。"""
+                                exclude_ids=None, auto_grade_only: bool = True) -> list:
+        """出题查询：仅取启用题目，随机排序；document_id 传入时含「该文档题 + 课程通用题」。
+
+        auto_grade_only=True（默认）：主观题（FILL/ESSAY）不进随机出题池——它们要教师批改、
+        作答耗时长，混进随机卷会拉垮体验；只有显式指定 q_type 时才取（"不硬插入"策略）。
+        """
         where, params = ["course_id = ?", "is_active = 1"], [course_id]
         if document_id is not None:
             where.append("(document_id = ? OR document_id IS NULL)")
@@ -1360,6 +1791,10 @@ class SQLDatabase:
         if q_type:
             where.append("q_type = ?")
             params.append(q_type)
+        elif auto_grade_only:
+            marks = ", ".join("?" for _ in MANUAL_GRADE_TYPES)
+            where.append(f"q_type NOT IN ({marks})")
+            params.extend(MANUAL_GRADE_TYPES)
         if exclude_ids:
             placeholders = ",".join("?" for _ in exclude_ids)
             where.append(f"question_id NOT IN ({placeholders})")
@@ -1417,13 +1852,20 @@ class SQLDatabase:
                 unlinked = r["c"]              # 唯一一行：kp_id IS NULL
         return grouped, unlinked
 
-    def question_answer_stats(self, course_id: int) -> dict:
-        """按题统计作答人次与正确数，返回 {question_id: {"attempts": n, "correct": n}}"""
-        rows = self._query(
-            "SELECT question_id, count(*) AS attempts, sum(is_correct) AS correct "
-            "FROM t_answer_record WHERE course_id = ? GROUP BY question_id",
-            (course_id,),
-        )
+    def question_answer_stats(self, course_id: int, graded_only: bool = True) -> dict:
+        """按题统计作答人次与正确数，返回 {question_id: {"attempts": n, "correct": n}}。
+
+        graded_only=True（默认）只统计已判分的记录：主观题提交后处于 PENDING 且
+        is_correct=0，若不排除会把"未批改"误算成"答错"，污染推荐器的区分度信号与正确率。
+        """
+        sql = ("SELECT question_id, count(*) AS attempts, sum(is_correct) AS correct "
+               "FROM t_answer_record WHERE course_id = ?")
+        if graded_only:
+            sql += " AND grade_status = 'GRADED'"
+        sql += " GROUP BY question_id"
+        rows = self._query(sql, (course_id,))
+        if not rows:
+            return {}
         return {
             r["question_id"]: {"attempts": r["attempts"], "correct": r["correct"] or 0}
             for r in rows
@@ -1433,20 +1875,30 @@ class SQLDatabase:
 
     def add_answer_record(self, user_id: int, course_id: int, document_id, question_id: int,
                           user_answer, is_correct: bool, score: float = 0,
-                          grade_source: str = "AUTO") -> int:
-        """追加一条答题记录（不覆盖历史，同一题可多次作答）"""
+                          grade_source: str = "AUTO", grade_status: str = "GRADED") -> int:
+        """追加一条答题记录（不覆盖历史，同一题可多次作答）。
+
+        grade_status 默认 'GRADED'（客观题提交即判分，与历史行为一致）；
+        主观题（FILL/ESSAY）由上层显式传 'PENDING'——提交只落库、不判分，等待教师批改。
+        """
+        if grade_status not in ANSWER_GRADE_STATUS:
+            grade_status = "GRADED"
         return self._execute(
             "INSERT INTO t_answer_record "
             "(user_id, course_id, document_id, question_id, user_answer, is_correct, "
-            " score, grade_source, answered_at) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            " score, grade_source, grade_status, answered_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (user_id, course_id, document_id, question_id, self._json_text(user_answer),
-             1 if is_correct else 0, score, grade_source, _now()),
+             1 if is_correct else 0, score, grade_source, grade_status, _now()),
         )
 
     def list_answer_records(self, user_id: int, course_id: int = None, document_id=None,
-                            only_wrong: bool = False) -> list:
-        """查询答题记录（时间倒序）；only_wrong=True 仅返回答错的记录（错题本原始数据）"""
+                            only_wrong: bool = False, include_pending: bool = True) -> list:
+        """查询答题记录（时间倒序）；only_wrong=True 仅返回答错的记录（错题本原始数据）。
+
+        include_pending=False 时排除「待批改」的主观题记录——错题本、正确率、掌握度
+        都必须用这个口径，否则"交了但老师还没批"会被当成答错。
+        """
         where, params = ["user_id = ?"], [user_id]
         if course_id is not None:
             where.append("course_id = ?")
@@ -1456,6 +1908,8 @@ class SQLDatabase:
             params.append(document_id)
         if only_wrong:
             where.append("is_correct = 0")
+        if not include_pending:
+            where.append("grade_status = 'GRADED'")
         return self._query(
             f"SELECT * FROM t_answer_record WHERE {' AND '.join(where)} ORDER BY record_id DESC",
             tuple(params),
@@ -1478,6 +1932,160 @@ class SQLDatabase:
         return self._query_one(
             "SELECT count(*) AS cnt FROM t_answer_record WHERE question_id = ?", (question_id,),
         )["cnt"]
+
+    def get_answer_record(self, record_id: int) -> dict:
+        """取单条作答记录（批改前校验归属与题型用）"""
+        return self._query_one(
+            "SELECT * FROM t_answer_record WHERE record_id = ?", (record_id,)
+        )
+
+    # ---------- 题库：主观题批改（Scope B，就地更新 t_answer_record） ----------
+
+    def grade_answer_record(self, record_id: int, score: float, is_correct: bool,
+                            graded_by: int, comment: str = None) -> int:
+        """教师批改单条作答：就地更新（分数/对错/评语/批改痕迹），返回影响行数。
+
+        - grade_status 置 GRADED、grade_source 置 TEACHER：与客观题（AUTO）可区分；
+        - 允许重批（覆盖旧分与旧评语）——这是「就地更新」方案的既定语义（不留痕）。
+        """
+        with self._connect() as conn:
+            cur = conn.execute(
+                "UPDATE t_answer_record SET score = ?, is_correct = ?, grade_status = 'GRADED', "
+                "grade_source = 'TEACHER', graded_by = ?, graded_at = ?, comment = ? "
+                "WHERE record_id = ?",
+                (score, 1 if is_correct else 0, graded_by, _now(), comment, record_id),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def grade_answer_records_batch(self, record_ids: list, score: float, is_correct: bool,
+                                   graded_by: int, comment: str = None) -> int:
+        """批量批改（同一分数与评语），返回实际更新条数；空列表返回 0"""
+        if not record_ids:
+            return 0
+        marks = ", ".join("?" for _ in record_ids)
+        with self._connect() as conn:
+            cur = conn.execute(
+                f"UPDATE t_answer_record SET score = ?, is_correct = ?, grade_status = 'GRADED', "
+                f"grade_source = 'TEACHER', graded_by = ?, graded_at = ?, comment = ? "
+                f"WHERE record_id IN ({marks})",
+                (score, 1 if is_correct else 0, graded_by, _now(), comment) + tuple(record_ids),
+            )
+            conn.commit()
+            return cur.rowcount
+
+    def list_pending_answer_records(self, course_id: int, document_id=None, kp_id: str = None,
+                                    student_id: int = None, limit: int = 50,
+                                    offset: int = 0, status: str = "PENDING") -> list:
+        """批改台列表（教师视角，联表带出题面 / 参考答案 / 学生信息）。
+
+        - status='PENDING'（默认）：只取待批改，排序按 record_id 升序 = 先交先批；
+        - status='GRADED'：取已批改（**限定主观题**，客观题由系统判分不属于人工批改台），
+          排序按 graded_at 倒序 = 最近批改在前，供教师复查与改判；
+        - status='ALL'：不过滤状态（仍按 record_id 升序）。
+        document_id 口径与题目列表一致（含课程通用题）。
+        参考答案随该接口下发给教师，学生端绝不可复用本方法。
+        """
+        where, params = ["r.course_id = ?"], [course_id]
+        if status == "GRADED":
+            where.append("r.grade_status = 'GRADED'")
+            where.append(f"q.q_type IN ({', '.join('?' for _ in MANUAL_GRADE_TYPES)})")
+            params.extend(MANUAL_GRADE_TYPES)
+        elif status == "ALL":
+            pass
+        else:
+            where.append("r.grade_status = 'PENDING'")
+        if document_id is not None:
+            where.append("(r.document_id = ? OR r.document_id IS NULL)")
+            params.append(document_id)
+        if kp_id:
+            where.append("q.kp_id = ?")
+            params.append(kp_id)
+        if student_id is not None:
+            where.append("r.user_id = ?")
+            params.append(student_id)
+        order_by = "r.graded_at DESC, r.record_id DESC" if status == "GRADED" else "r.record_id ASC"
+        params.extend([limit, offset])
+        return self._query(
+            f"""
+            SELECT r.*, q.stem AS stem, q.q_type AS q_type, q.kp_id AS kp_id,
+                   q.options AS question_options,
+                   q.answer AS reference_answer, q.analysis AS analysis,
+                   q.difficulty AS difficulty, q.document_id AS question_document_id,
+                   COALESCE(u.display_name, u.username, '') AS student_name,
+                   u.username AS student_username
+            FROM t_answer_record r
+            JOIN t_question q ON q.question_id = r.question_id
+            LEFT JOIN t_user u ON u.user_id = r.user_id
+            WHERE {' AND '.join(where)}
+            ORDER BY {order_by}
+            LIMIT ? OFFSET ?
+            """,
+            tuple(params),
+        )
+
+    def count_pending_answer_records(self, course_id: int, document_id=None, kp_id: str = None,
+                                     student_id: int = None, status: str = "PENDING") -> int:
+        """批改台条数（与 list_pending_answer_records 同一口径，含 status 筛选）"""
+        where, params = ["r.course_id = ?"], [course_id]
+        if status == "GRADED":
+            where.append("r.grade_status = 'GRADED'")
+            where.append(f"q.q_type IN ({', '.join('?' for _ in MANUAL_GRADE_TYPES)})")
+            params.extend(MANUAL_GRADE_TYPES)
+        elif status == "ALL":
+            pass
+        else:
+            where.append("r.grade_status = 'PENDING'")
+        if document_id is not None:
+            where.append("(r.document_id = ? OR r.document_id IS NULL)")
+            params.append(document_id)
+        if kp_id:
+            where.append("q.kp_id = ?")
+            params.append(kp_id)
+        if student_id is not None:
+            where.append("r.user_id = ?")
+            params.append(student_id)
+        return self._query_one(
+            f"SELECT count(*) AS cnt FROM t_answer_record r "
+            f"JOIN t_question q ON q.question_id = r.question_id "
+            f"WHERE {' AND '.join(where)}",
+            tuple(params),
+        )["cnt"]
+
+    def answer_grading_summary(self, course_id: int) -> dict:
+        """批改进度汇总：{pending, graded, manual_total, auto_total, avg_score}
+
+        - manual_total = 主观题（FILL/ESSAY）作答总数，auto_total = 客观题作答总数；
+        - avg_score 只统计已批改记录：未批改记录的 0 分是占位值，不能拉低平均分。
+        """
+        rows = self._query(
+            """
+            SELECT q.q_type AS q_type, r.grade_status AS grade_status,
+                   count(*) AS cnt, AVG(r.score) AS avg_score
+            FROM t_answer_record r
+            JOIN t_question q ON q.question_id = r.question_id
+            WHERE r.course_id = ?
+            GROUP BY q.q_type, r.grade_status
+            """,
+            (course_id,),
+        )
+        summary = {"pending": 0, "graded": 0, "manual_total": 0, "auto_total": 0,
+                   "avg_score": 0.0}
+        weighted, scored = 0.0, 0
+        for r in rows:
+            if r["grade_status"] == "PENDING":
+                summary["pending"] += r["cnt"]
+            else:
+                summary["graded"] += r["cnt"]
+                if r["avg_score"] is not None:
+                    weighted += r["avg_score"] * r["cnt"]
+                    scored += r["cnt"]
+            if r["q_type"] in MANUAL_GRADE_TYPES:
+                summary["manual_total"] += r["cnt"]
+            else:
+                summary["auto_total"] += r["cnt"]
+        summary["avg_score"] = round(weighted / scored, 1) if scored else 0.0
+        return summary
 
     def count_answers_grouped_by_course(self) -> dict:
         """按课程统计答题总数，返回 {course_id: count}"""

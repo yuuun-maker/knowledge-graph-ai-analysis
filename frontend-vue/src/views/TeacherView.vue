@@ -660,6 +660,25 @@
                 <div class="class-kpi-label">判断题</div>
               </div>
               <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.by_type?.FILL ?? 0 }}</div>
+                <div class="class-kpi-label">填空题</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ questionStats?.by_type?.ESSAY ?? 0 }}</div>
+                <div class="class-kpi-label">解答题</div>
+              </div>
+              <!-- F3：一键直达「主观题批改」页（标签栏 tab 较多时该页可能被溢出隐藏，故给显式入口） -->
+              <div
+                class="class-kpi"
+                :class="{ highlight: (questionStats?.pending_count ?? 0) > 0 }"
+                style="cursor: pointer"
+                title="点击进入「主观题批改」"
+                @click="gotoGrading"
+              >
+                <div class="class-kpi-value">{{ questionStats?.pending_count ?? 0 }}</div>
+                <div class="class-kpi-label">待批改 ›</div>
+              </div>
+              <div class="class-kpi">
                 <div class="class-kpi-value">{{ questionStats?.answer_count ?? 0 }}</div>
                 <div class="class-kpi-label">累计作答</div>
               </div>
@@ -771,6 +790,8 @@
               />
               <el-button :icon="Refresh" @click="loadQuestionsTab">刷新</el-button>
               <el-button type="primary" :icon="Plus" @click="openQuestionForm(null)">新增题目</el-button>
+              <el-button :icon="MagicStick" @click="openAutoLabel">批量自动标注</el-button>
+              <el-button :icon="Upload" @click="openImportWizard">从文档导入</el-button>
               <el-button :icon="Star" @click="openQuestionFavorites">题目收藏情况</el-button>
             </div>
 
@@ -844,7 +865,7 @@
                 <el-input v-model="questionForm.stem" type="textarea" :rows="3" maxlength="1000" show-word-limit placeholder="请输入题干" />
               </el-form-item>
 
-              <template v-if="questionForm.q_type !== 'JUDGE'">
+              <template v-if="questionForm.q_type === 'SINGLE' || questionForm.q_type === 'MULTI'">
                 <el-form-item v-for="(opt, idx) in questionForm.options" :key="opt.key" :label="`选项 ${opt.key}`">
                   <div class="opt-row">
                     <el-input v-model="opt.text" placeholder="选项内容" />
@@ -863,6 +884,43 @@
                   </el-checkbox-group>
                 </el-form-item>
               </template>
+
+              <!-- 填空题：空位编辑器（每空必须有参考答案；学生提交后进入「批改」队列） -->
+              <template v-else-if="questionForm.q_type === 'FILL'">
+                <el-alert
+                  class="coverage-alert"
+                  type="info"
+                  :closable="false"
+                  show-icon
+                  title="填空题不自动判分"
+                  description="每空必须填写参考答案。学生提交后进入「批改」队列，由你逐题给分（可给部分分 0~100）。"
+                />
+                <el-form-item v-for="(b, idx) in questionForm.blanks" :key="b.key" :label="b.label">
+                  <div class="opt-row">
+                    <el-input v-model="b.answer" placeholder="参考答案（必填）" />
+                    <el-input v-model="b.hint" placeholder="空位提示（可选，如：单位 kg）" />
+                    <el-input-number v-model="b.score" :min="0" :max="100" :step="5" controls-position="right" style="width: 120px" />
+                    <el-button :icon="Delete" text type="danger" :disabled="questionForm.blanks.length <= 1" @click="removeQuestionBlank(idx)" />
+                  </div>
+                </el-form-item>
+                <el-form-item label=" ">
+                  <el-button :icon="Plus" size="small" :disabled="questionForm.blanks.length >= 20" @click="addQuestionBlank">添加空位</el-button>
+                  <span class="class-note">（分值仅用于教师批改时参考）</span>
+                </el-form-item>
+              </template>
+
+              <!-- 解答题：参考答案（必填；批改前不会下发给学生） -->
+              <el-form-item v-else-if="questionForm.q_type === 'ESSAY'" label="参考答案">
+                <el-input
+                  v-model="questionForm.essayAnswer"
+                  type="textarea"
+                  :rows="4"
+                  maxlength="4000"
+                  show-word-limit
+                  placeholder="必填：参考答案/解答要点。学生提交后进入「批改」队列，批改前不会下发给学生。"
+                />
+              </el-form-item>
+
               <el-form-item v-else label="正确答案">
                 <el-radio-group v-model="questionForm.judgeAnswer">
                   <el-radio value="true">正确</el-radio>
@@ -882,14 +940,271 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="关联知识点">
-                <el-select v-model="questionForm.kp_id" placeholder="可选：关联图谱知识点（用于推荐练题）" clearable filterable style="width: 100%">
-                  <el-option v-for="n in questionKpOptions" :key="n.id" :label="n.label" :value="n.id" />
-                </el-select>
+                <div class="opt-row">
+                  <el-select v-model="questionForm.kp_id" placeholder="可选：关联图谱知识点（用于推荐练题）" clearable filterable style="flex: 1">
+                    <el-option v-for="n in questionKpOptions" :key="n.id" :label="n.label" :value="n.id" />
+                  </el-select>
+                  <el-button
+                    :loading="kpCandLoading"
+                    :disabled="!questionEditingId"
+                    @click="loadKpCandidates"
+                  >自动标注</el-button>
+                </div>
+                <div v-if="!questionEditingId" class="class-note">（新增题目请先保存，再使用「自动标注」）</div>
               </el-form-item>
             </el-form>
             <template #footer>
               <el-button @click="questionFormVisible = false">取消</el-button>
               <el-button type="primary" :loading="questionFormLoading" @click="submitQuestionForm">保存</el-button>
+            </template>
+          </el-dialog>
+
+          <!-- 知识点自动标注：单题候选（Scope C / P3，三层证据 + 融合打分） -->
+          <el-dialog v-model="kpCandVisible" title="知识点自动标注建议" width="640px">
+            <el-alert
+              v-if="kpCandMeta"
+              class="coverage-alert"
+              type="info"
+              :closable="false"
+              show-icon
+              :title="`候选来源：${catalogSourceLabel(kpCandMeta.catalog_source)}（知识点 ${kpCandMeta.catalog_size} 个）`"
+              :description="kpCandDescription"
+            />
+            <el-table :data="kpCandList" v-loading="kpCandLoading" max-height="360">
+              <el-table-column label="知识点" min-width="170">
+                <template #default="{ row }">
+                  <span>{{ row.name }}</span>
+                  <el-tag v-if="row.category" size="small" effect="plain" class="kp-tag">{{ row.category }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="分数" width="80">
+                <template #default="{ row }">{{ row.score }}</template>
+              </el-table-column>
+              <el-table-column label="置信度" width="90">
+                <template #default="{ row }">
+                  <el-tag
+                    size="small"
+                    :type="row.confidence === 'high' ? 'success' : (row.confidence === 'medium' ? 'warning' : 'info')"
+                  >{{ { high: '高', medium: '中' }[row.confidence] || '低' }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="依据" min-width="150">
+                <template #default="{ row }">
+                  <span v-if="row.sources.lexical" class="kp-src">字面 {{ row.sources.lexical }}</span>
+                  <span v-if="row.sources.vector" class="kp-src">向量 {{ row.sources.vector }}</span>
+                  <span v-if="row.sources.graph" class="kp-src">图谱 {{ row.sources.graph }}</span>
+                  <span v-if="row.graph_only" class="kp-src">仅关系推断</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="86" fixed="right">
+                <template #default="{ row }">
+                  <el-button size="small" type="primary" @click="adoptKpCandidate(row)">采纳</el-button>
+                </template>
+              </el-table-column>
+              <template #empty>
+                <el-empty
+                  description="没有候选：请确认本课程已建知识图谱；配置 EMBEDDING_API_KEY 可启用语义召回"
+                  :image-size="70"
+                />
+              </template>
+            </el-table>
+            <div class="class-note">采纳只填入表单，点击「保存」才写入题库；自动标注不会覆盖你已有的判断。</div>
+          </el-dialog>
+
+          <!-- 批量知识点自动标注（Scope C / P3） -->
+          <el-dialog v-model="autoLabelVisible" title="批量知识点自动标注" width="880px">
+            <div class="question-toolbar">
+              <el-select v-model="autoLabelForm.document_id" placeholder="全部学习资料" clearable style="width: 200px">
+                <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
+              </el-select>
+              <span class="class-note">每题候选数</span>
+              <el-input-number v-model="autoLabelForm.top_k" :min="1" :max="10" controls-position="right" style="width: 110px" />
+              <span class="class-note">写入阈值</span>
+              <el-input-number
+                v-model="autoLabelForm.apply_threshold"
+                :min="0" :max="1" :step="0.05" :precision="2"
+                controls-position="right" style="width: 130px"
+              />
+              <el-checkbox v-model="autoLabelForm.only_missing">只处理未挂知识点的题</el-checkbox>
+            </div>
+            <div class="opt-row" style="margin: 8px 0 12px">
+              <el-button :loading="autoLabelLoading" @click="runAutoLabel(false)">仅预览（不写库）</el-button>
+              <el-button type="primary" :loading="autoLabelLoading" @click="runAutoLabel(true)">预览并写入达阈值项</el-button>
+              <span class="class-note">写入只影响「建议分数 ≥ 阈值」的题，且默认跳过已有知识点的题</span>
+            </div>
+
+            <el-alert
+              v-if="autoLabelPreview"
+              class="coverage-alert"
+              type="info"
+              :closable="false"
+              show-icon
+              :title="`扫描 ${autoLabelPreview.scanned} 道 · 有建议 ${autoLabelPreview.with_candidates} 道 · 已写入 ${autoLabelPreview.applied} 道`"
+              :description="autoLabelMetaText"
+            />
+
+            <el-table v-if="autoLabelPreview" :data="autoLabelPreview.items" max-height="380" size="small">
+              <el-table-column label="题目" min-width="220" show-overflow-tooltip>
+                <template #default="{ row }">
+                  <el-tag size="small" effect="plain" class="kp-tag">{{ questionTypeLabel(row.q_type) }}</el-tag>
+                  {{ row.stem }}
+                </template>
+              </el-table-column>
+              <el-table-column label="当前知识点" width="130">
+                <template #default="{ row }">{{ row.current_kp_name || '（未挂）' }}</template>
+              </el-table-column>
+              <el-table-column label="建议知识点" min-width="180">
+                <template #default="{ row }">
+                  <span v-if="row.candidates.length">
+                    {{ row.candidates[0].name }}
+                    <el-tag
+                      size="small"
+                      :type="row.candidates[0].confidence === 'high' ? 'success' : (row.candidates[0].confidence === 'medium' ? 'warning' : 'info')"
+                    >{{ row.candidates[0].score }}</el-tag>
+                  </span>
+                  <span v-else class="cell-empty">无建议</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="写入" width="80">
+                <template #default="{ row }">
+                  <el-tag v-if="row.applied" size="small" type="success">已写入</el-tag>
+                  <span v-else class="cell-empty">—</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-dialog>
+
+          <!-- 试题文档导入向导（P2：文档 → 解析预览 → 导入为暂存题） -->
+          <el-dialog v-model="importVisible" title="从文档导入试题" width="1000px" :close-on-click-modal="false">
+            <div class="question-toolbar">
+              <el-select v-model="importDocId" placeholder="选择要解析的课程文档" clearable filterable style="width: 300px">
+                <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
+              </el-select>
+              <span class="class-note">最多解析</span>
+              <el-input-number v-model="importMax" :min="1" :max="500" controls-position="right" style="width: 120px" />
+              <el-button type="primary" :loading="importLoading" :disabled="!importDocId" @click="runImportPreview">解析预览</el-button>
+              <span class="class-note">仅解析不写库；适用「题目区 + 答案区」版式的试题文档（PDF/TXT/DOCX/MD）</span>
+            </div>
+
+            <el-alert
+              v-if="importStats"
+              class="coverage-alert"
+              type="info"
+              :closable="false"
+              show-icon
+              :title="`识别 ${importStats.total} 题 · 有答案 ${importStats.with_answer} · 待复核 ${importStats.needs_review} · 缺答案 ${importStats.answer_missing} · 重复 ${importStats.duplicates}`"
+              :description="importStatsText"
+            />
+
+            <el-table
+              v-if="importItems.length"
+              :data="importItems"
+              max-height="420"
+              size="small"
+              row-key="number"
+              @selection-change="onImportSelection"
+            >
+              <el-table-column type="selection" width="44" :selectable="importSelectable" />
+              <el-table-column label="题号" width="60"><template #default="{ row }">{{ row.number }}</template></el-table-column>
+              <el-table-column label="题型" width="86">
+                <template #default="{ row }"><el-tag size="small" effect="plain">{{ questionTypeLabel(row.q_type) }}</el-tag></template>
+              </el-table-column>
+              <el-table-column label="题干" min-width="240" show-overflow-tooltip>
+                <template #default="{ row }">{{ row.stem }}</template>
+              </el-table-column>
+              <el-table-column label="选项" width="66">
+                <template #default="{ row }">{{ row.options.length || '—' }}</template>
+              </el-table-column>
+              <el-table-column label="答案（可直接填写）" min-width="240">
+                <template #default="{ row }">
+                  <!-- 单选 -->
+                  <el-select
+                    v-if="row.q_type === 'SINGLE'"
+                    v-model="row.answer" size="small" placeholder="选择答案" style="width: 120px"
+                    @change="recomputeImportState(row)"
+                  >
+                    <el-option v-for="o in row.options" :key="o.key" :label="o.key" :value="o.key" />
+                  </el-select>
+                  <!-- 多选 -->
+                  <el-select
+                    v-else-if="row.q_type === 'MULTI'"
+                    v-model="row.answer" multiple collapse-tags size="small"
+                    placeholder="选择答案（可多选）" style="width: 170px"
+                    @change="recomputeImportState(row)"
+                  >
+                    <el-option v-for="o in row.options" :key="o.key" :label="o.key" :value="o.key" />
+                  </el-select>
+                  <!-- 判断 -->
+                  <el-select
+                    v-else-if="row.q_type === 'JUDGE'"
+                    v-model="row.answer" size="small" placeholder="对 / 错" style="width: 100px"
+                    @change="recomputeImportState(row)"
+                  >
+                    <el-option label="正确" value="true" />
+                    <el-option label="错误" value="false" />
+                  </el-select>
+                  <!-- 填空：按空位逐个填写参考答案 -->
+                  <div v-else-if="row.q_type === 'FILL'">
+                    <div v-for="b in row.options" :key="b.key" class="opt-row">
+                      <span class="class-note" style="min-width: 52px">{{ b.label || ('第' + b.key + '空') }}</span>
+                      <el-input
+                        v-model="b.answer" size="small" placeholder="参考答案" style="width: 150px"
+                        @change="recomputeImportState(row)"
+                      />
+                    </div>
+                  </div>
+                  <!-- 解答 -->
+                  <el-input
+                    v-else
+                    v-model="row.answer" type="textarea" :rows="2" size="small"
+                    placeholder="参考答案（教师批改依据）"
+                    @change="recomputeImportState(row)"
+                  />
+                  <div v-if="!hasImportAnswer(row)" class="class-note">填写答案后即可勾选导入</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="状态" width="100">
+                <template #default="{ row }">
+                  <el-tag
+                    size="small"
+                    :type="row.import_status === 'READY' ? 'success' : (row.import_status === 'NEEDS_REVIEW' ? 'warning' : 'danger')"
+                  >{{ importStatusLabel(row.import_status) }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="警告" min-width="130" show-overflow-tooltip>
+                <template #default="{ row }"><span class="cell-empty">{{ importWarnText(row) || '—' }}</span></template>
+              </el-table-column>
+            </el-table>
+
+            <el-alert
+              v-if="importReport"
+              class="coverage-alert"
+              type="success"
+              :closable="false"
+              show-icon
+              :title="`已导入 ${importReport.imported} / ${importReport.total} 题（跳过 ${importReport.skipped.length}，待复核 ${importReport.needs_review}）`"
+              :description="`批次 ${importReport.batch_id} · ${importReport.hint}`"
+            />
+
+            <el-collapse
+              v-if="importReport && importReport.skipped && importReport.skipped.length"
+              style="margin-top: 8px"
+            >
+              <el-collapse-item :title="`未导入 ${importReport.skipped.length} 题的拒绝原因`">
+                <div v-for="(s, i) in importReport.skipped" :key="i" class="class-note">
+                  第 {{ s.number || (s.index + 1) }} 题：{{ s.reason }}
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+
+            <template #footer>
+              <el-button @click="importVisible = false">关闭</el-button>
+              <el-button :disabled="!importSelection.length" :loading="importLoading" @click="submitImport(false)">
+                导入为暂存题（已选 {{ importSelection.length }}）
+              </el-button>
+              <el-button type="primary" :disabled="!importSelection.length" :loading="importLoading" @click="submitImport(true)">
+                导入并直接启用
+              </el-button>
             </template>
           </el-dialog>
 
@@ -903,6 +1218,164 @@
               <template #empty><el-empty description="暂无学生收藏题目" :image-size="70" /></template>
             </el-table>
           </el-dialog>
+        </template>
+      </el-tab-pane>
+
+      <!-- ============ Tab 6：主观题批改（Scope B：填空/解答提交不判分，教师批改后给分） ============ -->
+      <el-tab-pane name="grading">
+        <template #label>
+          <span class="tab-label">
+            <el-icon><EditPen /></el-icon>主观题批改
+            <el-badge v-if="gradingSummary?.pending" :value="gradingSummary.pending" class="tab-badge" />
+          </span>
+        </template>
+
+        <el-card v-if="!currentCourseId" class="page-card">
+          <el-empty description="请先选择要批改的课程">
+            <div class="doc-course-pick">
+              <el-select v-model="currentCourseId" placeholder="选择课程" filterable clearable style="width: 260px" @change="onContextCourseChange">
+                <el-option v-for="c in courses" :key="c.course_id" :label="c.course_name" :value="String(c.course_id)" />
+              </el-select>
+            </div>
+          </el-empty>
+        </el-card>
+
+        <template v-else>
+          <el-card class="page-card">
+            <div class="chart-title-line">
+              <el-icon><EditPen /></el-icon> 批改进度
+              <span class="class-note">（主观题提交后不判分，批改后才给出分数；≥60 分记为答对）</span>
+              <el-button size="small" text type="primary" @click="loadGrading">刷新</el-button>
+            </div>
+            <div v-loading="gradingLoading" class="class-summary">
+              <div class="class-kpi" :class="{ highlight: (gradingSummary?.pending ?? 0) > 0 }">
+                <div class="class-kpi-value">{{ gradingSummary?.pending ?? 0 }}</div>
+                <div class="class-kpi-label">待批改</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ gradingSummary?.graded ?? 0 }}</div>
+                <div class="class-kpi-label">已批改</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ gradingSummary?.manual_total ?? 0 }}</div>
+                <div class="class-kpi-label">主观题作答</div>
+              </div>
+              <div class="class-kpi">
+                <div class="class-kpi-value">{{ gradingSummary?.avg_score ?? 0 }}</div>
+                <div class="class-kpi-label">已批改平均分</div>
+              </div>
+            </div>
+          </el-card>
+
+          <el-card class="page-card">
+            <div class="chart-title-line">
+              <el-icon><DocumentChecked /></el-icon> {{ gradingStatus === 'GRADED' ? '已批改作答（可复查与改判）' : '待批改作答' }}
+              <span class="class-note">
+                {{ gradingStatus === 'GRADED'
+                  ? '（按批改时间倒序；改分数或评语后点「改判」即覆盖旧结果）'
+                  : '（先交先批；批改后就地更新为学生得分）' }}
+              </span>
+            </div>
+
+            <div class="question-toolbar">
+              <el-radio-group v-model="gradingStatus" @change="onGradingStatusChange">
+                <el-radio-button value="PENDING">待批改</el-radio-button>
+                <el-radio-button value="GRADED">已批改</el-radio-button>
+              </el-radio-group>
+              <el-select v-model="gradingDocFilter" placeholder="全部学习资料" clearable style="width: 200px" @change="loadGrading">
+                <el-option v-for="d in documents" :key="d.doc_id" :label="d.file_name" :value="String(d.doc_id)" />
+              </el-select>
+              <!-- G2：按学生筛选（选项来自批改台已加载的记录，无需额外请求） -->
+              <el-select v-model="gradingStudentFilter" placeholder="全部学生" clearable filterable style="width: 160px" @change="loadGrading">
+                <el-option v-for="s in gradingStudentOptions" :key="s.value" :label="s.label" :value="s.value" />
+              </el-select>
+              <el-input-number v-model="gradingBatchScore" :min="0" :max="100" :step="10" controls-position="right" style="width: 130px" />
+              <el-input v-model="gradingBatchComment" placeholder="批量评语（可选）" style="width: 200px" />
+              <el-button :disabled="!gradingSelection.length" type="primary" plain @click="batchGrade">
+                批量{{ gradingStatus === 'GRADED' ? '改判' : '给分' }}（已选 {{ gradingSelection.length }}）
+              </el-button>
+            </div>
+            <el-table
+              :data="gradingList"
+              v-loading="gradingLoading"
+              row-key="record_id"
+              max-height="560"
+              @selection-change="onGradingSelection"
+            >
+              <el-table-column type="selection" width="46" />
+              <el-table-column label="学生" width="120">
+                <template #default="{ row }">{{ row.student_name }}</template>
+              </el-table-column>
+              <el-table-column label="题型" width="90">
+                <template #default="{ row }"><el-tag size="small" effect="plain">{{ row.q_type_label }}</el-tag></template>
+              </el-table-column>
+              <el-table-column label="题干" min-width="180" show-overflow-tooltip>
+                <template #default="{ row }">{{ row.stem }}</template>
+              </el-table-column>
+              <el-table-column label="学生解答 / 参考答案" min-width="260">
+                <template #default="{ row }">
+                  <div v-if="row.q_type === 'FILL'">
+                    <div v-for="b in row.blanks" :key="b.key" class="grade-blank-row">
+                      <span class="grade-blank-label">{{ b.label }}</span>
+                      <span class="grade-blank-user">{{ blankAnswerOf(row, b.key) || '（未填）' }}</span>
+                      <span class="grade-blank-ref">参考：{{ b.answer }}</span>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <div class="grade-essay-user">{{ row.user_answer || '（未作答）' }}</div>
+                    <div class="grade-blank-ref">参考答案：{{ row.reference_answer }}</div>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="answered_at" label="提交时间" width="150" />
+              <!-- 已批改视图：复查用（当前得分、评语、批改时间），改动后可再次提交改判 -->
+              <el-table-column v-if="gradingStatus === 'GRADED'" label="批改结果" min-width="200">
+                <template #default="{ row }">
+                  <el-tag size="small" :type="row.is_correct ? 'success' : 'danger'" effect="plain">
+                    {{ row.score ?? 0 }} 分 · {{ row.is_correct ? '通过' : '未通过' }}
+                  </el-tag>
+                  <div class="class-note">{{ row.comment || '（无评语）' }}</div>
+                </template>
+              </el-table-column>
+              <el-table-column v-if="gradingStatus === 'GRADED'" prop="graded_at" label="批改时间" width="150" />
+              <el-table-column :label="gradingStatus === 'GRADED' ? '改判' : '给分'" width="240" fixed="right">
+                <template #default="{ row }">
+                  <div class="opt-row">
+                    <el-input-number
+                      v-model="gradingScore[row.record_id]"
+                      :min="0"
+                      :max="100"
+                      :step="10"
+                      controls-position="right"
+                      size="small"
+                      style="width: 110px"
+                    />
+                    <el-button size="small" type="primary" @click="submitGrade(row)">
+                      {{ gradingStatus === 'GRADED' ? '改判' : '批改' }}
+                    </el-button>
+                  </div>
+                </template>
+              </el-table-column>
+              <template #empty>
+                <el-empty
+                  :description="gradingStatus === 'GRADED'
+                    ? '还没有已批改的主观题作答（批改后会出现在这里，可随时改判）'
+                    : '没有待批改的作答（学生提交填空/解答题后会出现在这里）'"
+                  :image-size="80"
+                />
+              </template>
+            </el-table>
+
+            <el-pagination
+              v-if="gradingTotal > gradingPageSize"
+              class="table-pagination"
+              v-model:current-page="gradingPage"
+              :page-size="gradingPageSize"
+              :total="gradingTotal"
+              layout="total, prev, pager, next"
+              @current-change="loadGrading"
+            />
+          </el-card>
         </template>
       </el-tab-pane>
     </el-tabs>
@@ -1056,6 +1529,7 @@ import {
   UploadFilled, Upload, View, EditPen, Refresh, FullScreen, Plus, Connection, ArrowRight, Search, SuccessFilled,
   Notebook, Document, Delete, DataAnalysis, Clock, User, UserFilled, Back, Files, FolderOpened,
   Reading, Download, Promotion, Collection, Star, Aim, WarningFilled, CircleCheckFilled,
+  DocumentChecked, MagicStick,
 } from '@element-plus/icons-vue'
 import { api } from '../api'
 import { fetchDocumentBuffer } from '../utils/documentContent'
@@ -1075,7 +1549,7 @@ const route = useRoute()
 const router = useRouter()
 // 课程中心改造：新增 members（学生管理）Tab，既有 5 个 Tab 全部保留
 // 合并 PR #3：再并入合作者的 questions（题库管理）Tab
-const TEACHER_TABS = ['courses', 'documents', 'members', 'preview', 'edit', 'monitor', 'questions']
+const TEACHER_TABS = ['courses', 'documents', 'members', 'preview', 'edit', 'monitor', 'questions', 'grading']
 const activeTab = ref(TEACHER_TABS.includes(route.query.tab) ? route.query.tab : 'courses')
 
 // ===================== 当前上下文：课程 + 文档（教师端不搬 student learningContext） =====================
@@ -1919,6 +2393,7 @@ function onContextDocChange(id) {
     })
     .catch(() => {})
   if (activeTab.value === 'edit' && id) loadEditNodes()
+  if (activeTab.value === 'grading') loadGrading()
 }
 
 // 用户直接点击 Tab 头：同步路由（缺失参数的守卫统一由 route watcher 处理）
@@ -1961,7 +2436,7 @@ watch(
       // 缺少课程/文档时停留在当前页，由页内级联选择器引导，不再弹窗强制跳回
       currentCourseId.value = cid ? String(cid) : ''
       currentDocumentId.value = did ? String(did) : ''
-    } else if (tab === 'documents' || tab === 'members' || tab === 'questions') {
+    } else if (tab === 'documents' || tab === 'members' || tab === 'questions' || tab === 'grading') {
       // 这几个 Tab 只需要课程（不需要文档）：未指定课程时停留在页内选择器引导
       // questions 由 PR #3 并入，与 members 同理——不在此保留 currentCourseId 会永远停在空态
       currentCourseId.value = cid ? String(cid) : ''
@@ -1981,11 +2456,13 @@ watch(currentCourseId, (cid) => {
   else documents.value = []
 })
 
-// ===================== 题库管理（Scope A：单选/多选/判断；答案与解析仅教师可见） =====================
+/** 题型：前三类自动判分，后两类由教师批改（后端 MANUAL_GRADE_TYPES 的同口径前端副本） */
 const QUESTION_TYPES = [
   { value: 'SINGLE', label: '单选题' },
   { value: 'MULTI', label: '多选题' },
   { value: 'JUDGE', label: '判断题' },
+  { value: 'FILL', label: '填空题' },
+  { value: 'ESSAY', label: '解答题' },
 ]
 const questionTypeLabel = (t) => QUESTION_TYPES.find((x) => x.value === t)?.label || t || ''
 
@@ -2013,6 +2490,8 @@ const questionKpOptions = ref([])
 const questionForm = reactive({
   q_type: 'SINGLE', stem: '', analysis: '', difficulty: 3, kp_id: '', document_id: '',
   options: [], singleAnswer: 'A', multiAnswer: [], judgeAnswer: 'true',
+  // Scope B：填空题空位（key/label/hint/score/answer）与解答题参考答案
+  blanks: [], essayAnswer: '',
 })
 
 const questionFavVisible = ref(false)
@@ -2129,6 +2608,382 @@ async function loadQuestionCoverage() {
   }
 }
 
+// ---------- 知识点自动标注（Scope C / P3：字面匹配 + 向量召回 + 图谱扩展） ----------
+const kpCandVisible = ref(false)
+const kpCandLoading = ref(false)
+const kpCandList = ref([])
+const kpCandMeta = ref(null)
+
+/** 候选来源与各层可用性（如实展示降级情况，避免"没结果却不知道为什么"） */
+const kpCandDescription = computed(() => {
+  const m = kpCandMeta.value
+  if (!m) return ''
+  const parts = [
+    m.graph_available ? '图谱可用（关系扩展已启用）' : '图谱不可用（仅按名称字面匹配）',
+    m.vector_available
+      ? '向量召回已启用'
+      : (m.embedding_configured ? '向量召回本次失败' : '未配置 EMBEDDING_API_KEY（向量召回关闭）'),
+  ]
+  if (m.reason) parts.push(m.reason)
+  return parts.join(' · ')
+})
+
+function catalogSourceLabel(src) {
+  return { graph: 'Neo4j 图谱', cache: '本地缓存', injected: '外部数据', none: '无' }[src] || src || '未知'
+}
+
+/** 单题自动标注：取候选（不写库，采纳后由「保存」落库） */
+async function loadKpCandidates() {
+  if (!questionEditingId.value) return
+  kpCandVisible.value = true
+  kpCandLoading.value = true
+  try {
+    const data = await api.getKpCandidates(questionEditingId.value, 5)
+    kpCandList.value = data.candidates || []
+    kpCandMeta.value = data.meta || null
+  } catch (e) {
+    kpCandList.value = []
+    kpCandMeta.value = null
+    ElMessage.warning(`自动标注失败：${e.message}`)
+  } finally {
+    kpCandLoading.value = false
+  }
+}
+
+function adoptKpCandidate(row) {
+  questionForm.kp_id = row.kp_id
+  kpCandVisible.value = false
+  ElMessage.success(`已填入知识点「${row.name}」，保存后生效`)
+}
+
+// ---------- 批量知识点自动标注 ----------
+const autoLabelVisible = ref(false)
+const autoLabelLoading = ref(false)
+const autoLabelPreview = ref(null)
+const autoLabelForm = reactive({
+  document_id: '', only_missing: true, top_k: 3, apply_threshold: 0.6,
+})
+
+const autoLabelMetaText = computed(() => {
+  const m = autoLabelPreview.value?.meta
+  if (!m) return ''
+  const parts = [
+    `候选来源：${catalogSourceLabel(m.catalog_source)}（${m.catalog_size} 个知识点）`,
+    m.graph_available ? '图谱可用' : '图谱不可用',
+    m.embedding_configured ? '向量召回可用' : '未配置 EMBEDDING_API_KEY',
+  ]
+  if (m.reason) parts.push(m.reason)
+  return parts.join(' · ')
+})
+
+function openAutoLabel() {
+  autoLabelPreview.value = null
+  autoLabelForm.document_id = questionDocFilter.value || ''
+  autoLabelVisible.value = true
+}
+
+/** 批量标注：apply=false 仅预览；apply=true 写入「建议分 ≥ 阈值且非仅关系推断」的题 */
+async function runAutoLabel(apply) {
+  if (!currentCourseId.value) {
+    ElMessage.warning('请先选择课程')
+    return
+  }
+  autoLabelLoading.value = true
+  try {
+    const data = await api.autoLabelQuestions({
+      course_id: currentCourseId.value,
+      document_id: autoLabelForm.document_id || undefined,
+      only_missing: autoLabelForm.only_missing,
+      apply,
+      top_k: autoLabelForm.top_k,
+      apply_threshold: autoLabelForm.apply_threshold,
+    })
+    autoLabelPreview.value = data
+    if (apply) {
+      ElMessage.success(`已写入 ${data.applied} 道题（扫描 ${data.scanned} 道，有建议 ${data.with_candidates} 道）`)
+      await loadQuestionsTab()
+    } else {
+      ElMessage.success(`预览完成：扫描 ${data.scanned} 道，有建议 ${data.with_candidates} 道`)
+    }
+  } catch (e) {
+    ElMessage.error(`自动标注失败：${e.message}`)
+  } finally {
+    autoLabelLoading.value = false
+  }
+}
+
+// ---------- 试题文档导入向导（P2 / Scope D：文档 → 预览 → 暂存） ----------
+const importVisible = ref(false)
+const importLoading = ref(false)
+const importDocId = ref('')
+const importMax = ref(200)
+const importItems = ref([])
+const importSelection = ref([])
+const importStats = ref(null)
+const importReport = ref(null)
+
+const importStatsText = computed(() => {
+  const s = importStats.value
+  if (!s) return ''
+  const dist = Object.entries(s.by_type || {})
+    .map(([k, v]) => `${questionTypeLabel(k)} ${v}`).join('、') || '—'
+  const parts = [`题型分布：${dist}`]
+  if (!s.answer_section_found) parts.push('未识别到答案区（答案需人工补齐）')
+  if (s.sections && s.sections.length) {
+    parts.push(`章节：${s.sections.slice(0, 3).join(' / ')}${s.sections.length > 3 ? ' …' : ''}`)
+  }
+  parts.push('导入的题目默认「停用」，复核后再启用')
+  return parts.join(' · ')
+})
+
+function openImportWizard() {
+  importVisible.value = true
+  importItems.value = []
+  importSelection.value = []
+  importStats.value = null
+  importReport.value = null
+  importDocId.value = questionDocFilter.value || ''
+}
+
+/** 缺答案的题不允许勾选导入（主观题没有参考答案就无法批改；补完答案后状态会变、即可勾选） */
+function importSelectable(row) {
+  return !!row.q_type && !!row.stem && row.import_status !== 'ANSWER_MISSING'
+}
+
+/** 该行是否已有可用答案（填空题要求每个空都填） */
+function hasImportAnswer(row) {
+  if (!row) return false
+  if (row.q_type === 'FILL') {
+    return (row.options || []).length > 0 && row.options.every((b) => String(b.answer || '').trim())
+  }
+  if (row.q_type === 'MULTI') {
+    return Array.isArray(row.answer) && row.answer.length > 0
+  }
+  return !!(row.answer && String(row.answer).trim())
+}
+
+/** 行内补答案后重算状态：缺答案 → ANSWER_MISSING（不可勾选）；补完 → READY / NEEDS_REVIEW */
+function recomputeImportState(row) {
+  const others = (row.warnings || []).filter((w) => w !== 'answer_missing')
+  const ok = hasImportAnswer(row)
+  row.warnings = ok ? others : [...others, 'answer_missing']
+  row.import_status = !ok ? 'ANSWER_MISSING' : (others.length ? 'NEEDS_REVIEW' : 'READY')
+}
+
+function importStatusLabel(status) {
+  return { READY: '可导入', NEEDS_REVIEW: '待复核', ANSWER_MISSING: '缺答案' }[status] || status
+}
+
+function importWarnText(row) {
+  const labels = {
+    answer_missing: '缺答案', multi_type_needs_review: '多选需确认',
+    judge_type_guessed: '判断题待确认', duplicate_stem: '题干重复',
+    no_options_no_answer: '无选项无答案',
+  }
+  return (row.warnings || []).map((w) => labels[w] || w).join('、')
+}
+
+function formatImportAnswer(row) {
+  const a = row.answer
+  if (a === null || a === undefined || a === '') return '—'
+  return Array.isArray(a) ? a.join('、') : String(a)
+}
+
+function onImportSelection(rows) {
+  importSelection.value = rows || []
+}
+
+/** 解析预览：只读，不写库 */
+async function runImportPreview() {
+  if (!currentCourseId.value || !importDocId.value) return
+  importLoading.value = true
+  importReport.value = null
+  try {
+    const data = await api.previewImportQuestions({
+      course_id: currentCourseId.value,
+      document_id: importDocId.value,
+      max_questions: importMax.value,
+    })
+    importItems.value = (data.items || []).map((it) => {
+      if (it.q_type === 'MULTI' && !Array.isArray(it.answer)) it.answer = []
+      if (it.q_type === 'FILL' && Array.isArray(it.options)) {
+        it.options.forEach((b) => { if (b.answer === undefined) b.answer = '' })
+      }
+      return it
+    })
+    importStats.value = data.stats || null
+    importSelection.value = []
+    const importable = importItems.value.filter(importSelectable).length
+    ElMessage.success(`解析完成：识别 ${data.stats.total} 题，可导入 ${importable} 题（缺答案的题可直接在表格里填写）`)
+  } catch (e) {
+    importItems.value = []
+    importStats.value = null
+    ElMessage.error(`解析失败：${e.message}`)
+  } finally {
+    importLoading.value = false
+  }
+}
+
+/** 提交导入：默认入库为停用的暂存题；activate=true 则直接启用 */
+async function submitImport(activate) {
+  if (!importSelection.value.length) return
+  importLoading.value = true
+  try {
+    const data = await api.commitImportQuestions({
+      course_id: currentCourseId.value,
+      document_id: importDocId.value,
+      items: importSelection.value,
+      activate,
+    })
+    importReport.value = data
+    ElMessage.success(activate
+      ? `已导入并启用 ${data.imported} 题`
+      : `已导入 ${data.imported} 题为暂存题（默认停用）`)
+    await loadQuestionsTab()
+  } catch (e) {
+    ElMessage.error(`导入失败：${e.message}`)
+  } finally {
+    importLoading.value = false
+  }
+}
+
+// ---------- 主观题批改（Scope B：填空/解答提交不判分，教师批改后才给分） ----------
+const gradingSummary = ref(null)
+const gradingList = ref([])
+const gradingLoading = ref(false)
+const gradingTotal = ref(0)
+const gradingPage = ref(1)
+const gradingPageSize = ref(20)
+const gradingDocFilter = ref('')
+const gradingStatus = ref('PENDING')     // PENDING=待批改 / GRADED=已批改（复查与改判）
+const gradingStudentFilter = ref('')     // 按学生筛选（后端 student_id，早前已支持）
+const gradingStudentOptions = ref([])    // 批改台已加载记录中出现过的学生（避免筛选后选项丢失）
+let gradingOptCourse = null              // 记录选项累积所属课程，切课即重置
+const gradingSelection = ref([])
+const gradingScore = reactive({})        // record_id -> 打分输入值（默认满分，教师可改）
+const gradingBatchScore = ref(100)
+const gradingBatchComment = ref('')
+
+/** 待批改列表 + 进度汇总（进入批改 Tab / 刷新 / 批改后统一调用） */
+async function loadGrading() {
+  if (!currentCourseId.value) {
+    gradingSummary.value = null
+    gradingList.value = []
+    gradingTotal.value = 0
+    return
+  }
+  gradingLoading.value = true
+  if (gradingOptCourse !== currentCourseId.value) {   // 切换课程后重建学生候选与筛选
+    gradingOptCourse = currentCourseId.value
+    gradingStudentOptions.value = []
+    gradingStudentFilter.value = ''
+  }
+  try {
+    const [summary, data] = await Promise.all([
+      api.getGradingSummary(currentCourseId.value),
+      api.getPendingGrades({
+        course_id: currentCourseId.value,
+        document_id: gradingDocFilter.value || undefined,
+        student_id: gradingStudentFilter.value || undefined,
+        status: gradingStatus.value,
+        page: gradingPage.value,
+        page_size: gradingPageSize.value,
+      }),
+    ])
+    gradingSummary.value = summary
+    gradingList.value = data.items || []
+    gradingTotal.value = data.total || 0
+    gradingList.value.forEach((it) => {
+      // 待批改默认满分（教师只改需要调整的）；已批改预填当前分数（便于微调后改判）
+      if (gradingStatus.value === 'GRADED') gradingScore[it.record_id] = Number(it.score ?? 0)
+      else if (gradingScore[it.record_id] === undefined) gradingScore[it.record_id] = 100
+      // 学生筛选下拉：累积本课程出现过的学生
+      const sid = String(it.student_id ?? '')
+      if (sid && !gradingStudentOptions.value.some((o) => o.value === sid)) {
+        gradingStudentOptions.value.push({ value: sid, label: it.student_name || sid })
+      }
+    })
+    gradingSelection.value = []
+  } catch (e) {
+    gradingSummary.value = null
+    gradingList.value = []
+    gradingTotal.value = 0
+    ElMessage.warning(`批改数据加载失败：${e.message}`)
+  } finally {
+    gradingLoading.value = false
+  }
+}
+
+function onGradingSelection(rows) {
+  gradingSelection.value = (rows || []).map((r) => r.record_id)
+}
+
+/** 切换待批改/已批改视图：回到第一页并清空选择（避免跨视图误批量） */
+function onGradingStatusChange() {
+  gradingPage.value = 1
+  gradingSelection.value = []
+  loadGrading()
+}
+
+/** F3：从题库页「待批改」卡片直达主观题批改页（不依赖标签栏 tab 是否可见） */
+function gotoGrading() {
+  activeTab.value = 'grading'
+  currentDocumentId.value = ''
+  gradingPage.value = 1
+  loadGrading()
+}
+
+/** 单题批改（就地更新分数与评语；后端按 >=60 记为答对，允许重批覆盖） */
+async function submitGrade(row) {
+  const score = Number(gradingScore[row.record_id])
+  if (Number.isNaN(score) || score < 0 || score > 100) {
+    ElMessage.warning('请填写 0-100 的分数')
+    return
+  }
+  let comment = ''
+  try {
+    const { value } = await ElMessageBox.prompt(
+      '可填写评语（可选，学生可见）',
+      `批改 · ${row.student_name} · ${score} 分`,
+      {
+        confirmButtonText: '确认给分',
+        cancelButtonText: '取消',
+        inputPlaceholder: '评语（可选）',
+        inputValue: '',
+      },
+    )
+    comment = value || ''
+  } catch {
+    return                                  // 教师取消：不写库
+  }
+  try {
+    await api.gradeAnswer(row.record_id, score, comment || undefined)
+    ElMessage.success(`已批改：${row.student_name} ${score} 分`)
+    await Promise.all([loadGrading(), loadQuestionStats()])
+  } catch (e) {
+    ElMessage.error(`批改失败：${e.message}`)
+  }
+}
+
+/** 批量批改（同一分数与评语；客观题/越权记录由后端跳过并返回原因） */
+async function batchGrade() {
+  if (!gradingSelection.value.length) return
+  const score = Number(gradingBatchScore.value)
+  if (Number.isNaN(score) || score < 0 || score > 100) {
+    ElMessage.warning('请填写 0-100 的分数')
+    return
+  }
+  try {
+    const data = await api.gradeAnswersBatch(
+      gradingSelection.value, score, gradingBatchComment.value || undefined,
+    )
+    ElMessage.success(`批量批改完成：更新 ${data.updated} 条，跳过 ${(data.skipped || []).length} 条`)
+    await Promise.all([loadGrading(), loadQuestionStats()])
+  } catch (e) {
+    ElMessage.error(`批量批改失败：${e.message}`)
+  }
+}
+
 /** 覆盖率卡片里点击「无题知识点」→ 打开新增表单并预填该知识点（补题闭环） */
 function createQuestionForKp(kp) {
   openQuestionForm(null)
@@ -2161,9 +3016,29 @@ function openQuestionForm(row) {
     : (currentDocumentId.value || '')
 
   const isJudge = row && row.q_type === 'JUDGE'
-  questionForm.options = isJudge || !row
-    ? (row ? [] : emptyOptions())
-    : (Array.isArray(row.options) ? row.options.map((o) => ({ key: String(o.key), text: o.text })) : emptyOptions())
+  const isFill = row && row.q_type === 'FILL'
+  const isEssay = row && row.q_type === 'ESSAY'
+
+  // 选择题回填选项（不重排编号）；判断题/填空/解答不使用选项数组
+  questionForm.options = (row && (row.q_type === 'SINGLE' || row.q_type === 'MULTI'))
+    ? (Array.isArray(row.options)
+        ? row.options.map((o) => ({ key: String(o.key), text: o.text }))
+        : emptyOptions())
+    : []
+
+  // 填空题：回填空位（每空含参考答案与分值，教师视角才有 answer）
+  questionForm.blanks = isFill && Array.isArray(row.options)
+    ? row.options.map((b, i) => ({
+        key: b.key ?? i + 1,
+        label: b.label || `第${i + 1}空`,
+        hint: b.hint || '',
+        score: Number(b.score) || 0,
+        answer: b.answer || '',
+      }))
+    : emptyBlanks()
+
+  // 解答题：回填参考答案（存储为字符串）
+  questionForm.essayAnswer = isEssay && typeof row.answer === 'string' ? row.answer : ''
 
   const ans = row ? row.answer : null
   questionForm.singleAnswer = row && row.q_type === 'SINGLE' ? String(ans) : (questionForm.options[0]?.key || 'A')
@@ -2174,7 +3049,9 @@ function openQuestionForm(row) {
     ? (String(ans) === 'false' ? 'false' : 'true')
     : 'true'
 
-  if (!questionForm.options.length && !isJudge) questionForm.options = emptyOptions()
+  if (!questionForm.options.length && !isJudge && !isFill && !isEssay) {
+    questionForm.options = emptyOptions()
+  }
   questionFormVisible.value = true
   if (!questionKpOptions.value.length) loadQuestionKpOptions()
 }
@@ -2196,7 +3073,35 @@ function removeQuestionOption(idx) {
   }
 }
 
-/** 组装提交体：空选项被过滤；document_id 留空即「课程通用题」 */
+/** 填空题默认空位（1 个；最多 20 个，与后端 MAX_BLANKS 对齐） */
+function emptyBlanks() {
+  return [{ key: 1, label: '第1空', hint: '', score: 50, answer: '' }]
+}
+
+/** 添加空位：编号顺延（不重排已有编号，避免答案错位） */
+function addQuestionBlank() {
+  if (questionForm.blanks.length >= 20) return
+  const nextKey = questionForm.blanks.reduce((m, b) => Math.max(m, Number(b.key) || 0), 0) + 1
+  questionForm.blanks.push({ key: nextKey, label: `第${nextKey}空`, hint: '', score: 0, answer: '' })
+}
+
+/** 删除空位：至少保留 1 个 */
+function removeQuestionBlank(idx) {
+  if (questionForm.blanks.length <= 1) return
+  questionForm.blanks.splice(idx, 1)
+}
+
+/** 批改台：从学生解答对象里取某个空位的作答（填空题学生答案形如 {"1": "浮点数"}） */
+function blankAnswerOf(row, key) {
+  const ans = row?.user_answer
+  if (!ans) return ''
+  if (Array.isArray(ans)) return ans[key - 1] ?? ''
+  if (typeof ans === 'object') return ans[String(key)] ?? ans[key] ?? ''
+  return String(ans)
+}
+
+/** 组装提交体：空选项被过滤；document_id 留空即「课程通用题」
+ *  Scope B：填空题提交「空位定义」（每空带参考答案），解答题提交参考答案字符串 */
 function buildQuestionPayload() {
   const base = {
     q_type: questionForm.q_type,
@@ -2208,6 +3113,23 @@ function buildQuestionPayload() {
   }
   if (questionForm.q_type === 'JUDGE') {
     return { ...base, options: [], answer: questionForm.judgeAnswer }
+  }
+  if (questionForm.q_type === 'FILL') {
+    return {
+      ...base,
+      options: questionForm.blanks.map((b, i) => ({
+        key: Number(b.key) || i + 1,
+        label: b.label || `第${i + 1}空`,
+        hint: b.hint || '',
+        score: Number(b.score) || 0,
+        answer: (b.answer || '').trim(),
+      })),
+      // 参考答案由每个空位携带；后端会同步落一份数组，这里不重复传
+      answer: null,
+    }
+  }
+  if (questionForm.q_type === 'ESSAY') {
+    return { ...base, options: [], answer: (questionForm.essayAnswer || '').trim() }
   }
   const options = questionForm.options
     .filter((o) => (o.text || '').trim())
@@ -2225,12 +3147,27 @@ async function submitQuestionForm() {
     ElMessage.warning('请填写题干')
     return
   }
-  if (payload.q_type !== 'JUDGE' && payload.options.length < 2) {
+  const selectTypes = ['SINGLE', 'MULTI']
+  if (selectTypes.includes(payload.q_type) && payload.options.length < 2) {
     ElMessage.warning('选择题至少需要 2 个非空选项')
     return
   }
   if (payload.q_type === 'MULTI' && !payload.answer.length) {
     ElMessage.warning('请勾选多选题的正确答案')
+    return
+  }
+  if (payload.q_type === 'FILL') {
+    if (!payload.options.length) {
+      ElMessage.warning('填空题至少需要 1 个空位')
+      return
+    }
+    if (payload.options.some((b) => !b.answer)) {
+      ElMessage.warning('请为每个空位填写参考答案（教师批改依据）')
+      return
+    }
+  }
+  if (payload.q_type === 'ESSAY' && !payload.answer) {
+    ElMessage.warning('请填写解答题的参考答案（教师批改依据）')
     return
   }
   questionFormLoading.value = true
@@ -2957,5 +3894,19 @@ function isDocInFlight(doc) {
 }
 .upload-card :deep(.el-icon--upload svg) { color: #fff; }
 .upload-card :deep(.el-upload__text) { color: var(--text-secondary); font-size: 13.5px; }
-.upload-card :deep(.el-upload__text em) { color: var(--brand-600); font-style: normal; font-weight: 600; }
+/* ===== Scope B：主观题（填空/解答）与批改台 ===== */
+.class-kpi.highlight {
+  border-color: rgba(245, 71, 93, .35);
+  background: linear-gradient(135deg, rgba(245, 71, 93, .08), rgba(245, 71, 93, .02));
+}
+.class-kpi.highlight .class-kpi-value { color: #f5475d; }
+.tab-badge { margin-left: 6px; }
+.grade-blank-row { display: flex; gap: 8px; align-items: baseline; line-height: 1.7; font-size: 12.5px; }
+.grade-blank-label { color: var(--text-secondary); flex: 0 0 auto; }
+.grade-blank-user { color: var(--text-primary); font-weight: 600; flex: 0 0 auto; }
+.grade-blank-ref { color: var(--text-secondary); }
+.grade-essay-user { color: var(--text-primary); line-height: 1.6; margin-bottom: 4px; white-space: pre-wrap; }
+/* Scope C：知识点自动标注候选 */
+.kp-tag { margin-left: 6px; }
+.kp-src { display: inline-block; margin-right: 8px; color: var(--text-secondary); font-size: 12.5px; }
 </style>

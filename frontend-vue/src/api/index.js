@@ -188,7 +188,7 @@ export const api = {
       params: { course_id: courseId, document_id: documentId },
     }),
 
-  // ---- 题库管理（教师端；Scope A：单选/多选/判断） ----
+  // ---- 题库管理（教师端；Scope B：单选/多选/判断自动判分 + 填空/解答由教师批改） ----
   /** 题库列表（含答案/解析/作答正确率/收藏数） */
   listQuestions: (params = {}) => request.get('/api/v1/questions', { params }),
   /** 题库总览：题量/题型分布/作答正确率/收藏数 */
@@ -213,6 +213,32 @@ export const api = {
   /** 启用/停用题目 */
   setQuestionActive: (questionId, isActive) =>
     request.patch(`/api/v1/questions/${questionId}/active`, { is_active: isActive }),
+  /** 单题知识点候选（Scope C：字面匹配 + 向量召回 + 图谱扩展，融合打分） */
+  getKpCandidates: (questionId, topK = 5) =>
+    request.post(`/api/v1/questions/${questionId}/kp-candidates`, { top_k: topK }),
+  /** 批量知识点自动标注（默认只出建议；apply=true 才写入达阈值的题） */
+  autoLabelQuestions: (payload = {}) => request.post('/api/v1/questions/auto-label', payload),
+  /** 从课程文档解析题目候选（预览，不写库）—— 试题文档导入 P2 */
+  previewImportQuestions: (payload = {}) =>
+    request.post('/api/v1/questions/import/preview', payload),
+  /** 提交导入：入库为暂存题（activate=true 才直接启用） */
+  commitImportQuestions: (payload = {}) =>
+    request.post('/api/v1/questions/import/commit', payload),
+  /** 导入批次明细 */
+  getImportBatch: (batchId) => request.get(`/api/v1/questions/import/batch/${batchId}`),
+
+  // ---- 主观题批改（教师端；Scope B：填空/解答提交只落库，教师批改后才给分） ----
+  /** 待批改列表（只返回待批改的主观题作答，按提交先后排序） */
+  getPendingGrades: (params = {}) => request.get('/api/v1/grading/pending', { params }),
+  /** 批改进度汇总（待批改 / 已批改 / 主观题作答量 / 平均分） */
+  getGradingSummary: (courseId) =>
+    request.get('/api/v1/grading/summary', { params: { course_id: courseId } }),
+  /** 单题批改（score 0~100，>=60 记为答对；允许重批覆盖） */
+  gradeAnswer: (recordId, score, comment) =>
+    request.post(`/api/v1/grading/${recordId}`, { score, comment }),
+  /** 批量批改（同一分数与评语） */
+  gradeAnswersBatch: (recordIds, score, comment) =>
+    request.post('/api/v1/grading/batch', { record_ids: recordIds, score, comment }),
 
   // ---- 做题练习（学生端；出题接口不含答案，提交后才下发） ----
   /** 出题（course_id 必填；可指定文档/知识点/题型/数量） */

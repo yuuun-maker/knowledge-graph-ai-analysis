@@ -1,0 +1,338 @@
+{
+  "params": {
+    "top_k": 5,
+    "weights": {
+      "lexical": 0.45,
+      "vector": 0.45,
+      "graph": 0.1
+    },
+    "vec_floor": 0.35,
+    "min_score": 0.3,
+    "graph_min_score": 0.01,
+    "lex_base": 0.65,
+    "lex_min_name_len": 2,
+    "option_weight": 0.7,
+    "graph_decay": 0.45,
+    "apply_min_score": 0.6
+  },
+  "metrics": {
+    "total": 69,
+    "hit@1": 0.0145,
+    "hit@3": 0.1014,
+    "hit@5": 0.1304,
+    "mrr": 0.0565,
+    "mode": "synthetic(description->kp)",
+    "catalog_size": 69,
+    "skipped_no_description": 0,
+    "graph_only_hits": 6,
+    "layer_hits": {
+      "lexical": 3,
+      "vector": 0,
+      "graph": 6
+    },
+    "elapsed_sec": 0.005
+  },
+  "samples": [
+    {
+      "kp_id": "kp_5_be1bced5",
+      "name": "可调用对象",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_c80d1b43",
+      "name": "属性字典",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_b12dd410",
+      "name": "稀疏矩阵",
+      "rank": null,
+      "top": "kp_5_f5e92347"
+    },
+    {
+      "kp_id": "kp_5_b6ec0699",
+      "name": "单链表",
+      "rank": null,
+      "top": "kp_5_f8d54635"
+    },
+    {
+      "kp_id": "kp_5_1282e8ba",
+      "name": "公开方法",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_33fc4f63",
+      "name": "基类",
+      "rank": 3,
+      "top": "kp_5_59e19c15"
+    },
+    {
+      "kp_id": "kp_5_0e5c4ff8",
+      "name": "派生类",
+      "rank": 3,
+      "top": "kp_5_33fc4f63"
+    },
+    {
+      "kp_id": "kp_5_e266a712",
+      "name": "super()",
+      "rank": null,
+      "top": "kp_5_c5ab3f2e"
+    },
+    {
+      "kp_id": "kp_5_a97d53a3",
+      "name": "多继承",
+      "rank": 5,
+      "top": "kp_5_59e19c15"
+    },
+    {
+      "kp_id": "kp_5_9810c742",
+      "name": "运算符",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_c238c337",
+      "name": "成员访问运算符",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_311c0986",
+      "name": "索引",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_9fed9bcd",
+      "name": "切片",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_f5e92347",
+      "name": "矩阵",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_2a87fb73",
+      "name": "标量",
+      "rank": null,
+      "top": "kp_5_f5e92347"
+    },
+    {
+      "kp_id": "kp_5_f8d54635",
+      "name": "节点",
+      "rank": null,
+      "top": "kp_5_6cde4a50"
+    },
+    {
+      "kp_id": "kp_5_6cde4a50",
+      "name": "链表",
+      "rank": null,
+      "top": "kp_5_f8d54635"
+    },
+    {
+      "kp_id": "kp_5_3faba1bb",
+      "name": "代码复用",
+      "rank": null,
+      "top": "kp_5_59e19c15"
+    },
+    {
+      "kp_id": "kp_5_ed3bb6e1",
+      "name": "设计复用",
+      "rank": null,
+      "top": "kp_5_59e19c15"
+    },
+    {
+      "kp_id": "kp_5_4d3433bb",
+      "name": "面向对象程序设计",
+      "rank": null,
+      "top": "kp_5_3faba1bb"
+    },
+    {
+      "kp_id": "kp_5_b725c140",
+      "name": "对象",
+      "rank": 2,
+      "top": "kp_5_21084776"
+    },
+    {
+      "kp_id": "kp_5_ea1eaacb",
+      "name": "类",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_21084776",
+      "name": "封装",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_59e19c15",
+      "name": "继承",
+      "rank": 2,
+      "top": "kp_5_3faba1bb"
+    },
+    {
+      "kp_id": "kp_5_c10b42b9",
+      "name": "多态",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_0c3ba0e4",
+      "name": "实例方法",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_110113b5",
+      "name": "self参数",
+      "rank": 3,
+      "top": "kp_5_0c3ba0e4"
+    },
+    {
+      "kp_id": "kp_5_8c93df1c",
+      "name": "数据成员",
+      "rank": null,
+      "top": "kp_5_aa32111b"
+    },
+    {
+      "kp_id": "kp_5_2bb07014",
+      "name": "成员方法",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_08170987",
+      "name": "类属性",
+      "rank": null,
+      "top": "kp_5_8c93df1c"
+    },
+    {
+      "kp_id": "kp_5_aa32111b",
+      "name": "实例属性",
+      "rank": null,
+      "top": "kp_5_8c93df1c"
+    },
+    {
+      "kp_id": "kp_5_6cab823e",
+      "name": "构造方法",
+      "rank": null,
+      "top": "kp_5_8f836b94"
+    },
+    {
+      "kp_id": "kp_5_46ca1ef6",
+      "name": "析构方法",
+      "rank": 5,
+      "top": "kp_5_8f836b94"
+    },
+    {
+      "kp_id": "kp_5_38a21e52",
+      "name": "公有方法",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_d7181e41",
+      "name": "私有方法",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_0fbfc1d0",
+      "name": "静态方法",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_11167e11",
+      "name": "类方法",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_6442c973",
+      "name": "抽象方法",
+      "rank": 2,
+      "top": "kp_5_de81aa2b"
+    },
+    {
+      "kp_id": "kp_5_de81aa2b",
+      "name": "抽象类",
+      "rank": null,
+      "top": "kp_5_6442c973"
+    },
+    {
+      "kp_id": "kp_5_8f836b94",
+      "name": "特殊方法",
+      "rank": null,
+      "top": "kp_5_b70f3d28"
+    },
+    {
+      "kp_id": "kp_5_b70f3d28",
+      "name": "运算符重载",
+      "rank": null,
+      "top": "kp_5_8f836b94"
+    },
+    {
+      "kp_id": "kp_5_89f00528",
+      "name": "只读属性",
+      "rank": null,
+      "top": "kp_5_95f05925"
+    },
+    {
+      "kp_id": "kp_5_95f05925",
+      "name": "property",
+      "rank": null,
+      "top": "kp_5_c5ab3f2e"
+    },
+    {
+      "kp_id": "kp_5_e08d287a",
+      "name": "混入机制",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_a7200c05",
+      "name": "动态类型",
+      "rank": null,
+      "top": "kp_5_b725c140"
+    },
+    {
+      "kp_id": "kp_5_ec55defc",
+      "name": "class关键字",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_401a57cb",
+      "name": "isinstance()",
+      "rank": null,
+      "top": "kp_5_c5ab3f2e"
+    },
+    {
+      "kp_id": "kp_5_86505051",
+      "name": "pass语句",
+      "rank": null,
+      "top": null
+    },
+    {
+      "kp_id": "kp_5_1b27831d",
+      "name": "types模块",
+      "rank": null,
+      "top": "kp_5_934afbdf"
+    },
+    {
+      "kp_id": "kp_5_934afbdf",
+      "name": "MethodType",
+      "rank": null,
+      "top": "kp_5_1b27831d"
+    }
+  ],
+  "command": "eval_kp_labeling.py --snapshot backup/neo4j_20260905_145113.json --course-id 5 --synthetic --out eval_data/eval_report_kp_labeling_c5.json"
+}

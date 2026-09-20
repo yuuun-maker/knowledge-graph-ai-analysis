@@ -1,0 +1,332 @@
+{
+  "params": {
+    "top_k": 5,
+    "weights": {
+      "lexical": 0.45,
+      "vector": 0.45,
+      "graph": 0.1
+    },
+    "vec_floor": 0.35,
+    "min_score": 0.3,
+    "graph_min_score": 0.01,
+    "lex_base": 0.65,
+    "lex_min_name_len": 2,
+    "option_weight": 0.7,
+    "graph_decay": 0.45,
+    "apply_min_score": 0.6
+  },
+  "metrics": {
+    "total": 49,
+    "hit@1": 0.102,
+    "hit@3": 0.2041,
+    "hit@5": 0.4694,
+    "mrr": 0.2,
+    "mode": "synthetic(description->kp)",
+    "catalog_size": 49,
+    "skipped_no_description": 0,
+    "graph_only_hits": 12,
+    "layer_hits": {
+      "lexical": 11,
+      "vector": 0,
+      "graph": 12
+    },
+    "elapsed_sec": 0.003
+  },
+  "samples": [
+    {
+      "kp_id": "非线性数据结构",
+      "name": "非线性数据结构",
+      "rank": 1,
+      "top": "非线性数据结构"
+    },
+    {
+      "kp_id": "二叉树",
+      "name": "二叉树",
+      "rank": null,
+      "top": "非线性数据结构"
+    },
+    {
+      "kp_id": "节点",
+      "name": "节点",
+      "rank": 4,
+      "top": "右子节点"
+    },
+    {
+      "kp_id": "左子节点",
+      "name": "左子节点",
+      "rank": null,
+      "top": "节点"
+    },
+    {
+      "kp_id": "右子节点",
+      "name": "右子节点",
+      "rank": null,
+      "top": "节点"
+    },
+    {
+      "kp_id": "父节点",
+      "name": "父节点",
+      "rank": 3,
+      "top": "节点"
+    },
+    {
+      "kp_id": "左子树",
+      "name": "左子树",
+      "rank": null,
+      "top": "左子节点"
+    },
+    {
+      "kp_id": "右子树",
+      "name": "右子树",
+      "rank": null,
+      "top": "右子节点"
+    },
+    {
+      "kp_id": "根节点",
+      "name": "根节点",
+      "rank": null,
+      "top": "二叉树"
+    },
+    {
+      "kp_id": "叶节点",
+      "name": "叶节点",
+      "rank": null,
+      "top": "节点"
+    },
+    {
+      "kp_id": "边",
+      "name": "边",
+      "rank": null,
+      "top": "节点"
+    },
+    {
+      "kp_id": "层",
+      "name": "层",
+      "rank": null,
+      "top": "根节点"
+    },
+    {
+      "kp_id": "度",
+      "name": "度",
+      "rank": null,
+      "top": "二叉树"
+    },
+    {
+      "kp_id": "高度",
+      "name": "高度",
+      "rank": 4,
+      "top": "节点"
+    },
+    {
+      "kp_id": "深度",
+      "name": "深度",
+      "rank": null,
+      "top": "根节点"
+    },
+    {
+      "kp_id": "链表",
+      "name": "链表",
+      "rank": 2,
+      "top": "二叉树"
+    },
+    {
+      "kp_id": "完美二叉树",
+      "name": "完美二叉树",
+      "rank": 5,
+      "top": "二叉树"
+    },
+    {
+      "kp_id": "完全二叉树",
+      "name": "完全二叉树",
+      "rank": 3,
+      "top": "二叉树"
+    },
+    {
+      "kp_id": "完满二叉树",
+      "name": "完满二叉树",
+      "rank": 5,
+      "top": "节点"
+    },
+    {
+      "kp_id": "平衡二叉树",
+      "name": "平衡二叉树",
+      "rank": null,
+      "top": "二叉树"
+    },
+    {
+      "kp_id": "二叉搜索树",
+      "name": "二叉搜索树",
+      "rank": null,
+      "top": "节点"
+    },
+    {
+      "kp_id": "AVL 树",
+      "name": "AVL 树",
+      "rank": null,
+      "top": "平衡二叉搜索树"
+    },
+    {
+      "kp_id": "平衡二叉搜索树",
+      "name": "平衡二叉搜索树",
+      "rank": null,
+      "top": "AVL 树"
+    },
+    {
+      "kp_id": "红黑树",
+      "name": "红黑树",
+      "rank": 5,
+      "top": "平衡二叉搜索树"
+    },
+    {
+      "kp_id": "队列",
+      "name": "队列",
+      "rank": 3,
+      "top": "广度优先遍历"
+    },
+    {
+      "kp_id": "多级索引",
+      "name": "多级索引",
+      "rank": null,
+      "top": "二叉搜索树"
+    },
+    {
+      "kp_id": "失衡节点",
+      "name": "失衡节点",
+      "rank": null,
+      "top": "平衡因子"
+    },
+    {
+      "kp_id": "平衡因子",
+      "name": "平衡因子",
+      "rank": 2,
+      "top": "AVL 树"
+    },
+    {
+      "kp_id": "遍历",
+      "name": "遍历",
+      "rank": 1,
+      "top": "遍历"
+    },
+    {
+      "kp_id": "分治",
+      "name": "分治",
+      "rank": null,
+      "top": "二叉树"
+    },
+    {
+      "kp_id": "层序遍历",
+      "name": "层序遍历",
+      "rank": 5,
+      "top": "广度优先遍历"
+    },
+    {
+      "kp_id": "前序遍历",
+      "name": "前序遍历",
+      "rank": 5,
+      "top": "深度优先遍历"
+    },
+    {
+      "kp_id": "中序遍历",
+      "name": "中序遍历",
+      "rank": 5,
+      "top": "深度优先遍历"
+    },
+    {
+      "kp_id": "后序遍历",
+      "name": "后序遍历",
+      "rank": null,
+      "top": "深度优先遍历"
+    },
+    {
+      "kp_id": "广度优先遍历",
+      "name": "广度优先遍历",
+      "rank": 1,
+      "top": "广度优先遍历"
+    },
+    {
+      "kp_id": "深度优先遍历",
+      "name": "深度优先遍历",
+      "rank": 1,
+      "top": "深度优先遍历"
+    },
+    {
+      "kp_id": "递归",
+      "name": "递归",
+      "rank": 1,
+      "top": "递归"
+    },
+    {
+      "kp_id": "二分查找",
+      "name": "二分查找",
+      "rank": null,
+      "top": "二叉搜索树"
+    },
+    {
+      "kp_id": "查找节点",
+      "name": "查找节点",
+      "rank": null,
+      "top": "节点"
+    },
+    {
+      "kp_id": "插入节点",
+      "name": "插入节点",
+      "rank": 5,
+      "top": "二叉搜索树"
+    },
+    {
+      "kp_id": "删除节点",
+      "name": "删除节点",
+      "rank": 4,
+      "top": "二叉搜索树"
+    },
+    {
+      "kp_id": "旋转",
+      "name": "旋转",
+      "rank": null,
+      "top": "先右旋后左旋"
+    },
+    {
+      "kp_id": "右旋",
+      "name": "右旋",
+      "rank": null,
+      "top": "二叉搜索树"
+    },
+    {
+      "kp_id": "左旋",
+      "name": "左旋",
+      "rank": 5,
+      "top": "右旋"
+    },
+    {
+      "kp_id": "先左旋后右旋",
+      "name": "先左旋后右旋",
+      "rank": 5,
+      "top": "右旋"
+    },
+    {
+      "kp_id": "先右旋后左旋",
+      "name": "先右旋后左旋",
+      "rank": 4,
+      "top": "右旋"
+    },
+    {
+      "kp_id": "数组表示",
+      "name": "数组表示",
+      "rank": null,
+      "top": "层序遍历"
+    },
+    {
+      "kp_id": "映射公式",
+      "name": "映射公式",
+      "rank": null,
+      "top": "节点"
+    },
+    {
+      "kp_id": "中序遍历有序",
+      "name": "中序遍历有序",
+      "rank": null,
+      "top": "二叉搜索树"
+    }
+  ],
+  "command": "eval_kp_labeling.py --snapshot eval_data/gold_第7章_树.json --synthetic --out eval_data/eval_report_kp_labeling_gold_tree.json"
+}

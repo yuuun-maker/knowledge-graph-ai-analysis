@@ -102,7 +102,18 @@ def kp_mastery(answer_records, manual_records, now=None, half_life_days: float =
         b = buckets.setdefault(kp_id, {"w_sum": 0.0, "w_correct": 0.0, "attempts": 0,
                                        "last_at": None, "days_since": None})
         b["w_sum"] += weight
-        b["w_correct"] += weight * (1.0 if r.get("is_correct") else 0.0)
+        # 掌握度得分（Scope B）：教师批改后的主观题可能得部分分（0~100），
+        # 用 score/100 参与加权比布尔 is_correct 更贴近真实掌握程度；
+        # 记录未携带 score 时退回 is_correct（与旧调用方/旧数据兼容）。
+        score = r.get("score")
+        if score is None:
+            credit = 1.0 if r.get("is_correct") else 0.0
+        else:
+            try:
+                credit = _clamp(float(score) / 100.0)
+            except (TypeError, ValueError):
+                credit = 1.0 if r.get("is_correct") else 0.0
+        b["w_correct"] += weight * credit
         b["attempts"] += 1
         if answered_at and (b["last_at"] is None or answered_at > b["last_at"]):
             b["last_at"] = answered_at
@@ -231,8 +242,10 @@ def build_candidates(rows, answer_by_question: dict, mastery: dict, ctx: dict,
 
         difficulty = row.get("difficulty") or 3
         diff_fit = _clamp(1.0 - abs(difficulty - _target_difficulty(m_eff)) / DIFF_SLOPE)
-        novelty = 1.0 if not mine else (0.5 if not mine.get("last_is_correct") else 0.3)
-        wrong_flag = 1.0 if (mine and not mine.get("last_is_correct")) else 0.0
+        # 对错语义（Scope B）：last_is_correct 可能是 None（待批改）——
+        # 只有明确的 False 才算"最近答错"，明确的 True 才算"掌握得不错"。
+        novelty = 1.0 if not mine else (0.3 if mine.get("last_is_correct") is True else 0.5)
+        wrong_flag = 1.0 if (mine and mine.get("last_is_correct") is False) else 0.0
         importance = ctx["importance"].get(kp_id, 0.5) if ctx.get("available") else 0.5
 
         score = (W_NEED * need + W_DUE * due + W_DIFF * diff_fit
@@ -338,30 +351,42 @@ class QuestionRecommender:
             mode = "mixed"
 
         # 1) 候选池（仅启用中的题；文档级作用域自动含课程通用题）
+        #    Scope B：auto_grade_only=True —— 主观题（FILL/ESSAY）不进自动组卷候选池，
+        #    实现「自动组卷不硬插入主观题」；学生显式指定 q_type=FILL/ESSAY 时才会取到。
         _, rows = sql_db.list_questions(
             course_id, document_id=document_id, kp_id=(kp_id or "").strip() or None,
             q_type=(q_type or "").strip().upper() or None, is_active=True,
-            page=1, page_size=100000,
+            page=1, page_size=100000, auto_grade_only=True,
         )
         # 2) 课程全部题目：把作答记录映射到知识点 + 全班区分度统计
+        #    区分度统计内部已按 grade_status='GRADED' 过滤（未批改的主观题不参与）
         _, all_rows = sql_db.list_questions(course_id, page=1, page_size=100000)
         q_kp = {r["question_id"]: r.get("kp_id") for r in all_rows}
         quality_stats = sql_db.question_answer_stats(course_id)
 
         # 3) 我的作答 → 逐题统计（最近一次/次数）+ 知识点维度明细
+        #    口径：逐题统计包含「待批改」记录（学生确实做过，影响新颖度与遗忘到期），
+        #    但对错只在已批改记录上判定；掌握度只喂已批改记录（未批改对错未知）。
         records = sql_db.list_answer_records(user_id, course_id=course_id)
         answer_by_question, enriched = {}, []
         for r in records:
             qid = r["question_id"]
+            graded = (r.get("grade_status") or "GRADED") == "GRADED"
             st = answer_by_question.setdefault(
                 qid, {"attempts": 0, "correct": 0, "last_at": None, "last_is_correct": False})
             st["attempts"] += 1
-            st["correct"] += 1 if r["is_correct"] else 0
             ts = _parse_ts(r["answered_at"])
-            if ts and (st["last_at"] is None or ts > st["last_at"]):
-                st["last_at"], st["last_is_correct"] = ts, bool(r["is_correct"])
-            enriched.append({"kp_id": q_kp.get(qid), "is_correct": r["is_correct"],
-                             "answered_at": r["answered_at"]})
+            if graded:
+                st["correct"] += 1 if r["is_correct"] else 0
+                if ts and (st["last_at"] is None or ts > st["last_at"]):
+                    st["last_at"], st["last_is_correct"] = ts, bool(r["is_correct"])
+                # score 一并传入：教师批改后的主观题可能得部分分（见 kp_mastery）
+                enriched.append({"kp_id": q_kp.get(qid), "is_correct": r["is_correct"],
+                                 "score": r["score"], "answered_at": r["answered_at"]})
+            else:
+                # 待批改：只更新"最近作答时间"，对错标记为 None（既不当作对，也不当作错）
+                if ts and (st["last_at"] is None or ts > st["last_at"]):
+                    st["last_at"], st["last_is_correct"] = ts, None
 
         # 4) 轻量掌握度（练习表现 + 学生自评；读时计算，不落库）
         manual = sql_db.list_records_by_user_course(user_id, course_id)
@@ -414,6 +439,10 @@ class QuestionRecommender:
             "requested": count,
             "buckets": bucket_counts,
             "candidates": len(candidates),
+            # Scope B：自动组卷默认排除主观题；显式指定 q_type=FILL/ESSAY 时才是 "requested"
+            "subjectivity_policy": ("requested"
+                                    if (q_type or "").strip().upper() in ("FILL", "ESSAY")
+                                    else "excluded"),
             "kp_quota": kp_limit,
             "mastery_available": any(v.get("mastery") is not None for v in mastery.values()),
             "graph_available": ctx["available"],

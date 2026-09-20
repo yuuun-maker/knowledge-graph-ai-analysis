@@ -730,10 +730,12 @@
                 <el-radio value="document">本学习资料</el-radio>
                 <el-radio value="course">整门课程</el-radio>
               </el-radio-group>
-              <el-select v-model="practiceQType" placeholder="全部题型" clearable style="width: 130px">
+              <el-select v-model="practiceQType" placeholder="全部题型（默认仅客观题）" clearable style="width: 170px">
                 <el-option label="单选题" value="SINGLE" />
                 <el-option label="多选题" value="MULTI" />
                 <el-option label="判断题" value="JUDGE" />
+                <el-option label="填空题（需教师批改）" value="FILL" />
+                <el-option label="解答题（需教师批改）" value="ESSAY" />
               </el-select>
               <el-select v-model="practiceKpId" placeholder="全部知识点" clearable filterable style="width: 200px">
                 <el-option v-for="n in practiceKpOptions" :key="n.id" :label="n.label" :value="n.id" />
@@ -843,7 +845,7 @@
 
                   <!-- 判断 -->
                   <el-radio-group
-                    v-else
+                    v-else-if="currentPracticeQuestion.q_type === 'JUDGE'"
                     v-model="practiceAnswers[currentPracticeQuestion.question_id]"
                     class="practice-options"
                     :disabled="!!practiceResults[currentPracticeQuestion.question_id]"
@@ -852,20 +854,54 @@
                     <el-radio value="false" class="practice-option">错误</el-radio>
                   </el-radio-group>
 
-                  <!-- 判定结果（提交后才下发答案与解析） -->
+                  <!-- 填空（Scope B：多空输入；提交后进入教师批改队列，批改前不下发参考答案） -->
+                  <div v-else-if="currentPracticeQuestion.q_type === 'FILL'" class="practice-blanks">
+                    <div v-for="b in currentPracticeQuestion.options" :key="b.key" class="practice-blank-row">
+                      <span class="practice-blank-label">{{ b.label }}</span>
+                      <el-input
+                        v-model="practiceAnswers[currentPracticeQuestion.question_id][b.key]"
+                        :placeholder="b.hint || '填写答案'"
+                        :disabled="!!practiceResults[currentPracticeQuestion.question_id]"
+                        style="width: 260px"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- 解答（Scope B：主观题，教师批改后给分） -->
+                  <el-input
+                    v-else
+                    v-model="practiceAnswers[currentPracticeQuestion.question_id]"
+                    type="textarea"
+                    :rows="5"
+                    maxlength="4000"
+                    show-word-limit
+                    placeholder="请写出你的解答过程（提交后由教师批改）"
+                    :disabled="!!practiceResults[currentPracticeQuestion.question_id]"
+                  />
+
+                  <!-- 判定结果（客观题提交后即下发答案；主观题批改后才下发） -->
                   <div
                     v-if="practiceResults[currentPracticeQuestion.question_id]"
                     class="practice-result"
-                    :class="practiceResults[currentPracticeQuestion.question_id].is_correct ? 'ok' : 'bad'"
+                    :class="resultClass(currentPracticeQuestion.question_id)"
                   >
                     <div class="practice-result-head">
                       <el-icon>
-                        <component :is="practiceResults[currentPracticeQuestion.question_id].is_correct ? CircleCheckFilled : WarningFilled" />
+                        <component :is="resultIcon(currentPracticeQuestion.question_id)" />
                       </el-icon>
-                      {{ practiceResults[currentPracticeQuestion.question_id].is_correct ? '回答正确' : '回答错误' }}
-                      <span class="practice-result-answer">
+                      {{ resultText(currentPracticeQuestion.question_id) }}
+                      <span
+                        v-if="!practiceResults[currentPracticeQuestion.question_id].pending"
+                        class="practice-result-answer"
+                      >
                         正确答案：{{ formatAnswer(practiceResults[currentPracticeQuestion.question_id].correct_answer) }}
                       </span>
+                    </div>
+                    <div
+                      v-if="practiceResults[currentPracticeQuestion.question_id].comment"
+                      class="practice-analysis"
+                    >
+                      教师评语：{{ practiceResults[currentPracticeQuestion.question_id].comment }}
                     </div>
                     <div v-if="practiceResults[currentPracticeQuestion.question_id].analysis" class="practice-analysis">
                       解析：{{ practiceResults[currentPracticeQuestion.question_id].analysis }}
@@ -917,6 +953,21 @@
                   <el-table-column prop="wrong_count" label="错答次数" width="90" />
                   <el-table-column label="最近错误作答" width="140">
                     <template #default="{ row }">{{ formatAnswer(row.last_user_answer) }}</template>
+                  </el-table-column>
+                  <!-- G0b：主观题批改结果对学生可见（教师给分与评语；客观题此处为 —） -->
+                  <el-table-column label="教师给分" width="100">
+                    <template #default="{ row }">
+                      <span v-if="row.grade_source === 'TEACHER' && row.last_score !== null && row.last_score !== undefined">
+                        {{ row.last_score }} 分
+                      </span>
+                      <span v-else class="cell-empty">—</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="教师评语" min-width="140" show-overflow-tooltip>
+                    <template #default="{ row }">
+                      <span v-if="row.last_comment">{{ row.last_comment }}</span>
+                      <span v-else class="cell-empty">—</span>
+                    </template>
                   </el-table-column>
                   <el-table-column label="正确答案" width="120">
                     <template #default="{ row }">{{ formatAnswer(row.correct_answer) }}</template>
@@ -1003,7 +1054,7 @@
 import { ref, nextTick, watch, computed, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Refresh, Compass, ChatDotRound, Guide, Aim, Search, Document, Opportunity, MagicStick, ArrowDown, CircleCheckFilled, Right, Collection, WarningFilled, Star, StarFilled, DataAnalysis, Histogram, Odometer, Checked, Reading, Download, EditPen } from '@element-plus/icons-vue'
+import { Refresh, Compass, ChatDotRound, Guide, Aim, Search, Document, Opportunity, MagicStick, ArrowDown, CircleCheckFilled, Right, Collection, WarningFilled, Star, StarFilled, DataAnalysis, Histogram, Odometer, Checked, Reading, Download, EditPen, Clock } from '@element-plus/icons-vue'
 import { fetchDocumentBuffer } from '../utils/documentContent'
 import { getReadingProgress } from '../utils/readingProgress'
 import { api } from '../api'
@@ -1805,13 +1856,53 @@ const myQuestionFavLoading = ref(false)
 
 const currentPracticeQuestion = computed(() => practiceList.value[practiceIndex.value] || null)
 
-/** 答案展示：单选→键；多选→"A、C"；判断→正确/错误 */
+/** 答案展示：单选→键；多选→"A、C"；判断→正确/错误；填空→各空参考答案；解答→文本 */
 function formatAnswer(answer) {
   if (answer === null || answer === undefined || answer === '') return '—'
+  // 填空题作答/答案形如 {"1":"浮点数","2":"0.5"}（修复此前显示成 [object Object] 的问题）
+  if (typeof answer === 'object' && !Array.isArray(answer)) {
+    const keys = Object.keys(answer).sort((a, b) => Number(a) - Number(b))
+    const parts = keys.map((k) => `第${k}空：${String(answer[k] ?? '').trim() || '（未填）'}`)
+    return parts.length ? parts.join('；') : '—'
+  }
   if (Array.isArray(answer)) return answer.length ? answer.join('、') : '—'
   if (answer === true || String(answer) === 'true') return '正确'
   if (answer === false || String(answer) === 'false') return '错误'
   return String(answer)
+}
+
+/** 新建一道题的作答容器：多选=数组，填空=各空对象，其余=字符串 */
+function emptyAnswerFor(q) {
+  if (!q) return ''
+  if (q.q_type === 'MULTI') return []
+  if (q.q_type === 'FILL') {
+    const blanks = {}
+    ;(q.options || []).forEach((b) => {
+      blanks[b.key] = ''
+    })
+    return blanks
+  }
+  return ''
+}
+
+/** 主观题提交后进入待批改：结果区文案 / 图标 / 配色（与客观题共用同一容器） */
+function resultText(qid) {
+  const r = practiceResults[qid] || {}
+  if (r.pending) return '已提交，等待教师批改'
+  return r.is_correct ? '回答正确' : '回答错误'
+}
+
+function resultIcon(qid) {
+  const r = practiceResults[qid] || {}
+  if (r.pending) return Clock
+  return r.is_correct ? CircleCheckFilled : WarningFilled
+}
+
+function resultClass(qid) {
+  const r = practiceResults[qid]
+  if (!r) return ''
+  if (r.pending) return 'pending'
+  return r.is_correct ? 'ok' : 'bad'
 }
 
 function isPracticeFavorited(q) {
@@ -1914,7 +2005,7 @@ function applyPracticeQuestions(items) {
   Object.keys(practiceAnswers).forEach((k) => delete practiceAnswers[k])
   Object.keys(practiceResults).forEach((k) => delete practiceResults[k])
   practiceList.value.forEach((q) => {
-    practiceAnswers[q.question_id] = q.q_type === 'MULTI' ? [] : ''
+    practiceAnswers[q.question_id] = emptyAnswerFor(q)
   })
   practiceFavoriteIds.value = practiceList.value
     .filter((q) => q.is_favorited).map((q) => q.question_id)
@@ -1956,17 +2047,21 @@ async function submitCurrent() {
   const q = currentPracticeQuestion.value
   if (!q) return
   const answer = practiceAnswers[q.question_id]
+  // 概念：填空题答案是「各空对象」，需所有空位都空才算未作答
+  const isBlankObject = answer && typeof answer === 'object' && !Array.isArray(answer)
   const empty = answer === undefined || answer === null || answer === '' ||
-    (Array.isArray(answer) && !answer.length)
+    (Array.isArray(answer) && !answer.length) ||
+    (isBlankObject && !Object.values(answer).some((v) => String(v ?? '').trim()))
   if (empty) {
-    ElMessage.warning('请先作答再提交')
+    ElMessage.warning(q.q_type === 'FILL' ? '请至少填写一个空位' : '请先作答再提交')
     return
   }
   practiceSubmitting.value = true
   try {
     const data = await api.submitAnswer(q.question_id, answer)
     practiceResults[q.question_id] = data
-    if (data.is_correct) ElMessage.success('回答正确 🎉')
+    if (data.pending) ElMessage.success('已提交，等待教师批改')
+    else if (data.is_correct) ElMessage.success('回答正确 🎉')
     else ElMessage.warning('回答错误，看看解析再试')
     loadPracticeStats()
   } catch (e) {
@@ -2042,7 +2137,7 @@ function redoQuestion(q) {
   if (!q) return
   practiceList.value = [{ ...q }]
   practiceIndex.value = 0
-  practiceAnswers[q.question_id] = q.q_type === 'MULTI' ? [] : ''
+  practiceAnswers[q.question_id] = emptyAnswerFor(q)
   delete practiceResults[q.question_id]
   practiceSubTab.value = 'doing'
 }
@@ -3519,6 +3614,29 @@ function overviewGoFavorites() {
 .practice-result.bad {
   border-left-color: #f56c6c;
   background: rgba(245, 108, 108, 0.08);
+}
+/* 主观题待批改：中性色（既不是对也不是错） */
+.practice-result.pending {
+  border-left-color: #e6a23c;
+  background: rgba(230, 162, 60, 0.08);
+}
+/* 填空题：多空输入 */
+.practice-blanks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.practice-blank-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.practice-blank-label {
+  flex: 0 0 auto;
+  min-width: 56px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 .practice-result-head {
   display: flex;

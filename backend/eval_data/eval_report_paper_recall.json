@@ -1,0 +1,198 @@
+{
+  "course_id": 65,
+  "k": 10,
+  "seed": 2026,
+  "questions": 120,
+  "distinct_kp": 40,
+  "A_real_single_label": {
+    "matrix_shape": [
+      120,
+      40
+    ],
+    "similarity": {
+      "distinct_values": [
+        0.0,
+        1.0
+      ],
+      "distinct_count": 2,
+      "nonzero_pair_ratio": 0.0168,
+      "max": 1.0,
+      "mean": 0.0168
+    },
+    "avg_ground_truth": 2.0,
+    "sweep": [
+      {
+        "lambda": 0.0,
+        "avg_candidates": 10.0,
+        "compression": 0.916,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.1,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.2,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.3,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.4,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.5,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.6,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.8,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 0.9,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      },
+      {
+        "lambda": 1.0,
+        "avg_candidates": 2.0,
+        "compression": 0.9832,
+        "coverage": 1.0,
+        "recall@k": 1.0
+      }
+    ]
+  },
+  "B_simulated_multi_label": {
+    "matrix_shape": [
+      120,
+      40
+    ],
+    "avg_labels_per_question": 2.042,
+    "similarity": {
+      "distinct_values": [
+        0.0,
+        0.3333,
+        0.4082,
+        0.5,
+        0.5774,
+        0.6667,
+        0.7071,
+        0.8165,
+        1.0
+      ],
+      "distinct_count": 9,
+      "nonzero_pair_ratio": 0.0933,
+      "max": 1.0,
+      "mean": 0.044
+    },
+    "avg_ground_truth": 11.1,
+    "sweep": [
+      {
+        "lambda": 0.0,
+        "avg_candidates": 10.0,
+        "compression": 0.916,
+        "coverage": 1.0,
+        "recall@k": 0.7583
+      },
+      {
+        "lambda": 0.1,
+        "avg_candidates": 8.417,
+        "compression": 0.9293,
+        "coverage": 1.0,
+        "recall@k": 0.7583
+      },
+      {
+        "lambda": 0.2,
+        "avg_candidates": 8.417,
+        "compression": 0.9293,
+        "coverage": 1.0,
+        "recall@k": 0.7583
+      },
+      {
+        "lambda": 0.3,
+        "avg_candidates": 8.417,
+        "compression": 0.9293,
+        "coverage": 1.0,
+        "recall@k": 0.7583
+      },
+      {
+        "lambda": 0.4,
+        "avg_candidates": 7.95,
+        "compression": 0.9332,
+        "coverage": 1.0,
+        "recall@k": 0.7162
+      },
+      {
+        "lambda": 0.5,
+        "avg_candidates": 3.067,
+        "compression": 0.9742,
+        "coverage": 0.925,
+        "recall@k": 0.2763
+      },
+      {
+        "lambda": 0.6,
+        "avg_candidates": 1.283,
+        "compression": 0.9892,
+        "coverage": 0.7083,
+        "recall@k": 0.1156
+      },
+      {
+        "lambda": 0.8,
+        "avg_candidates": 0.233,
+        "compression": 0.998,
+        "coverage": 0.2333,
+        "recall@k": 0.021
+      },
+      {
+        "lambda": 0.9,
+        "avg_candidates": 0.217,
+        "compression": 0.9982,
+        "coverage": 0.2167,
+        "recall@k": 0.0195
+      },
+      {
+        "lambda": 1.0,
+        "avg_candidates": 0.167,
+        "compression": 0.9986,
+        "coverage": 0.1667,
+        "recall@k": 0.015
+      }
+    ]
+  },
+  "C_semantic_variant": {
+    "available": false,
+    "reason": "该课程没有知识点向量（t_kp_embedding 命中 0 条）"
+  },
+  "command": "eval_paper_recall_knn.py --course-id 65 --k 10"
+}

@@ -1,0 +1,53 @@
+{
+  "params": {
+    "temperature": 0.0,
+    "max_llm_calls": 4,
+    "docs": 2,
+    "price_per_m_input": 1.0
+  },
+  "aggregate": {
+    "docs": 2,
+    "truth_total": 123,
+    "rule_total": 123,
+    "rule_with_answer": 123,
+    "llm_added": 0,
+    "merged_total": 123,
+    "merged_with_answer": 123,
+    "llm_calls": 2,
+    "prompt_tokens_est": 4549,
+    "cost_est_yuan": 0.0045
+  },
+  "per_doc": [
+    {
+      "file": "第1章_语句_测试题与答案_中文版.txt",
+      "chars": 9180,
+      "answer_entries": 64,
+      "rule_items": 64,
+      "rule_with_answer": 64,
+      "rule_missing_vs_truth": [],
+      "llm_calls": 1,
+      "llm_items": 0,
+      "llm_added": 0,
+      "merged_items": 64,
+      "merged_with_answer": 64,
+      "merged_missing_vs_truth": [],
+      "elapsed_sec": 10.64
+    },
+    {
+      "file": "第2章_表达式_测试题与答案_中文版.txt",
+      "chars": 4951,
+      "answer_entries": 59,
+      "rule_items": 59,
+      "rule_with_answer": 59,
+      "rule_missing_vs_truth": [],
+      "llm_calls": 1,
+      "llm_items": 59,
+      "llm_added": 0,
+      "merged_items": 59,
+      "merged_with_answer": 59,
+      "merged_missing_vs_truth": [],
+      "elapsed_sec": 10.22
+    }
+  ],
+  "command": "eval_question_import.py --docs 2 --max-llm-calls 4"
+}

@@ -3,13 +3,13 @@
     <PageHeader
       title="课程中心"
       :desc="isTeacher
-        ? '创建并管理你的课程：查看文档、知识图谱、学生与教学数据'
+        ? '发现公开课程、通过加课码加入其他课程（管理自己的课程请前往「课程管理」）'
         : '加入课程、继续学习、查看知识图谱与学习路径'"
     />
 
     <el-tabs v-model="activeTab" class="cc-tabs" @tab-change="onTabChange">
-      <!-- ============ 我的课程 ============ -->
-      <el-tab-pane name="mine">
+      <!-- ============ 我的课程（仅学生；教师的课程管理在「课程管理」页，避免两处内容重复） ============ -->
+      <el-tab-pane v-if="!isTeacher" name="mine">
         <template #label><span class="tab-label">我的课程</span></template>
 
         <div class="toolbar">
@@ -76,8 +76,8 @@
         </div>
       </el-tab-pane>
 
-      <!-- ============ 发现课程（学生） ============ -->
-      <el-tab-pane v-if="!isTeacher" name="discover">
+      <!-- ============ 发现课程（全角色：浏览公开课程并申请加入） ============ -->
+      <el-tab-pane name="discover">
         <template #label><span class="tab-label">发现课程</span></template>
 
         <div class="toolbar">
@@ -261,7 +261,14 @@ const router = useRouter()
 const VALID_TABS = ['mine', 'discover', 'join']
 const isTeacher = computed(() => store.role === 'teacher')
 
-const activeTab = ref(VALID_TABS.includes(route.query.tab) ? route.query.tab : 'mine')
+// 教师端不展示「我的课程」tab（与课程管理页重复），课程中心定位为「发现 / 加入课程」
+const defaultTab = isTeacher.value ? 'discover' : 'mine'
+const queryTab = String(route.query.tab || '')
+const activeTab = ref(
+  queryTab === 'mine' && isTeacher.value
+    ? 'discover'
+    : VALID_TABS.includes(queryTab) ? queryTab : defaultTab
+)
 
 const mineCourses = ref([])
 const pendingCourses = ref([])
@@ -478,8 +485,13 @@ function openInviteLink() {
 }
 
 onMounted(() => {
-  loadMine()
-  if (activeTab.value === 'discover' && !isTeacher.value) loadDiscover()
+  if (isTeacher.value) {
+    // 教师端课程中心默认落在「发现课程」，必须初始加载（原条件排除了教师，导致进来是空白）
+    loadDiscover()
+  } else {
+    loadMine()
+    if (activeTab.value === 'discover') loadDiscover()
+  }
 })
 </script>
 

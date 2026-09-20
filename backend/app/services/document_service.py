@@ -6,10 +6,11 @@
 import os
 import hashlib
 
-from ..core.config import BASE_DIR, settings
+from ..core.config import settings
 from ..core.database import db
 from ..core.permissions import Permissions
 from ..core.sql_database import sql_db
+from ..core.storage import resolve_document_path
 from .document_parser import DocumentParser
 from .knowledge_extractor import KnowledgeExtractor
 from .kg_manager import KnowledgeGraphManager
@@ -30,19 +31,6 @@ FILE_TYPE_TO_MEDIA_TYPE = {
 def _media_type_for(file_type: str) -> str:
     """文件类型 -> Content-Type；未知类型退化为二进制流"""
     return FILE_TYPE_TO_MEDIA_TYPE.get(file_type, "application/octet-stream")
-
-
-def _resolve_stored_path(path: str) -> str:
-    """把 t_document.file_path 解析为可用的绝对路径（只读场景，不写回数据库）。
-
-    历史行存在两种形态：绝对路径，以及相对启动目录的路径（如 ./data/uploads/5/x.pdf）。
-    后者只有从 backend/ 启动时才成立。这里在按原样找不到文件时，再相对 backend/
-    根目录解析一次，使旧数据在任何启动目录下都能在线阅读；仍找不到则交由调用方报错。
-    """
-    if os.path.exists(path):
-        return path
-    candidate = os.path.normpath(os.path.join(str(BASE_DIR), path))
-    return candidate if os.path.exists(candidate) else path
 
 
 def _clean_filename(filename: str) -> str:
@@ -232,7 +220,8 @@ class DocumentService:
             return {"ok": False, "code": perm["code"], "message": perm["message"]}
         doc = perm["data"]["document"]
 
-        path = _resolve_stored_path(doc["file_path"]) if doc.get("file_path") else None
+        # 路径解析见 core/storage：兼容其他机器写入的绝对路径（随仓库流转的历史行）
+        path = resolve_document_path(doc)
         if not path or not os.path.exists(path):
             return {"ok": False, "code": 2003, "message": "文档文件不存在或已被移除，无法在线阅读"}
 
@@ -295,7 +284,8 @@ class DocumentService:
             return {"ok": False, "code": 5002, "message": f"删除文档题库数据失败: {str(e)}"}
 
         # 5. 本地文件（不存在视为已删，幂等）
-        path = doc.get("file_path")
+        # 同样走路径解析：历史行的 file_path 可能是其他机器的路径，只按原值判断会漏删本机文件
+        path = resolve_document_path(doc)
         if path and os.path.exists(path):
             try:
                 os.remove(path)

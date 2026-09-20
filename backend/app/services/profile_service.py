@@ -63,7 +63,10 @@ class ProfileService:
         row = sql_db.get_user_profile(user_id)
         if row is None:
             return {"ok": False, "code": 2001, "message": f"用户不存在: user_id={user_id}"}
-        return {"ok": True, "code": 0, "message": "success", "data": ProfileService._shape(row)}
+        data = ProfileService._shape(row)
+        # 库里指针为空时回退到磁盘上的头像文件，避免「图还在但显示不出来」
+        data["avatar_url"] = ProfileService.avatar_url_for(user_id, data.get("avatar_url"))
+        return {"ok": True, "code": 0, "message": "success", "data": data}
 
     @staticmethod
     def update_profile(user_id: int, role: str, fields: dict) -> dict:
@@ -127,7 +130,7 @@ class ProfileService:
                 pass
 
         # 带版本参数，确保浏览器不会命中旧头像缓存
-        url = f"/api/v1/profile/avatar/{user_id}?v={os.path.splitext(new_name)[0].split('_')[-1]}"
+        url = ProfileService._url_of_avatar_file(new_path)
         sql_db.upsert_user_profile(user_id, avatar_url=url)
         return {"ok": True, "code": 0, "message": "success",
                 "data": {"avatar_url": url}}
@@ -149,6 +152,33 @@ class ProfileService:
     def avatar_path(user_id: int) -> str:
         """供 FileResponse 使用；无头像返回 None"""
         return ProfileService._find_avatar(user_id)
+
+    @staticmethod
+    def _url_of_avatar_file(path: str) -> str:
+        """由头像文件路径拼出直链。
+
+        文件名格式为 {user_id}_{时间戳}{扩展名}，时间戳（含微秒）兼作版本参数，
+        确保换头像后浏览器不会继续命中旧图缓存。
+        """
+        stem = os.path.splitext(os.path.basename(path))[0]  # 2_20260913133738159050
+        user_id, _, version = stem.rpartition("_")
+        return f"/api/v1/profile/avatar/{user_id}?v={version}"
+
+    @staticmethod
+    def avatar_url_for(user_id: int, stored: str = None) -> str:
+        """取用户头像直链：库里有值就用库里的，为空则回退到扫描头像目录。
+
+        回退为什么必要：avatar_url 只是「指向哪个文件」的指针，头像文件本身按
+        {user_id}_{时间戳}{扩展名} 独立存在磁盘上。app.db 曾是 git 跟踪的二进制文件
+        （现已移出跟踪，见 .gitignore），在跟踪期间发生过被合并脚本整体覆盖、
+        指针丢失而图片还在的事故（见 backup/dbmerge_20260917/），此时扫目录仍能取到
+        最新头像，用户不必重新上传。注意 _find_avatar 取的是字典序最后一个，
+        而文件名前缀时间戳保证字典序 = 时间序，故结果即最新一张。
+        """
+        if stored:
+            return stored
+        path = ProfileService._find_avatar(user_id)
+        return ProfileService._url_of_avatar_file(path) if path else None
 
     # ---------- 展示名 ----------
 

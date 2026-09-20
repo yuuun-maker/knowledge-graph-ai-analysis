@@ -2,6 +2,7 @@
 LLM知识提取服务：实体识别 + 关系提取
 """
 import json
+import logging
 import re
 import asyncio
 from typing import List, Tuple
@@ -9,6 +10,8 @@ from openai import OpenAI
 from ..core.config import settings
 from ..core.database import VALID_RELATION_TYPES
 from ..utils.text_processor import chunk_text_for_llm
+
+_logger = logging.getLogger(__name__)
 
 
 # 知识提取的 Prompt 模板（决策树式关系判定，强化学习依赖与文本顺序的区分）
@@ -190,9 +193,6 @@ class KnowledgeExtractor:
         # 分割长文本（分块上限 _CHUNK_MAX_TOKENS tokens，overlap 解决跨块指代）
         chunks = chunk_text_for_llm(text, max_tokens=_CHUNK_MAX_TOKENS, overlap_tokens=overlap_tokens)
 
-        if len(chunks) == 1:
-            return await asyncio.to_thread(self._extract_single, chunks[0])
-
         # 并发抽取：同步 LLM 客户端放在线程池中并行执行，避免逐块串行阻塞事件循环
         sem = asyncio.Semaphore(_MAX_CONCURRENCY)
 
@@ -200,17 +200,21 @@ class KnowledgeExtractor:
             async with sem:
                 return await asyncio.to_thread(self._extract_single, chunk)
 
-        results = await asyncio.gather(*[_run_one(c) for c in chunks])
+        results = list(await asyncio.gather(*[_run_one(c) for c in chunks]))
 
-        # 并发下偶发限流/超时会导致个别分块失败：对失败分块串行重试一次，提升成功率
-        retried = []
+        # 并发下偶发限流/超时/非法 JSON 会导致个别分块失败：对失败分块串行重试一次。
+        # 单块文档同样要重试 —— 原先单块走的是「直接返回、不重试」的捷径，
+        # 一次坏响应就让整篇文档判失败（报「无法从 LLM 返回内容中解析出 JSON」），
+        # 而当时没有重新抽取的入口，用户只能删掉文档重新上传。
         for i, r in enumerate(results):
             if r.get("error"):
-                retried.append(await asyncio.to_thread(self._extract_single, chunks[i]))
-            else:
-                retried.append(r)
+                results[i] = await asyncio.to_thread(self._extract_single, chunks[i])
 
-        return self._merge_results(retried)
+        # 单块与多块统一走 _merge_results：实体按名去重、关系白名单/置信度校验都在那里
+        # （其 docstring 声明「数据完整性约束不依赖 LLM，全部在此兜底」）。
+        # 原实现单块直接返回原始解析结果，绕过了这些约束，会出现
+        # 「DB 记 48 个实体、图里只有 33 个节点」（重复名在入图 MERGE 时被折叠）这类对不上的账。
+        return self._merge_results(results)
 
     def _extract_single(self, text: str) -> dict:
         """对单个文本块执行提取（同步；由 extract 通过线程池并发调用）"""
@@ -263,6 +267,11 @@ class KnowledgeExtractor:
             except json.JSONDecodeError:
                 pass
 
+        # 解析失败时留下原文片段：截断/夹杂说明文字的响应光看报错无法定位原因
+        _logger.warning(
+            "LLM 返回内容无法解析为 JSON（长度 %d），开头 300 字符：%s",
+            len(content), content[:300],
+        )
         raise ValueError("无法从 LLM 返回内容中解析出 JSON")
 
     def _merge_results(self, results: List[dict]) -> dict:

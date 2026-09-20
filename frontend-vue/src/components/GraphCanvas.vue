@@ -163,31 +163,7 @@ let resizeObserver = null
 let resizeTimer = null
 
 // 节点状态 / 强调统一使用中性深色（--text-primary），避免与知识点类型色（蓝/红/橙/绿）重合
-const STATE_STROKE = '#1c2438'
-// 当前悬停的节点 id（用于非树图模式下显示其关联边标签）
-const edgeHoverId = ref(null)
-
-// hex 颜色明暗调整：percent 为负加深、为正变浅
-function shade(hex, percent) {
-  const c = hexToRgb(hex)
-  if (!c) return hex
-  const f = (v) => {
-    const t = percent < 0 ? 0 : 255
-    const p = Math.abs(percent) / 100
-    return Math.round((t - v) * p + v)
-  }
-  return `rgb(${f(c.r)}, ${f(c.g)}, ${f(c.b)})`
-}
-function hexToRgb(hex) {
-  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '')
-  if (!m) return null
-  return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) }
-}
-function hexToRgba(hex, a) {
-  const c = hexToRgb(hex)
-  if (!c) return `rgba(30,40,80,${a})`
-  return `rgba(${c.r}, ${c.g}, ${c.b}, ${a})`
-}
+const STATE_STROKE = '#303133'
 
 // ---------------------------------------------------------------
 // UI 外壳状态（与 G6 渲染/数据无关，仅图例折叠展示）
@@ -351,11 +327,7 @@ async function loadGraph() {
     // 局部展开模式：默认展开核心节点 → 显示核心 + 一阶关系
     expandedIds.value = props.progressive ? coreIds.value.slice() : []
     focusedId.value = null
-    // 力导向布局动画可能让 render() 的 Promise 迟迟不 settle，加 4s 超时兜底，避免加载浮层卡死
-    await Promise.race([
-      renderGraph(),
-      new Promise((resolve) => setTimeout(resolve, 4000)),
-    ])
+    await renderGraph()
     emit('loaded', { nodeCount: rawNodes.length, edgeCount: rawEdges.length })
     centerOnPath()
   } catch (e) {
@@ -380,48 +352,22 @@ function clearCanvas() {
 // 布局配置：按查看方式生成 G6 layout 选项（均为 G6 5.1.1 内置布局，已在 dist 包实证注册）
 function layoutOption(mode, focusNodeId) {
   if (mode === 'tree') {
-    // 树图：dagre 有向分层，左→右排布；animation:false 立即收敛，避免快速切换时 fitView 截断动画导致节点散落
-    // 注意：G6 5.x 注册的布局 id 是 'antv-dagre'（'dagre' 未注册会静默回退默认布局）
-    return { type: 'antv-dagre', rankdir: 'LR', nodesep: 36, ranksep: 110, animation: false }
+    // 树图：dagre 有向分层，左→右排布，贴合「知识模块 → 知识点」层级
+    return { type: 'dagre', rankdir: 'LR', nodesep: 26, ranksep: 80, align: 'UL' }
   }
   if (mode === 'ring') {
     // 环图：同心圆，度数高的核心知识点靠中心
-    return { type: 'concentric', sortBy: 'degree', preventOverlap: true, nodeSize: 48, minNodeSpacing: 22 }
+    return { type: 'concentric', sortBy: 'degree', preventOverlap: true, nodeSize: 42, minNodeSpacing: 18 }
   }
   if (mode === 'personal') {
     // 个性化：以焦点节点为中心辐射；无焦点时回退同心圆
     if (focusNodeId) {
-      return { type: 'radial', focusNode: focusNodeId, preventOverlap: true, nodeSize: 44, unitRadius: 128 }
+      return { type: 'radial', focusNode: focusNodeId, preventOverlap: true, nodeSize: 34, unitRadius: 110 }
     }
-    return { type: 'concentric', sortBy: 'degree', preventOverlap: true, nodeSize: 48, minNodeSpacing: 22 }
+    return { type: 'concentric', sortBy: 'degree', preventOverlap: true, nodeSize: 42, minNodeSpacing: 18 }
   }
-  // 网图：d3-force 力导向——多体斥力铺开 + 碰撞防重叠 + 弱向心，避免密集知识图收缩成团；按关系类型区分边长
-  // animation:false 同步算到收敛，避免动画漂移导致 fitView 时节点贴边
-  return {
-    type: 'd3-force',
-    animation: false,
-    preventOverlap: true,
-    alpha: 1,
-    alphaDecay: 0.018,
-    alphaMin: 0.001,
-    velocityDecay: 0.38,
-    manyBody: { strength: -460, theta: 0.8 },
-    link: {
-      distance: (edge) => {
-        const t = edge?.data?.type
-        if (t === 'PRECEDES') return 98
-        if (t === 'CONTAINS') return 86
-        if (t === 'APPLIES_TO') return 134
-        return 162 // RELATED_TO 弱关系拉长，减少缠绕
-      },
-      strength: 0.32,
-      iterations: 2,
-    },
-    collide: { radius: 36, strength: 1, iterations: 2 },
-    x: { strength: 0.055 },
-    y: { strength: 0.055 },
-    center: { strength: 1 },
-  }
+  // 网图：力导向（原默认参数）
+  return { type: 'force', preventOverlap: true, nodeSize: 56, linkDistance: 150 }
 }
 
 async function initGraph() {
@@ -432,32 +378,22 @@ async function initGraph() {
     layout: layoutOption(layoutMode.value, personalFocusId()),
     node: {
       style: {
-        size: 36,
+        size: 34,
         labelPlacement: 'bottom',
         labelFontSize: 12,
-        labelFill: '#33415c',
-        labelFontWeight: 500,
-        labelMaxWidth: 150,
-        labelBackground: true,
-        labelBackgroundFill: 'rgba(255,255,255,0.82)',
-        labelBackgroundRadius: 6,
-        labelBackgroundOpacity: 0.9,
-        labelPadding: [2, 5],
+        labelFill: '#303133',
+        labelMaxWidth: 140,
       },
     },
     edge: {
       style: {
         endArrow: true,
-        lineWidth: 1.6,
-        opacity: 0.72,
-        labelFontSize: 10.5,
-        labelFill: '#7a849c',
-        labelFontWeight: 500,
+        lineWidth: 1.5,
+        labelFontSize: 11,
+        labelFill: '#909399',
         labelBackground: true,
-        labelBackgroundFill: 'rgba(255,255,255,0.88)',
-        labelBackgroundRadius: 5,
-        labelBackgroundOpacity: 0.9,
-        labelPadding: [1, 5],
+        labelBackgroundFill: '#ffffff',
+        labelBackgroundOpacity: 0.85,
       },
     },
     behaviors: ['drag-canvas', 'zoom-canvas', 'drag-element', 'click-select'],
@@ -473,17 +409,6 @@ async function initGraph() {
     }
     emit('node-click', node, neighborInfo(String(id)))
   })
-  graph.on('node:mouseenter', (evt) => {
-    const id = evt?.target?.id
-    if (id == null || layoutMode.value === 'tree') return
-    edgeHoverId.value = String(id)
-    rehighlight()
-  })
-  graph.on('node:mouseleave', () => {
-    if (layoutMode.value === 'tree') return
-    edgeHoverId.value = null
-    rehighlight()
-  })
   graph.on('edge:click', (evt) => {
     if (!props.editable) return
     const id = evt?.target?.id
@@ -493,25 +418,6 @@ async function initGraph() {
   graph.on('canvas:click', () => {
     if (props.editable) emit('edge-click', null) // 点击空白取消选择
     clearFocus()
-  })
-  // 力导向布局收敛后自动适配视图（防抖，避免动画过程中频繁缩放）；padding 给文字标签留边，防止贴边裁切
-  // 定时器句柄声明在组件级（applyLayout 切换布局时需要取消它们）
-  graph.on('afterlayout', () => {
-    clearTimeout(afterLayoutTimer)
-    clearTimeout(afterLayoutTimer2)
-    afterLayoutTimer = setTimeout(() => {
-      try {
-    if (graph && !focusedId.value) graph.fitView({ padding: [88, 140, 230, 140], when: 'always' }, { duration: 320 })
-      } catch {
-        /* 部分布局无 fitView 动画时忽略 */
-      }
-    }, 260)
-    // 力导向动画完全停下后再适配一次，确保最终位置完整入画
-    afterLayoutTimer2 = setTimeout(() => {
-      try {
-      if (graph && !focusedId.value) graph.fitView({ padding: [88, 140, 230, 140], when: 'always' }, { duration: 300 })
-      } catch { /* ignore */ }
-    }, 1100)
   })
 
   await graph.render()
@@ -544,45 +450,20 @@ function personalFocusId() {
 }
 
 // 切换查看方式：换布局并整体重建（失败时回退网图，避免白屏）
-// 快速连续切换的竞态保护：每次切换递增 layoutSeq，过期任务在 await 后自动退出，
-// 避免旧布局的 render/fitView 覆盖新布局导致残影、节点错位
-let layoutSeq = 0
-// afterlayout 防抖 fitView 的定时器句柄：组件级声明，applyLayout 切换时取消挂起任务
-let afterLayoutTimer = null
-let afterLayoutTimer2 = null
-// 布局任务串行链：同一时刻只允许一个布局任务执行，后一次切换排队等待，
-// 彻底避免两次 render() 并发交错把旧位置写进画布（快速连点散落/堆叠的根因）
-let layoutJob = Promise.resolve()
-function applyLayout(mode, force = false) {
-  if (!force && layoutMode.value === mode) return Promise.resolve()
+async function applyLayout(mode, force = false) {
+  if (!force && layoutMode.value === mode) return
   layoutMode.value = mode
-  const seq = ++layoutSeq
-  // 取消上一次布局挂起的延迟 fitView，防止其作用到新布局上
-  clearTimeout(afterLayoutTimer)
-  clearTimeout(afterLayoutTimer2)
-  layoutJob = layoutJob.catch(() => {}).then(() => runLayout(mode, seq))
-  return layoutJob
-}
-async function runLayout(mode, seq) {
-  if (!graph || seq !== layoutSeq) return // 期间又发生了切换，本次任务作废
+  if (!graph) return
   try {
     graph.setLayout(layoutOption(mode, personalFocusId()))
     await renderGraph()
-    if (seq !== layoutSeq) return
-    graph.fitView({ padding: [88, 140, 230, 140], when: "always" })
-    // 布局收尾动画会把节点继续推远，动画结束后再校准一次，避免底部节点压到切换条
-    setTimeout(() => {
-      if (seq !== layoutSeq || !graph || focusedId.value) return
-      try { graph.fitView({ padding: [88, 140, 230, 140], when: "always" }, { duration: 220 }) } catch { /* ignore */ }
-    }, 950)
+    graph.fitView()
   } catch (e) {
-    if (seq !== layoutSeq) return
     layoutMode.value = 'net'
     try {
       graph.setLayout(layoutOption('net'))
       await renderGraph()
-      if (seq !== layoutSeq) return
-      graph.fitView({ padding: [88, 140, 230, 140], when: "always" })
+      graph.fitView()
     } catch (e2) { /* 已回退，忽略 */ }
   }
 }
@@ -620,24 +501,21 @@ function buildGraphData() {
       if (isCurrent) labelText = '● ' + labelText
       else if (isRecommended) labelText = '★ ' + labelText
 
-      const baseColor = nodeColor(n.type)
       // 完整样式：显式给出所有可变键，避免 updateNodeData 浅合并残留旧状态
       const style = {
-        // 径向渐变制造「玻璃球」高光质感（g-lite 支持 CSS 渐变字符串）
-        fill: `radial-gradient(circle at 34% 28%, rgba(255,255,255,0.75) 0%, ${baseColor} 46%, ${shade(baseColor, -14)} 100%)`,
+        fill: nodeColor(n.type),
         labelText,
-        stroke: 'rgba(255,255,255,0.85)',
-        lineWidth: 1.5,
+        stroke: 'transparent',
+        lineWidth: 1,
         halo: false,
-        haloStroke: baseColor,
-        haloLineWidth: 4,
-        haloFillOpacity: 0.18,
+        haloStroke: STATE_STROKE,
+        haloLineWidth: 3,
         badges: [],
         opacity: 1,
-        // 彩色柔光投影，节点像「浮」在点阵画布上
-        shadowColor: hexToRgba(baseColor, 0.35),
-        shadowBlur: 10,
-        shadowOffsetY: 3,
+        // 柔和投影提升层次感（浅色画布上轻微浮起）
+        shadowColor: 'rgba(0, 0, 0, 0.14)',
+        shadowBlur: 6,
+        shadowOffsetY: 2,
       }
       let shape = 'circle'
 
@@ -648,12 +526,10 @@ function buildGraphData() {
           {
             text: '✓',
             placement: 'right-top',
-            fontSize: 10,
             fill: '#ffffff',
             background: true,
-            backgroundFill: '#22c08a',
+            backgroundFill: '#67c23a',
             backgroundRadius: '50%',
-            padding: 1,
           },
         ]
       } else if (isCurrent) {
@@ -718,9 +594,8 @@ function buildGraphData() {
     })
 
   const isTree = layoutMode.value === 'tree'
-  // 节点纯色映射（边描边必须用纯色，节点填充是渐变字符串）
-  const nodeSolid = {}
-  for (const n of rawNodes) nodeSolid[String(n.id)] = nodeColor(n.type)
+  const nodeFill = {}
+  for (const gn of gNodes) nodeFill[gn.id] = gn.style.fill
 
   const edgeTypeName = isTree ? 'cubic-horizontal' : 'quadratic'
   // 树图只保留骨架边（包含/前置）， RELATED_TO/APPLIES_TO 等弱关系在树状视图隐藏，避免交叉杂乱
@@ -731,32 +606,23 @@ function buildGraphData() {
     const src = String(e.source)
     const tgt = String(e.target)
     const inPath = pathEdgeSet.has(`${src}-${tgt}`)
-    const baseStroke = isTree ? nodeSolid[tgt] || edgeColor(e.type) : edgeColor(e.type)
     const style = isTree
       ? {
           // 树图：连线取子节点色，无文字标签，直角水平贝塞尔
           labelText: '',
-          stroke: inPath ? '#f5a623' : baseStroke,
-          lineWidth: inPath ? 3 : 1.6,
-          endArrow: true,
-          opacity: inPath ? 1 : 0.75,
-        }
-      : {
-          // 非树图模式默认隐藏边标签（悬停时再显示），避免多边标签旋转堆叠遮挡
-          labelText: edgeHoverId.value && (src === edgeHoverId.value || tgt === edgeHoverId.value)
-            ? edgeTypeLabel(e.type, e.label)
-            : '',
-          stroke: inPath ? '#f5a623' : baseStroke,
+          stroke: inPath ? '#e6a23c' : nodeFill[tgt] || edgeColor(e.type),
           lineWidth: inPath ? 3 : 1.5,
           endArrow: true,
-          opacity: 0.62,
-          // 弱关系用虚线，强化「主结构 vs 弱关联」的视觉层级
-          lineDash: e.type === 'RELATED_TO' ? [4, 4] : undefined,
+        }
+      : {
+          labelText: edgeTypeLabel(e.type, e.label),
+          stroke: inPath ? '#e6a23c' : edgeColor(e.type),
+          lineWidth: inPath ? 3 : 1.5,
         }
     if (focusId) {
       const incident =
         src === focusId || tgt === focusId || (fNbr.has(src) && fNbr.has(tgt))
-      style.opacity = incident ? 1 : 0.06
+      style.opacity = incident ? 1 : 0.08
     }
     return {
       id: String(e.id || `${src}-${tgt}`),
@@ -783,22 +649,9 @@ watch(
 async function renderGraph() {
   await initGraph()
   if (!graph) return
-  // 重渲染（筛选/搜索等触发）前重设当前模式的布局选项，防止布局参数回退默认值（如 dagre 变回 TB 纵向）
   graph.setData(buildGraphData())
-  graph.setLayout(layoutOption(layoutMode.value, personalFocusId()))
   await graph.render()
   emitStats()
-  // 可见集变化（筛选/搜索跨界/路径高亮）后重新适配视图，避免子图跑出画布被裁切
-  const seq = ++layoutSeq
-  clearTimeout(afterLayoutTimer)
-  clearTimeout(afterLayoutTimer2)
-  if (!focusedId.value) {
-    try { graph.fitView({ padding: [88, 140, 230, 140], when: 'always' }) } catch { /* ignore */ }
-    setTimeout(() => {
-      if (seq !== layoutSeq || !graph || focusedId.value) return
-      try { graph.fitView({ padding: [88, 140, 230, 140], when: 'always' }, { duration: 220 }) } catch { /* ignore */ }
-    }, 950)
-  }
 }
 
 // 仅强调变化（opacity/halo/描边等，节点集不变）：不重新布局
@@ -900,7 +753,7 @@ function selectNode(id) {
 }
 
 function fitView() {
-  if (graph) graph.fitView({ padding: [88, 140, 230, 140], when: "always" })
+  if (graph) graph.fitView()
 }
 
 function clearFocus() {
@@ -1006,14 +859,13 @@ function centerOnPath() {
   if (seq.length === 1) {
     graph.focusElement(seq[0], { animation: { duration: 300 } })
   } else if (seq.length > 1) {
-    graph.fitView({ padding: [88, 140, 230, 140], when: "always" })
+    graph.fitView()
   }
 }
 
 // 筛选 / 隔离聚焦改变可见集时，统一重布局（状态变更后由 watcher 触发渲染）
 // 注意：expandedIds 由 loadGraph 初始化 + toggleExpand 手动触发渲染，不在此处监听（避免初始加载双重渲染）
-// 复用 applyLayout(force) 而非裸 renderGraph：确保筛选后仍按当前模式完整重设并应用布局
-watch([nodeFilter, edgeFilter, onlyPrecedes, isolateOn], () => applyLayout(layoutMode.value, true), { deep: true })
+watch([nodeFilter, edgeFilter, onlyPrecedes, isolateOn], () => renderGraph(), { deep: true })
 
 // 搜索命中唯一节点时居中定位
 function centerOnSearch() {
@@ -1027,7 +879,7 @@ function centerOnSearch() {
   if (hits.length === 1) {
     graph.focusElement(String(hits[0].id), { animation: { duration: 300 } })
   } else if (hits.length > 1) {
-    graph.fitView({ padding: [88, 140, 230, 140], when: "always" })
+    graph.fitView()
   }
 }
 </script>
@@ -1043,64 +895,68 @@ function centerOnSearch() {
   inset: 0;
 }
 
-/* 底部居中：视图切换条（参考智慧树 pill 分段控件）。放在底部避免与右上筛选控件重叠，
-   也避免画布节点透出遮挡按钮文字 */
+/* 顶部居中：视图切换条（参考智慧树 pill 分段控件） */
 .layout-switch {
   position: absolute;
-  bottom: var(--space-3);
+  top: var(--space-3);
   left: 50%;
   transform: translateX(-50%);
   z-index: 11;
   display: flex;
   gap: 2px;
   padding: 3px;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,.9);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--color-border);
   border-radius: 999px;
   box-shadow: var(--shadow-card);
 }
 .layout-btn {
   border: none;
   background: transparent;
-  padding: 6px 15px;
+  padding: 6px 14px;
   font-size: 13px;
-  font-weight: 500;
   color: var(--color-text-secondary, #606266);
   border-radius: 999px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.2s, color 0.2s, box-shadow .2s;
+  transition: background-color 0.2s, color 0.2s;
 }
 .layout-btn:hover {
-  color: var(--brand-500);
+  color: var(--el-color-primary, #409eff);
 }
 .layout-btn.active {
-  background: var(--gradient-brand);
+  background: var(--el-color-primary, #409eff);
   color: #fff;
-  font-weight: 600;
-  box-shadow: 0 4px 10px -3px rgba(79,110,247,.6);
 }
 
-/* 筛选 / 聚焦控制（右上，玻璃悬浮工具条） */
+/* 筛选 / 聚焦控制（右上，轻量悬浮工具条：白底半透明 + 轻描边 + 小圆角 + 微弱阴影）
+   竖排而非横排：编辑模式下图谱只占中间一栏（sm=13），横排时整条会向左伸出约 300px，
+   压到顶部居中的视图切换条（.layout-switch，z-index 更高，表现为被盖住）。
+   竖排后宽度收敛到最宽按钮的宽度（约 100px），两者互不干涉。
+   顺序即 DOM 顺序：筛选在上、只看前置知识在下。 */
 .graph-controls {
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
   z-index: 10;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--space-1);
   padding: var(--space-1);
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,.9);
-  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
 }
-
+/* 列内按钮等宽：stretch 让每个按钮撑满列宽（列宽 = 最宽按钮），
+   width/margin 覆盖 Element 的默认值——相邻按钮的 margin-left 在竖排下会顶出列外 */
+.graph-controls :deep(.el-button) {
+  width: 100%;
+  margin: 0;
+  justify-content: center;
+  white-space: nowrap;
+}
 .filter-panel {
   display: flex;
   flex-direction: column;
@@ -1125,17 +981,15 @@ function centerOnSearch() {
   top: var(--space-3);
   left: var(--space-3);
   z-index: 10;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,.9);
-  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   font-size: 12px;
   color: var(--color-text-regular);
-  max-width: 184px;
+  max-width: 180px;
   overflow: hidden;
 }
 .legend-header {
@@ -1187,12 +1041,11 @@ function centerOnSearch() {
   gap: 6px;
 }
 .legend-dot {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: inline-block;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 2px rgba(255,255,255,.6), 0 1px 3px rgba(20,30,60,.25);
 }
 .legend-shape {
   width: 12px;

@@ -221,11 +221,15 @@ class MemberService:
         if blocked:
             return blocked
 
+        # 加入角色随账号角色：教师加入即协作教师（需审核后共管课程），学生即学生成员
+        account = sql_db.get_user_by_id(user_id) or {}
+        member_role = "teacher" if account.get("role") == "teacher" else "student"
+
         join_mode = course.get("join_mode") or "approval"
         # 曾被移除的学生：无论课程是否自动加入，都必须重新走审核，
         # 否则一个外泄的加课码就能把「已被移除」的决定撤销掉。
         if member and member["status"] == "removed":
-            sql_db.upsert_membership(course_id, user_id, "student", "pending", "apply", reason)
+            sql_db.upsert_membership(course_id, user_id, member_role, "pending", "apply", reason)
             return {"ok": True, "code": 0, "message": "success", "data": {
                 "course_id": course_id, "course_name": course["course_name"],
                 "status": "pending", "join_mode": join_mode}}
@@ -233,11 +237,15 @@ class MemberService:
         if join_mode == "closed":
             return MemberService._fail(4006, "该课程已关闭加入，请联系教师获取邀请链接")
 
-        status = "approved" if join_mode == "auto" else "pending"
-        sql_db.upsert_membership(course_id, user_id, "student", status, "code", reason)
+        # 教师经加课码加入一律需审核（协作教师有课程管理权，防加课码外泄直接得权）
+        if member_role == "teacher":
+            status = "pending"
+        else:
+            status = "approved" if join_mode == "auto" else "pending"
+        sql_db.upsert_membership(course_id, user_id, member_role, status, "code", reason)
         return {"ok": True, "code": 0, "message": "success", "data": {
             "course_id": course_id, "course_name": course["course_name"],
-            "status": status, "join_mode": join_mode}}
+            "status": status, "role": member_role, "join_mode": join_mode}}
 
     @staticmethod
     def apply_to_course(user_id: int, course_id: int, reason: str = None) -> dict:
@@ -257,9 +265,13 @@ class MemberService:
         if blocked:
             return blocked
 
-        sql_db.upsert_membership(course_id, user_id, "student", "pending", "apply", reason)
+        # 申请角色随账号角色：教师申请即协作教师（审核通过后共管课程），学生即学生成员
+        account = sql_db.get_user_by_id(user_id) or {}
+        member_role = "teacher" if account.get("role") == "teacher" else "student"
+
+        sql_db.upsert_membership(course_id, user_id, member_role, "pending", "apply", reason)
         return {"ok": True, "code": 0, "message": "success", "data": {
-            "course_id": course_id, "course_name": course["course_name"],
+            "course_id": course_id, "course_name": course["course_name"], "role": member_role,
             "status": "pending", "join_mode": course.get("join_mode") or "approval"}}
 
     @staticmethod

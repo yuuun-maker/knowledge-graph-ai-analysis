@@ -15,6 +15,7 @@ from ..core.config import settings
 from ..core.response import success, error
 from ..core.security import hash_password, verify_password
 from ..core.sql_database import sql_db
+from ..services.profile_service import ProfileService
 
 router = APIRouter(prefix="/api/auth", tags=["用户认证"])
 
@@ -90,6 +91,7 @@ def login(user: UserLogin):
             "display_name": db_user.get("display_name"),
             "nickname": profile.get("nickname"),
             "real_name": profile.get("real_name"),
-            "avatar_url": profile.get("avatar_url"),
+            "avatar_url": ProfileService.avatar_url_for(
+                db_user["user_id"], profile.get("avatar_url")),
         },
     })

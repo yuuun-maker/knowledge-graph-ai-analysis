@@ -1,69 +1,78 @@
 <template>
-  <div class="login-page">
-    <!-- 左侧品牌展示区：与注册页共用 -->
+  <div class="register-page">
+    <!-- 左侧品牌展示区：与登录页共用 -->
     <AuthBrandPanel />
 
-    <!-- 右侧登录区 -->
+    <!-- 右侧注册区 -->
     <div class="form-panel">
-      <div class="login-card">
+      <div class="register-card">
         <div class="form-brand-row">
           <div class="form-logo"><BrandMark :size="26" /></div>
           <div>
-            <div class="form-title">欢迎使用</div>
-            <div class="form-sub">课程知识图谱智能构建与学习导航系统</div>
+            <div class="form-title">创建账号</div>
+            <div class="form-sub">注册后即可创建课程或加入课程学习</div>
           </div>
         </div>
 
-        <el-form ref="formRef" :model="form" :rules="rules" size="large" @keyup.enter="handleLogin">
-          <el-form-item prop="username">
+        <el-form
+          ref="formRef"
+          :model="form"
+          :rules="rules"
+          size="large"
+          label-position="top"
+          @keyup.enter="handleRegister"
+        >
+          <el-form-item label="用户名" prop="username">
             <el-input v-model="form.username" placeholder="请输入用户名" :prefix-icon="User" clearable />
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item label="密码" prop="password">
             <el-input
               v-model="form.password"
               type="password"
-              placeholder="请输入密码"
+              placeholder="至少 6 位"
               :prefix-icon="Lock"
               show-password
-              clearable
             />
+          </el-form-item>
+          <el-form-item label="确认密码" prop="confirm">
+            <el-input
+              v-model="form.confirm"
+              type="password"
+              placeholder="再次输入密码"
+              :prefix-icon="Lock"
+              show-password
+            />
+          </el-form-item>
+          <el-form-item label="身份" prop="role">
+            <el-radio-group v-model="form.role">
+              <el-radio value="student">学生</el-radio>
+              <el-radio value="teacher">教师</el-radio>
+            </el-radio-group>
           </el-form-item>
           <el-form-item>
             <el-button
               type="primary"
-              class="login-btn"
+              class="submit-btn"
               :loading="loading"
-              @click="handleLogin"
+              @click="handleRegister"
             >
-              {{ loading ? '登录中…' : '登 录' }}
+              {{ loading ? '注册中…' : '注 册' }}
             </el-button>
           </el-form-item>
         </el-form>
 
-        <div class="quick-demo">
-          <span class="quick-label">演示账号一键填充：</span>
-          <el-tag
-            v-for="d in demos"
-            :key="d.role"
-            class="quick-tag"
-            effect="plain"
-            @click="fillDemo(d)"
-          >{{ d.label }}</el-tag>
-        </div>
-
-        <div class="login-tips">
+        <div class="role-tips">
           <el-icon><InfoFilled /></el-icon>
-          <span>首次使用可在账号注册入口创建账号；教师创建课程、上传资料后即可体验完整流程。</span>
+          <span>教师可创建课程、上传资料并管理成员；学生通过加课码或邀请链接加入课程。</span>
         </div>
 
         <div class="form-footer">
-          <el-button link type="primary" @click="router.push('/register')">没有账号？去注册</el-button>
-          <el-button link @click="router.push('/invite')">加课码 / 邀请链接</el-button>
+          <el-button link type="primary" @click="router.push('/login')">已有账号？去登录</el-button>
         </div>
       </div>
       <div class="form-status">
         <span class="status-dot" :class="store.backendOnline ? 'on' : 'off'" />
-        {{ store.backendOnline ? '后端服务在线，可正常登录' : '后端服务未连接，请先启动后端服务' }}
+        {{ store.backendOnline ? '后端服务在线，可正常注册' : '后端服务未连接，请先启动后端服务' }}
       </div>
     </div>
 
@@ -86,36 +95,48 @@ const store = useAppStore()
 
 const formRef = ref(null)
 const loading = ref(false)
-const form = reactive({ username: '', password: '', role: 'student' })
-const demos = [
-  { role: 'teacher', label: '教师 demo_teacher', username: 'demo_teacher', password: 'demo123456' },
-  { role: 'student', label: '学生 demo_student', username: 'demo_student', password: 'demo123456' },
-]
+const form = reactive({ username: '', password: '', confirm: '', role: 'student' })
+
 const rules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 3, max: 20, message: '用户名长度需在 3-20 个字符之间', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, message: '密码至少 6 位', trigger: 'blur' },
+  ],
+  confirm: [
+    { required: true, message: '请再次输入密码', trigger: 'blur' },
+    {
+      validator: (_rule, value, callback) => {
+        if (value !== form.password) callback(new Error('两次输入的密码不一致'))
+        else callback()
+      },
+      trigger: 'blur',
+    },
+  ],
+  role: [{ required: true, message: '请选择身份', trigger: 'change' }],
 }
 
-function fillDemo(d) {
-  form.username = d.username
-  form.password = d.password
-  form.role = d.role
-}
-
-async function handleLogin() {
+async function handleRegister() {
   if (!formRef.value) return
   try {
     await formRef.value.validate()
   } catch {
     return
   }
+  if (loading.value) return
   loading.value = true
+  const username = form.username.trim()
   try {
-    await store.login(form.username, form.password)
-    ElMessage.success('登录成功')
+    await store.register({ username, password: form.password, role: form.role })
+    ElMessage.success('注册成功，正在登录…')
+    // 注册后自动登录，省去用户再填一次（后端注册接口不返回 token）
+    await store.login(username, form.password)
     router.push('/course-center')
   } catch (e) {
-    ElMessage.error(e.message || '登录失败')
+    ElMessage.error(e.message || '注册失败')
   } finally {
     loading.value = false
   }
@@ -127,7 +148,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.login-page {
+.register-page {
   min-height: 100vh;
   display: flex;
   background: #f3f5fb;
@@ -143,8 +164,9 @@ onMounted(() => {
   justify-content: center;
   padding: 40px;
   position: relative;
+  overflow-y: auto;
 }
-.login-card {
+.register-card {
   width: 100%;
   max-width: 380px;
   animation: kg-fade-up .55s cubic-bezier(.22,.8,.36,1) both;
@@ -168,7 +190,7 @@ onMounted(() => {
 .form-title { font-size: 22px; font-weight: 700; color: var(--text-primary); }
 .form-sub { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
 
-.login-btn {
+.submit-btn {
   width: 100%;
   height: 44px;
   font-size: 15px;
@@ -176,18 +198,7 @@ onMounted(() => {
   border-radius: 10px;
 }
 
-.quick-demo {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 4px 0 14px;
-}
-.quick-label { font-size: 12px; color: var(--text-secondary); }
-.quick-tag { cursor: pointer; border-radius: 7px; transition: all .2s; }
-.quick-tag:hover { transform: translateY(-1px); }
-
-.login-tips {
+.role-tips {
   display: flex;
   gap: 7px;
   font-size: 12px;
@@ -198,11 +209,11 @@ onMounted(() => {
   border-radius: 10px;
   padding: 10px 12px;
 }
-.login-tips .el-icon { color: var(--brand-500); flex-shrink: 0; margin-top: 2px; }
+.role-tips .el-icon { color: var(--brand-500); flex-shrink: 0; margin-top: 2px; }
 
 .form-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 18px;
 }
 

@@ -52,28 +52,6 @@
             </el-button>
           </template>
         </MyCourseGrid>
-
-        <!-- 申请中 / 被拒绝：学生查看审核进度与教师意见 -->
-        <div v-if="!isTeacher && pendingCourses.length" class="pending-section">
-          <div class="section-title">申请中 / 未通过</div>
-          <el-table :data="pendingCourses" size="small">
-            <el-table-column label="课程" min-width="160" prop="course_name" />
-            <el-table-column label="教师" width="120" prop="teacher_name" />
-            <el-table-column label="状态" width="110">
-              <template #default="{ row }">
-                <el-tag size="small" :type="row.my_status === 'rejected' ? 'danger' : 'warning'" effect="plain">
-                  {{ row.my_status === 'rejected' ? '未通过' : '等待教师审核' }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="审核意见" min-width="160">
-              <template #default="{ row }">{{ row.review_comment || '—' }}</template>
-            </el-table-column>
-            <el-table-column label="申请时间" width="140">
-              <template #default="{ row }">{{ fmtTime(row.created_at) }}</template>
-            </el-table-column>
-          </el-table>
-        </div>
       </el-tab-pane>
 
       <!-- ============ 发现课程（全角色：浏览公开课程并申请加入） ============ -->
@@ -211,6 +189,28 @@
       </el-tab-pane>
     </el-tabs>
 
+    <!-- 申请中 / 未通过：学生与教师（申请加入其他课程时）查看审核进度与教师意见 -->
+    <div v-if="pendingCourses.length" class="pending-section">
+      <div class="section-title">申请中 / 未通过</div>
+      <el-table :data="pendingCourses" size="small">
+        <el-table-column label="课程" min-width="160" prop="course_name" />
+        <el-table-column label="教师" width="120" prop="teacher_name" />
+        <el-table-column label="状态" width="110">
+          <template #default="{ row }">
+            <el-tag size="small" :type="row.my_status === 'rejected' ? 'danger' : 'warning'" effect="plain">
+              {{ row.my_status === 'rejected' ? '未通过' : '等待教师审核' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="审核意见" min-width="160">
+          <template #default="{ row }">{{ row.review_comment || '—' }}</template>
+        </el-table-column>
+        <el-table-column label="申请时间" width="140">
+          <template #default="{ row }">{{ fmtTime(row.created_at) }}</template>
+        </el-table-column>
+      </el-table>
+    </div>
+
     <!-- 申请加入（发现课程） -->
     <el-dialog v-model="applyVisible" title="申请加入课程" width="460px">
       <div class="apply-course">{{ applying?.course_name }}</div>
@@ -303,6 +303,16 @@ const joinModeText = (m) => (JOIN_MODE[m] || JOIN_MODE.approval).text
 const joinModeType = (m) => (JOIN_MODE[m] || JOIN_MODE.approval).type
 const fmtTime = (t) => (t ? String(t).slice(0, 16) : '—')
 
+/** 拉取「申请中 / 未通过」的课程（my_status 由后端在 /courses/my 中返回，pending 状态同时含被拒绝） */
+async function loadPending() {
+  try {
+    const pd = await api.getMyCourses({ status: 'pending', page_size: 100 })
+    pendingCourses.value = pd.items || []
+  } catch (e) {
+    pendingCourses.value = []
+  }
+}
+
 async function loadMine() {
   loadingMine.value = true
   try {
@@ -315,12 +325,7 @@ async function loadMine() {
     mineCourses.value = data.items || []
     // 同步到全局课程列表，供教师/学生端既有的课程下拉框使用
     store.fetchCourses(true).catch(() => {})
-    if (!isTeacher.value) {
-      const pd = await api.getMyCourses({ status: 'pending', page_size: 100 })
-      pendingCourses.value = pd.items || []
-    } else {
-      pendingCourses.value = []
-    }
+    await loadPending()
   } catch (e) {
     ElMessage.error(e?.message || '加载我的课程失败')
   } finally {
@@ -445,8 +450,10 @@ async function doJoin() {
     joinCode.value = ''
     joinReason.value = ''
     await loadMine()
-    activeTab.value = 'mine'
-    onTabChange('mine')
+    if (!isTeacher.value) {
+      activeTab.value = 'mine'
+      onTabChange('mine')
+    }
   } catch (e) {
     // 后端对「码无效 / 已关闭加入 / 已是成员」都给了明确中文提示，直接透出
     ElMessage.error(e?.message || '加入失败')
@@ -468,6 +475,7 @@ async function doApply() {
     ElMessage.success('已提交申请，等待教师审核')
     applyVisible.value = false
     await loadDiscover()
+    await loadPending()
   } catch (e) {
     ElMessage.error(e?.message || '申请失败')
   } finally {
@@ -485,6 +493,8 @@ function openInviteLink() {
 }
 
 onMounted(() => {
+  // 学生与教师都加载「申请中 / 未通过」，保证两端状态展示一致
+  loadPending()
   if (isTeacher.value) {
     // 教师端课程中心默认落在「发现课程」，必须初始加载（原条件排除了教师，导致进来是空白）
     loadDiscover()

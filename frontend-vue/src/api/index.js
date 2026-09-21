@@ -8,6 +8,9 @@ export const api = {
   // ---- 用户认证（对齐后端 /api/auth，注意路由无 /v1 版本号） ----
   login: (data) => request.post('/api/auth/login', data),
   register: (data) => request.post('/api/auth/register', data),
+  changePassword: (data) => request.post('/api/auth/change-password', data),
+  /** 注销账号（软停用：置 is_active=0，需校验当前密码） */
+  deactivateAccount: (data) => request.post('/api/auth/deactivate', data),
 
   // ---- 健康检查 ----
   health: () => request.get('/health'),
@@ -90,6 +93,7 @@ export const api = {
   /** 更新资料（只传需要改的字段；传空串表示清空） */
   updateProfile: (data) => request.put('/api/v1/profile', data),
   /** 上传头像（jpg/jpeg/png/webp，≤2MB） */
+  deleteAvatar: () => request.delete('/api/v1/profile/avatar'),
   uploadAvatar: (formData) =>
     request.post('/api/v1/profile/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
 

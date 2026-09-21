@@ -154,6 +154,20 @@ class ProfileService:
         return ProfileService._find_avatar(user_id)
 
     @staticmethod
+    def delete_avatar(user_id: int) -> dict:
+        """删除头像：移除磁盘上的头像文件并把库中指针置空。"""
+        if os.path.isdir(settings.AVATAR_DIR):
+            prefix = f"{user_id}_"
+            for name in os.listdir(settings.AVATAR_DIR):
+                if name.startswith(prefix) and not name.endswith(".tmp"):
+                    try:
+                        os.remove(os.path.join(settings.AVATAR_DIR, name))
+                    except OSError:
+                        pass
+        sql_db.upsert_user_profile(user_id, avatar_url=None)
+        return {"ok": True, "code": 0, "message": "success", "data": {"avatar_url": None}}
+
+    @staticmethod
     def _url_of_avatar_file(path: str) -> str:
         """由头像文件路径拼出直链。
 

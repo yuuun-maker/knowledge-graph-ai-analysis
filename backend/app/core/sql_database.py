@@ -685,6 +685,20 @@ class SQLDatabase:
     def get_user_by_id(self, user_id: int) -> dict:
         return self._query_one("SELECT * FROM t_user WHERE user_id = ?", (user_id,))
 
+    def update_password(self, user_id: int, password_hash: str) -> int:
+        """更新指定用户密码哈希（仅本人修改密码使用）"""
+        return self._execute(
+            "UPDATE t_user SET password_hash = ? WHERE user_id = ?",
+            (password_hash, user_id),
+        )
+
+    def deactivate_user(self, user_id: int) -> int:
+        """注销（软停用）指定用户：置 is_active=0，保留历史数据；登录时会被拒绝"""
+        return self._execute(
+            "UPDATE t_user SET is_active = 0 WHERE user_id = ?",
+            (user_id,),
+        )
+
     def list_users(self) -> list:
         return self._query("SELECT * FROM t_user ORDER BY user_id")
 

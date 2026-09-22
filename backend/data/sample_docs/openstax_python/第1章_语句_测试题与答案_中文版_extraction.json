@@ -1,0 +1,203 @@
+{
+  "entities": [
+    {
+      "name": "语句",
+      "category": "概念",
+      "description": "Python 程序中的基本执行单元，如赋值语句、打印语句等。"
+    },
+    {
+      "name": "输入输出",
+      "category": "概念",
+      "description": "程序与用户交互的方式，包括使用 input() 获取输入和 print() 输出结果。"
+    },
+    {
+      "name": "变量",
+      "category": "概念",
+      "description": "用于存储数据的命名容器，通过赋值运算符将值绑定到名称。"
+    },
+    {
+      "name": "赋值运算符",
+      "category": "概念",
+      "description": "用于将值赋给变量的运算符，即等号 =。"
+    },
+    {
+      "name": "变量命名规则",
+      "category": "概念",
+      "description": "变量名必须以字母或下划线开头，不能以数字开头，不能使用关键字。"
+    },
+    {
+      "name": "字符串",
+      "category": "概念",
+      "description": "由引号括起来的字符序列，用于表示文本数据。"
+    },
+    {
+      "name": "字符串长度",
+      "category": "方法",
+      "description": "使用 len() 函数获取字符串中字符的个数。"
+    },
+    {
+      "name": "字符串拼接",
+      "category": "方法",
+      "description": "使用加号 + 将两个字符串连接成一个新字符串。"
+    },
+    {
+      "name": "数字类型",
+      "category": "概念",
+      "description": "Python 中的数值类型，包括整数 int 和浮点数 float。"
+    },
+    {
+      "name": "算术运算符",
+      "category": "概念",
+      "description": "用于执行数学运算的符号，如 +、-、*、/、** 等。"
+    },
+    {
+      "name": "运算符优先级",
+      "category": "概念",
+      "description": "决定表达式中运算顺序的规则，如括号优先、指数优先于乘除等。"
+    },
+    {
+      "name": "错误信息",
+      "category": "概念",
+      "description": "程序运行出错时 Python 解释器输出的提示信息，包含错误类型和位置。"
+    },
+    {
+      "name": "语法错误",
+      "category": "概念",
+      "description": "代码不符合 Python 语法规则导致的错误，如缺少括号、引号不匹配等。"
+    },
+    {
+      "name": "缩进错误",
+      "category": "概念",
+      "description": "代码缩进不一致或不符合 Python 要求的错误。"
+    },
+    {
+      "name": "名称错误",
+      "category": "概念",
+      "description": "使用了未定义的变量名导致的错误。"
+    },
+    {
+      "name": "注释",
+      "category": "概念",
+      "description": "以 # 开头的文本，用于解释代码，不被程序执行。"
+    },
+    {
+      "name": "文档字符串",
+      "category": "概念",
+      "description": "用三引号括起来的字符串，用于总结程序或函数的目的和用法。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "输入输出",
+      "target": "语句",
+      "type": "CONTAINS",
+      "evidence": "第1章：Statements（语句）—— 测试题与答案（中文版）",
+      "confidence": 0.9
+    },
+    {
+      "source": "变量",
+      "target": "语句",
+      "type": "CONTAINS",
+      "evidence": "第1章：Statements（语句）—— 测试题与答案（中文版）",
+      "confidence": 0.9
+    },
+    {
+      "source": "字符串",
+      "target": "语句",
+      "type": "CONTAINS",
+      "evidence": "第1章：Statements（语句）—— 测试题与答案（中文版）",
+      "confidence": 0.9
+    },
+    {
+      "source": "数字类型",
+      "target": "语句",
+      "type": "CONTAINS",
+      "evidence": "第1章：Statements（语句）—— 测试题与答案（中文版）",
+      "confidence": 0.9
+    },
+    {
+      "source": "错误信息",
+      "target": "语句",
+      "type": "CONTAINS",
+      "evidence": "第1章：Statements（语句）—— 测试题与答案（中文版）",
+      "confidence": 0.9
+    },
+    {
+      "source": "注释",
+      "target": "语句",
+      "type": "CONTAINS",
+      "evidence": "第1章：Statements（语句）—— 测试题与答案（中文版）",
+      "confidence": 0.9
+    },
+    {
+      "source": "文档字符串",
+      "target": "注释",
+      "type": "CONTAINS",
+      "evidence": "以下哪项不是 docstring？",
+      "confidence": 0.8
+    },
+    {
+      "source": "变量",
+      "target": "赋值运算符",
+      "type": "RELATED_TO",
+      "evidence": "哪个是赋值运算符？",
+      "confidence": 0.8
+    },
+    {
+      "source": "变量",
+      "target": "变量命名规则",
+      "type": "RELATED_TO",
+      "evidence": "为什么名称 2nd _input 不是有效的变量名？",
+      "confidence": 0.8
+    },
+    {
+      "source": "字符串",
+      "target": "字符串长度",
+      "type": "RELATED_TO",
+      "evidence": "len(\"Hi Ali\") 的返回值是什么？",
+      "confidence": 0.8
+    },
+    {
+      "source": "字符串",
+      "target": "字符串拼接",
+      "type": "RELATED_TO",
+      "evidence": "哪个产生字符串 \"Awake\"？",
+      "confidence": 0.8
+    },
+    {
+      "source": "数字类型",
+      "target": "算术运算符",
+      "type": "RELATED_TO",
+      "evidence": "print(x / z) 的输出是什么？",
+      "confidence": 0.8
+    },
+    {
+      "source": "算术运算符",
+      "target": "运算符优先级",
+      "type": "RELATED_TO",
+      "evidence": "(1 + 3) * * 2 / 4 中哪部分先求值？",
+      "confidence": 0.8
+    },
+    {
+      "source": "错误信息",
+      "target": "语法错误",
+      "type": "CONTAINS",
+      "evidence": "发现了什么类型的错误？",
+      "confidence": 0.9
+    },
+    {
+      "source": "错误信息",
+      "target": "缩进错误",
+      "type": "CONTAINS",
+      "evidence": "会发生什么类型的错误？",
+      "confidence": 0.9
+    },
+    {
+      "source": "错误信息",
+      "target": "名称错误",
+      "type": "CONTAINS",
+      "evidence": "会发生什么类型的错误？",
+      "confidence": 0.9
+    }
+  ]
+}

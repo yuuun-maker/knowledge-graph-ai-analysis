@@ -108,7 +108,9 @@ _MAX_CONCURRENCY = 4
 # 分块与输出参数（正式评测需冻结，由 eval_config.make_config 记录到 experiment_config.json）
 _CHUNK_MAX_TOKENS = 6000
 _OVERLAP_TOKENS = 400
-_MAX_OUTPUT_TOKENS = 4096
+# 8192 为 deepseek-chat 单次输出上限：4096 时知识点密集的块（如习题/能量章节）
+# 会在 JSON 数组中途被截断（finish_reason=length），导致整块解析失败
+_MAX_OUTPUT_TOKENS = 8192
 
 # 各关系类型的最低置信度阈值：LLM 明确给出且低于阈值时丢弃。
 # PRECEDES 是学习路径的基础、RELATED_TO 最易泛化，二者阈值相对高（偏向高精度）。
@@ -123,6 +125,13 @@ _RELATION_CONFIDENCE_THRESHOLDS = {
 # 语义澄清：这不是"系统认为该关系有 80% 准确率"，而只是缺省值填充（保证边有 confidence 字段入图），
 # 不参与 Precision / Recall / F1 的准确率计算。真实准确率仅由 Gold 标注 + eval_accuracy.py 计算。
 _DEFAULT_RELATION_CONFIDENCE = 0.8
+
+# dropped_relations 里保留的明细条数上限。计数不受此限制（dropped_counts 恒为精确值），
+# 仅防止极端情况下把预测文件撑爆。
+# 丢弃原因代号（与 eval_accuracy.py 的 DROP_REASON_LABELS 对齐，勿单方面改名）：
+#   invalid_relation_type / invalid_endpoint / synonym_split
+#   dangling_endpoint / duplicate / low_confidence
+_MAX_DROPPED_RECORDED = 500
 
 # 常见缩写/别名 -> 规范名 映射（课程相关，按需扩充）。
 # 示例：{"cnn": "卷积神经网络", "bp网络": "反向传播神经网络"}
@@ -279,13 +288,21 @@ class KnowledgeExtractor:
         合并多个提取结果（数据完整性约束不依赖 LLM，全部在此兜底）：
         - 实体：轻量规范化后按规范名去重
         - 关系：类型白名单、source/target 实体存在、自环、重复、confidence 阈值过滤
+
+        可观测性：本函数丢弃的每条关系都记入返回值的 dropped_relations /
+        dropped_counts，连同原因与原始端点。此前这些 continue 全是静默的——
+        关系一进这里就消失，上层看到的只是"少了 N 条"，无从知道少了什么、
+        为什么少。评测侧据此才能把"抽到了但被阈值砍掉"（low_confidence）
+        与"压根没抽到"（missed_core）区分开，否则后者会被系统性高估。
         """
         # 第一遍：规范化实体并按规范名去重（保留首个出现的字段）
         merged_entities = {}  # 规范名 -> entity dict
+        dropped_entity_count = 0
         for result in results:
             for entity in result.get("entities", []):
                 name = _normalize_entity_name(entity.get("name", ""))
                 if not name:
+                    dropped_entity_count += 1
                     continue
                 if name not in merged_entities:
                     category = entity.get("category", "概念")
@@ -302,24 +319,50 @@ class KnowledgeExtractor:
         seen_relations = set()
         merged_relations = []
         errors = []
+        raw_relation_count = 0
+        dropped = []
+        dropped_counts = {}
+
         for result in results:
             for relation in result.get("relations", []):
+                raw_relation_count += 1
+
                 source = _normalize_entity_name(relation.get("source", ""))
                 target = _normalize_entity_name(relation.get("target", ""))
                 rel_type = (relation.get("type", "") or "").strip().upper()
 
+                def _drop(reason_code: str, detail: str = "") -> None:
+                    dropped_counts[reason_code] = dropped_counts.get(reason_code, 0) + 1
+                    if len(dropped) < _MAX_DROPPED_RECORDED:
+                        dropped.append({
+                            "source": source or str(relation.get("source") or ""),
+                            "type": rel_type,
+                            "target": target or str(relation.get("target") or ""),
+                            "reason_code": reason_code,
+                            "detail": detail,
+                        })
+
                 # 关系类型白名单（不依赖 LLM）
                 if rel_type not in VALID_RELATION_TYPES:
+                    _drop("invalid_relation_type", f"type={rel_type!r}")
                     continue
-                # 过滤空值 / 自环
-                if not source or not target or source == target:
+                # 过滤空值
+                if not source or not target:
+                    _drop("invalid_endpoint", "端点为空")
+                    continue
+                # 归一化后构成自环 = "同义拆分"（模型输出了两个本应归一为同一实体的写法）。
+                # 丢弃本身是正确行为，但必须记账：否则评测的错误归因里这一类恒为 0。
+                if source == target:
+                    _drop("synonym_split", f"归一化后自环: {source}")
                     continue
                 # source/target 必须存在于实体列表（避免孤立关系 / 悬空边）
                 if source not in entity_names or target not in entity_names:
+                    _drop("dangling_endpoint", "端点不在 entities 中")
                     continue
                 # 按 (source, type, target) 去重
                 key = (source, rel_type, target)
                 if key in seen_relations:
+                    _drop("duplicate", "重复三元组（多因分块重叠）")
                     continue
                 seen_relations.add(key)
 
@@ -327,6 +370,7 @@ class KnowledgeExtractor:
                 confidence = _parse_confidence(relation.get("confidence"))
                 threshold = _RELATION_CONFIDENCE_THRESHOLDS.get(rel_type, 0.5)
                 if confidence is not None and confidence < threshold:
+                    _drop("low_confidence", f"confidence={confidence} < 阈值 {threshold}")
                     continue
 
                 merged_relations.append({
@@ -340,7 +384,15 @@ class KnowledgeExtractor:
             if result.get("error"):
                 errors.append(result["error"])
 
-        merged = {"entities": list(merged_entities.values()), "relations": merged_relations}
+        merged = {
+            "entities": list(merged_entities.values()),
+            "relations": merged_relations,
+            # 可观测性字段：不参与入图，仅供统计与准确率归因
+            "raw_relation_count": raw_relation_count,
+            "dropped_relations": dropped,
+            "dropped_counts": dropped_counts,
+            "dropped_entity_count": dropped_entity_count,
+        }
         # 分块错误透传（最多携带前 3 条，避免信息过长），供上层判断抽取是否真正成功
         if errors:
             merged["error"] = "；".join(errors[:3])

@@ -1,0 +1,1269 @@
+{
+  "entities": [
+    {
+      "name": "神经通信",
+      "category": "概念",
+      "description": "神经元之间通过化学突触和电突触进行信息传递的过程。"
+    },
+    {
+      "name": "化学突触",
+      "category": "概念",
+      "description": "神经元之间通过释放神经递质进行通信的专门结构。"
+    },
+    {
+      "name": "神经递质",
+      "category": "概念",
+      "description": "神经元释放的化学信号分子，用于在突触处传递信息。"
+    },
+    {
+      "name": "突触前终末",
+      "category": "概念",
+      "description": "突触前神经元释放神经递质的末端结构。"
+    },
+    {
+      "name": "突触后终末",
+      "category": "概念",
+      "description": "突触后神经元上接收神经递质并产生反应的区域。"
+    },
+    {
+      "name": "囊泡",
+      "category": "概念",
+      "description": "突触前终末内储存神经递质的小膜结合气泡。"
+    },
+    {
+      "name": "突触间隙",
+      "category": "概念",
+      "description": "突触前和突触后神经元之间的细胞外空间。"
+    },
+    {
+      "name": "兴奋性突触后电位",
+      "category": "概念",
+      "description": "突触后神经元中短暂的电位变化，兴奋神经元，推动其向产生动作电位方向靠近。"
+    },
+    {
+      "name": "抑制性突触后电位",
+      "category": "概念",
+      "description": "突触后神经元中短暂的电位变化，抑制神经元，推动其远离产生动作电位。"
+    },
+    {
+      "name": "神经调制",
+      "category": "概念",
+      "description": "突触后神经元内信号传导的变化，调制该神经元，改变其生长、连接或信号模式。"
+    },
+    {
+      "name": "电突触",
+      "category": "概念",
+      "description": "神经元之间通过间隙连接直接传递电信号的通信结构。"
+    },
+    {
+      "name": "连接子",
+      "category": "概念",
+      "description": "形成间隙连接的专门蛋白质，允许电信号直接从一个神经元传递到另一个。"
+    },
+    {
+      "name": "间隙连接",
+      "category": "概念",
+      "description": "由连接子形成的蛋白质桥，连接神经元，允许电信号和小分子通过。"
+    },
+    {
+      "name": "静息电位",
+      "category": "概念",
+      "description": "神经元在未受刺激时维持的跨膜负电荷。"
+    },
+    {
+      "name": "动作电位",
+      "category": "概念",
+      "description": "神经元产生的电波，沿轴突传播，触发神经递质释放。"
+    },
+    {
+      "name": "阈值",
+      "category": "概念",
+      "description": "神经元产生动作电位所需的膜电位临界值。"
+    },
+    {
+      "name": "感觉神经元",
+      "category": "概念",
+      "description": "响应外部世界变化而发放动作电位的神经元。"
+    },
+    {
+      "name": "运动神经元",
+      "category": "概念",
+      "description": "向肌肉释放递质的神经元，通常自发活跃以维持肌肉张力。"
+    },
+    {
+      "name": "神经回路",
+      "category": "概念",
+      "description": "相互连接的神经元群体，共同处理信息并产生行为。"
+    },
+    {
+      "name": "并行处理",
+      "category": "概念",
+      "description": "神经元同时沿多条通路发送信息的特性。"
+    },
+    {
+      "name": "反馈",
+      "category": "概念",
+      "description": "神经回路中神经元产生输出影响其后续输入的环路特性。"
+    },
+    {
+      "name": "节律",
+      "category": "概念",
+      "description": "神经网络表现出的周期性活动模式。"
+    },
+    {
+      "name": "适度活动",
+      "category": "概念",
+      "description": "神经回路在兴奋和抑制之间保持平衡以最佳运作的状态。"
+    },
+    {
+      "name": "效率",
+      "category": "概念",
+      "description": "神经元相对于现代电子设备需要较少能量的特性。"
+    },
+    {
+      "name": "计算神经科学",
+      "category": "概念",
+      "description": "神经科学的一个亚领域，致力于开发和研究神经元和神经网络的数学模型。"
+    },
+    {
+      "name": "整合-发放模型",
+      "category": "概念",
+      "description": "一种简单的神经元模型，其中神经元输入总和超过阈值则发放。"
+    },
+    {
+      "name": "神经假体",
+      "category": "概念",
+      "description": "可以替换或修复神经系统部分的设备。"
+    },
+    {
+      "name": "电流",
+      "category": "概念",
+      "description": "电荷的流动，用I表示。"
+    },
+    {
+      "name": "电导",
+      "category": "概念",
+      "description": "衡量电流通过难易程度的物理量，用G表示。"
+    },
+    {
+      "name": "电位",
+      "category": "概念",
+      "description": "电学中表示电势差的物理量，用V表示。"
+    },
+    {
+      "name": "欧姆定律",
+      "category": "公式",
+      "description": "描述电流、电导和电位之间关系的定律：I = GV。"
+    },
+    {
+      "name": "电解质",
+      "category": "概念",
+      "description": "细胞液中构成神经元中大多数电流的离子，包括K⁺、Na⁺、Cl⁻和Ca²⁺。"
+    },
+    {
+      "name": "静电力",
+      "category": "概念",
+      "description": "异性相吸、同性相斥的力，影响电解质运动。"
+    },
+    {
+      "name": "扩散",
+      "category": "概念",
+      "description": "电解质从高浓度向低浓度运动的过程。"
+    },
+    {
+      "name": "细胞膜",
+      "category": "概念",
+      "description": "控制电解质运动的主要角色之一，作为屏障。"
+    },
+    {
+      "name": "离子泵",
+      "category": "概念",
+      "description": "使用能量建立带电分子浓度梯度的蛋白质机器。"
+    },
+    {
+      "name": "离子通道",
+      "category": "概念",
+      "description": "监测神经元环境然后开关以产生电流的蛋白质。"
+    },
+    {
+      "name": "电压敏感荧光蛋白",
+      "category": "概念",
+      "description": "基因工程蛋白质，根据电环境发出荧光，用于监测神经元电信号。"
+    },
+    {
+      "name": "膜电位",
+      "category": "概念",
+      "description": "神经元膜两侧的电荷差，通常以毫伏报告。"
+    },
+    {
+      "name": "电压计",
+      "category": "概念",
+      "description": "测量电势的设备，用于记录神经元膜电位。"
+    },
+    {
+      "name": "电压敏感染料",
+      "category": "概念",
+      "description": "用于同时测量整个神经元电位的染料，可视化膜电位变化。"
+    },
+    {
+      "name": "平衡电位",
+      "category": "概念",
+      "description": "离子扩散压力与静电力相等时的膜电位，取决于浓度梯度。"
+    },
+    {
+      "name": "泄漏通道",
+      "category": "概念",
+      "description": "始终开放的离子通道，提供恒定的选择性电导。"
+    },
+    {
+      "name": "配体门控通道",
+      "category": "概念",
+      "description": "由配体结合打开的离子通道，如神经递质门控通道。"
+    },
+    {
+      "name": "电压门控通道",
+      "category": "概念",
+      "description": "由膜电位变化打开或关闭的离子通道。"
+    },
+    {
+      "name": "钠离子",
+      "category": "概念",
+      "description": "电解质Na⁺，在神经元外浓度高，扩散压力进入细胞，产生正电流。"
+    },
+    {
+      "name": "钾离子",
+      "category": "概念",
+      "description": "电解质K⁺，在神经元内浓度高，扩散压力离开细胞，产生负电流。"
+    },
+    {
+      "name": "氯离子",
+      "category": "概念",
+      "description": "电解质Cl⁻，在神经元外浓度高，扩散压力进入细胞，产生负电流。"
+    },
+    {
+      "name": "钙离子",
+      "category": "概念",
+      "description": "电解质Ca²⁺，在神经元外浓度高，扩散压力进入细胞，产生正电流。"
+    },
+    {
+      "name": "钠钾泵",
+      "category": "概念",
+      "description": "一种离子泵，将Na⁺泵出细胞，将K⁺泵入细胞，维持浓度梯度。"
+    },
+    {
+      "name": "钙泵",
+      "category": "概念",
+      "description": "一种离子泵，将Ca²⁺推出细胞，维持细胞外高钙浓度。"
+    },
+    {
+      "name": "氯泵",
+      "category": "概念",
+      "description": "一种离子泵，将Cl⁻推出细胞，维持细胞外高氯浓度。"
+    },
+    {
+      "name": "泄漏钾通道",
+      "category": "概念",
+      "description": "始终开放的钾离子通道，产生静息电位。"
+    },
+    {
+      "name": "电压门控钠通道",
+      "category": "概念",
+      "description": "电压门控的钠离子通道，在动作电位上升相中开放，随后失活。"
+    },
+    {
+      "name": "电压门控钾通道",
+      "category": "概念",
+      "description": "电压门控的钾离子通道，在动作电位下降相中开放，允许K⁺离开。"
+    },
+    {
+      "name": "配体门控钠通道",
+      "category": "概念",
+      "description": "由神经递质打开的钠离子通道，产生EPSP。"
+    },
+    {
+      "name": "配体门控氯通道",
+      "category": "概念",
+      "description": "由神经递质打开的氯离子通道，产生IPSP。"
+    },
+    {
+      "name": "泄漏K⁺通道",
+      "category": "概念",
+      "description": "一种在神经元膜上弱表达的离子通道，允许K⁺持续泄漏，使膜电位趋向K⁺平衡电位，维持静息电位。"
+    },
+    {
+      "name": "静息膜电位",
+      "category": "概念",
+      "description": "神经元在未受刺激时膜内外存在的电位差，通常约为-65 mV，由离子浓度梯度和通道活动维持。"
+    },
+    {
+      "name": "EPSP",
+      "category": "概念",
+      "description": "兴奋性突触后电位，由配体门控Na⁺或Ca²⁺通道开放引起，使突触后膜暂时去极化。"
+    },
+    {
+      "name": "IPSP",
+      "category": "概念",
+      "description": "抑制性突触后电位，由配体门控Cl⁻通道开放引起，使突触后膜暂时超极化。"
+    },
+    {
+      "name": "配体门控离子通道",
+      "category": "概念",
+      "description": "由神经递质结合打开的跨膜离子通道，产生EPSP或IPSP，将化学信号转化为电信号。"
+    },
+    {
+      "name": "电压门控Na⁺通道",
+      "category": "概念",
+      "description": "对电压敏感的Na⁺通道，在膜电位达到阈值时开放，产生动作电位的上升相，随后失活。"
+    },
+    {
+      "name": "电压门控K⁺通道",
+      "category": "概念",
+      "description": "对电压敏感的K⁺通道，在动作电位后期缓慢开放，驱动复极化和下冲，不失活。"
+    },
+    {
+      "name": "突触总和",
+      "category": "概念",
+      "description": "EPSP和IPSP在空间和时间上的叠加，决定神经元是否达到阈值并发放动作电位。"
+    },
+    {
+      "name": "时间总和",
+      "category": "概念",
+      "description": "来自同一突触前神经元在时间上接近的EPSP叠加，使突触后电位增大。"
+    },
+    {
+      "name": "空间总和",
+      "category": "概念",
+      "description": "来自不同突触前神经元同时发生的EPSP在突触后膜上的叠加。"
+    },
+    {
+      "name": "轴突丘",
+      "category": "概念",
+      "description": "轴突起始段，动作电位在此启动，也是突触总和决定是否达到阈值的关键位置。"
+    },
+    {
+      "name": "髓鞘",
+      "category": "概念",
+      "description": "由支持细胞形成的脂肪绝缘层，包裹轴突，减少泄漏，加速动作电位传播。"
+    },
+    {
+      "name": "跳跃式传导",
+      "category": "概念",
+      "description": "动作电位在郎飞结处再生，并通过有髓轴突段快速被动传播的传导方式，显著提高传导速度。"
+    },
+    {
+      "name": "郎飞结",
+      "category": "概念",
+      "description": "髓鞘之间的裸露轴突片段，富含电压门控通道，动作电位在此再生。"
+    },
+    {
+      "name": "不应期",
+      "category": "概念",
+      "description": "动作电位后的一段时间，电压门控Na⁺通道失活，神经元不能立即产生另一个动作电位。"
+    },
+    {
+      "name": "下冲",
+      "category": "概念",
+      "description": "动作电位下降相后膜电位暂时低于静息电位的超极化阶段，由电压门控K⁺通道缓慢关闭引起。"
+    },
+    {
+      "name": "河豚毒素",
+      "category": "概念",
+      "description": "一种神经毒素，堵塞电压门控Na⁺通道，阻止动作电位上升相，导致麻痹。"
+    },
+    {
+      "name": "多发性硬化症",
+      "category": "概念",
+      "description": "一种自身免疫性疾病，髓鞘受损，导致动作电位传播减弱或延迟。"
+    },
+    {
+      "name": "动作电位传播",
+      "category": "概念",
+      "description": "动作电位沿轴突的传导过程。"
+    },
+    {
+      "name": "轴突终末",
+      "category": "概念",
+      "description": "轴突末端，负责释放神经递质。"
+    },
+    {
+      "name": "膜电位记录",
+      "category": "方法",
+      "description": "记录神经元膜电位变化的技术。"
+    },
+    {
+      "name": "皮质脊髓束",
+      "category": "概念",
+      "description": "从皮层向下发送运动命令到脊柱运动神经元的白质束。"
+    },
+    {
+      "name": "自身受体",
+      "category": "概念",
+      "description": "突触前终末上的受体，通常调节递质释放。"
+    },
+    {
+      "name": "逆行信使",
+      "category": "概念",
+      "description": "突触后神经元向突触前神经元发送的信号分子。"
+    },
+    {
+      "name": "反向传播",
+      "category": "概念",
+      "description": "动作电位从轴突末端向细胞体传播的现象。"
+    },
+    {
+      "name": "可塑性",
+      "category": "概念",
+      "description": "神经元连接强度可被调节的特性。"
+    },
+    {
+      "name": "共递质",
+      "category": "概念",
+      "description": "突触前神经元同时释放的多种递质。"
+    },
+    {
+      "name": "胶质细胞",
+      "category": "概念",
+      "description": "神经系统中除神经元外的支持细胞，也参与信号传导。"
+    },
+    {
+      "name": "小胶质细胞",
+      "category": "概念",
+      "description": "中枢神经系统中的免疫细胞，属于胶质细胞。"
+    },
+    {
+      "name": "神经元多样性",
+      "category": "概念",
+      "description": "神经元在形态、大小和信号传导等方面的巨大多样性。"
+    },
+    {
+      "name": "稳态",
+      "category": "概念",
+      "description": "神经回路在变化中维持功能稳定的能力。"
+    },
+    {
+      "name": "神经回路自组织",
+      "category": "概念",
+      "description": "神经回路在没有完整遗传蓝图下自我组装的过程。"
+    },
+    {
+      "name": "神经元分类",
+      "category": "概念",
+      "description": "根据形态、分子等特征对神经元进行分型。"
+    },
+    {
+      "name": "突触后电位",
+      "category": "概念",
+      "description": "突触传递引起的突触后膜短暂电位变化。"
+    },
+    {
+      "name": "上升相",
+      "category": "概念",
+      "description": "动作电位去极化阶段，由钠离子内流引起。"
+    },
+    {
+      "name": "下降相",
+      "category": "概念",
+      "description": "动作电位复极化阶段，由钾离子外流引起。"
+    },
+    {
+      "name": "正反馈",
+      "category": "概念",
+      "description": "动作电位上升相中钠通道激活的正反馈循环。"
+    },
+    {
+      "name": "阈下",
+      "category": "概念",
+      "description": "低于阈值、不能触发动作电位的刺激强度。"
+    },
+    {
+      "name": "浓度梯度",
+      "category": "概念",
+      "description": "离子在膜两侧的浓度差异，是扩散的驱动力。"
+    },
+    {
+      "name": "选择性过滤器",
+      "category": "概念",
+      "description": "离子通道中决定离子选择性的结构。"
+    },
+    {
+      "name": "自身免疫性疾病",
+      "category": "概念",
+      "description": "免疫系统攻击自身组织的疾病。"
+    },
+    {
+      "name": "弛缓性瘫痪",
+      "category": "概念",
+      "description": "肌肉张力降低的瘫痪类型。"
+    },
+    {
+      "name": "痉挛性瘫痪",
+      "category": "概念",
+      "description": "肌肉张力增高的瘫痪类型。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "神经通信",
+      "target": "化学突触",
+      "type": "CONTAINS",
+      "evidence": "神经元之间发生的化学信号传导主要发生在化学突触",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经通信",
+      "target": "电突触",
+      "type": "CONTAINS",
+      "evidence": "神经元也可以通过电突触相互信号",
+      "confidence": 0.95
+    },
+    {
+      "source": "化学突触",
+      "target": "突触前终末",
+      "type": "CONTAINS",
+      "evidence": "我们称之为突触前神经元，并说它含有突触前终末",
+      "confidence": 0.95
+    },
+    {
+      "source": "化学突触",
+      "target": "突触后终末",
+      "type": "CONTAINS",
+      "evidence": "我们称之为突触后神经元，并说它含有突触后终末",
+      "confidence": 0.95
+    },
+    {
+      "source": "化学突触",
+      "target": "突触间隙",
+      "type": "CONTAINS",
+      "evidence": "仅由一小块称为突触间隙的细胞外空间隔开",
+      "confidence": 0.95
+    },
+    {
+      "source": "突触前终末",
+      "target": "囊泡",
+      "type": "CONTAINS",
+      "evidence": "突触前终末将神经递质储存在称为囊泡的小膜结合气泡中",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经递质",
+      "target": "兴奋性突触后电位",
+      "type": "RELATED_TO",
+      "evidence": "每个接收到的化学信息都被受体翻译成突触后神经元中仅三种反应之一：兴奋性突触后电位（EPSP）",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经递质",
+      "target": "抑制性突触后电位",
+      "type": "RELATED_TO",
+      "evidence": "每个接收到的化学信息都被受体翻译成突触后神经元中仅三种反应之一：抑制性突触后电位（IPSP）",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经递质",
+      "target": "神经调制",
+      "type": "RELATED_TO",
+      "evidence": "每个接收到的化学信息都被受体翻译成突触后神经元中仅三种反应之一：神经调制",
+      "confidence": 0.9
+    },
+    {
+      "source": "电突触",
+      "target": "连接子",
+      "type": "CONTAINS",
+      "evidence": "在电突触处，神经元表达一种称为连接子的专门蛋白质",
+      "confidence": 0.95
+    },
+    {
+      "source": "连接子",
+      "target": "间隙连接",
+      "type": "RELATED_TO",
+      "evidence": "连接子形成称为间隙连接的蛋白质桥",
+      "confidence": 0.9
+    },
+    {
+      "source": "动作电位",
+      "target": "神经递质",
+      "type": "RELATED_TO",
+      "evidence": "动作电位经过每个突触前终末时触发递质释放",
+      "confidence": 0.9
+    },
+    {
+      "source": "动作电位",
+      "target": "阈值",
+      "type": "RELATED_TO",
+      "evidence": "当兴奋和抑制平衡高于神经元阈值时，它发放动作电位",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经回路",
+      "target": "并行处理",
+      "type": "CONTAINS",
+      "evidence": "神经回路具有并行处理，意味着信息沿多条通路传播",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经回路",
+      "target": "反馈",
+      "type": "CONTAINS",
+      "evidence": "反馈，即神经元影响它以后将接收的输入，使即使看似简单的网络也能产生复杂的活动模式",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经回路",
+      "target": "节律",
+      "type": "CONTAINS",
+      "evidence": "神经网络通常是节律性或周期性的，表现出重复的活动和不活动模式",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经回路",
+      "target": "适度活动",
+      "type": "CONTAINS",
+      "evidence": "神经回路可能故障。它们在适度活动水平下运作最佳",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经回路",
+      "target": "效率",
+      "type": "CONTAINS",
+      "evidence": "神经网络高度高效",
+      "confidence": 0.95
+    },
+    {
+      "source": "计算神经科学",
+      "target": "整合-发放模型",
+      "type": "CONTAINS",
+      "evidence": "在整合-发放模型中，每个“神经元”在计算机中表示为一组输入和一个阈值",
+      "confidence": 0.95
+    },
+    {
+      "source": "计算神经科学",
+      "target": "神经假体",
+      "type": "RELATED_TO",
+      "evidence": "计算神经科学家开始探索使用模拟来替换或修复活体神经系统的部分。例如，开发神经假体",
+      "confidence": 0.9
+    },
+    {
+      "source": "欧姆定律",
+      "target": "电流",
+      "type": "RELATED_TO",
+      "evidence": "欧姆定律（I = GV）定义的相互关系",
+      "confidence": 0.9
+    },
+    {
+      "source": "欧姆定律",
+      "target": "电导",
+      "type": "RELATED_TO",
+      "evidence": "欧姆定律（I = GV）定义的相互关系",
+      "confidence": 0.9
+    },
+    {
+      "source": "欧姆定律",
+      "target": "电位",
+      "type": "RELATED_TO",
+      "evidence": "欧姆定律（I = GV）定义的相互关系",
+      "confidence": 0.9
+    },
+    {
+      "source": "电解质",
+      "target": "静电力",
+      "type": "RELATED_TO",
+      "evidence": "每种电解质的运动如何由静电力（异性相吸；同性相斥）和扩散（从高浓度向低浓度运动）决定",
+      "confidence": 0.9
+    },
+    {
+      "source": "电解质",
+      "target": "扩散",
+      "type": "RELATED_TO",
+      "evidence": "每种电解质的运动如何由静电力（异性相吸；同性相斥）和扩散（从高浓度向低浓度运动）决定",
+      "confidence": 0.9
+    },
+    {
+      "source": "细胞膜",
+      "target": "电解质",
+      "type": "RELATED_TO",
+      "evidence": "控制电解质运动的主要角色：1）细胞膜",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子泵",
+      "target": "电解质",
+      "type": "RELATED_TO",
+      "evidence": "控制电解质运动的主要角色：2）离子泵",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子通道",
+      "target": "电解质",
+      "type": "RELATED_TO",
+      "evidence": "控制电解质运动的主要角色：3）离子通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "电压敏感荧光蛋白",
+      "target": "动作电位",
+      "type": "RELATED_TO",
+      "evidence": "电压敏感荧光蛋白，基因工程蛋白质，根据其电环境发出荧光",
+      "confidence": 0.8
+    },
+    {
+      "source": "静电力",
+      "target": "电解质",
+      "type": "APPLIES_TO",
+      "evidence": "电解质由静电力和扩散移动",
+      "confidence": 0.9
+    },
+    {
+      "source": "扩散",
+      "target": "电解质",
+      "type": "APPLIES_TO",
+      "evidence": "电解质由静电力和扩散移动",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子泵",
+      "target": "电解质",
+      "type": "APPLIES_TO",
+      "evidence": "离子泵创建浓度梯度电池，将K⁺集中在神经元内，将Na⁺、Ca²⁺和Cl⁻集中在外面",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子通道",
+      "target": "电解质",
+      "type": "APPLIES_TO",
+      "evidence": "离子通道允许电解质电流进出神经元",
+      "confidence": 0.9
+    },
+    {
+      "source": "电压计",
+      "target": "膜电位",
+      "type": "APPLIES_TO",
+      "evidence": "我们可以通过将神经元连接到电压计来测量神经元的膜电位",
+      "confidence": 0.95
+    },
+    {
+      "source": "电压敏感染料",
+      "target": "膜电位",
+      "type": "APPLIES_TO",
+      "evidence": "电压敏感染料也可以可视化显示膜电位相对于细胞外环境的变化",
+      "confidence": 0.95
+    },
+    {
+      "source": "静息电位",
+      "target": "泄漏钾通道",
+      "type": "RELATED_TO",
+      "evidence": "静息膜电位主要由K⁺的浓度梯度和称为泄漏K⁺通道的特殊离子通道产生",
+      "confidence": 0.95
+    },
+    {
+      "source": "兴奋性突触后电位",
+      "target": "配体门控钠通道",
+      "type": "RELATED_TO",
+      "evidence": "产生EPSP的配体门控通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "抑制性突触后电位",
+      "target": "配体门控氯通道",
+      "type": "RELATED_TO",
+      "evidence": "产生IPSP的配体门控通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "动作电位",
+      "target": "电压门控钠通道",
+      "type": "RELATED_TO",
+      "evidence": "动作电位如何由电压门控失活Na⁺通道和电压门控K⁺通道的顺序开放产生",
+      "confidence": 0.95
+    },
+    {
+      "source": "动作电位",
+      "target": "电压门控钾通道",
+      "type": "RELATED_TO",
+      "evidence": "动作电位如何由电压门控失活Na⁺通道和电压门控K⁺通道的顺序开放产生",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子泵",
+      "target": "钠钾泵",
+      "type": "CONTAINS",
+      "evidence": "3种常见泵：Ca²⁺泵、Cl⁻泵、Na⁺/K⁺泵",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子泵",
+      "target": "钙泵",
+      "type": "CONTAINS",
+      "evidence": "3种常见泵：Ca²⁺泵、Cl⁻泵、Na⁺/K⁺泵",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子泵",
+      "target": "氯泵",
+      "type": "CONTAINS",
+      "evidence": "3种常见泵：Ca²⁺泵、Cl⁻泵、Na⁺/K⁺泵",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子通道",
+      "target": "泄漏通道",
+      "type": "CONTAINS",
+      "evidence": "3种常见离子通道：泄漏通道（始终开放）、配体门控通道（由配体结合打开，如神经递质）、电压门控通道（由膜电位变化关闭或打开）",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子通道",
+      "target": "配体门控通道",
+      "type": "CONTAINS",
+      "evidence": "3种常见离子通道：泄漏通道（始终开放）、配体门控通道（由配体结合打开，如神经递质）、电压门控通道（由膜电位变化关闭或打开）",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子通道",
+      "target": "电压门控通道",
+      "type": "CONTAINS",
+      "evidence": "3种常见离子通道：泄漏通道（始终开放）、配体门控通道（由配体结合打开，如神经递质）、电压门控通道（由膜电位变化关闭或打开）",
+      "confidence": 0.95
+    },
+    {
+      "source": "电解质",
+      "target": "钠离子",
+      "type": "CONTAINS",
+      "evidence": "神经元中几乎所有电信号传导都是由于仅4种矿物质的运动：钠（化学符号Na⁺）、钾（化学符号K⁺）、钙（Ca²⁺）和氯（Cl⁻）",
+      "confidence": 0.95
+    },
+    {
+      "source": "电解质",
+      "target": "钾离子",
+      "type": "CONTAINS",
+      "evidence": "神经元中几乎所有电信号传导都是由于仅4种矿物质的运动：钠（化学符号Na⁺）、钾（化学符号K⁺）、钙（Ca²⁺）和氯（Cl⁻）",
+      "confidence": 0.95
+    },
+    {
+      "source": "电解质",
+      "target": "氯离子",
+      "type": "CONTAINS",
+      "evidence": "神经元中几乎所有电信号传导都是由于仅4种矿物质的运动：钠（化学符号Na⁺）、钾（化学符号K⁺）、钙（Ca²⁺）和氯（Cl⁻）",
+      "confidence": 0.95
+    },
+    {
+      "source": "电解质",
+      "target": "钙离子",
+      "type": "CONTAINS",
+      "evidence": "神经元中几乎所有电信号传导都是由于仅4种矿物质的运动：钠（化学符号Na⁺）、钾（化学符号K⁺）、钙（Ca²⁺）和氯（Cl⁻）",
+      "confidence": 0.95
+    },
+    {
+      "source": "泄漏通道",
+      "target": "泄漏钾通道",
+      "type": "CONTAINS",
+      "evidence": "产生静息电位的泄漏K⁺通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "配体门控通道",
+      "target": "配体门控钠通道",
+      "type": "CONTAINS",
+      "evidence": "产生EPSP的配体门控通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "配体门控通道",
+      "target": "配体门控氯通道",
+      "type": "CONTAINS",
+      "evidence": "产生IPSP的配体门控通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "电压门控通道",
+      "target": "电压门控钠通道",
+      "type": "CONTAINS",
+      "evidence": "产生动作电位的电压门控Na⁺和K⁺通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "电压门控通道",
+      "target": "电压门控钾通道",
+      "type": "CONTAINS",
+      "evidence": "产生动作电位的电压门控Na⁺和K⁺通道",
+      "confidence": 0.9
+    },
+    {
+      "source": "电流",
+      "target": "欧姆定律",
+      "type": "PRECEDES",
+      "evidence": "为了回答这些问题，我们首先需要掌握电学的基本概念。然后我们将看到离子泵和离子通道如何使神经元通过控制溶解在细胞液中的四种电解质的运动来产生信号",
+      "confidence": 0.8
+    },
+    {
+      "source": "电导",
+      "target": "欧姆定律",
+      "type": "PRECEDES",
+      "evidence": "为了回答这些问题，我们首先需要掌握电学的基本概念。然后我们将看到离子泵和离子通道如何使神经元通过控制溶解在细胞液中的四种电解质的运动来产生信号",
+      "confidence": 0.8
+    },
+    {
+      "source": "电位",
+      "target": "欧姆定律",
+      "type": "PRECEDES",
+      "evidence": "为了回答这些问题，我们首先需要掌握电学的基本概念。然后我们将看到离子泵和离子通道如何使神经元通过控制溶解在细胞液中的四种电解质的运动来产生信号",
+      "confidence": 0.8
+    },
+    {
+      "source": "静电力",
+      "target": "平衡电位",
+      "type": "RELATED_TO",
+      "evidence": "在+52 mV时，扩散推动Na⁺进入与静电排斥推动Na⁺出去相等",
+      "confidence": 0.9
+    },
+    {
+      "source": "扩散",
+      "target": "平衡电位",
+      "type": "RELATED_TO",
+      "evidence": "在+52 mV时，扩散推动Na⁺进入与静电排斥推动Na⁺出去相等",
+      "confidence": 0.9
+    },
+    {
+      "source": "钠钾泵",
+      "target": "钠离子",
+      "type": "APPLIES_TO",
+      "evidence": "Na⁺/K⁺泵",
+      "confidence": 0.9
+    },
+    {
+      "source": "钠钾泵",
+      "target": "钾离子",
+      "type": "APPLIES_TO",
+      "evidence": "Na⁺/K⁺泵",
+      "confidence": 0.9
+    },
+    {
+      "source": "钙泵",
+      "target": "钙离子",
+      "type": "APPLIES_TO",
+      "evidence": "一种泵将Ca²⁺推出细胞",
+      "confidence": 0.9
+    },
+    {
+      "source": "氯泵",
+      "target": "氯离子",
+      "type": "APPLIES_TO",
+      "evidence": "Cl⁻和Na⁺也被泵推出",
+      "confidence": 0.9
+    },
+    {
+      "source": "泄漏K⁺通道",
+      "target": "静息膜电位",
+      "type": "RELATED_TO",
+      "evidence": "泄漏K⁺通道提供恒定电导，始终允许K⁺将神经元膜电位拉回K⁺的负平衡电位。",
+      "confidence": 0.9
+    },
+    {
+      "source": "配体门控离子通道",
+      "target": "EPSP",
+      "type": "RELATED_TO",
+      "evidence": "EPSP和IPSP由配体门控离子通道产生。",
+      "confidence": 0.95
+    },
+    {
+      "source": "配体门控离子通道",
+      "target": "IPSP",
+      "type": "RELATED_TO",
+      "evidence": "EPSP和IPSP由配体门控离子通道产生。",
+      "confidence": 0.95
+    },
+    {
+      "source": "电压门控Na⁺通道",
+      "target": "动作电位",
+      "type": "RELATED_TO",
+      "evidence": "动作电位是由于两种相对独特的离子通道的操作：失活电压门控Na⁺通道和非失活电压门控K⁺通道。",
+      "confidence": 0.95
+    },
+    {
+      "source": "电压门控K⁺通道",
+      "target": "动作电位",
+      "type": "RELATED_TO",
+      "evidence": "动作电位是由于两种相对独特的离子通道的操作：失活电压门控Na⁺通道和非失活电压门控K⁺通道。",
+      "confidence": 0.95
+    },
+    {
+      "source": "突触总和",
+      "target": "时间总和",
+      "type": "CONTAINS",
+      "evidence": "我们称之为时间总和，因为它将来自同一伙伴的、在时间上接近的EPSP相加。",
+      "confidence": 0.9
+    },
+    {
+      "source": "突触总和",
+      "target": "空间总和",
+      "type": "CONTAINS",
+      "evidence": "我们称之为空间总和，因为它总和来自神经元树突树多个位置的输入。",
+      "confidence": 0.9
+    },
+    {
+      "source": "突触总和",
+      "target": "轴突丘",
+      "type": "RELATED_TO",
+      "evidence": "突触总和的关键点是轴突丘（也称为起始段）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "髓鞘",
+      "target": "跳跃式传导",
+      "type": "RELATED_TO",
+      "evidence": "相对缓慢的再生（在每个郎飞结）和异常快速的电流扩散（通过每段髓鞘）的混合称为跳跃式传导。",
+      "confidence": 0.9
+    },
+    {
+      "source": "跳跃式传导",
+      "target": "郎飞结",
+      "type": "RELATED_TO",
+      "evidence": "APs在郎飞结处发生，然后AP产生的离子被动流过有髓（绝缘）轴突段到下一个节点。这称为跳跃式传导。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电压门控Na⁺通道",
+      "target": "不应期",
+      "type": "RELATED_TO",
+      "evidence": "一旦神经元产生动作电位，它不能再产生另一个，直到回到静息并且大多数电压门控Na⁺通道被疏通。我们观察为每个动作电位后立即发生的短暂不应期。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电压门控K⁺通道",
+      "target": "下冲",
+      "type": "RELATED_TO",
+      "evidence": "电压门控K⁺通道缓慢操作的第二个后果是下冲。",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子泵",
+      "target": "静息膜电位",
+      "type": "RELATED_TO",
+      "evidence": "正是这种浓度梯度与泄漏K⁺通道一起产生静息电位。",
+      "confidence": 0.85
+    },
+    {
+      "source": "河豚毒素",
+      "target": "电压门控Na⁺通道",
+      "type": "RELATED_TO",
+      "evidence": "河豚毒素（TTX），一种堵塞负责动作电位上升相的失活电压门控Na⁺通道的神经毒素。",
+      "confidence": 0.95
+    },
+    {
+      "source": "多发性硬化症",
+      "target": "髓鞘",
+      "type": "RELATED_TO",
+      "evidence": "多发性硬化症（MS）是一种自身免疫性疾病，影响全球数百万人，尤其是女性。",
+      "confidence": 0.8
+    },
+    {
+      "source": "髓鞘",
+      "target": "动作电位传播",
+      "type": "APPLIES_TO",
+      "evidence": "髓鞘可以通过防止电流在短段轴突上泄漏来加速动作电位传播。",
+      "confidence": 0.95
+    },
+    {
+      "source": "膜电位记录",
+      "target": "轴突丘",
+      "type": "APPLIES_TO",
+      "evidence": "膜电位记录显示轴突丘和轴突终末的动作电位。",
+      "confidence": 0.9
+    },
+    {
+      "source": "膜电位记录",
+      "target": "轴突终末",
+      "type": "APPLIES_TO",
+      "evidence": "膜电位记录显示轴突丘和轴突终末的动作电位。",
+      "confidence": 0.9
+    },
+    {
+      "source": "皮质脊髓束",
+      "target": "运动神经元",
+      "type": "RELATED_TO",
+      "evidence": "CNS中最突出的白质束是从皮层向下发送运动命令到脊柱运动神经元的皮质脊髓束。",
+      "confidence": 0.85
+    },
+    {
+      "source": "化学突触",
+      "target": "自身受体",
+      "type": "CONTAINS",
+      "evidence": "突触前终末也有受体（通常称为自身受体）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学突触",
+      "target": "逆行信使",
+      "type": "CONTAINS",
+      "evidence": "突触后终末向突触前神经元发送信息（这些通常称为逆行信使）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "反向传播",
+      "target": "可塑性",
+      "type": "RELATED_TO",
+      "evidence": "阻断反向传播会损害可塑性，表明其在微调连接性中有重要作用。",
+      "confidence": 0.85
+    },
+    {
+      "source": "化学突触",
+      "target": "共递质",
+      "type": "CONTAINS",
+      "evidence": "突触前神经元实际上可以释放多种递质（称为共递质）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "胶质细胞",
+      "target": "小胶质细胞",
+      "type": "CONTAINS",
+      "evidence": "我们将在第17章神经免疫学中特别了解更多关于小胶质细胞的内容。",
+      "confidence": 0.8
+    },
+    {
+      "source": "离子泵",
+      "target": "浓度梯度",
+      "type": "APPLIES_TO",
+      "evidence": "泵是使用能量建立4种关键电解质浓度梯度的蛋白质机器。",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子通道",
+      "target": "平衡电位",
+      "type": "APPLIES_TO",
+      "evidence": "离子通道可以打开，允许特定离子的压力部分释放，产生将神经元充电到该离子平衡电位的电流。",
+      "confidence": 0.9
+    },
+    {
+      "source": "配体门控离子通道",
+      "target": "突触后电位",
+      "type": "APPLIES_TO",
+      "evidence": "结合配体门控通道产生突触后电位。",
+      "confidence": 0.95
+    },
+    {
+      "source": "突触后电位",
+      "target": "兴奋性突触后电位",
+      "type": "CONTAINS",
+      "evidence": "突触后电位：小、短暂、局部的膜电位变化，推动神经元朝向阈值（EPSP，由于Na⁺或Ca²⁺电导）或远离阈值（IPSP，由于Cl⁻电导）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "突触后电位",
+      "target": "抑制性突触后电位",
+      "type": "CONTAINS",
+      "evidence": "突触后电位：小、短暂、局部的膜电位变化，推动神经元朝向阈值（EPSP，由于Na⁺或Ca²⁺电导）或远离阈值（IPSP，由于Cl⁻电导）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "动作电位",
+      "target": "上升相",
+      "type": "CONTAINS",
+      "evidence": "这产生上升相（来自Na⁺进入）。",
+      "confidence": 0.95
+    },
+    {
+      "source": "动作电位",
+      "target": "下降相",
+      "type": "CONTAINS",
+      "evidence": "随后是下降相和下冲（来自K⁺离开）。",
+      "confidence": 0.95
+    },
+    {
+      "source": "动作电位",
+      "target": "下冲",
+      "type": "CONTAINS",
+      "evidence": "随后是下降相和下冲（来自K⁺离开）。",
+      "confidence": 0.95
+    },
+    {
+      "source": "动作电位",
+      "target": "不应期",
+      "type": "RELATED_TO",
+      "evidence": "帮助重置神经元以准备下一个动作电位，同时帮助防止过度兴奋。",
+      "confidence": 0.8
+    },
+    {
+      "source": "动作电位",
+      "target": "正反馈",
+      "type": "RELATED_TO",
+      "evidence": "正反馈（在关键术语中列出，与动作电位相关）。",
+      "confidence": 0.7
+    },
+    {
+      "source": "动作电位",
+      "target": "阈下",
+      "type": "RELATED_TO",
+      "evidence": "阈下（在关键术语中列出，与动作电位相关）。",
+      "confidence": 0.7
+    },
+    {
+      "source": "欧姆定律",
+      "target": "电流",
+      "type": "APPLIES_TO",
+      "evidence": "欧姆定律（在关键术语中列出，用于理解电流）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "欧姆定律",
+      "target": "电导",
+      "type": "APPLIES_TO",
+      "evidence": "欧姆定律（在关键术语中列出，用于理解电导）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "欧姆定律",
+      "target": "膜电位",
+      "type": "APPLIES_TO",
+      "evidence": "欧姆定律（在关键术语中列出，用于理解膜电位）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "电解质",
+      "target": "浓度梯度",
+      "type": "RELATED_TO",
+      "evidence": "泵是使用能量建立4种关键电解质浓度梯度的蛋白质机器。",
+      "confidence": 0.85
+    },
+    {
+      "source": "扩散",
+      "target": "浓度梯度",
+      "type": "RELATED_TO",
+      "evidence": "离子通道可以打开，允许特定离子的压力部分释放。",
+      "confidence": 0.8
+    },
+    {
+      "source": "计算神经科学",
+      "target": "神经回路",
+      "type": "APPLIES_TO",
+      "evidence": "计算神经科学领域探索可以在计算机上模拟的神经元数学模型。",
+      "confidence": 0.85
+    },
+    {
+      "source": "电压敏感荧光蛋白",
+      "target": "膜电位",
+      "type": "APPLIES_TO",
+      "evidence": "电压敏感荧光蛋白（在关键术语中列出，用于监测膜电位）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "离子通道",
+      "target": "选择性过滤器",
+      "type": "CONTAINS",
+      "evidence": "离子通道、选择性过滤器（在关键术语中并列列出）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "自身免疫性疾病",
+      "target": "多发性硬化症",
+      "type": "CONTAINS",
+      "evidence": "多发性硬化症（MS）是一种自身免疫性疾病。",
+      "confidence": 0.95
+    },
+    {
+      "source": "弛缓性瘫痪",
+      "target": "痉挛性瘫痪",
+      "type": "RELATED_TO",
+      "evidence": "弛缓性瘫痪、痉挛性瘫痪（在关键术语中并列列出）。",
+      "confidence": 0.7
+    }
+  ]
+}

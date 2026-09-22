@@ -1,0 +1,295 @@
+{
+  "entities": [
+    {
+      "name": "化学突触",
+      "category": "概念",
+      "description": "通过神经递质在突触前和突触后神经元之间传递信号的突触类型。"
+    },
+    {
+      "name": "电突触",
+      "category": "概念",
+      "description": "通过间隙连接直接进行电信号传递的突触类型。"
+    },
+    {
+      "name": "突触传递",
+      "category": "概念",
+      "description": "信号从突触前神经元传递到突触后神经元的过程。"
+    },
+    {
+      "name": "神经递质",
+      "category": "概念",
+      "description": "在突触处释放的化学物质，用于传递信号。"
+    },
+    {
+      "name": "突触后神经元",
+      "category": "概念",
+      "description": "接收突触前神经元信号的神经元。"
+    },
+    {
+      "name": "突触前神经元",
+      "category": "概念",
+      "description": "释放神经递质传递信号的神经元。"
+    },
+    {
+      "name": "间隙连接",
+      "category": "概念",
+      "description": "电突触中连接细胞并允许离子直接流动的结构。"
+    },
+    {
+      "name": "兴奋性突触后电位",
+      "category": "概念",
+      "description": "突触后神经元中短暂的去极化电位，使神经元兴奋并朝向阈值。"
+    },
+    {
+      "name": "抑制性突触后电位",
+      "category": "概念",
+      "description": "突触后神经元中短暂的超极化电位，抑制神经元活动。"
+    },
+    {
+      "name": "神经调制",
+      "category": "概念",
+      "description": "改变突触后神经元的生长、连接或信号模式的反应类型。"
+    },
+    {
+      "name": "动作电位",
+      "category": "概念",
+      "description": "膜电位的快速翻转，可快速传播并触发神经递质释放。"
+    },
+    {
+      "name": "静息电位",
+      "category": "概念",
+      "description": "神经元静息时维持的整体负电势。"
+    },
+    {
+      "name": "神经回路",
+      "category": "概念",
+      "description": "神经元之间的连接网络，处理信息。"
+    },
+    {
+      "name": "并行处理",
+      "category": "概念",
+      "description": "神经网络中信息同时沿多条通路传播的处理方式。"
+    },
+    {
+      "name": "反馈环路",
+      "category": "概念",
+      "description": "神经回路中神经元产生输出影响其输入的环路。"
+    },
+    {
+      "name": "计算神经科学",
+      "category": "概念",
+      "description": "开发神经元和神经网络数学模型的神经科学子领域。"
+    },
+    {
+      "name": "神经假体",
+      "category": "概念",
+      "description": "使用计算机模型模拟脑区处理以替换或修复神经系统部分的设备。"
+    },
+    {
+      "name": "扩散",
+      "category": "概念",
+      "description": "分子沿浓度梯度向下移动的过程。"
+    },
+    {
+      "name": "电势",
+      "category": "概念",
+      "description": "电荷流动的压力。"
+    },
+    {
+      "name": "电导",
+      "category": "概念",
+      "description": "电荷流动的容易程度。"
+    },
+    {
+      "name": "离子通道",
+      "category": "概念",
+      "description": "允许离子跨膜流动的蛋白质。"
+    },
+    {
+      "name": "离子泵",
+      "category": "概念",
+      "description": "使用能量逆浓度梯度移动离子的蛋白质。"
+    },
+    {
+      "name": "电压门控K⁺通道",
+      "category": "概念",
+      "description": "在去极化电压下打开、对K⁺可渗透的离子通道。"
+    },
+    {
+      "name": "分级电位",
+      "category": "概念",
+      "description": "突触后神经元中短暂的局部电位变化，如EPSP和IPSP。"
+    },
+    {
+      "name": "配体门控离子通道",
+      "category": "概念",
+      "description": "由神经递质结合打开并产生EPSP和IPSP的离子通道。"
+    },
+    {
+      "name": "突触间隙",
+      "category": "概念",
+      "description": "突触前和突触后神经元之间的小块细胞外空间。"
+    },
+    {
+      "name": "电流",
+      "category": "概念",
+      "description": "带电粒子的运动。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "化学突触",
+      "target": "突触传递",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与化学突触的突触传递，除了：",
+      "confidence": 0.9
+    },
+    {
+      "source": "电突触",
+      "target": "突触传递",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与电突触的突触传递，除了：",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学突触",
+      "target": "神经递质",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与化学突触的突触传递，除了：...d. 神经递质。",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学突触",
+      "target": "突触后神经元",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与化学突触的突触传递，除了：a. 突触后神经元。",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学突触",
+      "target": "突触前神经元",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与化学突触的突触传递，除了：b. 突触前神经元。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电突触",
+      "target": "间隙连接",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与电突触的突触传递，除了：a. 间隙连接。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电突触",
+      "target": "突触前神经元",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与电突触的突触传递，除了：c. 突触前神经元。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电突触",
+      "target": "突触后神经元",
+      "type": "CONTAINS",
+      "evidence": "以下所有都参与电突触的突触传递，除了：d. 突触后神经元。",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经回路",
+      "target": "并行处理",
+      "type": "RELATED_TO",
+      "evidence": "如果神经网络使用并行处理，这意味着：",
+      "confidence": 0.8
+    },
+    {
+      "source": "神经回路",
+      "target": "反馈环路",
+      "type": "CONTAINS",
+      "evidence": "神经回路通常具有______环路，意味着神经元通常产生可以影响其输入的输出。",
+      "confidence": 0.9
+    },
+    {
+      "source": "计算神经科学",
+      "target": "神经回路",
+      "type": "APPLIES_TO",
+      "evidence": "哪个神经科学子领域涉及开发神经元和神经网络的数学模型？",
+      "confidence": 0.8
+    },
+    {
+      "source": "神经假体",
+      "target": "神经回路",
+      "type": "APPLIES_TO",
+      "evidence": "研究人员开发了可以使用计算机模型模拟该脑区处理来替换或修复神经系统部分的设备。这是以下哪项的示例？",
+      "confidence": 0.7
+    },
+    {
+      "source": "扩散",
+      "target": "离子通道",
+      "type": "RELATED_TO",
+      "evidence": "什么决定离子的运动？a. 扩散和电荷的力",
+      "confidence": 0.7
+    },
+    {
+      "source": "电势",
+      "target": "电流",
+      "type": "RELATED_TO",
+      "evidence": "哪个是电势的最佳定义？c. 电荷流动的压力",
+      "confidence": 0.8
+    },
+    {
+      "source": "电导",
+      "target": "电流",
+      "type": "RELATED_TO",
+      "evidence": "哪个是电导的最佳描述？b. 电荷流动的容易程度",
+      "confidence": 0.8
+    },
+    {
+      "source": "静息电位",
+      "target": "电压门控K⁺通道",
+      "type": "RELATED_TO",
+      "evidence": "为什么神经元有静息电位？a. 因为它们有泄漏K⁺通道，允许K⁺将神经元拉向负电位",
+      "confidence": 0.8
+    },
+    {
+      "source": "动作电位",
+      "target": "电压门控K⁺通道",
+      "type": "RELATED_TO",
+      "evidence": "在动作电位期间，当K⁺通道打开时会发生什么？",
+      "confidence": 0.8
+    },
+    {
+      "source": "分级电位",
+      "target": "配体门控离子通道",
+      "type": "RELATED_TO",
+      "evidence": "EPSP和IPSP由______门控离子通道产生。",
+      "confidence": 0.9
+    },
+    {
+      "source": "兴奋性突触后电位",
+      "target": "配体门控离子通道",
+      "type": "RELATED_TO",
+      "evidence": "EPSP在以下情况产生：a. 神经递质结合配体门控Na⁺通道。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抑制性突触后电位",
+      "target": "配体门控离子通道",
+      "type": "RELATED_TO",
+      "evidence": "EPSP和IPSP由______门控离子通道产生。",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子通道",
+      "target": "离子泵",
+      "type": "RELATED_TO",
+      "evidence": "离子通道和离子泵的相似之处在于：a. 两者都是蛋白质。",
+      "confidence": 0.8
+    },
+    {
+      "source": "突触间隙",
+      "target": "化学突触",
+      "type": "CONTAINS",
+      "evidence": "突触前和突触后神经元之间的小块细胞外空间称为______。",
+      "confidence": 0.9
+    }
+  ]
+}

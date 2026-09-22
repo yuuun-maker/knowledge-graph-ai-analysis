@@ -1,0 +1,208 @@
+[
+  {
+    "text_id": "化学_化学反应计量_第4章_测试题",
+    "source": "data/sample_docs/openstax_化学/第4章_化学反应计量_测试题与答案_中文版.txt",
+    "entities": [
+      {
+        "name": "配平化学方程式",
+        "category": "方法",
+        "description": "调整系数使反应物侧和生成物侧每种元素的原子数相同；方程式必须配平才能准确反映物质守恒定律。"
+      },
+      {
+        "name": "分子方程式",
+        "category": "概念",
+        "description": "用完整化学式表示所有反应物和产物的方程式。"
+      },
+      {
+        "name": "完全离子方程式",
+        "category": "概念",
+        "description": "将可溶性离子化合物写成解离离子形式、但保留弱电解质和难溶物为分子形式的方程式。"
+      },
+      {
+        "name": "净离子方程式",
+        "category": "概念",
+        "description": "只保留实际参与反应的离子、省略旁观离子的方程式。"
+      },
+      {
+        "name": "旁观离子",
+        "category": "概念",
+        "description": "反应中未实际参与反应、在完全离子方程式两侧以相同形式出现的离子。"
+      },
+      {
+        "name": "氧化还原反应",
+        "category": "概念",
+        "description": "元素氧化态（氧化数）在反应过程中发生变化的反应，可与酸碱反应相区分。"
+      },
+      {
+        "name": "氧化数",
+        "category": "概念",
+        "description": "元素在化合物中的表观电荷（氧化态），用于判断氧化还原反应并确定被氧化、被还原的原子。"
+      },
+      {
+        "name": "氧化剂",
+        "category": "概念",
+        "description": "氧化还原反应中使其他物质被氧化、自身被还原的物质。"
+      },
+      {
+        "name": "还原剂",
+        "category": "概念",
+        "description": "氧化还原反应中使其他物质被还原、自身被氧化的物质。"
+      },
+      {
+        "name": "半反应法",
+        "category": "方法",
+        "description": "将氧化还原反应拆分为氧化和还原两个半反应、分别配平后相加来配平方程式的方法。"
+      },
+      {
+        "name": "酸碱反应",
+        "category": "概念",
+        "description": "涉及氢离子（质子）转移的反应，如酸碱中和生成盐和水的反应。"
+      },
+      {
+        "name": "化学计量学",
+        "category": "概念",
+        "description": "研究化学反应中反应物与产物之间量的关系，基于配平化学方程式的系数比进行计算。"
+      },
+      {
+        "name": "限量反应物",
+        "category": "概念",
+        "description": "反应中首先被完全消耗、决定产物生成量的反应物（也称限制反应物/限制试剂）。"
+      },
+      {
+        "name": "理论产率",
+        "category": "概念",
+        "description": "根据化学计量关系（以限量反应物计）计算得到的最大产物量。"
+      },
+      {
+        "name": "百分产率",
+        "category": "公式",
+        "description": "实际产量与理论产量之比乘以100%，用于评价反应效率。"
+      },
+      {
+        "name": "滴定分析",
+        "category": "方法",
+        "description": "用已知浓度的滴定剂溶液与待测溶液反应至终点，从而测定待测物质浓度的定量分析方法。"
+      },
+      {
+        "name": "摩尔浓度",
+        "category": "概念",
+        "description": "单位体积溶液中所含溶质的物质的量（mol/L），是滴定计算中的核心量。"
+      },
+      {
+        "name": "实验式",
+        "category": "概念",
+        "description": "表示化合物中各元素原子最简单整数比的化学式（也称经验式）。"
+      },
+      {
+        "name": "分子式",
+        "category": "概念",
+        "description": "表示分子中各原子实际数目的化学式，可由实验式结合分子量确定。"
+      },
+      {
+        "name": "道尔顿原子理论",
+        "category": "定理",
+        "description": "认为原子在化学反应中不可分割、反应前后原子种类和数目不变的理论，是计算理论产率的依据。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "分子方程式",
+        "target": "完全离子方程式",
+        "type": "PRECEDES",
+        "evidence": "根据配平的分子方程式，写出下列反应的完全离子方程式和净离子方程式：",
+        "core": true
+      },
+      {
+        "source": "完全离子方程式",
+        "target": "净离子方程式",
+        "type": "PRECEDES",
+        "evidence": "(b) 当反应物中所有可溶性离子都参与反应，没有旁观离子时，完全离子方程式和净离子方程式相同。",
+        "core": true
+      },
+      {
+        "source": "旁观离子",
+        "target": "净离子方程式",
+        "type": "RELATED_TO",
+        "evidence": "净离子方程式只保留实际参与反应的离子，省略旁观离子。",
+        "core": false
+      },
+      {
+        "source": "氧化数",
+        "target": "氧化还原反应",
+        "type": "PRECEDES",
+        "evidence": "这是氧化还原反应，因为银的氧化态在反应过程中发生了变化。",
+        "core": true
+      },
+      {
+        "source": "半反应法",
+        "target": "氧化还原反应",
+        "type": "APPLIES_TO",
+        "evidence": "根据半反应法配平下列各方程式：",
+        "core": true
+      },
+      {
+        "source": "氧化剂",
+        "target": "还原剂",
+        "type": "RELATED_TO",
+        "evidence": "氧化剂NiCl2，还原剂Mg。",
+        "core": false
+      },
+      {
+        "source": "氧化剂",
+        "target": "氧化还原反应",
+        "type": "RELATED_TO",
+        "evidence": "指出下列各方程式中被氧化和被还原的原子、每个原子的氧化态变化，以及氧化剂和还原剂：",
+        "core": false
+      },
+      {
+        "source": "酸碱反应",
+        "target": "氧化还原反应",
+        "type": "RELATED_TO",
+        "evidence": "将下列反应分类为酸碱反应或氧化还原反应：",
+        "core": false
+      },
+      {
+        "source": "配平化学方程式",
+        "target": "化学计量学",
+        "type": "PRECEDES",
+        "evidence": "写出配平方程式，然后列出确定下列各题中所求信息所需的步骤：",
+        "core": true
+      },
+      {
+        "source": "限量反应物",
+        "target": "理论产率",
+        "type": "PRECEDES",
+        "evidence": "理论产量以限制反应物计算：2.0 mol I2 × (2 mol HI / 1 mol I2) = 4.0 mol HI。",
+        "core": true
+      },
+      {
+        "source": "理论产率",
+        "target": "百分产率",
+        "type": "PRECEDES",
+        "evidence": "确定该反应的理论产率（以克计）和百分产率。",
+        "core": true
+      },
+      {
+        "source": "滴定分析",
+        "target": "摩尔浓度",
+        "type": "APPLIES_TO",
+        "evidence": "一份 0.3420-g KHC8H5O4 样品在滴定中与 35.73 mL NaOH 溶液反应。NaOH 的摩尔浓度是多少？",
+        "core": true
+      },
+      {
+        "source": "道尔顿原子理论",
+        "target": "理论产率",
+        "type": "RELATED_TO",
+        "evidence": "道尔顿原子理论的哪条假设解释了为什么我们可以计算化学反应的理论产率？",
+        "core": true
+      },
+      {
+        "source": "实验式",
+        "target": "分子式",
+        "type": "PRECEDES",
+        "evidence": "经验式为 C5H4（式量 64.09 amu）。分子量 130 amu，130/64.09 ≈ 2，分子式为 C10H8。",
+        "core": false
+      }
+    ]
+  }
+]

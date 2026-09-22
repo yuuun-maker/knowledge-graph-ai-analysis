@@ -1,0 +1,215 @@
+[
+  {
+    "text_id": "化学_物质组成与溶液_第3章_测试题",
+    "source": "data/sample_docs/openstax_化学/第3章_物质组成与溶液_测试题与答案_中文版.txt",
+    "entities": [
+      {
+        "name": "分子质量",
+        "category": "概念",
+        "description": "1个分子的质量，等于分子中所有原子的原子量之和，以amu为单位。"
+      },
+      {
+        "name": "式量",
+        "category": "概念",
+        "description": "化学式中所有原子的原子量之和，题目要求计算各物质的分子量或式量。"
+      },
+      {
+        "name": "摩尔",
+        "category": "概念",
+        "description": "物质的量的单位，1摩尔任何物质都含有6.022×10²³个分子。"
+      },
+      {
+        "name": "阿伏伽德罗常数",
+        "category": "概念",
+        "description": "1摩尔物质所含的粒子数6.022×10²³/mol，用于由摩尔数求分子或原子数。"
+      },
+      {
+        "name": "摩尔质量",
+        "category": "概念",
+        "description": "1摩尔物质以克计的质量，数值上与分子质量相同但单位不同，即6.022×10²³个分子的质量。"
+      },
+      {
+        "name": "百分组成",
+        "category": "概念",
+        "description": "化合物中各元素的质量百分比，如氨NH3的百分组成。"
+      },
+      {
+        "name": "实验式",
+        "category": "概念",
+        "description": "化合物中各元素原子最简整数比的化学式，可由百分组成确定。"
+      },
+      {
+        "name": "分子式",
+        "category": "概念",
+        "description": "表示分子中原子实际数目的化学式，分子式 = (实验式)n，其中 n = 摩尔质量 / 实验式质量。"
+      },
+      {
+        "name": "摩尔浓度",
+        "category": "概念",
+        "description": "每升溶液中所含溶质的摩尔数，单位为mol/L（M）。"
+      },
+      {
+        "name": "稀释",
+        "category": "概念",
+        "description": "加入溶剂使溶液体积增大、浓度降低的过程，稀释前后溶质的物质的量保持不变。"
+      },
+      {
+        "name": "稀释公式",
+        "category": "公式",
+        "description": "稀释前后浓度与体积的关系式 c1V1 = c2V2。"
+      },
+      {
+        "name": "质量百分比",
+        "category": "概念",
+        "description": "溶质质量与溶液质量之比，以百分比表示，如质量分数为10.0%的HNO3溶液。"
+      },
+      {
+        "name": "百万分率",
+        "category": "概念",
+        "description": "极低浓度的表示单位（ppm），如水的硬度以CaCO3的百万分率（按质量计）表示。"
+      },
+      {
+        "name": "十亿分率",
+        "category": "概念",
+        "description": "更低浓度的表示单位（ppb），如溪流中汞的浓度为十亿分之0.68。"
+      },
+      {
+        "name": "溶液",
+        "category": "概念",
+        "description": "由溶质溶解在溶剂中形成的混合物，题目涉及溶液的体积、浓度与溶质量之间的关系。"
+      },
+      {
+        "name": "溶质",
+        "category": "概念",
+        "description": "溶解在溶液中的物质，其物质的量和质量常为题目求解对象。"
+      },
+      {
+        "name": "质量与摩尔数换算",
+        "category": "方法",
+        "description": "使用分子式求摩尔质量，将化合物的质量除以以克表示的摩尔质量从而得到摩尔数的方法。"
+      },
+      {
+        "name": "分子式确定",
+        "category": "方法",
+        "description": "需要知道化合物的摩尔质量（或分子量）以及由实验式算出的实验式质量，由两者之比确定分子式的方法。"
+      },
+      {
+        "name": "实验式确定",
+        "category": "方法",
+        "description": "假设100 g样品，由百分组成求各元素摩尔数并化为最简整数比以确定实验式的方法。"
+      },
+      {
+        "name": "摩尔浓度计算",
+        "category": "方法",
+        "description": "先确定溶质的摩尔质量与摩尔数，再由摩尔数除以溶液体积（升）计算摩尔浓度的方法。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "质量与摩尔数换算",
+        "target": "摩尔质量",
+        "type": "APPLIES_TO",
+        "evidence": "使用分子式求摩尔质量；要得到摩尔数，将化合物的质量除以以克表示的化合物的摩尔质量。",
+        "core": true
+      },
+      {
+        "source": "摩尔",
+        "target": "阿伏伽德罗常数",
+        "type": "RELATED_TO",
+        "evidence": "三者分子数相同，因为1摩尔任何物质都含有6.022×10^23个分子。",
+        "core": true
+      },
+      {
+        "source": "摩尔质量",
+        "target": "分子质量",
+        "type": "RELATED_TO",
+        "evidence": "这两个质量具有相同的数值，但单位不同：分子质量是 1 个分子的质量，而摩尔质量是 6.022 × 1023 个分子的质量。",
+        "core": true
+      },
+      {
+        "source": "百分组成",
+        "target": "实验式",
+        "type": "PRECEDES",
+        "evidence": "根据以下百分组成确定化合物的实验式",
+        "core": true
+      },
+      {
+        "source": "实验式",
+        "target": "分子式",
+        "type": "PRECEDES",
+        "evidence": "从经验式确定化合物的分子式需要什么信息？",
+        "core": true
+      },
+      {
+        "source": "分子式确定",
+        "target": "摩尔质量",
+        "type": "APPLIES_TO",
+        "evidence": "需要知道化合物的摩尔质量（或分子量），以及由实验式算出的实验式质量",
+        "core": true
+      },
+      {
+        "source": "实验式确定",
+        "target": "百分组成",
+        "type": "APPLIES_TO",
+        "evidence": "假设 100 g：P 43.6 g / 30.97 = 1.408 mol；O 56.4 g / 16.00 = 3.525 mol。",
+        "core": true
+      },
+      {
+        "source": "摩尔浓度计算",
+        "target": "摩尔浓度",
+        "type": "APPLIES_TO",
+        "evidence": "确定 KMnO4 的摩尔质量；确定溶液中 KMnO4 的摩尔数；由摩尔数和溶液体积确定摩尔浓度",
+        "core": true
+      },
+      {
+        "source": "摩尔质量",
+        "target": "摩尔浓度计算",
+        "type": "PRECEDES",
+        "evidence": "n(HCl) = 0.3366 g / 36.46 g/mol = 9.232×10^-3 mol；V = 35.23 mL = 0.03523 L；c = 9.232×10^-3 mol / 0.03523 L = 0.2621 M。",
+        "core": false
+      },
+      {
+        "source": "稀释公式",
+        "target": "稀释",
+        "type": "APPLIES_TO",
+        "evidence": "稀释公式：c1V1 = c2V2；V1 = (0.250 M × 1.00 L) / 1.00 M = 0.250 L。",
+        "core": true
+      },
+      {
+        "source": "稀释",
+        "target": "摩尔浓度",
+        "type": "RELATED_TO",
+        "evidence": "当1.00 L NaCl溶液稀释至1.80 L时，溶质的物质的量保持不变；由于体积增大，溶液的摩尔浓度降低",
+        "core": true
+      },
+      {
+        "source": "溶质",
+        "target": "溶液",
+        "type": "RELATED_TO",
+        "evidence": "用于静脉注射的 0.500 L 0.30 M 葡萄糖 C6H12O6 溶液中，溶质的质量是多少？",
+        "core": false
+      },
+      {
+        "source": "百万分率",
+        "target": "摩尔浓度",
+        "type": "RELATED_TO",
+        "evidence": "硬度值为175 mg CaCO3/L的水样中Ca2+离子的摩尔浓度是多少？",
+        "core": false
+      },
+      {
+        "source": "十亿分率",
+        "target": "摩尔浓度",
+        "type": "RELATED_TO",
+        "evidence": "假设密度为1.0 g/mL，计算该溪流中汞的摩尔浓度。",
+        "core": false
+      },
+      {
+        "source": "质量百分比",
+        "target": "摩尔浓度",
+        "type": "RELATED_TO",
+        "evidence": "一种喉咙喷雾剂为水中1.40%（按质量计）的苯酚C6H5OH。如果该溶液的密度为0.9956 g/mL，计算该溶液的摩尔浓度。",
+        "core": false
+      }
+    ]
+  }
+]

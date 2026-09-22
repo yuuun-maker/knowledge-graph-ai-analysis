@@ -1,0 +1,136 @@
+{
+  "entities": [
+    {
+      "name": "迭代",
+      "category": "概念",
+      "description": "一种重复执行某个任务的控制结构，程序在满足一定条件下重复执行某段代码，直到条件不再满足。"
+    },
+    {
+      "name": "递归",
+      "category": "概念",
+      "description": "一种算法策略，通过函数调用自身来解决问题，包含递和归两个阶段。"
+    },
+    {
+      "name": "for循环",
+      "category": "方法",
+      "description": "一种迭代形式，适合在预先知道迭代次数时使用。"
+    },
+    {
+      "name": "while循环",
+      "category": "方法",
+      "description": "一种实现迭代的方法，每轮先检查条件，条件为真则执行，否则结束循环。"
+    },
+    {
+      "name": "嵌套循环",
+      "category": "方法",
+      "description": "在一个循环结构内嵌套另一个循环结构，每次嵌套使时间复杂度提高一个维度。"
+    },
+    {
+      "name": "调用栈",
+      "category": "概念",
+      "description": "递归函数调用时系统分配内存以存储局部变量、调用地址等信息的栈结构。"
+    },
+    {
+      "name": "栈帧空间",
+      "category": "概念",
+      "description": "函数上下文数据存储的内存区域，直至函数返回后才会被释放。"
+    },
+    {
+      "name": "尾递归",
+      "category": "概念",
+      "description": "如果函数在返回前的最后一步才进行递归调用，则该函数可以被编译器或解释器优化，使其在空间效率上与迭代相当。"
+    },
+    {
+      "name": "递归树",
+      "category": "概念",
+      "description": "递归调用产生的树形结构，用于表示递归过程中的调用分支。"
+    },
+    {
+      "name": "斐波那契数列",
+      "category": "概念",
+      "description": "一个数列，前两个数字为0和1，每个数字是前两个数字的和。"
+    },
+    {
+      "name": "分治",
+      "category": "概念",
+      "description": "将问题分解为更小子问题的思维范式，递归体现了这种策略。"
+    },
+    {
+      "name": "栈",
+      "category": "概念",
+      "description": "一种数据结构，遵循先入后出原则，与递归的调用栈工作机制相似。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "迭代",
+      "target": "for循环",
+      "type": "CONTAINS",
+      "evidence": "for 循环是最常见的迭代形式之一",
+      "confidence": 0.95
+    },
+    {
+      "source": "迭代",
+      "target": "while循环",
+      "type": "CONTAINS",
+      "evidence": "while 循环也是一种实现迭代的方法",
+      "confidence": 0.95
+    },
+    {
+      "source": "迭代",
+      "target": "嵌套循环",
+      "type": "CONTAINS",
+      "evidence": "我们可以在一个循环结构内嵌套另一个循环结构",
+      "confidence": 0.9
+    },
+    {
+      "source": "递归",
+      "target": "调用栈",
+      "type": "RELATED_TO",
+      "evidence": "调用栈和栈帧空间这类递归术语已经暗示了递归与栈之间的密切关系",
+      "confidence": 0.9
+    },
+    {
+      "source": "递归",
+      "target": "尾递归",
+      "type": "CONTAINS",
+      "evidence": "这种情况被称为尾递归",
+      "confidence": 0.95
+    },
+    {
+      "source": "递归",
+      "target": "递归树",
+      "type": "RELATED_TO",
+      "evidence": "这样不断递归调用下去，最终将产生一棵层数为 n 的递归树",
+      "confidence": 0.9
+    },
+    {
+      "source": "递归",
+      "target": "分治",
+      "type": "RELATED_TO",
+      "evidence": "递归体现了将问题分解为更小子问题的思维范式，这种分治策略至关重要",
+      "confidence": 0.9
+    },
+    {
+      "source": "递归",
+      "target": "斐波那契数列",
+      "type": "APPLIES_TO",
+      "evidence": "以斐波那契数列为例...按照递推关系进行递归调用",
+      "confidence": 0.9
+    },
+    {
+      "source": "调用栈",
+      "target": "栈",
+      "type": "RELATED_TO",
+      "evidence": "这种工作机制与栈的先入后出原则异曲同工",
+      "confidence": 0.9
+    },
+    {
+      "source": "栈帧空间",
+      "target": "调用栈",
+      "type": "RELATED_TO",
+      "evidence": "函数的上下文数据都存储在称为栈帧空间的内存区域中",
+      "confidence": 0.9
+    }
+  ]
+}

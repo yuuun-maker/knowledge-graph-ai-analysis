@@ -29,3 +29,8 @@ pydantic==2.10.4
 python-dotenv==1.0.1
 aiofiles==24.1.0
 PyJWT==2.12.1
+
+# 评测报告出图（仅 create_graphy.py 使用，跑后端服务不需要它）
+# 中文标签依赖系统字体：Windows 自带 Microsoft YaHei/SimHei 即可；
+# Linux 需另装 fonts-noto-cjk，否则图中的中文会渲染成方块
+matplotlib==3.10.7

@@ -1,0 +1,593 @@
+{
+  "entities": [
+    {
+      "name": "二维运动学",
+      "category": "概念",
+      "description": "研究物体在平面内沿曲线路径运动的运动学分支，是三维运动学的基础。"
+    },
+    {
+      "name": "矢量",
+      "category": "概念",
+      "description": "具有大小和方向的物理量，如位移、速度、加速度和力。"
+    },
+    {
+      "name": "矢量加法",
+      "category": "方法",
+      "description": "将两个或多个矢量合成一个合矢量的运算，包括图解法和解析法。"
+    },
+    {
+      "name": "矢量减法",
+      "category": "方法",
+      "description": "通过加上负矢量来实现的矢量运算，与矢量加法类似。"
+    },
+    {
+      "name": "首尾相接法",
+      "category": "方法",
+      "description": "一种用图示方式相加矢量的方法，将第二个矢量的尾端放在第一个矢量的头端，依次连接。"
+    },
+    {
+      "name": "矢量分解",
+      "category": "方法",
+      "description": "将一个矢量分解为两个相互垂直的分量矢量的过程。"
+    },
+    {
+      "name": "解析法",
+      "category": "方法",
+      "description": "使用几何和三角学进行矢量加法和减法的方法，比图解法更精确。"
+    },
+    {
+      "name": "抛体运动",
+      "category": "概念",
+      "description": "物体被抛出或投射到空中，仅受重力加速度作用的二维运动。"
+    },
+    {
+      "name": "运动的独立性",
+      "category": "概念",
+      "description": "二维运动的水平和竖直分量彼此独立，水平方向的运动不影响竖直方向的运动，反之亦然。"
+    },
+    {
+      "name": "勾股定理",
+      "category": "定理",
+      "description": "直角三角形中，两直角边的平方和等于斜边的平方，用于计算合矢量的大小。"
+    },
+    {
+      "name": "矢量分量",
+      "category": "概念",
+      "description": "一个矢量沿坐标轴方向的分量矢量，如x分量和y分量。"
+    },
+    {
+      "name": "合矢量",
+      "category": "概念",
+      "description": "多个矢量相加后得到的总矢量，表示总位移或总速度等。"
+    },
+    {
+      "name": "负矢量",
+      "category": "概念",
+      "description": "大小相同但方向相反的矢量，用于定义矢量减法。"
+    },
+    {
+      "name": "矢量与标量的乘法",
+      "category": "方法",
+      "description": "标量乘以矢量，改变矢量的大小，若标量为负则方向相反。"
+    },
+    {
+      "name": "轨迹",
+      "category": "概念",
+      "description": "抛体运动的路径。"
+    },
+    {
+      "name": "射程",
+      "category": "概念",
+      "description": "抛体运动在水平方向上的最大距离。"
+    },
+    {
+      "name": "最大高度",
+      "category": "概念",
+      "description": "抛体运动在竖直方向上达到的最高点。"
+    },
+    {
+      "name": "重力加速度",
+      "category": "概念",
+      "description": "由于重力引起的加速度，在抛体运动中竖直向下，大小为g。"
+    },
+    {
+      "name": "运动学方程",
+      "category": "公式",
+      "description": "描述匀加速直线运动的方程，用于分析抛体运动的水平和竖直分量。"
+    },
+    {
+      "name": "位移",
+      "category": "概念",
+      "description": "物体位置的变化量，是矢量，具有大小和方向。"
+    },
+    {
+      "name": "速度",
+      "category": "概念",
+      "description": "描述物体运动快慢和方向的物理量，是矢量。"
+    },
+    {
+      "name": "加速度",
+      "category": "概念",
+      "description": "描述速度变化快慢的物理量，是矢量。"
+    },
+    {
+      "name": "标量",
+      "category": "概念",
+      "description": "只有大小没有方向的量。"
+    },
+    {
+      "name": "抛体",
+      "category": "概念",
+      "description": "在空气中运动且只经历重力加速度的物体。"
+    },
+    {
+      "name": "相对速度",
+      "category": "概念",
+      "description": "物体相对于特定参考系的速度。"
+    },
+    {
+      "name": "经典相对论",
+      "category": "概念",
+      "description": "研究速度远小于光速时，不同观察者测量同一现象的相对速度的学科。"
+    },
+    {
+      "name": "空气阻力",
+      "category": "概念",
+      "description": "物体穿过空气时受到的摩擦力，在基础物理问题中常被忽略。"
+    },
+    {
+      "name": "坐标系",
+      "category": "概念",
+      "description": "用于描述物体位置和运动的参考框架，包括原点和坐标轴方向。"
+    },
+    {
+      "name": "反矢量",
+      "category": "概念",
+      "description": "大小相等、方向相反的矢量。"
+    },
+    {
+      "name": "矢量合成原理",
+      "category": "定理",
+      "description": "矢量合成遵循平行四边形法则或三角形法则，合矢量等于各分矢量的矢量和。"
+    },
+    {
+      "name": "速度合成",
+      "category": "方法",
+      "description": "将多个速度矢量合成为一个总速度的方法。"
+    },
+    {
+      "name": "相对速度计算",
+      "category": "方法",
+      "description": "通过矢量加法计算物体相对于不同参考系的速度。"
+    },
+    {
+      "name": "抛体运动分析步骤",
+      "category": "方法",
+      "description": "将抛体运动分解为水平和竖直两个独立的一维运动，分别求解后再合成。"
+    },
+    {
+      "name": "运动分解",
+      "category": "方法",
+      "description": "将二维运动分解为两个正交方向上的独立一维运动。"
+    },
+    {
+      "name": "三角恒等式",
+      "category": "公式",
+      "description": "用于求矢量方向角的三角函数关系。"
+    },
+    {
+      "name": "运动学",
+      "category": "概念",
+      "description": "研究运动而不考虑质量或力的学科。"
+    },
+    {
+      "name": "运动",
+      "category": "概念",
+      "description": "物体随时间变化的位移。"
+    },
+    {
+      "name": "相对性",
+      "category": "概念",
+      "description": "研究相对于彼此运动的不同观察者如何测量同一现象。"
+    },
+    {
+      "name": "矢量加法交换律",
+      "category": "定理",
+      "description": "矢量相加的顺序不影响最终和，即A+B=B+A。"
+    },
+    {
+      "name": "矢量加法图形法",
+      "category": "方法",
+      "description": "通过画图并使用首尾相接法将矢量相加，用直尺和量角器确定合矢量的大小和方向。"
+    },
+    {
+      "name": "矢量减法图形法",
+      "category": "方法",
+      "description": "通过加上被减矢量的反矢量，再采用首尾相接相加法得到合矢量。"
+    },
+    {
+      "name": "矢量与标量乘法",
+      "category": "方法",
+      "description": "矢量乘以标量，乘积的大小由标量绝对值与矢量大小的乘积给出，方向根据标量正负确定。"
+    },
+    {
+      "name": "矢量加法解析法",
+      "category": "方法",
+      "description": "使用勾股定理和三角恒等式来确定合矢量的大小和方向。"
+    },
+    {
+      "name": "矢量减法解析法",
+      "category": "方法",
+      "description": "使用勾股定理和三角恒等式来确定合矢量的大小和方向。"
+    },
+    {
+      "name": "速度的相加",
+      "category": "方法",
+      "description": "二维中的速度使用相同的解析矢量技术相加。"
+    },
+    {
+      "name": "经典相对性",
+      "category": "概念",
+      "description": "仅限于速度小于约光速1%的情形的相对性研究。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "二维运动学",
+      "target": "矢量",
+      "type": "RELATED_TO",
+      "evidence": "与一维运动学一样，我们用箭头来表示矢量。",
+      "confidence": 0.8
+    },
+    {
+      "source": "二维运动学",
+      "target": "抛体运动",
+      "type": "CONTAINS",
+      "evidence": "分析这种称为抛体运动的运动的关键，是将其分解为沿相互垂直方向的运动。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二维运动学",
+      "target": "运动的独立性",
+      "type": "CONTAINS",
+      "evidence": "二维运动的水平和竖直分量彼此独立。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量加法",
+      "target": "首尾相接法",
+      "type": "CONTAINS",
+      "evidence": "首尾相接法是一种用图示方式相加矢量的方法",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量加法",
+      "target": "解析法",
+      "type": "CONTAINS",
+      "evidence": "向量加法和减法的解析方法使用几何和简单三角学",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量减法",
+      "target": "负矢量",
+      "type": "RELATED_TO",
+      "evidence": "矢量的负矢量定义为；也就是说，在图形上，任何矢量的负矢量具有相同的大小但相反的方向",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量减法",
+      "target": "矢量加法",
+      "type": "RELATED_TO",
+      "evidence": "矢量减法是矢量加法的直接扩展。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量分解",
+      "target": "矢量分量",
+      "type": "RELATED_TO",
+      "evidence": "这是求向量分量的一個例子。",
+      "confidence": 0.9
+    },
+    {
+      "source": "解析法",
+      "target": "矢量分解",
+      "type": "APPLIES_TO",
+      "evidence": "向量加法与减法：解析方法中介绍的解析技术非常适合求向量分量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "解析法",
+      "target": "合矢量",
+      "type": "APPLIES_TO",
+      "evidence": "使用解析法进行向量加法",
+      "confidence": 0.9
+    },
+    {
+      "source": "勾股定理",
+      "target": "合矢量",
+      "type": "APPLIES_TO",
+      "evidence": "注意，方程 就是勾股定理，将直角三角形的两直角边与斜边长度联系起来。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "运动的独立性",
+      "type": "RELATED_TO",
+      "evidence": "这里要记住的最重要的事实是，沿垂直轴的运动是独立的，因此可以分别分析。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "运动学方程",
+      "type": "APPLIES_TO",
+      "evidence": "两个加速度都是恒定的，因此可以使用运动学方程。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "重力加速度",
+      "type": "RELATED_TO",
+      "evidence": "抛体运动是物体被抛出或投射到空中，仅受重力加速度作用的运动。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "轨迹",
+      "type": "RELATED_TO",
+      "evidence": "该物体称为抛体，其路径称为轨迹。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "射程",
+      "type": "RELATED_TO",
+      "evidence": "识别并解释抛体的性质，如重力加速度、射程、最大高度和轨迹。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "最大高度",
+      "type": "RELATED_TO",
+      "evidence": "识别并解释抛体的性质，如重力加速度、射程、最大高度和轨迹。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量与标量的乘法",
+      "target": "矢量",
+      "type": "APPLIES_TO",
+      "evidence": "当向量 乘以标量 时，向量的大小变为 的绝对值",
+      "confidence": 0.9
+    },
+    {
+      "source": "二维运动学",
+      "target": "位移",
+      "type": "CONTAINS",
+      "evidence": "要描述运动，我们必须处理速度和加速度，以及位移。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二维运动学",
+      "target": "速度",
+      "type": "CONTAINS",
+      "evidence": "要描述运动，我们必须处理速度和加速度，以及位移。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二维运动学",
+      "target": "加速度",
+      "type": "CONTAINS",
+      "evidence": "要描述运动，我们必须处理速度和加速度，以及位移。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量",
+      "target": "矢量分量",
+      "type": "CONTAINS",
+      "evidence": "矢量具有沿水平轴和垂直轴的分量",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量减法",
+      "target": "反矢量",
+      "type": "RELATED_TO",
+      "evidence": "从 中减去矢量 的图形法包括加上矢量 的反矢量",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "抛体",
+      "type": "RELATED_TO",
+      "evidence": "抛体运动是物体在空气中仅受重力加速度作用时的运动。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "射程",
+      "type": "CONTAINS",
+      "evidence": "在水平地面上，我们将射程定义为抛体所经过的水平距离。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "最大高度",
+      "type": "CONTAINS",
+      "evidence": "任何轨迹中的最高点称为顶点，在竖直速度为零时到达。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "轨迹",
+      "type": "CONTAINS",
+      "evidence": "轨迹 抛体在空中的路径",
+      "confidence": 0.9
+    },
+    {
+      "source": "相对速度",
+      "target": "经典相对论",
+      "type": "RELATED_TO",
+      "evidence": "本节中的相对速度实际上是经典相对论的方面",
+      "confidence": 0.9
+    },
+    {
+      "source": "相对速度",
+      "target": "速度合成",
+      "type": "RELATED_TO",
+      "evidence": "物体相对于观察者的速度是这些速度矢量的和",
+      "confidence": 0.9
+    },
+    {
+      "source": "速度合成",
+      "target": "矢量加法",
+      "type": "RELATED_TO",
+      "evidence": "矢量合成规则适用于速度的合成",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动分析步骤",
+      "target": "运动分解",
+      "type": "CONTAINS",
+      "evidence": "将运动分解为沿 x 轴和 y 轴的水平分量和垂直分量。",
+      "confidence": 0.95
+    },
+    {
+      "source": "运动分解",
+      "target": "矢量分解",
+      "type": "RELATED_TO",
+      "evidence": "将运动分解为沿 x 轴和 y 轴的水平分量和垂直分量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "解析法",
+      "target": "勾股定理",
+      "type": "RELATED_TO",
+      "evidence": "使用勾股定理和三角恒等式来确定合矢量的大小和方向。",
+      "confidence": 0.9
+    },
+    {
+      "source": "解析法",
+      "target": "三角恒等式",
+      "type": "RELATED_TO",
+      "evidence": "使用勾股定理和三角恒等式来确定合矢量的大小和方向。",
+      "confidence": 0.9
+    },
+    {
+      "source": "运动学方程",
+      "target": "运动学",
+      "type": "RELATED_TO",
+      "evidence": "运动学方程回顾（恒定）",
+      "confidence": 0.8
+    },
+    {
+      "source": "相对速度计算",
+      "target": "速度合成",
+      "type": "APPLIES_TO",
+      "evidence": "我们首先重新考察如何合成速度，然后考虑相对速度含义的某些方面。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量加法",
+      "target": "矢量加法交换律",
+      "type": "CONTAINS",
+      "evidence": "矢量加法是可交换的，因为矢量相加的顺序不影响最终和",
+      "confidence": 0.95
+    },
+    {
+      "source": "抛体运动",
+      "target": "空气阻力",
+      "type": "RELATED_TO",
+      "evidence": "空气阻力 一种摩擦力，会在物体穿过空气时减慢其运动；在求解基础物理问题时，空气阻力假定为零",
+      "confidence": 0.8
+    },
+    {
+      "source": "抛体运动",
+      "target": "坐标系",
+      "type": "RELATED_TO",
+      "evidence": "在分析抛体运动时，建立坐标系非常重要。",
+      "confidence": 0.9
+    },
+    {
+      "source": "相对速度",
+      "target": "相对性",
+      "type": "RELATED_TO",
+      "evidence": "相对速度是相对论的一个方面，相对论被定义为研究相对于彼此运动的不同观察者如何测量同一现象。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量加法图形法",
+      "target": "首尾相接法",
+      "type": "CONTAINS",
+      "evidence": "矢量相加的图形法包括在图上画出矢量，并使用首尾相接法将它们相加。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量减法图形法",
+      "target": "矢量加法图形法",
+      "type": "RELATED_TO",
+      "evidence": "从 中减去矢量 的图形法包括加上矢量 的反矢量，其定义为 。在这种情况下， 。然后按通常方式采用首尾相接相加法得到合矢量 。",
+      "confidence": 0.8
+    },
+    {
+      "source": "矢量加法解析法",
+      "target": "勾股定理",
+      "type": "APPLIES_TO",
+      "evidence": "矢量加法与减法的解析法包括使用勾股定理和三角恒等式来确定合矢量的大小和方向。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量加法解析法",
+      "target": "三角恒等式",
+      "type": "APPLIES_TO",
+      "evidence": "矢量加法与减法的解析法包括使用勾股定理和三角恒等式来确定合矢量的大小和方向。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量减法解析法",
+      "target": "勾股定理",
+      "type": "APPLIES_TO",
+      "evidence": "矢量加法与减法的解析法包括使用勾股定理和三角恒等式来确定合矢量的大小和方向。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量减法解析法",
+      "target": "三角恒等式",
+      "type": "APPLIES_TO",
+      "evidence": "矢量加法与减法的解析法包括使用勾股定理和三角恒等式来确定合矢量的大小和方向。",
+      "confidence": 0.95
+    },
+    {
+      "source": "抛体运动",
+      "target": "矢量分量",
+      "type": "APPLIES_TO",
+      "evidence": "要解决抛体运动问题，请执行以下步骤：1. 确定坐标系。然后，将物体的位置和/或速度分解为水平和竖直分量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "最大高度",
+      "type": "APPLIES_TO",
+      "evidence": "以初始竖直速度 发射的抛体的最大高度由下式给出",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "射程",
+      "type": "APPLIES_TO",
+      "evidence": "抛体行进的最大水平距离称为射程。在水平地面上以高于水平面的角度 发射、初速度为 的抛体，其射程由下式给出",
+      "confidence": 0.9
+    },
+    {
+      "source": "速度的相加",
+      "target": "矢量加法解析法",
+      "type": "APPLIES_TO",
+      "evidence": "二维中的速度使用相同的解析矢量技术相加",
+      "confidence": 0.9
+    },
+    {
+      "source": "经典相对性",
+      "target": "相对性",
+      "type": "CONTAINS",
+      "evidence": "经典相对性仅限于速度小于约光速1%（3000 km/s）的情形。",
+      "confidence": 0.9
+    }
+  ]
+}

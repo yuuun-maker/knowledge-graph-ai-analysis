@@ -1,0 +1,288 @@
+{
+  "entities": [
+    {
+      "name": "式量",
+      "category": "概念",
+      "description": "对于离子化合物，化学式中各原子的原子量之和，以amu为单位。"
+    },
+    {
+      "name": "分子量",
+      "category": "概念",
+      "description": "分子中所有原子的原子量之和，以amu为单位。"
+    },
+    {
+      "name": "摩尔质量",
+      "category": "概念",
+      "description": "1摩尔物质的质量，以g/mol为单位，数值上等于分子量或式量。"
+    },
+    {
+      "name": "摩尔",
+      "category": "概念",
+      "description": "物质的量的单位，1摩尔物质含有阿伏伽德罗常数个粒子。"
+    },
+    {
+      "name": "阿伏伽德罗常数",
+      "category": "概念",
+      "description": "1摩尔物质所含的粒子数，约为6.022×10^23 mol^-1。"
+    },
+    {
+      "name": "质量分数",
+      "category": "概念",
+      "description": "溶液中溶质的质量与溶液总质量之比，常用百分数表示。"
+    },
+    {
+      "name": "摩尔浓度",
+      "category": "概念",
+      "description": "溶液中溶质的物质的量除以溶液的体积，单位为mol/L。"
+    },
+    {
+      "name": "稀释",
+      "category": "方法",
+      "description": "向溶液中加入溶剂以降低其浓度的过程，稀释前后溶质的物质的量不变。"
+    },
+    {
+      "name": "稀释公式",
+      "category": "公式",
+      "description": "稀释前后溶质的物质的量相等，即c1V1 = c2V2。"
+    },
+    {
+      "name": "经验式",
+      "category": "概念",
+      "description": "化合物中各元素原子最简单整数比的化学式。"
+    },
+    {
+      "name": "分子式",
+      "category": "概念",
+      "description": "用元素符号表示分子中原子种类和数目的化学式，是经验式的整数倍。"
+    },
+    {
+      "name": "百分组成",
+      "category": "概念",
+      "description": "化合物中各元素的质量分数。"
+    },
+    {
+      "name": "质量摩尔浓度",
+      "category": "概念",
+      "description": "每千克溶剂中所含溶质的物质的量，单位为mol/kg。"
+    },
+    {
+      "name": "质量浓度",
+      "category": "概念",
+      "description": "单位体积溶液中所含溶质的质量，常用单位g/L或mg/L。"
+    },
+    {
+      "name": "百万分率",
+      "category": "概念",
+      "description": "溶质质量占溶液质量的百万分之一，常用ppm表示。"
+    },
+    {
+      "name": "十亿分率",
+      "category": "概念",
+      "description": "溶质质量占溶液质量的十亿分之一，常用ppb表示。"
+    },
+    {
+      "name": "物质的量",
+      "category": "概念",
+      "description": "表示一定数目粒子集合体的物理量，符号为n，单位为摩尔。"
+    },
+    {
+      "name": "溶质",
+      "category": "概念",
+      "description": "溶液中溶解的物质。"
+    },
+    {
+      "name": "溶液",
+      "category": "概念",
+      "description": "由溶质和溶剂组成的均匀混合物。"
+    },
+    {
+      "name": "溶剂",
+      "category": "概念",
+      "description": "溶液中溶解溶质的物质，通常是水。"
+    },
+    {
+      "name": "浓度",
+      "category": "概念",
+      "description": "溶液中溶质含量的相对量度，可用多种单位表示。"
+    },
+    {
+      "name": "摩尔质量计算",
+      "category": "方法",
+      "description": "根据化学式计算物质的摩尔质量，即各原子摩尔质量之和。"
+    },
+    {
+      "name": "质量-摩尔换算",
+      "category": "方法",
+      "description": "利用摩尔质量将物质的质量与物质的量相互换算。"
+    },
+    {
+      "name": "分子式确定",
+      "category": "方法",
+      "description": "通过经验式和摩尔质量确定分子式的方法。"
+    },
+    {
+      "name": "经验式确定",
+      "category": "方法",
+      "description": "通过百分组成计算各元素原子的摩尔比，从而确定经验式的方法。"
+    },
+    {
+      "name": "摩尔浓度计算",
+      "category": "方法",
+      "description": "根据溶质的物质的量和溶液体积计算摩尔浓度的方法。"
+    },
+    {
+      "name": "溶液配制",
+      "category": "方法",
+      "description": "根据所需浓度和体积，计算并称量溶质，溶解并定容的操作过程。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "摩尔质量",
+      "target": "摩尔",
+      "type": "RELATED_TO",
+      "evidence": "1摩尔任何物质都含有6.022×10^23个分子",
+      "confidence": 0.9
+    },
+    {
+      "source": "摩尔质量",
+      "target": "分子量",
+      "type": "RELATED_TO",
+      "evidence": "这两个质量具有相同的数值，但单位不同：分子质量是 1 个分子的质量，而摩尔质量是 6.022 × 1023 个分子的质量。",
+      "confidence": 0.95
+    },
+    {
+      "source": "摩尔质量",
+      "target": "式量",
+      "type": "RELATED_TO",
+      "evidence": "计算下列各矿物的经验式量或分子式量以及摩尔质量",
+      "confidence": 0.9
+    },
+    {
+      "source": "稀释公式",
+      "target": "稀释",
+      "type": "APPLIES_TO",
+      "evidence": "稀释公式：c1V1 = c2V2",
+      "confidence": 0.95
+    },
+    {
+      "source": "分子式",
+      "target": "经验式",
+      "type": "RELATED_TO",
+      "evidence": "分子式 = (实验式)ₙ，其中 n = 摩尔质量 / 实验式质量",
+      "confidence": 0.95
+    },
+    {
+      "source": "分子式确定",
+      "target": "经验式",
+      "type": "PRECEDES",
+      "evidence": "从经验式确定化合物的分子式需要什么信息？",
+      "confidence": 0.9
+    },
+    {
+      "source": "分子式确定",
+      "target": "摩尔质量",
+      "type": "PRECEDES",
+      "evidence": "需要知道化合物的摩尔质量（或分子量），以及由实验式算出的实验式质量",
+      "confidence": 0.9
+    },
+    {
+      "source": "经验式确定",
+      "target": "百分组成",
+      "type": "PRECEDES",
+      "evidence": "根据以下百分组成确定化合物的实验式",
+      "confidence": 0.9
+    },
+    {
+      "source": "摩尔浓度计算",
+      "target": "摩尔浓度",
+      "type": "APPLIES_TO",
+      "evidence": "确定以下各溶液的摩尔浓度",
+      "confidence": 0.95
+    },
+    {
+      "source": "摩尔浓度计算",
+      "target": "物质的量",
+      "type": "PRECEDES",
+      "evidence": "由摩尔数和溶液体积确定摩尔浓度",
+      "confidence": 0.9
+    },
+    {
+      "source": "摩尔浓度计算",
+      "target": "摩尔质量",
+      "type": "PRECEDES",
+      "evidence": "确定 KMnO4 的摩尔质量；确定溶液中 KMnO4 的摩尔数；由摩尔数和溶液体积确定摩尔浓度",
+      "confidence": 0.9
+    },
+    {
+      "source": "质量-摩尔换算",
+      "target": "摩尔质量",
+      "type": "APPLIES_TO",
+      "evidence": "要得到摩尔数，将化合物的质量除以以克表示的化合物的摩尔质量",
+      "confidence": 0.95
+    },
+    {
+      "source": "质量-摩尔换算",
+      "target": "物质的量",
+      "type": "APPLIES_TO",
+      "evidence": "要得到摩尔数，将化合物的质量除以以克表示的化合物的摩尔质量",
+      "confidence": 0.95
+    },
+    {
+      "source": "摩尔质量计算",
+      "target": "摩尔质量",
+      "type": "APPLIES_TO",
+      "evidence": "计算下列各化合物的摩尔质量",
+      "confidence": 0.95
+    },
+    {
+      "source": "溶液配制",
+      "target": "摩尔浓度",
+      "type": "APPLIES_TO",
+      "evidence": "要配制250 mL的2.00 M HCl",
+      "confidence": 0.9
+    },
+    {
+      "source": "溶液配制",
+      "target": "稀释",
+      "type": "APPLIES_TO",
+      "evidence": "需要多少体积的 1.00-M Fe(NO3)3 溶液才能稀释制备 1.00 L 浓度为 0.250 M 的溶液？",
+      "confidence": 0.9
+    },
+    {
+      "source": "质量分数",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "质量分数为10.0%的HNO3溶液",
+      "confidence": 0.9
+    },
+    {
+      "source": "摩尔浓度",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "确定以下各溶液的摩尔浓度",
+      "confidence": 0.9
+    },
+    {
+      "source": "质量浓度",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "以mg/dL表示",
+      "confidence": 0.8
+    },
+    {
+      "source": "百万分率",
+      "target": "质量浓度",
+      "type": "RELATED_TO",
+      "evidence": "硬度值为175 mg CaCO3/L的水样",
+      "confidence": 0.8
+    },
+    {
+      "source": "十亿分率",
+      "target": "质量浓度",
+      "type": "RELATED_TO",
+      "evidence": "十亿分之0.68",
+      "confidence": 0.8
+    }
+  ]
+}

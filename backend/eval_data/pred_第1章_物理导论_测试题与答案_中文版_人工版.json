@@ -1,0 +1,147 @@
+[
+  {
+    "text_id": "物理学_基础概念_第1章",
+    "entities": [
+      {
+        "name": "模型",
+        "category": "概念",
+        "description": "对物理系统或过程的简化表示，用于解释现象和做出预测。"
+      },
+      {
+        "name": "理论",
+        "category": "概念",
+        "description": "更广泛、更系统的解释框架，包含基本原理和定律，能解释和预测多种现象。"
+      },
+      {
+        "name": "经典物理学",
+        "category": "概念",
+        "description": "在宏观、低速条件下能准确描述现象的物理学分支，包括经典力学和经典电磁学。"
+      },
+      {
+        "name": "现代物理学",
+        "category": "概念",
+        "description": "研究高速、微观等极端条件下物理现象的物理学分支，包括相对论和量子力学。"
+      },
+      {
+        "name": "相对论量子力学",
+        "category": "概念",
+        "description": "研究高速且涉及微观粒子的现象时必须使用的物理学理论。"
+      },
+      {
+        "name": "公制单位",
+        "category": "概念",
+        "description": "国际单位制，具有十进制换算、单位统一等优点的测量单位系统。"
+      },
+      {
+        "name": "准确度",
+        "category": "概念",
+        "description": "测量值与真值的接近程度。"
+      },
+      {
+        "name": "不确定度",
+        "category": "概念",
+        "description": "对测量结果可信程度的定量估计，表示真值可能存在的范围。"
+      },
+      {
+        "name": "精密度",
+        "category": "概念",
+        "description": "多次测量结果之间的一致程度。"
+      },
+      {
+        "name": "有效数字",
+        "category": "概念",
+        "description": "测量结果中能反映测量精度的数字位数。"
+      },
+      {
+        "name": "百分不确定度",
+        "category": "概念",
+        "description": "不确定度与测量值的比值乘以100%，用于表示相对不确定度。"
+      },
+      {
+        "name": "屈光度",
+        "category": "概念",
+        "description": "透镜焦度的单位，定义为焦距的倒数，即 P = 1/f，其中 f 以米为单位。"
+      },
+      {
+        "name": "单位换算",
+        "category": "方法",
+        "description": "在不同单位之间进行数值转换的方法，常用于物理量计算。"
+      },
+      {
+        "name": "近似计算",
+        "category": "方法",
+        "description": "在物理问题中进行粗略估算的方法，常用于数量级估计。"
+      },
+      {
+        "name": "不确定度传播",
+        "category": "方法",
+        "description": "计算由多个测量值计算得到的量的不确定度的方法。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "模型",
+        "target": "理论",
+        "type": "RELATED_TO",
+        "evidence": "模型与理论有何不同？",
+        "confidence": 0.8
+      },
+      {
+        "source": "经典物理学",
+        "target": "现代物理学",
+        "type": "RELATED_TO",
+        "evidence": "经典物理学是现代物理学的一个很好的近似。",
+        "confidence": 0.9
+      },
+      {
+        "source": "现代物理学",
+        "target": "相对论量子力学",
+        "type": "CONTAINS",
+        "evidence": "什么时候必须使用相对论量子力学？",
+        "confidence": 0.7
+      },
+      {
+        "source": "准确度",
+        "target": "不确定度",
+        "type": "RELATED_TO",
+        "evidence": "测量的准确度与不确定度之间是什么关系？",
+        "confidence": 0.9
+      },
+      {
+        "source": "准确度",
+        "target": "精密度",
+        "type": "RELATED_TO",
+        "evidence": "准确度、精密度与有效数字",
+        "confidence": 0.8
+      },
+      {
+        "source": "有效数字",
+        "target": "百分不确定度",
+        "type": "RELATED_TO",
+        "evidence": "表达这两个数字准确度的更有意义的方式是有效数字还是百分不确定度？",
+        "confidence": 0.8
+      },
+      {
+        "source": "单位换算",
+        "target": "公制单位",
+        "type": "APPLIES_TO",
+        "evidence": "公制单位（国际单位制）的优点包括：十进制便于换算",
+        "confidence": 0.8
+      },
+      {
+        "source": "近似计算",
+        "target": "有效数字",
+        "type": "RELATED_TO",
+        "evidence": "本节各题的答案请用正确的有效数字位数和适当的单位表示。",
+        "confidence": 0.7
+      },
+      {
+        "source": "不确定度传播",
+        "target": "百分不确定度",
+        "type": "RELATED_TO",
+        "evidence": "体积不确定度由直径和距离的不确定度传播",
+        "confidence": 0.8
+      }
+    ]
+  }
+]

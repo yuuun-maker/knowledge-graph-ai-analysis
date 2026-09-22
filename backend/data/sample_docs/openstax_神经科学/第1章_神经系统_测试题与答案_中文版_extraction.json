@@ -1,0 +1,329 @@
+{
+  "entities": [
+    {
+      "name": "神经元",
+      "category": "概念",
+      "description": "神经系统的基本细胞，负责接收、整合和传递信息。"
+    },
+    {
+      "name": "胶质细胞",
+      "category": "概念",
+      "description": "神经系统中除神经元外的另一类主要细胞，包括星形胶质细胞、小胶质细胞、少突胶质细胞和施万细胞。"
+    },
+    {
+      "name": "星形胶质细胞",
+      "category": "概念",
+      "description": "一种胶质细胞，对形成血脑屏障最重要。"
+    },
+    {
+      "name": "小胶质细胞",
+      "category": "概念",
+      "description": "一种胶质细胞，对清除中枢神经系统损伤后的碎片最重要。"
+    },
+    {
+      "name": "少突胶质细胞",
+      "category": "概念",
+      "description": "中枢神经系统的主要髓鞘形成细胞。"
+    },
+    {
+      "name": "施万细胞",
+      "category": "概念",
+      "description": "周围神经系统的髓鞘形成细胞。"
+    },
+    {
+      "name": "树突",
+      "category": "概念",
+      "description": "神经元中专门用于接收信息的部分。"
+    },
+    {
+      "name": "轴突",
+      "category": "概念",
+      "description": "神经元中负责将信息传递给其他神经元或效应器的部分。"
+    },
+    {
+      "name": "中枢神经系统",
+      "category": "概念",
+      "description": "由脑和脊髓组成，是神经系统的中心部分。"
+    },
+    {
+      "name": "周围神经系统",
+      "category": "概念",
+      "description": "中枢神经系统以外的神经组织，包括脑神经和脊神经等。"
+    },
+    {
+      "name": "脑脊液",
+      "category": "概念",
+      "description": "存在于脑室系统、中央管和蛛网膜下腔中的液体，对脑和脊髓起保护作用。"
+    },
+    {
+      "name": "脑室系统",
+      "category": "概念",
+      "description": "脑内包含脑脊液的腔室系统。"
+    },
+    {
+      "name": "蛛网膜下腔",
+      "category": "概念",
+      "description": "蛛网膜与软脑膜之间的空间，内含脑脊液。"
+    },
+    {
+      "name": "脑神经",
+      "category": "概念",
+      "description": "直接从脑发出的周围神经，携带感觉和运动信息。"
+    },
+    {
+      "name": "端脑",
+      "category": "概念",
+      "description": "胚胎脑区之一，发育为大脑半球。"
+    },
+    {
+      "name": "间脑",
+      "category": "概念",
+      "description": "胚胎脑区之一，发育为丘脑和下丘脑等结构。"
+    },
+    {
+      "name": "中脑",
+      "category": "概念",
+      "description": "胚胎脑区之一，发育为中脑结构。"
+    },
+    {
+      "name": "菱脑",
+      "category": "概念",
+      "description": "胚胎脑区之一，发育为脑桥、延髓和小脑。"
+    },
+    {
+      "name": "大脑皮层",
+      "category": "概念",
+      "description": "大脑半球表面的灰质层，分为额叶、颞叶、顶叶和枕叶等。"
+    },
+    {
+      "name": "额叶",
+      "category": "概念",
+      "description": "大脑皮层的一个叶，对决策和问题解决最重要。"
+    },
+    {
+      "name": "颞叶",
+      "category": "概念",
+      "description": "大脑皮层的一个叶，对语言、记忆和听觉重要。"
+    },
+    {
+      "name": "顶叶",
+      "category": "概念",
+      "description": "大脑皮层的一个叶，参与感觉整合和空间认知。"
+    },
+    {
+      "name": "枕叶",
+      "category": "概念",
+      "description": "大脑皮层的一个叶，对视觉最重要。"
+    },
+    {
+      "name": "皮层下核团",
+      "category": "概念",
+      "description": "大脑皮层下方、属于端脑的一组专门脑区，参与运动控制等功能。"
+    },
+    {
+      "name": "脑干",
+      "category": "概念",
+      "description": "连接大脑和脊髓的脑区，包含中脑、脑桥和延髓，参与运动控制等。"
+    },
+    {
+      "name": "交感神经系统",
+      "category": "概念",
+      "description": "周围神经系统的一部分，负责应激反应，使身体兴奋。"
+    },
+    {
+      "name": "副交感神经系统",
+      "category": "概念",
+      "description": "周围神经系统的一部分，帮助身体放松和消化。"
+    },
+    {
+      "name": "躯体神经系统",
+      "category": "概念",
+      "description": "周围神经系统的一部分，负责随意运动和感觉信息传递。"
+    },
+    {
+      "name": "头化",
+      "category": "概念",
+      "description": "神经系统组织的一种属性，指感觉和整合结构向头部集中的趋势。"
+    },
+    {
+      "name": "集中化",
+      "category": "概念",
+      "description": "神经系统组织的一种属性，指神经元被整合到特定整合区域，而不是随机排列在全身。"
+    },
+    {
+      "name": "连接组",
+      "category": "概念",
+      "description": "神经系统中所有神经元及其连接的完整图谱，人类连接组仍在绘制中且极其复杂。"
+    },
+    {
+      "name": "上行通路",
+      "category": "概念",
+      "description": "将信息从外周带到脑的神经通路。"
+    },
+    {
+      "name": "下行通路",
+      "category": "概念",
+      "description": "将信息从脑带到外周的神经通路。"
+    },
+    {
+      "name": "冠状切面",
+      "category": "概念",
+      "description": "用于解剖分析脑的三个切面之一，将脑分为前后部分。"
+    },
+    {
+      "name": "矢状切面",
+      "category": "概念",
+      "description": "用于解剖分析脑的三个切面之一，将脑分为左右部分。"
+    },
+    {
+      "name": "水平切面",
+      "category": "概念",
+      "description": "用于解剖分析脑的三个切面之一，将脑分为上下部分。"
+    },
+    {
+      "name": "束",
+      "category": "概念",
+      "description": "中枢神经系统中的轴突束。"
+    },
+    {
+      "name": "神经",
+      "category": "概念",
+      "description": "周围神经系统中的轴突束。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "胶质细胞",
+      "target": "星形胶质细胞",
+      "type": "CONTAINS",
+      "evidence": "神经系统中四种主要胶质细胞是______、______、和。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "小胶质细胞",
+      "type": "CONTAINS",
+      "evidence": "神经系统中四种主要胶质细胞是______、______、和。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "少突胶质细胞",
+      "type": "CONTAINS",
+      "evidence": "神经系统中四种主要胶质细胞是______、______、和。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "施万细胞",
+      "type": "CONTAINS",
+      "evidence": "神经系统中四种主要胶质细胞是______、______、和。",
+      "confidence": 0.95
+    },
+    {
+      "source": "周围神经系统",
+      "target": "脑神经",
+      "type": "CONTAINS",
+      "evidence": "______神经是周围神经系统的一部分，直接从脑发出。",
+      "confidence": 0.95
+    },
+    {
+      "source": "周围神经系统",
+      "target": "交感神经系统",
+      "type": "CONTAINS",
+      "evidence": "周围神经系统中帮助身体放松和消化的部分是：副交感神经系统。",
+      "confidence": 0.9
+    },
+    {
+      "source": "周围神经系统",
+      "target": "副交感神经系统",
+      "type": "CONTAINS",
+      "evidence": "周围神经系统中帮助身体放松和消化的部分是：副交感神经系统。",
+      "confidence": 0.9
+    },
+    {
+      "source": "周围神经系统",
+      "target": "躯体神经系统",
+      "type": "CONTAINS",
+      "evidence": "周围神经系统中帮助身体放松和消化的部分是：副交感神经系统。",
+      "confidence": 0.9
+    },
+    {
+      "source": "大脑皮层",
+      "target": "额叶",
+      "type": "CONTAINS",
+      "evidence": "皮层哪个叶对决策和问题解决最重要？额叶。",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "颞叶",
+      "type": "CONTAINS",
+      "evidence": "皮层哪个叶对语言、记忆和听觉重要？颞叶。",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "顶叶",
+      "type": "CONTAINS",
+      "evidence": "皮层哪个叶对决策和问题解决最重要？额叶。",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "枕叶",
+      "type": "CONTAINS",
+      "evidence": "______叶对视觉最重要。枕叶。",
+      "confidence": 0.95
+    },
+    {
+      "source": "端脑",
+      "target": "皮层下核团",
+      "type": "CONTAINS",
+      "evidence": "大脑皮层下方、属于端脑的一组专门脑区称为______。皮层下核团。",
+      "confidence": 0.95
+    },
+    {
+      "source": "脑干",
+      "target": "中脑",
+      "type": "CONTAINS",
+      "evidence": "对运动控制重要的脑区位于：脑干。",
+      "confidence": 0.8
+    },
+    {
+      "source": "脑干",
+      "target": "菱脑",
+      "type": "CONTAINS",
+      "evidence": "对运动控制重要的脑区位于：脑干。",
+      "confidence": 0.8
+    },
+    {
+      "source": "脑脊液",
+      "target": "脑室系统",
+      "type": "RELATED_TO",
+      "evidence": "脑脊液：单向流过脑室，进入中央管和蛛网膜下腔。",
+      "confidence": 0.9
+    },
+    {
+      "source": "脑脊液",
+      "target": "蛛网膜下腔",
+      "type": "RELATED_TO",
+      "evidence": "脑脊液：单向流过脑室，进入中央管和蛛网膜下腔。",
+      "confidence": 0.9
+    },
+    {
+      "source": "束",
+      "target": "中枢神经系统",
+      "type": "RELATED_TO",
+      "evidence": "中枢神经系统中的轴突束称为______，周围神经系统中的轴突束称为______。",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经",
+      "target": "周围神经系统",
+      "type": "RELATED_TO",
+      "evidence": "中枢神经系统中的轴突束称为______，周围神经系统中的轴突束称为______。",
+      "confidence": 0.9
+    }
+  ]
+}

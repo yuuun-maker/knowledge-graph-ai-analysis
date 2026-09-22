@@ -1,0 +1,530 @@
+{
+  "entities": [
+    {
+      "name": "矢量",
+      "category": "概念",
+      "description": "既有大小又有方向的物理量，如重力加速度。"
+    },
+    {
+      "name": "标量",
+      "category": "概念",
+      "description": "只有大小没有方向的物理量，如身高、海拔、年龄等。"
+    },
+    {
+      "name": "位移",
+      "category": "概念",
+      "description": "从起点到终点的有向线段，是矢量。"
+    },
+    {
+      "name": "路程",
+      "category": "概念",
+      "description": "物体运动轨迹的总长度，是标量。"
+    },
+    {
+      "name": "矢量加法",
+      "category": "方法",
+      "description": "求两个或多个矢量合矢量的运算，包括图形法和解析法。"
+    },
+    {
+      "name": "矢量减法",
+      "category": "方法",
+      "description": "求两个矢量之差的运算，等价于加上相反矢量。"
+    },
+    {
+      "name": "矢量分量",
+      "category": "概念",
+      "description": "矢量在坐标轴上的投影，用于解析法计算。"
+    },
+    {
+      "name": "抛体运动",
+      "category": "概念",
+      "description": "物体在重力作用下，初速度与水平方向成一定角度的运动。"
+    },
+    {
+      "name": "射程",
+      "category": "公式",
+      "description": "抛体在水平地面上运动时，从发射点到落点的水平距离。"
+    },
+    {
+      "name": "速度的合成",
+      "category": "方法",
+      "description": "将不同参考系中的速度矢量相加，得到合速度的方法。"
+    },
+    {
+      "name": "参考系",
+      "category": "概念",
+      "description": "描述物体运动时选作参考的物体或坐标系。"
+    },
+    {
+      "name": "相对速度",
+      "category": "概念",
+      "description": "一个物体相对于另一个物体的速度，等于两物体速度的矢量差。"
+    },
+    {
+      "name": "重力加速度",
+      "category": "概念",
+      "description": "物体仅受重力作用时的加速度，方向竖直向下，大小约为9.8 m/s²。"
+    },
+    {
+      "name": "平行四边形定则",
+      "category": "方法",
+      "description": "矢量加法的图形法则，以两矢量为邻边作平行四边形，对角线表示合矢量。"
+    },
+    {
+      "name": "三角形定则",
+      "category": "方法",
+      "description": "矢量加法的图形法则，将两矢量首尾相接，从起点到终点的矢量表示合矢量。"
+    },
+    {
+      "name": "解析法",
+      "category": "方法",
+      "description": "通过将矢量分解为分量，利用代数运算求合矢量的方法。"
+    },
+    {
+      "name": "图形法",
+      "category": "方法",
+      "description": "通过作图求矢量合矢量的方法，包括平行四边形定则和三角形定则。"
+    },
+    {
+      "name": "速度",
+      "category": "概念",
+      "description": "描述物体运动快慢和方向的物理量，是矢量。"
+    },
+    {
+      "name": "加速度",
+      "category": "概念",
+      "description": "描述速度变化快慢的物理量，是矢量。"
+    },
+    {
+      "name": "轨迹",
+      "category": "概念",
+      "description": "物体运动过程中经过的路径。"
+    },
+    {
+      "name": "抛物线",
+      "category": "概念",
+      "description": "抛体运动的轨迹形状，在忽略空气阻力时。"
+    },
+    {
+      "name": "初速度",
+      "category": "概念",
+      "description": "物体开始运动时的速度。"
+    },
+    {
+      "name": "水平分量",
+      "category": "概念",
+      "description": "矢量在水平方向上的投影。"
+    },
+    {
+      "name": "竖直分量",
+      "category": "概念",
+      "description": "矢量在竖直方向上的投影。"
+    },
+    {
+      "name": "合矢量",
+      "category": "概念",
+      "description": "多个矢量相加后得到的总矢量。"
+    },
+    {
+      "name": "矢量分解",
+      "category": "方法",
+      "description": "将一个矢量分解为两个或多个分矢量的过程。"
+    },
+    {
+      "name": "矢量运算",
+      "category": "方法",
+      "description": "对矢量进行加法、减法、分解等运算的统称。"
+    },
+    {
+      "name": "位移分量",
+      "category": "概念",
+      "description": "位移矢量在坐标轴上的投影。"
+    },
+    {
+      "name": "速度矢量",
+      "category": "概念",
+      "description": "表示速度大小和方向的矢量。"
+    },
+    {
+      "name": "加速度矢量",
+      "category": "概念",
+      "description": "表示加速度大小和方向的矢量。"
+    },
+    {
+      "name": "相对运动",
+      "category": "概念",
+      "description": "物体相对于不同参考系的运动。"
+    },
+    {
+      "name": "参考系变换",
+      "category": "方法",
+      "description": "在不同参考系之间转换速度和位移的方法。"
+    },
+    {
+      "name": "伽利略变换",
+      "category": "方法",
+      "description": "经典力学中不同惯性参考系之间的速度变换关系。"
+    },
+    {
+      "name": "平抛运动",
+      "category": "概念",
+      "description": "初速度水平、仅受重力作用的抛体运动，竖直方向为自由落体。"
+    },
+    {
+      "name": "自由落体运动",
+      "category": "概念",
+      "description": "初速度为零、仅受重力作用的竖直下落运动，加速度为重力加速度。"
+    },
+    {
+      "name": "最大高度",
+      "category": "公式",
+      "description": "抛体运动能达到的竖直最高点，公式为 h = (v₀ sinθ)² / (2g)。"
+    },
+    {
+      "name": "飞行时间",
+      "category": "公式",
+      "description": "抛体运动从抛出到落回同一高度所需的时间，公式为 t = 2v₀ sinθ / g。"
+    },
+    {
+      "name": "抛体运动方程",
+      "category": "公式",
+      "description": "描述抛体运动轨迹的方程 y = x tanθ - gx²/(2v₀² cos²θ)，轨迹为抛物线。"
+    },
+    {
+      "name": "图解法",
+      "category": "方法",
+      "description": "通过作图求矢量合成或位移的方法，精度受绘图和测量误差影响。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "矢量加法",
+      "target": "平行四边形定则",
+      "type": "CONTAINS",
+      "evidence": "矢量加法的图形法则，以两矢量为邻边作平行四边形，对角线表示合矢量。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量加法",
+      "target": "三角形定则",
+      "type": "CONTAINS",
+      "evidence": "矢量加法的图形法则，将两矢量首尾相接，从起点到终点的矢量表示合矢量。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量加法",
+      "target": "解析法",
+      "type": "CONTAINS",
+      "evidence": "通过将矢量分解为分量，利用代数运算求合矢量的方法。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量加法",
+      "target": "图形法",
+      "type": "CONTAINS",
+      "evidence": "通过作图求矢量合矢量的方法，包括平行四边形定则和三角形定则。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量分解",
+      "target": "矢量分量",
+      "type": "CONTAINS",
+      "evidence": "矢量在坐标轴上的投影，用于解析法计算。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "射程",
+      "type": "CONTAINS",
+      "evidence": "抛体在水平地面上运动时，从发射点到落点的水平距离。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "轨迹",
+      "type": "CONTAINS",
+      "evidence": "物体运动过程中经过的路径。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "抛物线",
+      "type": "CONTAINS",
+      "evidence": "抛体运动的轨迹形状，在忽略空气阻力时。",
+      "confidence": 0.9
+    },
+    {
+      "source": "速度的合成",
+      "target": "相对速度",
+      "type": "CONTAINS",
+      "evidence": "一个物体相对于另一个物体的速度，等于两物体速度的矢量差。",
+      "confidence": 0.9
+    },
+    {
+      "source": "速度的合成",
+      "target": "参考系变换",
+      "type": "CONTAINS",
+      "evidence": "在不同参考系之间转换速度和位移的方法。",
+      "confidence": 0.9
+    },
+    {
+      "source": "参考系变换",
+      "target": "伽利略变换",
+      "type": "CONTAINS",
+      "evidence": "经典力学中不同惯性参考系之间的速度变换关系。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量",
+      "target": "位移",
+      "type": "CONTAINS",
+      "evidence": "从起点到终点的有向线段，是矢量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量",
+      "target": "速度",
+      "type": "CONTAINS",
+      "evidence": "描述物体运动快慢和方向的物理量，是矢量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量",
+      "target": "加速度",
+      "type": "CONTAINS",
+      "evidence": "描述速度变化快慢的物理量，是矢量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量",
+      "target": "重力加速度",
+      "type": "CONTAINS",
+      "evidence": "重力加速度是矢量，因为它有大小和方向。",
+      "confidence": 0.9
+    },
+    {
+      "source": "标量",
+      "target": "路程",
+      "type": "CONTAINS",
+      "evidence": "物体运动轨迹的总长度，是标量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量运算",
+      "target": "矢量加法",
+      "type": "CONTAINS",
+      "evidence": "对矢量进行加法、减法、分解等运算的统称。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量运算",
+      "target": "矢量减法",
+      "type": "CONTAINS",
+      "evidence": "对矢量进行加法、减法、分解等运算的统称。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量运算",
+      "target": "矢量分解",
+      "type": "CONTAINS",
+      "evidence": "对矢量进行加法、减法、分解等运算的统称。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量加法",
+      "target": "矢量减法",
+      "type": "RELATED_TO",
+      "evidence": "矢量减法等价于加上相反矢量，与矢量加法密切相关。",
+      "confidence": 0.8
+    },
+    {
+      "source": "矢量加法",
+      "target": "矢量分解",
+      "type": "RELATED_TO",
+      "evidence": "解析法通过将矢量分解为分量，利用代数运算求合矢量。",
+      "confidence": 0.8
+    },
+    {
+      "source": "抛体运动",
+      "target": "重力加速度",
+      "type": "RELATED_TO",
+      "evidence": "抛体运动是物体在重力作用下的运动，重力加速度是其关键参数。",
+      "confidence": 0.8
+    },
+    {
+      "source": "抛体运动",
+      "target": "初速度",
+      "type": "RELATED_TO",
+      "evidence": "抛体运动的初速度决定其轨迹和射程。",
+      "confidence": 0.8
+    },
+    {
+      "source": "抛体运动",
+      "target": "水平分量",
+      "type": "RELATED_TO",
+      "evidence": "抛体运动的速度可分解为水平分量和竖直分量。",
+      "confidence": 0.8
+    },
+    {
+      "source": "抛体运动",
+      "target": "竖直分量",
+      "type": "RELATED_TO",
+      "evidence": "抛体运动的速度可分解为水平分量和竖直分量。",
+      "confidence": 0.8
+    },
+    {
+      "source": "速度的合成",
+      "target": "相对运动",
+      "type": "RELATED_TO",
+      "evidence": "速度的合成用于分析相对运动。",
+      "confidence": 0.8
+    },
+    {
+      "source": "参考系",
+      "target": "相对运动",
+      "type": "RELATED_TO",
+      "evidence": "相对运动是物体相对于不同参考系的运动。",
+      "confidence": 0.8
+    },
+    {
+      "source": "参考系",
+      "target": "相对速度",
+      "type": "RELATED_TO",
+      "evidence": "相对速度是一个物体相对于另一个物体的速度，与参考系选择有关。",
+      "confidence": 0.8
+    },
+    {
+      "source": "矢量加法",
+      "target": "合矢量",
+      "type": "RELATED_TO",
+      "evidence": "矢量加法用于求合矢量。",
+      "confidence": 0.8
+    },
+    {
+      "source": "矢量分解",
+      "target": "位移分量",
+      "type": "RELATED_TO",
+      "evidence": "位移分量是位移矢量在坐标轴上的投影，通过矢量分解得到。",
+      "confidence": 0.8
+    },
+    {
+      "source": "速度矢量",
+      "target": "速度",
+      "type": "RELATED_TO",
+      "evidence": "速度矢量是表示速度大小和方向的矢量。",
+      "confidence": 0.8
+    },
+    {
+      "source": "加速度矢量",
+      "target": "加速度",
+      "type": "RELATED_TO",
+      "evidence": "加速度矢量是表示加速度大小和方向的矢量。",
+      "confidence": 0.8
+    },
+    {
+      "source": "矢量",
+      "target": "标量",
+      "type": "RELATED_TO",
+      "evidence": "标量只有大小没有方向，矢量既有大小又有方向。",
+      "confidence": 0.9
+    },
+    {
+      "source": "矢量加法",
+      "target": "矢量",
+      "type": "APPLIES_TO",
+      "evidence": "速度的合成遵循矢量加法法则：两个速度矢量相加时，合速度的大小和方向由平行四边形定则或三角形定则确定。",
+      "confidence": 0.95
+    },
+    {
+      "source": "矢量分解",
+      "target": "矢量",
+      "type": "APPLIES_TO",
+      "evidence": "将各段位移分解为x、y分量，求和后得总位移。",
+      "confidence": 0.9
+    },
+    {
+      "source": "解析法",
+      "target": "矢量分解",
+      "type": "APPLIES_TO",
+      "evidence": "位移大小和方向需用解析法：将各段位移分解为x、y分量，求和后得总位移。",
+      "confidence": 0.9
+    },
+    {
+      "source": "图解法",
+      "target": "矢量加法",
+      "type": "APPLIES_TO",
+      "evidence": "解析法比图解法更精确，因为避免了测量和绘图误差。",
+      "confidence": 0.8
+    },
+    {
+      "source": "抛体运动",
+      "target": "平抛运动",
+      "type": "CONTAINS",
+      "evidence": "水平弹出的硬币做平抛运动，竖直方向自由落体。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "自由落体运动",
+      "type": "CONTAINS",
+      "evidence": "水平弹出的硬币做平抛运动，竖直方向自由落体。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "射程",
+      "type": "RELATED_TO",
+      "evidence": "由 R = v² sin 2θ / g，sin 2θ = Rg/v²。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "最大高度",
+      "type": "RELATED_TO",
+      "evidence": "最大高度 h = v_y²/(2g) = 12²/(2×9.80) = 7.35 m。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "飞行时间",
+      "type": "RELATED_TO",
+      "evidence": "空中时间 t = 2v_y/g = 2×12/9.80 = 2.45 s。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抛体运动",
+      "target": "抛体运动方程",
+      "type": "RELATED_TO",
+      "evidence": "由抛体运动方程 y=x tanθ - gx²/(2v₀² cos²θ)。",
+      "confidence": 0.9
+    },
+    {
+      "source": "相对速度",
+      "target": "矢量加法",
+      "type": "APPLIES_TO",
+      "evidence": "鱼相对水的速度等于鹰速与鱼下落末速度的矢量和。",
+      "confidence": 0.9
+    },
+    {
+      "source": "相对速度",
+      "target": "参考系",
+      "type": "RELATED_TO",
+      "evidence": "在慢跑者参考系中，帽子从后脑勺掉落后，相对于慢跑者向后下方运动。",
+      "confidence": 0.9
+    },
+    {
+      "source": "位移",
+      "target": "矢量加法",
+      "type": "APPLIES_TO",
+      "evidence": "总位移为两段飞行位移的矢量和。",
+      "confidence": 0.9
+    },
+    {
+      "source": "速度",
+      "target": "矢量加法",
+      "type": "APPLIES_TO",
+      "evidence": "速度的合成遵循矢量加法法则。",
+      "confidence": 0.95
+    }
+  ]
+}

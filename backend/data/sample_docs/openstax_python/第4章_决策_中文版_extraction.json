@@ -1,0 +1,182 @@
+{
+  "entities": [
+    {
+      "name": "布尔值",
+      "category": "概念",
+      "description": "表示真或假二元值的数据类型，只有 True 和 False 两个值。"
+    },
+    {
+      "name": "bool() 函数",
+      "category": "方法",
+      "description": "将值转换为布尔值 True 或 False 的内置函数。"
+    },
+    {
+      "name": "比较运算符",
+      "category": "概念",
+      "description": "用于比较两个值并返回布尔结果的运算符，包括 ==、!=、>、<、>=、<=。"
+    },
+    {
+      "name": "if 语句",
+      "category": "概念",
+      "description": "一种决策结构，包含条件和语句体，条件为真时执行语句体。"
+    },
+    {
+      "name": "if-else 语句",
+      "category": "概念",
+      "description": "扩展的决策结构，条件为真时执行 if 分支，否则执行 else 分支。"
+    },
+    {
+      "name": "逻辑运算符",
+      "category": "概念",
+      "description": "接受条件操作数并产生布尔结果的运算符，包括 and、or、not。"
+    },
+    {
+      "name": "and 运算符",
+      "category": "概念",
+      "description": "逻辑与运算符，两个操作数都为真时返回 True，否则返回 False。"
+    },
+    {
+      "name": "or 运算符",
+      "category": "概念",
+      "description": "逻辑或运算符，任一操作数为真时返回 True，两个都为假时返回 False。"
+    },
+    {
+      "name": "not 运算符",
+      "category": "概念",
+      "description": "逻辑非运算符，对操作数取反，真变假，假变真。"
+    },
+    {
+      "name": "运算符优先级",
+      "category": "概念",
+      "description": "决定表达式中多个运算符求值顺序的规则，优先级高的先执行。"
+    },
+    {
+      "name": "结合性",
+      "category": "概念",
+      "description": "当相邻运算符优先级相同时决定求值顺序的规则，大多数运算符左结合，幂运算右结合。"
+    },
+    {
+      "name": "括号",
+      "category": "概念",
+      "description": "用于强制改变运算顺序并提高表达式清晰度的符号。"
+    },
+    {
+      "name": "链式决策",
+      "category": "概念",
+      "description": "使用 if-elif 或 if-elif-else 语句依次检查多个条件的决策结构。"
+    },
+    {
+      "name": "elif 语句",
+      "category": "概念",
+      "description": "链式决策中的分支语句，当前面条件为假时检查其条件。"
+    },
+    {
+      "name": "if-elif-else 语句",
+      "category": "概念",
+      "description": "包含 if、一个或多个 elif 以及可选 else 的完整链式决策语句。"
+    },
+    {
+      "name": "嵌套决策",
+      "category": "概念",
+      "description": "将一个决策语句放置在另一个决策语句内部的决策结构，通过缩进表示层次。"
+    },
+    {
+      "name": "条件表达式",
+      "category": "概念",
+      "description": "if-else 语句的简化单行版本，格式为 expression_if_true if condition else expression_if_false。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "布尔值",
+      "target": "bool() 函数",
+      "type": "RELATED_TO",
+      "evidence": "bool() 将值转换为布尔值 True 或 False。",
+      "confidence": 0.9
+    },
+    {
+      "source": "比较运算符",
+      "target": "布尔值",
+      "type": "RELATED_TO",
+      "evidence": "比较运算符用于比较值，结果是真或假。",
+      "confidence": 0.9
+    },
+    {
+      "source": "if 语句",
+      "target": "布尔值",
+      "type": "RELATED_TO",
+      "evidence": "条件是求值为真或假的表达式。if 语句是一种决策结构，包含条件和语句体。",
+      "confidence": 0.9
+    },
+    {
+      "source": "if-else 语句",
+      "target": "if 语句",
+      "type": "CONTAINS",
+      "evidence": "else 语句与 if 语句一起使用，包含一组语句，当 if 语句的条件为假时执行。",
+      "confidence": 0.95
+    },
+    {
+      "source": "逻辑运算符",
+      "target": "and 运算符",
+      "type": "CONTAINS",
+      "evidence": "Python 有三个逻辑运算符：and、or 和 not。",
+      "confidence": 0.95
+    },
+    {
+      "source": "逻辑运算符",
+      "target": "or 运算符",
+      "type": "CONTAINS",
+      "evidence": "Python 有三个逻辑运算符：and、or 和 not。",
+      "confidence": 0.95
+    },
+    {
+      "source": "逻辑运算符",
+      "target": "not 运算符",
+      "type": "CONTAINS",
+      "evidence": "Python 有三个逻辑运算符：and、or 和 not。",
+      "confidence": 0.95
+    },
+    {
+      "source": "运算符优先级",
+      "target": "结合性",
+      "type": "RELATED_TO",
+      "evidence": "如果相邻的运算符具有相同的优先级级别呢？结合性决定优先级相同时的运算顺序。",
+      "confidence": 0.9
+    },
+    {
+      "source": "运算符优先级",
+      "target": "括号",
+      "type": "RELATED_TO",
+      "evidence": "括号不仅断言不同的运算顺序，还减少混淆。",
+      "confidence": 0.9
+    },
+    {
+      "source": "链式决策",
+      "target": "elif 语句",
+      "type": "CONTAINS",
+      "evidence": "用 elif 链接决策语句允许程序员检查多个条件。",
+      "confidence": 0.95
+    },
+    {
+      "source": "if-elif-else 语句",
+      "target": "链式决策",
+      "type": "CONTAINS",
+      "evidence": "elif 可以与 if-else 语句链接，创建更复杂的决策语句。",
+      "confidence": 0.9
+    },
+    {
+      "source": "嵌套决策",
+      "target": "if-else 语句",
+      "type": "CONTAINS",
+      "evidence": "嵌套允许决策语句位于另一个决策语句内部，通过缩进级别表示。",
+      "confidence": 0.9
+    },
+    {
+      "source": "条件表达式",
+      "target": "if-else 语句",
+      "type": "RELATED_TO",
+      "evidence": "条件表达式（也称为“三元运算符”）是 if-else 语句的简化单行版本。",
+      "confidence": 0.95
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+{
+  "entities": [
+    {
+      "name": "道尔顿原子理论",
+      "category": "概念",
+      "description": "关于原子是物质基本单位、原子在化学变化中不可创造或毁灭、同一元素原子性质相同等公设的理论体系。"
+    },
+    {
+      "name": "质量守恒定律",
+      "category": "概念",
+      "description": "化学反应中物质总质量保持不变，物质既不能被创造也不能被销毁。"
+    },
+    {
+      "name": "定比定律",
+      "category": "概念",
+      "description": "给定化合物中各种元素的质量比总是固定的。"
+    },
+    {
+      "name": "倍比定律",
+      "category": "概念",
+      "description": "当两种元素形成多种化合物时，与固定质量的一种元素化合的另一种元素的质量成简单整数比。"
+    },
+    {
+      "name": "同位素",
+      "category": "概念",
+      "description": "同一元素的不同原子，质子数相同但中子数不同，因而质量数不同。"
+    },
+    {
+      "name": "电子",
+      "category": "概念",
+      "description": "带负电的亚原子粒子，质量约为9.109×10^-31 kg，存在于原子核外。"
+    },
+    {
+      "name": "质子",
+      "category": "概念",
+      "description": "带正电的亚原子粒子，质量约为1.673×10^-27 kg，存在于原子核内。"
+    },
+    {
+      "name": "中子",
+      "category": "概念",
+      "description": "不带电的亚原子粒子，质量与质子大致相同，存在于原子核内。"
+    },
+    {
+      "name": "汤姆森葡萄干布丁模型",
+      "category": "概念",
+      "description": "原子模型之一，认为正电荷均匀分布在整个原子中，电子嵌入其中。"
+    },
+    {
+      "name": "卢瑟福原子模型",
+      "category": "概念",
+      "description": "原子模型之一，认为原子有一个小的、带正电的原子核，电子在核外空间运动。"
+    },
+    {
+      "name": "α粒子散射",
+      "category": "概念",
+      "description": "α粒子射向原子时发生偏转的现象，用于检验原子模型。"
+    },
+    {
+      "name": "原子序数",
+      "category": "概念",
+      "description": "原子核中质子的数目，决定元素的种类。"
+    },
+    {
+      "name": "质量数",
+      "category": "概念",
+      "description": "原子核中质子数和中子数的总和。"
+    },
+    {
+      "name": "离子符号",
+      "category": "概念",
+      "description": "表示离子所带电荷和原子组成的符号，如Cs+、I−等。"
+    },
+    {
+      "name": "平均原子质量",
+      "category": "概念",
+      "description": "元素各天然同位素质量的加权平均值，根据丰度计算。"
+    },
+    {
+      "name": "分子式",
+      "category": "概念",
+      "description": "用元素符号和下标表示分子中原子种类和数目的化学式。"
+    },
+    {
+      "name": "实验式",
+      "category": "概念",
+      "description": "用元素符号表示化合物中各元素原子最简单整数比的化学式。"
+    },
+    {
+      "name": "结构异构体",
+      "category": "概念",
+      "description": "具有相同分子式但不同原子连接顺序或结构的化合物。"
+    },
+    {
+      "name": "元素周期表",
+      "category": "概念",
+      "description": "按原子序数排列元素并体现周期性规律的表格。"
+    },
+    {
+      "name": "金属",
+      "category": "概念",
+      "description": "具有金属光泽、导电导热性等特性的元素。"
+    },
+    {
+      "name": "非金属",
+      "category": "概念",
+      "description": "通常不具有金属特性的元素。"
+    },
+    {
+      "name": "主族元素",
+      "category": "概念",
+      "description": "周期表中s区和p区的元素，也称代表性元素。"
+    },
+    {
+      "name": "过渡金属",
+      "category": "概念",
+      "description": "周期表中d区的金属元素。"
+    },
+    {
+      "name": "内过渡金属",
+      "category": "概念",
+      "description": "周期表中f区的金属元素，包括镧系和锕系。"
+    },
+    {
+      "name": "碱金属",
+      "category": "概念",
+      "description": "第1族元素（除氢外），包括锂、钠、钾等。"
+    },
+    {
+      "name": "碱土金属",
+      "category": "概念",
+      "description": "第2族元素，包括铍、镁、钙等。"
+    },
+    {
+      "name": "卤素",
+      "category": "概念",
+      "description": "第17族元素，包括氟、氯、溴、碘等。"
+    },
+    {
+      "name": "稀有气体",
+      "category": "概念",
+      "description": "第18族元素，包括氦、氖、氩等，化学性质稳定。"
+    },
+    {
+      "name": "氧族元素",
+      "category": "概念",
+      "description": "第16族元素，包括氧、硫、硒等。"
+    },
+    {
+      "name": "离子化合物",
+      "category": "概念",
+      "description": "由离子键结合形成的化合物，通常由金属和非金属组成。"
+    },
+    {
+      "name": "共价化合物",
+      "category": "概念",
+      "description": "由共价键结合形成的化合物，通常由非金属元素组成。"
+    },
+    {
+      "name": "化学命名法",
+      "category": "概念",
+      "description": "根据IUPAC规则对化合物进行系统命名的规则体系。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "道尔顿原子理论",
+      "target": "质量守恒定律",
+      "type": "RELATED_TO",
+      "evidence": "道尔顿理论的公设是：在化学反应中，物质既不能被创造也不能被销毁。这与质量守恒定律一致",
+      "confidence": 0.95
+    },
+    {
+      "source": "道尔顿原子理论",
+      "target": "定比定律",
+      "type": "RELATED_TO",
+      "evidence": "这个陈述违反了道尔顿的第四条公设：在给定化合物中，每种类型的原子数（因此百分比）总是具有相同的比例。",
+      "confidence": 0.9
+    },
+    {
+      "source": "道尔顿原子理论",
+      "target": "倍比定律",
+      "type": "RELATED_TO",
+      "evidence": "这些数据提供了倍比定律的例子。",
+      "confidence": 0.9
+    },
+    {
+      "source": "道尔顿原子理论",
+      "target": "同位素",
+      "type": "RELATED_TO",
+      "evidence": "同位素的存在违反了道尔顿原子理论的一个原始观点。",
+      "confidence": 0.9
+    },
+    {
+      "source": "汤姆森葡萄干布丁模型",
+      "target": "α粒子散射",
+      "type": "APPLIES_TO",
+      "evidence": "预测射向具有汤姆森葡萄干布丁模型结构的原子的α粒子所走的路径。",
+      "confidence": 0.9
+    },
+    {
+      "source": "卢瑟福原子模型",
+      "target": "α粒子散射",
+      "type": "APPLIES_TO",
+      "evidence": "预测射向具有卢瑟福原子模型结构的原子的α粒子所走的路径。",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "金属",
+      "type": "CONTAINS",
+      "evidence": "使用元素周期表，把以下各元素分类为金属或非金属",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "非金属",
+      "type": "CONTAINS",
+      "evidence": "使用元素周期表，把以下各元素分类为金属或非金属",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "主族元素",
+      "type": "CONTAINS",
+      "evidence": "进一步分类为主族（代表性）元素、过渡金属或内过渡金属",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "过渡金属",
+      "type": "CONTAINS",
+      "evidence": "进一步分类为主族（代表性）元素、过渡金属或内过渡金属",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "内过渡金属",
+      "type": "CONTAINS",
+      "evidence": "进一步分类为主族（代表性）元素、过渡金属或内过渡金属",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "碱金属",
+      "type": "CONTAINS",
+      "evidence": "识别以下各族中最轻的成员：(c) 碱金属",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "碱土金属",
+      "type": "CONTAINS",
+      "evidence": "识别以下各族中最轻的成员：(b) 碱土金属",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "卤素",
+      "type": "CONTAINS",
+      "evidence": "与锂同周期的卤素",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "稀有气体",
+      "type": "CONTAINS",
+      "evidence": "识别以下各族中最轻的成员：(a) 稀有气体",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "氧族元素",
+      "type": "CONTAINS",
+      "evidence": "识别以下各族中最轻的成员：(d) 氧族元素",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子化合物",
+      "target": "化学命名法",
+      "type": "RELATED_TO",
+      "evidence": "命名以下化合物：... 写出以下化合物的化学式",
+      "confidence": 0.8
+    },
+    {
+      "source": "共价化合物",
+      "target": "化学命名法",
+      "type": "RELATED_TO",
+      "evidence": "命名以下化合物：... 写出以下化合物的化学式",
+      "confidence": 0.8
+    },
+    {
+      "source": "分子式",
+      "target": "实验式",
+      "type": "RELATED_TO",
+      "evidence": "写出以下化合物的分子式和实验式",
+      "confidence": 0.9
+    },
+    {
+      "source": "结构异构体",
+      "target": "分子式",
+      "type": "RELATED_TO",
+      "evidence": "这些分子具有相同的化学组成（原子的类型和数目）但不同的化学结构。它们是结构异构体。",
+      "confidence": 0.9
+    }
+  ]
+}

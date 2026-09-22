@@ -1,0 +1,905 @@
+{
+  "entities": [
+    {
+      "name": "神经元",
+      "category": "概念",
+      "description": "神经系统的基本细胞，高度特化用于通过电信号和化学信号进行通信。"
+    },
+    {
+      "name": "胶质细胞",
+      "category": "概念",
+      "description": "神经系统中的非神经元细胞，支持神经元功能，包括星形胶质细胞、小胶质细胞、少突胶质细胞和施万细胞。"
+    },
+    {
+      "name": "真核细胞",
+      "category": "概念",
+      "description": "具有膜结合细胞器的细胞，脑细胞包括神经元和胶质细胞都属于真核细胞。"
+    },
+    {
+      "name": "中心法则",
+      "category": "概念",
+      "description": "遗传信息从DNA转录为RNA，再翻译为蛋白质的普遍过程。"
+    },
+    {
+      "name": "细胞器",
+      "category": "概念",
+      "description": "真核细胞中执行特定功能的膜结合结构，如细胞核、内质网、高尔基体、溶酶体、线粒体等。"
+    },
+    {
+      "name": "树突",
+      "category": "概念",
+      "description": "神经元细胞体伸出的分支结构，专门在突触处接收信息并传递到细胞体。"
+    },
+    {
+      "name": "轴突",
+      "category": "概念",
+      "description": "神经元细胞体伸出的单个分支，专门用于发送信息。"
+    },
+    {
+      "name": "突触",
+      "category": "概念",
+      "description": "神经元与伙伴细胞通信的区域，包括突触间隙，分为化学突触和电突触。"
+    },
+    {
+      "name": "星形胶质细胞",
+      "category": "概念",
+      "description": "成人脑中最丰富的胶质细胞，维持血脑屏障，提供代谢和结构支持，调节神经元功能。"
+    },
+    {
+      "name": "小胶质细胞",
+      "category": "概念",
+      "description": "神经系统中承担免疫角色的胶质细胞，清除入侵者、受损神经元和未使用的突触。"
+    },
+    {
+      "name": "少突胶质细胞",
+      "category": "概念",
+      "description": "中枢神经系统的髓鞘形成细胞，为多个神经元提供髓鞘。"
+    },
+    {
+      "name": "施万细胞",
+      "category": "概念",
+      "description": "周围神经系统的主要胶质细胞，功能与少突胶质细胞相似，为一个神经元的轴突提供髓鞘。"
+    },
+    {
+      "name": "髓鞘",
+      "category": "概念",
+      "description": "包裹轴突的绝缘层，由脂质和蛋白质组成，帮助快速有效发送信号。"
+    },
+    {
+      "name": "血脑屏障",
+      "category": "概念",
+      "description": "过滤进入大脑的化学物质和病原体的结构，由星形胶质细胞维持。"
+    },
+    {
+      "name": "中枢神经系统",
+      "category": "概念",
+      "description": "由脑和脊髓组成的神经系统部分。"
+    },
+    {
+      "name": "周围神经系统",
+      "category": "概念",
+      "description": "包括脊髓和脑外的所有神经和神经节。"
+    },
+    {
+      "name": "灰质",
+      "category": "概念",
+      "description": "含有高浓度神经元细胞体、树突和无髓轴突的脑组织，位于脑最外层和脊髓中央。"
+    },
+    {
+      "name": "白质",
+      "category": "概念",
+      "description": "由覆盖髓鞘的轴突纤维组成的脑组织，位于脑深部并在脊髓中包围灰质。"
+    },
+    {
+      "name": "脑膜",
+      "category": "概念",
+      "description": "覆盖中枢神经系统的三层缓冲组织：硬脑膜、蛛网膜和软脑膜。"
+    },
+    {
+      "name": "脑室",
+      "category": "概念",
+      "description": "脑和脊髓中相互连接的腔，含脑脊液，缓冲脑并允许物质交换。"
+    },
+    {
+      "name": "脑脊液",
+      "category": "概念",
+      "description": "由脉络丛产生的清澈液体，填充脑室系统并循环于脑和脊髓。"
+    },
+    {
+      "name": "神经回路",
+      "category": "概念",
+      "description": "通过突触连接的一组神经元，处理特定类型信息。"
+    },
+    {
+      "name": "反射弧",
+      "category": "概念",
+      "description": "控制反射的简单神经元回路，始于感觉神经元，终于运动神经元。"
+    },
+    {
+      "name": "高尔基染色",
+      "category": "方法",
+      "description": "可视化死后组织中神经元的方法，只有少数随机细胞被染色并突出显示。"
+    },
+    {
+      "name": "免疫荧光",
+      "category": "方法",
+      "description": "使用针对感兴趣蛋白的抗体和荧光标签，定位和可视化特定蛋白质的技术。"
+    },
+    {
+      "name": "GFP标记",
+      "category": "方法",
+      "description": "使用绿色荧光蛋白标记细胞、细胞器和特定蛋白质的技术。"
+    },
+    {
+      "name": "BRAINBOW",
+      "category": "方法",
+      "description": "通过遗传机制在单个神经元中随机混合颜色，允许可视化整个神经回路的技术。"
+    },
+    {
+      "name": "传入神经元",
+      "category": "概念",
+      "description": "将身体内部和外部环境信息带到脑或脊髓的神经元。"
+    },
+    {
+      "name": "传出神经元",
+      "category": "概念",
+      "description": "将信息从其他神经元带离脑/脊髓或特定回路的神经元。"
+    },
+    {
+      "name": "中间神经元",
+      "category": "概念",
+      "description": "位于CNS，作为其他神经元之间的桥梁，进行回路内连接的局部回路神经元。"
+    },
+    {
+      "name": "膝跳反射",
+      "category": "概念",
+      "description": "允许腿对膝盖下方肌腱轻敲产生不自主运动的简单人类回路，是兴奋性和抑制性反射通路的例子。"
+    },
+    {
+      "name": "解剖方向术语",
+      "category": "概念",
+      "description": "用于描述神经系统解剖结构和方向的特定术语，如背侧、腹侧、前、后等。"
+    },
+    {
+      "name": "神经轴",
+      "category": "概念",
+      "description": "神经系统的轴线，其弯曲导致背/腹和上/下方向分离。"
+    },
+    {
+      "name": "冠状切面",
+      "category": "概念",
+      "description": "脑解剖分析的一个切面，前后切。"
+    },
+    {
+      "name": "矢状切面",
+      "category": "概念",
+      "description": "脑解剖分析的一个切面，左右切。"
+    },
+    {
+      "name": "水平切面",
+      "category": "概念",
+      "description": "脑解剖分析的一个切面，上下切，也称轴切面。"
+    },
+    {
+      "name": "神经发育",
+      "category": "概念",
+      "description": "脊椎动物神经系统胚胎发育的复杂多步骤过程，始于外胚层。"
+    },
+    {
+      "name": "外胚层",
+      "category": "概念",
+      "description": "胚胎外层，脊椎动物神经系统胚胎发育的起点。"
+    },
+    {
+      "name": "神经板",
+      "category": "概念",
+      "description": "约3周时外胚层增厚形成的扁平结构。"
+    },
+    {
+      "name": "神经管",
+      "category": "概念",
+      "description": "神经板内陷成沟并最终闭合形成的管状结构，由一层细胞组成，作为胶质细胞和神经元的祖细胞。"
+    },
+    {
+      "name": "前脑",
+      "category": "概念",
+      "description": "神经管前部区域扩大形成的三个膨大之一，最终细分为端脑和间脑。"
+    },
+    {
+      "name": "中脑",
+      "category": "概念",
+      "description": "神经管发育过程中形成的三个膨大之一，不再细分，形成顶盖和被盖。"
+    },
+    {
+      "name": "后脑",
+      "category": "概念",
+      "description": "神经管发育过程中形成的三个膨大之一，成为小脑和脑桥。"
+    },
+    {
+      "name": "末脑",
+      "category": "概念",
+      "description": "后脑分支之一，成为延髓。"
+    },
+    {
+      "name": "端脑",
+      "category": "概念",
+      "description": "前脑细分的一部分，成为大脑半球，占脑总质量约85%。"
+    },
+    {
+      "name": "间脑",
+      "category": "概念",
+      "description": "前脑细分的一部分，最终成为丘脑、下丘脑和垂体后叶。"
+    },
+    {
+      "name": "脊髓",
+      "category": "概念",
+      "description": "从神经管形成，完全发育后保持管状，从脑干延髓向下延伸，由三层脑膜包裹。"
+    },
+    {
+      "name": "脊神经",
+      "category": "概念",
+      "description": "从脊髓发出的31对神经，通过椎骨开口，服务身体两侧。"
+    },
+    {
+      "name": "背根",
+      "category": "概念",
+      "description": "含从身体投射到脊髓的感觉神经元，其细胞体在背根神经节。"
+    },
+    {
+      "name": "腹根",
+      "category": "概念",
+      "description": "含离开脊髓投射到肌肉的运动神经元。"
+    },
+    {
+      "name": "上行通路",
+      "category": "概念",
+      "description": "感觉信息通过上行通路从感觉受体到脑处理中心。"
+    },
+    {
+      "name": "下行通路",
+      "category": "概念",
+      "description": "运动信息通过下行通路从专门CNS中心到骨骼肌。"
+    },
+    {
+      "name": "大脑",
+      "category": "概念",
+      "description": "端脑成为大脑，脑最大部分，分为两个半球，约占脑总体积四分之三。"
+    },
+    {
+      "name": "大脑皮层",
+      "category": "概念",
+      "description": "大脑最外层，有皱褶且薄，平均约2.5毫米，承载大多数高级脑功能和复杂认知。"
+    },
+    {
+      "name": "胼胝体",
+      "category": "概念",
+      "description": "连接左右大脑半球的厚纤维束，允许信息从一侧传到另一侧。"
+    },
+    {
+      "name": "脑回",
+      "category": "概念",
+      "description": "大脑皮层折叠导致的脊状突起。"
+    },
+    {
+      "name": "脑沟",
+      "category": "概念",
+      "description": "大脑皮层折叠导致的沟。"
+    },
+    {
+      "name": "纵裂",
+      "category": "概念",
+      "description": "分开两个大脑半球的深沟。"
+    },
+    {
+      "name": "额叶",
+      "category": "概念",
+      "description": "最大叶，包含前运动和运动区，帮助计划和执行全身运动，前额叶皮层对人格、高级认知和决策至关重要。"
+    },
+    {
+      "name": "顶叶",
+      "category": "概念",
+      "description": "对躯体感觉整合重要，体感皮层位于顶叶前部，参与本体感觉。"
+    },
+    {
+      "name": "枕叶",
+      "category": "概念",
+      "description": "位于顶叶后下方，主要功能是视觉处理，包含初级视觉皮层。"
+    },
+    {
+      "name": "颞叶",
+      "category": "概念",
+      "description": "第二大叶，对语言、记忆、听觉和面孔知觉关键。"
+    },
+    {
+      "name": "中央沟",
+      "category": "概念",
+      "description": "分开额叶和顶叶的沟。"
+    },
+    {
+      "name": "外侧沟",
+      "category": "概念",
+      "description": "即Sylvian裂，将颞叶与其他叶分开。"
+    },
+    {
+      "name": "边缘系统",
+      "category": "概念",
+      "description": "围绕脑干并位于大脑皮层下的结构集合，参与情绪、攻击、食欲和性行为。"
+    },
+    {
+      "name": "海马",
+      "category": "概念",
+      "description": "边缘系统的一部分，与记忆相关，特别是形成长期记忆的能力。"
+    },
+    {
+      "name": "杏仁核",
+      "category": "概念",
+      "description": "边缘系统的一部分，对恐惧情绪和恐惧记忆特别重要。"
+    },
+    {
+      "name": "扣带回",
+      "category": "概念",
+      "description": "皮层一部分，位于胼胝体上方，对情绪和认知功能非常重要。"
+    },
+    {
+      "name": "基底神经节",
+      "category": "概念",
+      "description": "一组结构，在受控和协调运动中起重要作用，包括启动和促进运动，同时抑制不想要运动。"
+    },
+    {
+      "name": "丘脑",
+      "category": "概念",
+      "description": "椭圆形结构，由两个对称部分组成，是感觉 relay 站和大脑皮层进出门户。"
+    },
+    {
+      "name": "下丘脑",
+      "category": "概念",
+      "description": "位于丘脑腹侧，负责调节激素和维持稳态机制，如体温和血糖。"
+    },
+    {
+      "name": "脑干",
+      "category": "概念",
+      "description": "连接大脑与脊髓，也连接小脑，由中脑和后脑组成。"
+    },
+    {
+      "name": "脑桥",
+      "category": "概念",
+      "description": "位于延髓上方，含许多束和核团，连接小脑和延髓，调节睡眠和呼吸等基本身体功能。"
+    },
+    {
+      "name": "延髓",
+      "category": "概念",
+      "description": "源自末脑，控制呼吸、心率和血压等生命功能，含许多核团及脊髓上下行束。"
+    },
+    {
+      "name": "小脑",
+      "category": "概念",
+      "description": "起源于后脑，功能为运动协调和某些简单学习，对平衡和精细运动控制必要。"
+    },
+    {
+      "name": "迷走神经",
+      "category": "概念",
+      "description": "第10对脑神经，是副交感系统主要成分，提供连接脑与颈、肺、心、肠的感觉和运动回路。"
+    },
+    {
+      "name": "布罗卡区",
+      "category": "概念",
+      "description": "左半球特定区域，与言语产生和发音相关。"
+    },
+    {
+      "name": "韦尼克区",
+      "category": "概念",
+      "description": "左半球特定区域，与语言理解相关。"
+    },
+    {
+      "name": "脑成像技术",
+      "category": "概念",
+      "description": "帮助神经科学家和医学专业人员可视化人脑结构和功能的技术，如PET、CT、MRI、fMRI。"
+    },
+    {
+      "name": "脑神经",
+      "category": "概念",
+      "description": "通过颅骨孔和管离开的神经，大多数控制头颈，携带视觉、嗅觉和味觉信息，参与听觉和平衡。"
+    },
+    {
+      "name": "神经节",
+      "category": "概念",
+      "description": "PNS中神经细胞体组织成的结构，作为信息 relay 点，分感觉神经节和自主神经节。"
+    },
+    {
+      "name": "躯体神经系统",
+      "category": "概念",
+      "description": "PNS的一部分，主要功能是控制随意肌，由感觉和运动神经组成。"
+    },
+    {
+      "name": "自主神经系统",
+      "category": "概念",
+      "description": "PNS的一部分，控制通常不随意过程，如呼吸和心跳，主要控制内脏器官、心肌和平滑肌和腺体。"
+    },
+    {
+      "name": "交感神经系统",
+      "category": "概念",
+      "description": "自主神经系统的一部分，是战斗或逃跑反应基础，负责许多与高唤醒相关功能。"
+    },
+    {
+      "name": "副交感神经系统",
+      "category": "概念",
+      "description": "自主神经系统的一部分，与交感相反，帮助身体放松和消化。"
+    },
+    {
+      "name": "肠神经系统",
+      "category": "概念",
+      "description": "神经元网状系统，通过支配消化道协调胃肠功能，不完全由CNS控制，但通过脑-肠轴连接。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "神经元",
+      "target": "真核细胞",
+      "type": "CONTAINS",
+      "evidence": "脑细胞，包括神经元和胶质细胞，也遵循上述特征，基本上只是真核细胞。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "真核细胞",
+      "type": "CONTAINS",
+      "evidence": "脑细胞，包括神经元和胶质细胞，也遵循上述特征，基本上只是真核细胞。",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经元",
+      "target": "树突",
+      "type": "CONTAINS",
+      "evidence": "树突是从大多数神经元细胞体伸出的分支/突起。",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经元",
+      "target": "轴突",
+      "type": "CONTAINS",
+      "evidence": "一个神经元可以有数千个树突，但只有一个轴突。",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经元",
+      "target": "突触",
+      "type": "CONTAINS",
+      "evidence": "神经元在称为突触的区域与伙伴通信。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "星形胶质细胞",
+      "type": "CONTAINS",
+      "evidence": "下面讨论主要胶质细胞类型：星形胶质细胞、小胶质细胞、少突胶质细胞和施万细胞。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "小胶质细胞",
+      "type": "CONTAINS",
+      "evidence": "下面讨论主要胶质细胞类型：星形胶质细胞、小胶质细胞、少突胶质细胞和施万细胞。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "少突胶质细胞",
+      "type": "CONTAINS",
+      "evidence": "下面讨论主要胶质细胞类型：星形胶质细胞、小胶质细胞、少突胶质细胞和施万细胞。",
+      "confidence": 0.95
+    },
+    {
+      "source": "胶质细胞",
+      "target": "施万细胞",
+      "type": "CONTAINS",
+      "evidence": "下面讨论主要胶质细胞类型：星形胶质细胞、小胶质细胞、少突胶质细胞和施万细胞。",
+      "confidence": 0.95
+    },
+    {
+      "source": "中枢神经系统",
+      "target": "灰质",
+      "type": "CONTAINS",
+      "evidence": "灰质位于脑最外层和脊髓中央。",
+      "confidence": 0.9
+    },
+    {
+      "source": "中枢神经系统",
+      "target": "白质",
+      "type": "CONTAINS",
+      "evidence": "白质位于脑深部组织，并在脊髓中包围灰质。",
+      "confidence": 0.9
+    },
+    {
+      "source": "中枢神经系统",
+      "target": "脑膜",
+      "type": "CONTAINS",
+      "evidence": "CNS被骨覆盖。颅骨包裹脑，脊髓 housed 在33块小骨组成的椎骨中。在骨和CNS神经组织之间，有称为脑膜的缓冲组织层。",
+      "confidence": 0.9
+    },
+    {
+      "source": "中枢神经系统",
+      "target": "脑室",
+      "type": "CONTAINS",
+      "evidence": "脑室是脑和脊髓中相互连接的腔或开放空间，含脑脊液。",
+      "confidence": 0.9
+    },
+    {
+      "source": "脑室",
+      "target": "脑脊液",
+      "type": "CONTAINS",
+      "evidence": "脑室是脑和脊髓中相互连接的腔或开放空间，含脑脊液。",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经回路",
+      "target": "反射弧",
+      "type": "CONTAINS",
+      "evidence": "反射弧是控制反射的简单神经元回路。",
+      "confidence": 0.95
+    },
+    {
+      "source": "星形胶质细胞",
+      "target": "血脑屏障",
+      "type": "RELATED_TO",
+      "evidence": "星形胶质细胞有许多功能，例如维持血脑屏障。",
+      "confidence": 0.9
+    },
+    {
+      "source": "少突胶质细胞",
+      "target": "髓鞘",
+      "type": "RELATED_TO",
+      "evidence": "少突胶质细胞是中枢神经系统的髓鞘形成细胞。",
+      "confidence": 0.9
+    },
+    {
+      "source": "施万细胞",
+      "target": "髓鞘",
+      "type": "RELATED_TO",
+      "evidence": "施万细胞是周围神经系统的主要胶质细胞，功能与少突胶质细胞相似。",
+      "confidence": 0.9
+    },
+    {
+      "source": "高尔基染色",
+      "target": "神经元",
+      "type": "APPLIES_TO",
+      "evidence": "高尔基染色首先由Camillo Golgi发现，作为可视化死后组织中神经元的方法。",
+      "confidence": 0.95
+    },
+    {
+      "source": "BRAINBOW",
+      "target": "神经回路",
+      "type": "APPLIES_TO",
+      "evidence": "这一过程产生Brainbow，其中每个单个神经元因不同色调而突出。",
+      "confidence": 0.9
+    },
+    {
+      "source": "反射弧",
+      "target": "膝跳反射",
+      "type": "CONTAINS",
+      "evidence": "另一个简单人类回路例子是膝跳反射",
+      "confidence": 0.9
+    },
+    {
+      "source": "中枢神经系统",
+      "target": "脊髓",
+      "type": "CONTAINS",
+      "evidence": "中枢神经系统由脑和脊髓组成",
+      "confidence": 0.95
+    },
+    {
+      "source": "中枢神经系统",
+      "target": "大脑",
+      "type": "CONTAINS",
+      "evidence": "中枢神经系统由脑和脊髓组成",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经发育",
+      "target": "外胚层",
+      "type": "PRECEDES",
+      "evidence": "脊椎动物神经系统胚胎发育始于胚胎外层，称为外胚层",
+      "confidence": 0.9
+    },
+    {
+      "source": "外胚层",
+      "target": "神经板",
+      "type": "PRECEDES",
+      "evidence": "约3周时，外胚层开始增厚形成扁平结构，称为神经板",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经板",
+      "target": "神经管",
+      "type": "PRECEDES",
+      "evidence": "第3和第4周，神经板内陷成沟，最终闭合形成神经管",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经管",
+      "target": "脊髓",
+      "type": "PRECEDES",
+      "evidence": "神经管延长形成脊髓",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经管",
+      "target": "前脑",
+      "type": "PRECEDES",
+      "evidence": "前部区域扩大形成脑。最终出现三个膨大，成为前脑、中脑和后脑",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经管",
+      "target": "中脑",
+      "type": "PRECEDES",
+      "evidence": "前部区域扩大形成脑。最终出现三个膨大，成为前脑、中脑和后脑",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经管",
+      "target": "后脑",
+      "type": "PRECEDES",
+      "evidence": "前部区域扩大形成脑。最终出现三个膨大，成为前脑、中脑和后脑",
+      "confidence": 0.9
+    },
+    {
+      "source": "前脑",
+      "target": "端脑",
+      "type": "CONTAINS",
+      "evidence": "前脑细分为端脑和间脑",
+      "confidence": 0.95
+    },
+    {
+      "source": "前脑",
+      "target": "间脑",
+      "type": "CONTAINS",
+      "evidence": "前脑细分为端脑和间脑",
+      "confidence": 0.95
+    },
+    {
+      "source": "后脑",
+      "target": "末脑",
+      "type": "CONTAINS",
+      "evidence": "后脑成为末脑和后脑",
+      "confidence": 0.9
+    },
+    {
+      "source": "端脑",
+      "target": "大脑",
+      "type": "PRECEDES",
+      "evidence": "端脑成为大脑",
+      "confidence": 0.9
+    },
+    {
+      "source": "间脑",
+      "target": "丘脑",
+      "type": "CONTAINS",
+      "evidence": "最终成为丘脑、下丘脑和垂体后叶",
+      "confidence": 0.95
+    },
+    {
+      "source": "间脑",
+      "target": "下丘脑",
+      "type": "CONTAINS",
+      "evidence": "最终成为丘脑、下丘脑和垂体后叶",
+      "confidence": 0.95
+    },
+    {
+      "source": "后脑",
+      "target": "小脑",
+      "type": "CONTAINS",
+      "evidence": "后脑，成为小脑和脑桥",
+      "confidence": 0.95
+    },
+    {
+      "source": "后脑",
+      "target": "脑桥",
+      "type": "CONTAINS",
+      "evidence": "后脑，成为小脑和脑桥",
+      "confidence": 0.95
+    },
+    {
+      "source": "末脑",
+      "target": "延髓",
+      "type": "CONTAINS",
+      "evidence": "末脑，成为延髓",
+      "confidence": 0.95
+    },
+    {
+      "source": "脊髓",
+      "target": "灰质",
+      "type": "CONTAINS",
+      "evidence": "脊髓横截面中心含灰质",
+      "confidence": 0.95
+    },
+    {
+      "source": "脊髓",
+      "target": "白质",
+      "type": "CONTAINS",
+      "evidence": "白质在外",
+      "confidence": 0.95
+    },
+    {
+      "source": "脊髓",
+      "target": "背根",
+      "type": "CONTAINS",
+      "evidence": "背根含从身体投射到脊髓的感觉神经元",
+      "confidence": 0.9
+    },
+    {
+      "source": "脊髓",
+      "target": "腹根",
+      "type": "CONTAINS",
+      "evidence": "腹根含离开脊髓投射到肌肉的运动神经元",
+      "confidence": 0.9
+    },
+    {
+      "source": "白质",
+      "target": "上行通路",
+      "type": "CONTAINS",
+      "evidence": "上行和下行束组成白质",
+      "confidence": 0.95
+    },
+    {
+      "source": "白质",
+      "target": "下行通路",
+      "type": "CONTAINS",
+      "evidence": "上行和下行束组成白质",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑",
+      "target": "大脑皮层",
+      "type": "CONTAINS",
+      "evidence": "大脑包括大脑皮层和大脑核团",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑",
+      "target": "胼胝体",
+      "type": "CONTAINS",
+      "evidence": "左右大脑半球由厚纤维束胼胝体连接",
+      "confidence": 0.9
+    },
+    {
+      "source": "大脑皮层",
+      "target": "脑回",
+      "type": "CONTAINS",
+      "evidence": "折叠导致脊状突起称为脑回",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "脑沟",
+      "type": "CONTAINS",
+      "evidence": "沟称为脑沟",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "额叶",
+      "type": "CONTAINS",
+      "evidence": "每个半球皮层分为四叶：额叶、颞叶、顶叶和枕叶",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "顶叶",
+      "type": "CONTAINS",
+      "evidence": "每个半球皮层分为四叶：额叶、颞叶、顶叶和枕叶",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "枕叶",
+      "type": "CONTAINS",
+      "evidence": "每个半球皮层分为四叶：额叶、颞叶、顶叶和枕叶",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "颞叶",
+      "type": "CONTAINS",
+      "evidence": "每个半球皮层分为四叶：额叶、颞叶、顶叶和枕叶",
+      "confidence": 0.95
+    },
+    {
+      "source": "边缘系统",
+      "target": "海马",
+      "type": "CONTAINS",
+      "evidence": "一般同意包括海马、杏仁核和扣带回",
+      "confidence": 0.95
+    },
+    {
+      "source": "边缘系统",
+      "target": "杏仁核",
+      "type": "CONTAINS",
+      "evidence": "一般同意包括海马、杏仁核和扣带回",
+      "confidence": 0.95
+    },
+    {
+      "source": "边缘系统",
+      "target": "扣带回",
+      "type": "CONTAINS",
+      "evidence": "一般同意包括海马、杏仁核和扣带回",
+      "confidence": 0.95
+    },
+    {
+      "source": "脑干",
+      "target": "中脑",
+      "type": "CONTAINS",
+      "evidence": "由中脑和后脑组成",
+      "confidence": 0.95
+    },
+    {
+      "source": "脑干",
+      "target": "后脑",
+      "type": "CONTAINS",
+      "evidence": "由中脑和后脑组成",
+      "confidence": 0.95
+    },
+    {
+      "source": "后脑",
+      "target": "延髓",
+      "type": "CONTAINS",
+      "evidence": "后脑进一步分为脑桥和延髓",
+      "confidence": 0.95
+    },
+    {
+      "source": "周围神经系统",
+      "target": "脑神经",
+      "type": "CONTAINS",
+      "evidence": "脑神经通过颅骨孔和管离开",
+      "confidence": 0.9
+    },
+    {
+      "source": "周围神经系统",
+      "target": "脊神经",
+      "type": "CONTAINS",
+      "evidence": "脊神经从脊髓作为神经根发出",
+      "confidence": 0.9
+    },
+    {
+      "source": "周围神经系统",
+      "target": "神经节",
+      "type": "CONTAINS",
+      "evidence": "PNS中神经细胞体组织成神经节",
+      "confidence": 0.95
+    },
+    {
+      "source": "周围神经系统",
+      "target": "躯体神经系统",
+      "type": "CONTAINS",
+      "evidence": "PNS可分为躯体神经系统和自主神经系统",
+      "confidence": 0.95
+    },
+    {
+      "source": "周围神经系统",
+      "target": "自主神经系统",
+      "type": "CONTAINS",
+      "evidence": "PNS可分为躯体神经系统和自主神经系统",
+      "confidence": 0.95
+    },
+    {
+      "source": "自主神经系统",
+      "target": "交感神经系统",
+      "type": "CONTAINS",
+      "evidence": "ANS可进一步分为交感、副交感和肠系统",
+      "confidence": 0.95
+    },
+    {
+      "source": "自主神经系统",
+      "target": "副交感神经系统",
+      "type": "CONTAINS",
+      "evidence": "ANS可进一步分为交感、副交感和肠系统",
+      "confidence": 0.95
+    },
+    {
+      "source": "自主神经系统",
+      "target": "肠神经系统",
+      "type": "CONTAINS",
+      "evidence": "ANS可进一步分为交感、副交感和肠系统",
+      "confidence": 0.95
+    }
+  ]
+}

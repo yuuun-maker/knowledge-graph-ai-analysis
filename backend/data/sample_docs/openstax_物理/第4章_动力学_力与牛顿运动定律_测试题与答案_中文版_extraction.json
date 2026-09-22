@@ -1,0 +1,995 @@
+{
+  "entities": [
+    {
+      "name": "力",
+      "category": "概念",
+      "description": "物体之间的相互作用，能够改变物体的运动状态或使物体发生形变，是矢量。"
+    },
+    {
+      "name": "惯性",
+      "category": "概念",
+      "description": "物体保持其原有运动状态不变的性质，是物体固有属性。"
+    },
+    {
+      "name": "质量",
+      "category": "概念",
+      "description": "物体惯性大小的量度，也是物体所含物质的多少，是标量。"
+    },
+    {
+      "name": "重量",
+      "category": "概念",
+      "description": "物体所受重力的大小，等于质量与重力加速度的乘积，随位置变化。"
+    },
+    {
+      "name": "牛顿第一运动定律",
+      "category": "定理",
+      "description": "一切物体在没有受到外力作用时，总保持静止状态或匀速直线运动状态。"
+    },
+    {
+      "name": "牛顿第二运动定律",
+      "category": "定理",
+      "description": "物体加速度的大小与所受合外力成正比，与质量成反比，加速度方向与合外力方向相同。"
+    },
+    {
+      "name": "牛顿第三运动定律",
+      "category": "定理",
+      "description": "两个物体之间的作用力和反作用力总是大小相等、方向相反、作用在同一直线上。"
+    },
+    {
+      "name": "净外力",
+      "category": "概念",
+      "description": "作用在系统上的所有外力的矢量和，决定系统的加速度。"
+    },
+    {
+      "name": "系统",
+      "category": "概念",
+      "description": "为分析力学问题而选定的研究对象，可以是单个物体或多个物体的组合。"
+    },
+    {
+      "name": "受力图",
+      "category": "方法",
+      "description": "用带箭头的线段表示物体所受各力的大小、方向和作用点的示意图，是分析力学问题的工具。"
+    },
+    {
+      "name": "法向力",
+      "category": "概念",
+      "description": "两个物体接触面间垂直于接触面的力，通常由接触面提供，阻碍物体相互进入。"
+    },
+    {
+      "name": "张力",
+      "category": "概念",
+      "description": "绳子、钢丝等柔性介质内部由于拉伸而产生的力，方向沿介质方向。"
+    },
+    {
+      "name": "摩擦力",
+      "category": "概念",
+      "description": "两个相互接触的物体在相对运动或相对运动趋势时，在接触面上产生的阻碍相对运动的力。"
+    },
+    {
+      "name": "空气阻力",
+      "category": "概念",
+      "description": "物体在空气中运动时受到的阻碍运动的力，方向与运动方向相反。"
+    },
+    {
+      "name": "重力",
+      "category": "概念",
+      "description": "由于地球吸引而使物体受到的力，方向竖直向下，大小与质量成正比。"
+    },
+    {
+      "name": "四种基本力",
+      "category": "概念",
+      "description": "自然界中四种基本的相互作用：引力、电磁力、强核力和弱核力。"
+    },
+    {
+      "name": "引力",
+      "category": "概念",
+      "description": "任何两个物体之间存在的相互吸引力，是四种基本力中最弱的，但作用范围无限远。"
+    },
+    {
+      "name": "电磁力",
+      "category": "概念",
+      "description": "带电粒子之间的相互作用力，包括静电力和磁力，是四种基本力中第二强的。"
+    },
+    {
+      "name": "强核力",
+      "category": "概念",
+      "description": "将原子核中的质子和中子结合在一起的力，是四种基本力中最强的，但作用范围极短。"
+    },
+    {
+      "name": "弱核力",
+      "category": "概念",
+      "description": "导致放射性衰变（如β衰变）的力，作用范围极短，强度介于引力和电磁力之间。"
+    },
+    {
+      "name": "加速度",
+      "category": "概念",
+      "description": "速度的变化率，是矢量，方向与速度变化量方向相同。"
+    },
+    {
+      "name": "速度",
+      "category": "概念",
+      "description": "物体运动快慢和方向的物理量，是矢量。"
+    },
+    {
+      "name": "矢量",
+      "category": "概念",
+      "description": "既有大小又有方向，且遵循平行四边形定则的物理量。"
+    },
+    {
+      "name": "标量",
+      "category": "概念",
+      "description": "只有大小没有方向的物理量。"
+    },
+    {
+      "name": "力的合成",
+      "category": "方法",
+      "description": "求几个力的合力，遵循平行四边形定则或三角形定则。"
+    },
+    {
+      "name": "力的分解",
+      "category": "方法",
+      "description": "将一个力分解为几个分力，是力的合成的逆运算，同样遵循平行四边形定则。"
+    },
+    {
+      "name": "牛顿运动定律解题策略",
+      "category": "方法",
+      "description": "应用牛顿运动定律解题的一般步骤：确定系统、画受力图、选坐标系、列方程、求解。"
+    },
+    {
+      "name": "表观失重",
+      "category": "概念",
+      "description": "在加速参考系中，物体对支持物的压力小于其重力的现象，如自由落体或轨道飞行。"
+    },
+    {
+      "name": "加速参考系",
+      "category": "概念",
+      "description": "相对惯性系做加速运动的参考系，其中牛顿运动定律不直接成立，需引入惯性力。"
+    },
+    {
+      "name": "惯性力",
+      "category": "概念",
+      "description": "在非惯性系中，为使牛顿运动定律形式上成立而引入的假想力，没有施力物体。"
+    },
+    {
+      "name": "反冲",
+      "category": "概念",
+      "description": "系统在内力作用下，一部分向某方向运动，另一部分向相反方向运动的现象。"
+    },
+    {
+      "name": "牵引装置",
+      "category": "概念",
+      "description": "利用滑轮和绳子对骨折肢体施加拉力以进行复位的医疗装置。"
+    },
+    {
+      "name": "滑轮",
+      "category": "概念",
+      "description": "一种简单机械，可改变力的方向或大小，分为定滑轮和动滑轮。"
+    },
+    {
+      "name": "心冲击图仪",
+      "category": "概念",
+      "description": "一种通过测量心脏跳动引起的身体反冲来记录心脏活动的装置。"
+    },
+    {
+      "name": "无后坐力步枪",
+      "category": "概念",
+      "description": "一种两端开口的枪管，发射时部分气体向后喷出以抵消后坐力的步枪。"
+    },
+    {
+      "name": "火箭 sled",
+      "category": "概念",
+      "description": "一种用于测试加速度对人体影响的实验装置，由火箭推动在轨道上运动。"
+    },
+    {
+      "name": "β衰变",
+      "category": "概念",
+      "description": "原子核放射β粒子（电子或正电子）的衰变过程，由弱核力引起。"
+    },
+    {
+      "name": "核聚变",
+      "category": "概念",
+      "description": "轻原子核结合成较重原子核并释放能量的过程，需要克服电磁斥力。"
+    },
+    {
+      "name": "核裂变",
+      "category": "概念",
+      "description": "重原子核分裂成较轻原子核并释放能量的过程，由强核力和电磁力共同决定。"
+    },
+    {
+      "name": "内力",
+      "category": "概念",
+      "description": "系统内部各部分之间的相互作用力，成对出现且矢量和为零，不影响系统整体的加速度。"
+    },
+    {
+      "name": "自由落体",
+      "category": "概念",
+      "description": "物体只在重力作用下从静止开始下落的运动。"
+    },
+    {
+      "name": "匀速圆周运动",
+      "category": "概念",
+      "description": "物体沿圆周运动且速率保持不变的运动，净外力指向圆心。"
+    },
+    {
+      "name": "动滑轮",
+      "category": "概念",
+      "description": "滑轮的一种，可以改变力的大小和方向，用于增加拉力。"
+    },
+    {
+      "name": "系统内外的力",
+      "category": "概念",
+      "description": "选择不同系统时，一对作用力与反作用力可能一个在系统内、一个在系统外，影响系统质心运动。"
+    },
+    {
+      "name": "有效重力加速度",
+      "category": "概念",
+      "description": "在加速参考系中，表观重力加速度等于重力加速度减去加速度。"
+    },
+    {
+      "name": "失重",
+      "category": "概念",
+      "description": "物体对支持物的压力为零的现象，可因加速参考系或自由落体产生。"
+    },
+    {
+      "name": "粒子交换",
+      "category": "概念",
+      "description": "通过交换粒子产生吸引力的机制，如虚光子传递电磁力。"
+    },
+    {
+      "name": "牛顿运动定律",
+      "category": "定理",
+      "description": "描述力与运动状态变化关系的三条基本定律，是动力学分析的核心依据。"
+    },
+    {
+      "name": "受力分析图",
+      "category": "方法",
+      "description": "用图示方式标出物体所受全部外力，以便应用牛顿定律列方程求解。"
+    },
+    {
+      "name": "牛顿第二定律",
+      "category": "定理",
+      "description": "物体加速度与合外力成正比、与质量成反比，方向与合外力相同。"
+    },
+    {
+      "name": "牛顿第三定律",
+      "category": "定理",
+      "description": "两物体间的作用力与反作用力大小相等、方向相反、作用在同一直线上。"
+    },
+    {
+      "name": "支持力",
+      "category": "概念",
+      "description": "支承面垂直作用于物体的力，用于平衡垂直于接触面的其他力。"
+    },
+    {
+      "name": "合力",
+      "category": "概念",
+      "description": "多个力共同作用的效果等效于一个力，该力称为合力。"
+    },
+    {
+      "name": "矢量合成",
+      "category": "方法",
+      "description": "按平行四边形法则或三角形法则将多个矢量合成为一个矢量的方法。"
+    },
+    {
+      "name": "超重",
+      "category": "概念",
+      "description": "物体对支持物的压力或对悬挂物的拉力大于自身重力的现象。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "牛顿第一运动定律",
+      "target": "惯性",
+      "type": "RELATED_TO",
+      "evidence": "惯性和质量之间有什么关系？",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第一运动定律",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "惯性和质量之间有什么关系？",
+      "confidence": 0.8
+    },
+    {
+      "source": "质量",
+      "target": "惯性",
+      "type": "RELATED_TO",
+      "evidence": "惯性和质量之间有什么关系？",
+      "confidence": 0.9
+    },
+    {
+      "source": "重量",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "重量和质量之间有什么关系？哪一个是物体固有的、不变的属性？",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "净外力",
+      "type": "RELATED_TO",
+      "evidence": "为什么在应用牛顿第二运动定律时，我们可以忽略诸如将物体结合在一起的力？",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "系统",
+      "type": "RELATED_TO",
+      "evidence": "解释“所研究的系统”的选择如何影响应用牛顿第二运动定律时必须考虑哪些力。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "加速度",
+      "type": "RELATED_TO",
+      "evidence": "如果系统的加速度为零，是否没有外力作用在它上面？",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "反冲",
+      "type": "RELATED_TO",
+      "evidence": "为什么普通步枪射击时会反冲（向后踢）？",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "心冲击图仪",
+      "type": "RELATED_TO",
+      "evidence": "自20世纪40年代以来用于测量心脏跳动引起的身体冲击或反冲的装置是“心冲击图仪”。这里涉及什么物理原理来测量心脏收缩的力？",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "无后坐力步枪",
+      "type": "RELATED_TO",
+      "evidence": "描述当发射无后坐力步枪时牛顿第三定律如何适用。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "系统",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第三运动定律告诉我们，力总是以大小相等、方向相反的对出现。解释“所研究的系统”的选择如何影响这样一对力是否抵消。",
+      "confidence": 0.8
+    },
+    {
+      "source": "张力",
+      "target": "牵引装置",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.8
+    },
+    {
+      "source": "滑轮",
+      "target": "牵引装置",
+      "type": "RELATED_TO",
+      "evidence": "在骨折的牵引装置中，利用可用的滑轮和绳子，我们如何能够使用相同的重物来增加沿胫骨的力？",
+      "confidence": 0.8
+    },
+    {
+      "source": "表观失重",
+      "target": "加速参考系",
+      "type": "RELATED_TO",
+      "evidence": "为了模拟太空轨道中的表观失重状态，宇航员在一架以 向下加速的货机机舱中接受训练。为什么在这个加速参考系中，他们站在浴室秤上测量时会显得失重？",
+      "confidence": 0.8
+    },
+    {
+      "source": "四种基本力",
+      "target": "引力",
+      "type": "CONTAINS",
+      "evidence": "用四种基本力的性质来解释，为什么人们会注意到作用在身体上的重力，尽管它是一种相对较弱的力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "四种基本力",
+      "target": "电磁力",
+      "type": "CONTAINS",
+      "evidence": "用四种基本力的性质来解释，为什么人们会注意到作用在身体上的重力，尽管它是一种相对较弱的力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "四种基本力",
+      "target": "强核力",
+      "type": "CONTAINS",
+      "evidence": "用四种基本力的性质来解释，为什么人们会注意到作用在身体上的重力，尽管它是一种相对较弱的力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "四种基本力",
+      "target": "弱核力",
+      "type": "CONTAINS",
+      "evidence": "用四种基本力的性质来解释，为什么人们会注意到作用在身体上的重力，尽管它是一种相对较弱的力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "弱核力",
+      "target": "β衰变",
+      "type": "RELATED_TO",
+      "evidence": "我们之所以有这样的了解，是因为弱核力是 β 衰变的原因，这是一种其他力无法解释的核衰变。",
+      "confidence": 0.9
+    },
+    {
+      "source": "强核力",
+      "target": "核聚变",
+      "type": "RELATED_TO",
+      "evidence": "这些事实将在本文后面用于解释核聚变和核裂变。",
+      "confidence": 0.7
+    },
+    {
+      "source": "强核力",
+      "target": "核裂变",
+      "type": "RELATED_TO",
+      "evidence": "这些事实将在本文后面用于解释核聚变和核裂变。",
+      "confidence": 0.7
+    },
+    {
+      "source": "电磁力",
+      "target": "核聚变",
+      "type": "RELATED_TO",
+      "evidence": "这些事实将在本文后面用于解释核聚变和核裂变。",
+      "confidence": 0.7
+    },
+    {
+      "source": "电磁力",
+      "target": "核裂变",
+      "type": "RELATED_TO",
+      "evidence": "这些事实将在本文后面用于解释核聚变和核裂变。",
+      "confidence": 0.7
+    },
+    {
+      "source": "力的合成",
+      "target": "矢量",
+      "type": "RELATED_TO",
+      "evidence": "求合力 的分力 和 的大小，如图4.34所示。可以用作图法或三角法完成。",
+      "confidence": 0.8
+    },
+    {
+      "source": "力的分解",
+      "target": "矢量",
+      "type": "RELATED_TO",
+      "evidence": "求合力 的分力 和 的大小，如图4.34所示。可以用作图法或三角法完成。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "受力图",
+      "type": "RELATED_TO",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤。对于此情景，画出受力图并写出净力方程。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "系统",
+      "type": "RELATED_TO",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤。对于此情景，画出受力图并写出净力方程。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "净外力",
+      "type": "RELATED_TO",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤。对于此情景，画出受力图并写出净力方程。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "牛顿第二运动定律",
+      "type": "RELATED_TO",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "牛顿第三运动定律",
+      "type": "RELATED_TO",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "牛顿第一运动定律",
+      "type": "RELATED_TO",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤。",
+      "confidence": 0.8
+    },
+    {
+      "source": "法向力",
+      "target": "摩擦力",
+      "type": "RELATED_TO",
+      "evidence": "如果阻碍运动的摩擦力为24 N，那么人对割草机施加的力（以牛顿为单位）是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "空气阻力",
+      "target": "摩擦力",
+      "type": "RELATED_TO",
+      "evidence": "空气阻力类似于空气摩擦。它总是阻碍物体的运动。",
+      "confidence": 0.9
+    },
+    {
+      "source": "重力",
+      "target": "重量",
+      "type": "RELATED_TO",
+      "evidence": "重量和质量之间有什么关系？哪一个是物体固有的、不变的属性？",
+      "confidence": 0.8
+    },
+    {
+      "source": "重力",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "重量和质量之间有什么关系？哪一个是物体固有的、不变的属性？",
+      "confidence": 0.8
+    },
+    {
+      "source": "重力",
+      "target": "加速度",
+      "type": "RELATED_TO",
+      "evidence": "计算一名70.0 kg的跳高运动员必须对地面施加多大的力，才能产生等于重力加速度4.00倍的向上加速度。",
+      "confidence": 0.8
+    },
+    {
+      "source": "重力",
+      "target": "表观失重",
+      "type": "RELATED_TO",
+      "evidence": "为了模拟太空轨道中的表观失重状态，宇航员在一架以 向下加速的货机机舱中接受训练。",
+      "confidence": 0.7
+    },
+    {
+      "source": "惯性力",
+      "target": "加速参考系",
+      "type": "RELATED_TO",
+      "evidence": "为什么在这个加速参考系中，他们站在浴室秤上测量时会显得失重？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "力的合成",
+      "type": "RELATED_TO",
+      "evidence": "求49.00 kg的雪橇和儿童系统的加速度。注意摩擦力的方向未指定；它将与 和 的合力方向相反。",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "力的分解",
+      "type": "RELATED_TO",
+      "evidence": "求49.00 kg的雪橇和儿童系统的加速度。注意摩擦力的方向未指定；它将与 和 的合力方向相反。",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "矢量",
+      "type": "RELATED_TO",
+      "evidence": "力具有哪些性质使我们能够将其归类为矢量？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "标量",
+      "type": "RELATED_TO",
+      "evidence": "力具有哪些性质使我们能够将其归类为矢量？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "火箭 sled",
+      "type": "RELATED_TO",
+      "evidence": "图4.32所示的火箭 sled 以 的速率加速。其乘客的质量为75.0 kg。(a) 计算座椅对身体施加力的水平分量。",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "牵引装置",
+      "type": "RELATED_TO",
+      "evidence": "在骨折的牵引装置中，利用可用的滑轮和绳子，我们如何能够使用相同的重物来增加沿胫骨的力？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "滑轮",
+      "type": "RELATED_TO",
+      "evidence": "在骨折的牵引装置中，利用可用的滑轮和绳子，我们如何能够使用相同的重物来增加沿胫骨的力？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "张力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "法向力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "摩擦力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "空气阻力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "重力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "重量",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "加速度",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "速度",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "矢量",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "标量",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "力的合成",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "力的分解",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "牛顿运动定律解题策略",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "表观失重",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "加速参考系",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "惯性力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "四种基本力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "引力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "电磁力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "强核力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "弱核力",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "β衰变",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "核聚变",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "核裂变",
+      "type": "RELATED_TO",
+      "evidence": "如果一条腿通过如图4.29所示的牵引装置悬挂，绳子中的张力是多少？",
+      "confidence": 0.7
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "与它的质量成反比",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "力",
+      "type": "RELATED_TO",
+      "evidence": "力总是以大小相等、方向相反的对出现",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "受力图",
+      "type": "CONTAINS",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤。对于此情景，画出受力图",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "牛顿第二运动定律",
+      "type": "APPLIES_TO",
+      "evidence": "明确展示你如何遵循牛顿运动定律解题策略中的步骤",
+      "confidence": 0.85
+    },
+    {
+      "source": "引力",
+      "target": "重量",
+      "type": "RELATED_TO",
+      "evidence": "重量和质量之间有什么关系？",
+      "confidence": 0.8
+    },
+    {
+      "source": "质量",
+      "target": "重量",
+      "type": "RELATED_TO",
+      "evidence": "重量和质量之间有什么关系？",
+      "confidence": 0.8
+    },
+    {
+      "source": "法向力",
+      "target": "受力图",
+      "type": "RELATED_TO",
+      "evidence": "画出受力图，包括作用在系统上的所有力",
+      "confidence": 0.7
+    },
+    {
+      "source": "张力",
+      "target": "受力图",
+      "type": "RELATED_TO",
+      "evidence": "画出受力图，包括作用在系统上的所有力",
+      "confidence": 0.7
+    },
+    {
+      "source": "摩擦力",
+      "target": "受力图",
+      "type": "RELATED_TO",
+      "evidence": "画出受力图，包括作用在系统上的所有力",
+      "confidence": 0.7
+    },
+    {
+      "source": "动滑轮",
+      "target": "牵引装置",
+      "type": "APPLIES_TO",
+      "evidence": "可以通过增加动滑轮来增加沿胫骨的力",
+      "confidence": 0.9
+    },
+    {
+      "source": "表观失重",
+      "target": "自由落体",
+      "type": "RELATED_TO",
+      "evidence": "在轨道中，失重是因为宇航员处于自由落体状态",
+      "confidence": 0.85
+    },
+    {
+      "source": "匀速圆周运动",
+      "target": "净外力",
+      "type": "RELATED_TO",
+      "evidence": "物体做匀速圆周运动时，净外力指向圆心，不为零",
+      "confidence": 0.9
+    },
+    {
+      "source": "有效重力加速度",
+      "target": "失重",
+      "type": "RELATED_TO",
+      "evidence": "有效重力加速度 g_eff = g - a = 0，宇航员对秤的压力为零，故显得失重。",
+      "confidence": 0.8
+    },
+    {
+      "source": "惯性",
+      "target": "失重",
+      "type": "RELATED_TO",
+      "evidence": "帽子由于惯性保持原有运动状态，若人未被绑在地板上，人也会因惯性继续向上运动，帽子相对于人不会飞落。",
+      "confidence": 0.7
+    },
+    {
+      "source": "重力",
+      "target": "失重",
+      "type": "RELATED_TO",
+      "evidence": "在轨道中，失重是因为宇航员处于自由落体状态，重力完全提供向心加速度。",
+      "confidence": 0.8
+    },
+    {
+      "source": "引力",
+      "target": "重力",
+      "type": "RELATED_TO",
+      "evidence": "重力虽然相对较弱，但它是长程力且总是吸引的，没有屏蔽效应。",
+      "confidence": 0.6
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第二定律",
+      "type": "CONTAINS",
+      "evidence": "使用牛顿定律，因为我们要找的是力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第三定律",
+      "type": "CONTAINS",
+      "evidence": "根据牛顿第三定律",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "受力分析图",
+      "type": "CONTAINS",
+      "evidence": "遵循牛顿运动定律解题策略：2. 画受力图",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "牛顿第二定律",
+      "type": "CONTAINS",
+      "evidence": "遵循牛顿运动定律解题策略：3. 应用牛顿第二定律",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿运动定律解题策略",
+      "target": "牛顿第三定律",
+      "type": "CONTAINS",
+      "evidence": "遵循牛顿运动定律解题策略：6. 根据牛顿第三定律",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿第二定律",
+      "target": "加速度",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第二定律：F - f = ma",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二定律",
+      "target": "合力",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第二定律：F - f = ma",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二定律",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第二定律：F - f = ma",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第三定律",
+      "target": "张力",
+      "type": "RELATED_TO",
+      "evidence": "根据牛顿第三定律，运动员对地面施加的力大小等于N",
+      "confidence": 0.8
+    },
+    {
+      "source": "矢量合成",
+      "target": "合力",
+      "type": "APPLIES_TO",
+      "evidence": "按平行四边形法则，交换F₁、F₂顺序，合力相同",
+      "confidence": 0.95
+    },
+    {
+      "source": "超重",
+      "target": "重量",
+      "type": "RELATED_TO",
+      "evidence": "秤的读数约为体重的2.53倍，人会感到极度超重",
+      "confidence": 0.9
+    },
+    {
+      "source": "失重",
+      "target": "重量",
+      "type": "RELATED_TO",
+      "evidence": "秤的读数约为体重的2.53倍，人会感到极度超重",
+      "confidence": 0.9
+    },
+    {
+      "source": "强核力",
+      "target": "电磁力",
+      "type": "RELATED_TO",
+      "evidence": "强核力强度与电磁力强度之比约为100",
+      "confidence": 0.9
+    },
+    {
+      "source": "引力",
+      "target": "强核力",
+      "type": "RELATED_TO",
+      "evidence": "引力强度与强核力强度之比约为10⁻³⁹",
+      "confidence": 0.9
+    },
+    {
+      "source": "引力",
+      "target": "弱核力",
+      "type": "RELATED_TO",
+      "evidence": "引力强度与弱核力强度之比约为10⁻³³",
+      "confidence": 0.9
+    },
+    {
+      "source": "引力",
+      "target": "电磁力",
+      "type": "RELATED_TO",
+      "evidence": "引力强度与电磁力强度之比约为10⁻³⁶",
+      "confidence": 0.9
+    }
+  ]
+}

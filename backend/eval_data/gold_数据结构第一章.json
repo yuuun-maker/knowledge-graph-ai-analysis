@@ -1,0 +1,67 @@
+[
+  {
+    "text_id": "数据结构第一章",
+    "source": "data/sample_docs/数据结构/数据结构第一章.txt",
+    "entities": [
+      {
+        "name": "线性表",
+        "category": "概念",
+        "description": ""
+      },
+      {
+        "name": "顺序表",
+        "category": "概念",
+        "description": ""
+      },
+      {
+        "name": "链表",
+        "category": "概念",
+        "description": ""
+      },
+      {
+        "name": "栈",
+        "category": "概念",
+        "description": ""
+      },
+      {
+        "name": "队列",
+        "category": "概念",
+        "description": ""
+      }
+    ],
+    "relations": [
+      {
+        "source": "线性表",
+        "target": "顺序表",
+        "type": "CONTAINS",
+        "evidence": "",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "线性表",
+        "target": "链表",
+        "type": "CONTAINS",
+        "evidence": "",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "线性表",
+        "target": "栈",
+        "type": "CONTAINS",
+        "evidence": "",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "线性表",
+        "target": "队列",
+        "type": "CONTAINS",
+        "evidence": "",
+        "confidence": 0.9,
+        "core": true
+      }
+    ]
+  }
+]

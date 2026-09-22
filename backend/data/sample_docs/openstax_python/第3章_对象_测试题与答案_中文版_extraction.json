@@ -1,0 +1,144 @@
+{
+  "entities": [
+    {
+      "name": "字符串索引",
+      "category": "概念",
+      "description": "通过位置编号访问字符串中单个字符的机制，索引从0开始，负数表示从末尾倒数。"
+    },
+    {
+      "name": "码点",
+      "category": "概念",
+      "description": "字符在Unicode编码中对应的整数值，如字母A的码点为65。"
+    },
+    {
+      "name": "ord函数",
+      "category": "方法",
+      "description": "返回单个字符的码点的内置函数。"
+    },
+    {
+      "name": "chr函数",
+      "category": "方法",
+      "description": "返回码点对应的字符的内置函数。"
+    },
+    {
+      "name": "转义序列",
+      "category": "概念",
+      "description": "以反斜杠开头的特殊字符序列，用于表示换行、制表符等不可打印字符。"
+    },
+    {
+      "name": "F-STRING",
+      "category": "概念",
+      "description": "Python中用于格式化字符串的字面量，以f或F为前缀，可在字符串中嵌入表达式。"
+    },
+    {
+      "name": "格式说明符",
+      "category": "概念",
+      "description": "在f-string中用于控制数值显示格式的语法，如指定小数位数、千位分隔符等。"
+    },
+    {
+      "name": "变量",
+      "category": "概念",
+      "description": "用于存储数据值的命名引用，可通过赋值语句创建和修改。"
+    },
+    {
+      "name": "赋值语句",
+      "category": "概念",
+      "description": "将值赋给变量的语句，使用等号操作符。"
+    },
+    {
+      "name": "id函数",
+      "category": "方法",
+      "description": "返回对象的唯一标识符（内存地址）的内置函数。"
+    },
+    {
+      "name": "type函数",
+      "category": "方法",
+      "description": "返回对象所属数据类型的内置函数。"
+    },
+    {
+      "name": "列表",
+      "category": "概念",
+      "description": "Python中可变的有序序列，用方括号定义，元素可修改。"
+    },
+    {
+      "name": "元组",
+      "category": "概念",
+      "description": "Python中不可变的有序序列，用圆括号定义，元素不可修改。"
+    },
+    {
+      "name": "列表索引",
+      "category": "概念",
+      "description": "通过位置编号访问列表中元素的操作，索引从0开始。"
+    },
+    {
+      "name": "元组索引",
+      "category": "概念",
+      "description": "通过位置编号访问元组中元素的操作，索引从0开始。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "ord函数",
+      "target": "码点",
+      "type": "APPLIES_TO",
+      "evidence": "ord(\"0\") 返回什么值？",
+      "confidence": 0.9
+    },
+    {
+      "source": "chr函数",
+      "target": "码点",
+      "type": "APPLIES_TO",
+      "evidence": "chr(126) 返回什么？",
+      "confidence": 0.9
+    },
+    {
+      "source": "格式说明符",
+      "target": "F-STRING",
+      "type": "CONTAINS",
+      "evidence": "哪个格式说明符将浮点数显示为带逗号分隔符并四舍五入到两位小数？",
+      "confidence": 0.9
+    },
+    {
+      "source": "赋值语句",
+      "target": "变量",
+      "type": "APPLIES_TO",
+      "evidence": "上面的动画中有多少个赋值语句？",
+      "confidence": 0.9
+    },
+    {
+      "source": "id函数",
+      "target": "变量",
+      "type": "APPLIES_TO",
+      "evidence": "id(rating) 可能返回哪个值？",
+      "confidence": 0.9
+    },
+    {
+      "source": "type函数",
+      "target": "变量",
+      "type": "APPLIES_TO",
+      "evidence": "type(rating) 可能返回哪个值？",
+      "confidence": 0.9
+    },
+    {
+      "source": "列表索引",
+      "target": "列表",
+      "type": "APPLIES_TO",
+      "evidence": "访问名为 cardList 的列表中第 17 个元素的正确方法是什么？",
+      "confidence": 0.9
+    },
+    {
+      "source": "元组索引",
+      "target": "元组",
+      "type": "APPLIES_TO",
+      "evidence": "哪个访问 tuple_1 的第一个元素？",
+      "confidence": 0.9
+    },
+    {
+      "source": "列表",
+      "target": "元组",
+      "type": "RELATED_TO",
+      "evidence": "程序员想要创建一组常量以便于参考，并且在程序中的任何地方都不能更改。哪种序列最合适？",
+      "confidence": 0.8
+    }
+  ]
+}

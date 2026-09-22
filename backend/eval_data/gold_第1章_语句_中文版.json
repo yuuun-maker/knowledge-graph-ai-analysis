@@ -1,0 +1,590 @@
+[
+  {
+    "text_id": "Python编程_第1章_语句",
+    "source": "data/sample_docs/openstax_python/第1章_语句_中文版.txt",
+    "entities": [
+      {
+        "name": "程序",
+        "category": "概念",
+        "description": "计算机可以运行的一系列指令，用于完成任务、创造技术和解决问题。"
+      },
+      {
+        "name": "语句",
+        "category": "概念",
+        "description": "程序中的一条指令，描述要执行的某个动作。"
+      },
+      {
+        "name": "Python语言",
+        "category": "概念",
+        "description": "一种简洁明了、适合日常任务并拥有丰富库生态的编程语言。"
+      },
+      {
+        "name": "函数",
+        "category": "概念",
+        "description": "命名的、可重用的代码块，在调用时执行特定任务。"
+      },
+      {
+        "name": "print()函数",
+        "category": "方法",
+        "description": "向用户显示程序输出的内置函数，可使用多个值以及sep、end选项定制输出。"
+      },
+      {
+        "name": "input()函数",
+        "category": "方法",
+        "description": "从用户读取一行输入的内置函数，可使用提示消息。"
+      },
+      {
+        "name": "提示",
+        "category": "概念",
+        "description": "表示程序正在等待用户输入的简短消息。"
+      },
+      {
+        "name": "变量",
+        "category": "概念",
+        "description": "用于通过名称引用计算机内存中值的名称。"
+      },
+      {
+        "name": "赋值语句",
+        "category": "概念",
+        "description": "使用赋值运算符把一个值赋给变量的语句。"
+      },
+      {
+        "name": "赋值运算符",
+        "category": "概念",
+        "description": "用于赋值或更新变量值的符号=。"
+      },
+      {
+        "name": "变量命名规则",
+        "category": "概念",
+        "description": "变量名可由字母、数字和下划线组成，不能以数字开头，大小写有区别，并应避免使用关键字。"
+      },
+      {
+        "name": "关键字",
+        "category": "概念",
+        "description": "Python中具有特殊功能的保留字，不能用作变量或其他对象的名称。"
+      },
+      {
+        "name": "字符串",
+        "category": "概念",
+        "description": "由匹配的单引号或双引号括起来的字符序列。"
+      },
+      {
+        "name": "len()函数",
+        "category": "方法",
+        "description": "作用于字符串值时返回字符串长度，即其中的字符数。"
+      },
+      {
+        "name": "连接",
+        "category": "方法",
+        "description": "使用连接运算符+按顺序组合两个或多个字符串的操作。"
+      },
+      {
+        "name": "连接运算符",
+        "category": "概念",
+        "description": "使用加号（+）把两个字符串内容追加并产生新字符串的运算符。"
+      },
+      {
+        "name": "数据类型",
+        "category": "概念",
+        "description": "编程语言用于表示数据的格式或类型。"
+      },
+      {
+        "name": "整数",
+        "category": "概念",
+        "description": "表示整数值的数值数据类型。"
+      },
+      {
+        "name": "浮点数",
+        "category": "概念",
+        "description": "表示小数值的数值数据类型。"
+      },
+      {
+        "name": "算术运算",
+        "category": "概念",
+        "description": "对数字进行加、减、乘、除等数学运算的过程。"
+      },
+      {
+        "name": "算术运算符",
+        "category": "概念",
+        "description": "用于执行加法、减法、乘法和除法等数学运算的运算符。"
+      },
+      {
+        "name": "运算符优先级",
+        "category": "概念",
+        "description": "决定一个算术表达式中不同运算符求值顺序的规则。"
+      },
+      {
+        "name": "错误信息",
+        "category": "概念",
+        "description": "Python发生错误时显示的报告，包含错误行号、错误类型和额外细节。"
+      },
+      {
+        "name": "Traceback",
+        "category": "概念",
+        "description": "Python对错误位置和错误类型进行报告的信息，可帮助程序员回溯代码寻找问题。"
+      },
+      {
+        "name": "语法错误",
+        "category": "概念",
+        "description": "代码不符合Python语法规则时发生的错误。"
+      },
+      {
+        "name": "名称错误",
+        "category": "概念",
+        "description": "使用了未定义名称时发生的错误，例如拼写错误的变量名或函数名。"
+      },
+      {
+        "name": "缩进错误",
+        "category": "概念",
+        "description": "代码缩进不正确时发生的错误。"
+      },
+      {
+        "name": "注释",
+        "category": "概念",
+        "description": "以井号字符#开头、用于解释代码的文本，运行时从#到行末的内容会被忽略。"
+      },
+      {
+        "name": "docstring",
+        "category": "概念",
+        "description": "用于记录程序目的或用法的字符串，通常写成多行字符串，并可用于生成官方文档。"
+      },
+      {
+        "name": "代码质量",
+        "category": "概念",
+        "description": "代码的可读性和可理解程度，本章强调通过空行、合理注释等方式提高代码质量。"
+      },
+      {
+        "name": "库",
+        "category": "概念",
+        "description": "可以在其他程序中使用的代码集合，用于完成实际工作。"
+      },
+      {
+        "name": "标准库",
+        "category": "概念",
+        "description": "Python自带的广泛代码库，用于解决日常计算问题，例如从文件提取数据和创建摘要报告。"
+      },
+      {
+        "name": "Python语法",
+        "category": "概念",
+        "description": "定义Python代码必须如何组织以及关键字、符号和格式如何使用的规则。"
+      },
+      {
+        "name": "ABC语言",
+        "category": "概念",
+        "description": "Guido van Rossum参与设计的一种用于教学和原型设计的编程语言，其简单性适合初学者但缺少高级功能。"
+      },
+      {
+        "name": "Guido van Rossum",
+        "category": "概念",
+        "description": "Python的创造者，曾在荷兰国家研究机构CWI工作，并设计了具有简洁语法和高级功能的Python。"
+      },
+      {
+        "name": "CWI",
+        "category": "概念",
+        "description": "荷兰国家研究机构，Guido van Rossum曾在此工作并参与ABC语言相关工作。"
+      },
+      {
+        "name": "TIOBE指数",
+        "category": "概念",
+        "description": "用于衡量编程语言流行度的指数，依据语言相关的搜索引擎结果数量进行统计。"
+      },
+      {
+        "name": "Stack Overflow",
+        "category": "概念",
+        "description": "面向程序员的问题解答网站，可通过网站中与Python相关的问题数量观察语言的网络讨论频率。"
+      },
+      {
+        "name": "Python流行度",
+        "category": "概念",
+        "description": "Python在程序员社区中的使用和讨论程度，本章通过库生态、TIOBE指数和Stack Overflow等说明。"
+      },
+      {
+        "name": "type()函数",
+        "category": "方法",
+        "description": "返回某个值的类型或类的函数。"
+      },
+      {
+        "name": "赋值",
+        "category": "概念",
+        "description": "使用=运算符为变量首次设置值或更新已有变量值的操作。"
+      },
+      {
+        "name": "字符串长度",
+        "category": "概念",
+        "description": "字符串中包含的字符数量。"
+      },
+      {
+        "name": "输出",
+        "category": "概念",
+        "description": "程序产生并显示给用户的信息或结果。"
+      },
+      {
+        "name": "输入",
+        "category": "概念",
+        "description": "用户输入到程序中的内容。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "程序",
+        "target": "语句",
+        "type": "CONTAINS",
+        "evidence": "程序由一条接一条运行的语句组成。语句描述要执行的某个动作。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "Python语言",
+        "target": "Python语法",
+        "type": "CONTAINS",
+        "evidence": "语言的语法定义了代码必须如何组织。语法规则定义了程序中使用的关键字、符号和格式。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "函数",
+        "target": "print()函数",
+        "type": "CONTAINS",
+        "evidence": "函数是命名的、可重用的代码块，在调用时执行任务；本章随后介绍print()和input()函数。",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "函数",
+        "target": "input()函数",
+        "type": "CONTAINS",
+        "evidence": "函数是命名的、可重用的代码块，在调用时执行任务；input()函数用于从用户读取一行输入。",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "函数",
+        "target": "len()函数",
+        "type": "CONTAINS",
+        "evidence": "len()函数是用于获取字符串长度的内置函数，属于函数这一更一般的程序结构。",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "函数",
+        "target": "type()函数",
+        "type": "CONTAINS",
+        "evidence": "type(value)返回值的类型或类，属于本章介绍的内置函数。",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "数据类型",
+        "target": "整数",
+        "type": "CONTAINS",
+        "evidence": "Python支持两种基本数字格式：整数和浮点数；语言用于表示数据的格式称为数据类型。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "数据类型",
+        "target": "浮点数",
+        "type": "CONTAINS",
+        "evidence": "Python支持两种基本数字格式：整数和浮点数；语言用于表示数据的格式称为数据类型。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "数据类型",
+        "target": "字符串",
+        "type": "CONTAINS",
+        "evidence": "除了整数和浮点类型外，编程语言通常还有用于表示文本的字符串类型。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "语句",
+        "target": "赋值语句",
+        "type": "CONTAINS",
+        "evidence": "语句可以使用赋值运算符（=）将变量设置为某个值，这类语句属于赋值语句。",
+        "confidence": 0.95,
+        "core": true
+      },
+      {
+        "source": "赋值语句",
+        "target": "变量",
+        "type": "RELATED_TO",
+        "evidence": "赋值语句的左侧是变量，右侧是赋给变量的值。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "赋值语句",
+        "target": "赋值运算符",
+        "type": "RELATED_TO",
+        "evidence": "语句可以使用赋值运算符（=）将变量设置为某个值。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "变量命名规则",
+        "target": "变量",
+        "type": "RELATED_TO",
+        "evidence": "变量名可以由字母、数字和下划线组成，长度不限，名称不能以数字开头，且大小写有区别。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "变量命名规则",
+        "target": "关键字",
+        "type": "RELATED_TO",
+        "evidence": "Python有保留字，称为关键字，它们具有特殊功能，不能用作变量或其他对象的名称。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "input()函数",
+        "target": "输入",
+        "type": "APPLIES_TO",
+        "evidence": "input()函数从用户读取一行输入。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "input()函数",
+        "target": "变量",
+        "type": "APPLIES_TO",
+        "evidence": "输入存储在计算机内存中，以后可以使用变量访问；典型形式为variable = input(prompt)。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "print()函数",
+        "target": "输出",
+        "type": "APPLIES_TO",
+        "evidence": "print()函数向用户显示输出。输出是程序产生的信息或结果。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "print()函数",
+        "target": "变量",
+        "type": "APPLIES_TO",
+        "evidence": "示例要求使用变量并通过print语句输出变量计算得到的结果；print()可以打印变量的值。",
+        "confidence": 0.9,
+        "core": false
+      },
+      {
+        "source": "len()函数",
+        "target": "字符串",
+        "type": "APPLIES_TO",
+        "evidence": "len()函数在作用于字符串值时返回字符串长度。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "len()函数",
+        "target": "字符串长度",
+        "type": "APPLIES_TO",
+        "evidence": "len()函数用于获取字符串的长度，即字符串中的字符数。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "连接",
+        "target": "字符串",
+        "type": "APPLIES_TO",
+        "evidence": "连接是一种使用连接运算符（+）按顺序组合两个或多个字符串的操作。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "连接",
+        "target": "连接运算符",
+        "type": "RELATED_TO",
+        "evidence": "连接是一种使用连接运算符（+）按顺序组合两个或多个字符串的操作。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "算术运算",
+        "target": "整数",
+        "type": "APPLIES_TO",
+        "evidence": "算术运算包括对数字进行加法、减法、乘法和除法等基本计算。",
+        "confidence": 0.95,
+        "core": true
+      },
+      {
+        "source": "算术运算",
+        "target": "浮点数",
+        "type": "APPLIES_TO",
+        "evidence": "本章通过浮点数示例展示加减乘除等算术运算。",
+        "confidence": 0.95,
+        "core": true
+      },
+      {
+        "source": "算术运算",
+        "target": "算术运算符",
+        "type": "RELATED_TO",
+        "evidence": "算术运算通过算术运算符执行，如加法、减法、乘法和除法分别使用+、-、*、/。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "运算符优先级",
+        "target": "算术运算符",
+        "type": "RELATED_TO",
+        "evidence": "当计算中有多个运算符时，每个运算符按优先级顺序求值。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "错误信息",
+        "target": "语法错误",
+        "type": "RELATED_TO",
+        "evidence": "当发生错误时，Python显示错误类型，例如SyntaxError；本章还给出了缺少括号、缺少引号等语法错误实例。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "错误信息",
+        "target": "名称错误",
+        "type": "RELATED_TO",
+        "evidence": "当发生错误时，Python显示错误类型；表1.5列出了使用未定义名称时的NameError示例。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "错误信息",
+        "target": "缩进错误",
+        "type": "RELATED_TO",
+        "evidence": "当发生错误时，Python显示错误类型；表1.5列出了代码缩进不正确导致的IndentationError示例。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "错误信息",
+        "target": "Traceback",
+        "type": "CONTAINS",
+        "evidence": "Traceback是Python对错误位置和类型的报告，其中包含文件名、行号、错误类型和附加信息。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "注释",
+        "target": "代码质量",
+        "type": "RELATED_TO",
+        "evidence": "空行和注释一起显示程序的整体结构；在每个部分之前写注释可以提高代码的可读性。",
+        "confidence": 0.9,
+        "core": true
+      },
+      {
+        "source": "docstring",
+        "target": "程序",
+        "type": "RELATED_TO",
+        "evidence": "docstring是为将使用程序但不一定阅读源代码的人编写的文档，用于总结程序的目的或用法。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "注释",
+        "target": "docstring",
+        "type": "RELATED_TO",
+        "evidence": "本章在注释部分之后介绍docstring，并将其描述为更详细的文档形式；二者都用于说明程序。",
+        "confidence": 0.8,
+        "core": false
+      },
+      {
+        "source": "Python语言",
+        "target": "库",
+        "type": "RELATED_TO",
+        "evidence": "Python流行的原因之一是存在许多用于做实际工作的库，Python还附带了广泛的标准库。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "Python语言",
+        "target": "Python语法",
+        "type": "RELATED_TO",
+        "evidence": "Python被描述为语法简洁明了，语言语法定义了代码必须如何组织。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "标准库",
+        "target": "库",
+        "type": "CONTAINS",
+        "evidence": "Python附带一个广泛的标准库，用于解决日常计算问题。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "Guido van Rossum",
+        "target": "Python语言",
+        "type": "RELATED_TO",
+        "evidence": "Python的创造者Guido van Rossum设想了一种具有ABC般简单语法、同时提供专业人士所需高级功能的新语言，并最终将其命名为Python。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "ABC语言",
+        "target": "Guido van Rossum",
+        "type": "RELATED_TO",
+        "evidence": "1982年Guido van Rossum加入CWI团队，该团队正在设计名为ABC的新编程语言，用于教学和原型设计。",
+        "confidence": 1.0,
+        "core": false
+      },
+      {
+        "source": "CWI",
+        "target": "Guido van Rossum",
+        "type": "RELATED_TO",
+        "evidence": "1982年Guido van Rossum开始在一家荷兰国家研究机构CWI工作。",
+        "confidence": 1.0,
+        "core": false
+      },
+      {
+        "source": "Python流行度",
+        "target": "TIOBE指数",
+        "type": "RELATED_TO",
+        "evidence": "了解Python流行度的一种方式是TIOBE指数；TIOBE跟踪编程语言的流行度并在线发布结果。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "Python流行度",
+        "target": "Stack Overflow",
+        "type": "RELATED_TO",
+        "evidence": "了解Python流行度的另一种方式是分析Python在网上被讨论的频率，Stack Overflow用于观察每月标记为Python等的问题数量。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "type()函数",
+        "target": "整数",
+        "type": "APPLIES_TO",
+        "evidence": "type(value)返回值的类型；例如type(123)是<class 'int'>。",
+        "confidence": 1.0,
+        "core": true
+      },
+      {
+        "source": "type()函数",
+        "target": "浮点数",
+        "type": "APPLIES_TO",
+        "evidence": "本章使用type()演示浮点值的类型，例如2.0对应<class 'float'>。",
+        "confidence": 0.95,
+        "core": true
+      },
+      {
+        "source": "type()函数",
+        "target": "字符串",
+        "type": "APPLIES_TO",
+        "evidence": "本章将字符串作为一种数据类型，并使用type()检查值的类型。",
+        "confidence": 0.9,
+        "core": false
+      },
+      {
+        "source": "赋值",
+        "target": "变量",
+        "type": "APPLIES_TO",
+        "evidence": "在Python中，变量在第一次赋值时开始存在；=运算符用于赋值或更新变量的值。",
+        "confidence": 1.0,
+        "core": true
+      }
+    ]
+  }
+]

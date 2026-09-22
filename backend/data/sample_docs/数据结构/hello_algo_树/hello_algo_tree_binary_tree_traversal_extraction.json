@@ -1,0 +1,121 @@
+{
+  "entities": [
+    {
+      "name": "二叉树遍历",
+      "category": "概念",
+      "description": "按照某种顺序访问二叉树中所有节点的过程。"
+    },
+    {
+      "name": "层序遍历",
+      "category": "方法",
+      "description": "从顶部到底部逐层遍历二叉树，每一层从左到右访问节点。"
+    },
+    {
+      "name": "前序遍历",
+      "category": "方法",
+      "description": "深度优先遍历的一种，按照根-左-右的顺序访问节点。"
+    },
+    {
+      "name": "中序遍历",
+      "category": "方法",
+      "description": "深度优先遍历的一种，按照左-根-右的顺序访问节点。"
+    },
+    {
+      "name": "后序遍历",
+      "category": "方法",
+      "description": "深度优先遍历的一种，按照左-右-根的顺序访问节点。"
+    },
+    {
+      "name": "广度优先遍历",
+      "category": "概念",
+      "description": "一种逐层向外扩展的遍历方式，也称广度优先搜索（BFS）。"
+    },
+    {
+      "name": "深度优先遍历",
+      "category": "概念",
+      "description": "一种先走到尽头再回溯的遍历方式，也称深度优先搜索（DFS）。"
+    },
+    {
+      "name": "队列",
+      "category": "概念",
+      "description": "一种遵循先进先出规则的数据结构，常用于实现广度优先遍历。"
+    },
+    {
+      "name": "递归",
+      "category": "方法",
+      "description": "一种通过函数调用自身来解决问题的方法，常用于实现深度优先搜索。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "二叉树遍历",
+      "target": "层序遍历",
+      "type": "CONTAINS",
+      "evidence": "二叉树常见的遍历方式包括层序遍历、前序遍历、中序遍历和后序遍历等。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树遍历",
+      "target": "前序遍历",
+      "type": "CONTAINS",
+      "evidence": "二叉树常见的遍历方式包括层序遍历、前序遍历、中序遍历和后序遍历等。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树遍历",
+      "target": "中序遍历",
+      "type": "CONTAINS",
+      "evidence": "二叉树常见的遍历方式包括层序遍历、前序遍历、中序遍历和后序遍历等。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树遍历",
+      "target": "后序遍历",
+      "type": "CONTAINS",
+      "evidence": "二叉树常见的遍历方式包括层序遍历、前序遍历、中序遍历和后序遍历等。",
+      "confidence": 0.95
+    },
+    {
+      "source": "广度优先遍历",
+      "target": "层序遍历",
+      "type": "CONTAINS",
+      "evidence": "层序遍历本质上属于广度优先遍历（breadth-first traversal）",
+      "confidence": 0.95
+    },
+    {
+      "source": "深度优先遍历",
+      "target": "前序遍历",
+      "type": "CONTAINS",
+      "evidence": "前序、中序和后序遍历都属于深度优先遍历（depth-first traversal）",
+      "confidence": 0.95
+    },
+    {
+      "source": "深度优先遍历",
+      "target": "中序遍历",
+      "type": "CONTAINS",
+      "evidence": "前序、中序和后序遍历都属于深度优先遍历（depth-first traversal）",
+      "confidence": 0.95
+    },
+    {
+      "source": "深度优先遍历",
+      "target": "后序遍历",
+      "type": "CONTAINS",
+      "evidence": "前序、中序和后序遍历都属于深度优先遍历（depth-first traversal）",
+      "confidence": 0.95
+    },
+    {
+      "source": "广度优先遍历",
+      "target": "队列",
+      "type": "APPLIES_TO",
+      "evidence": "广度优先遍历通常借助“队列”来实现。",
+      "confidence": 0.9
+    },
+    {
+      "source": "深度优先遍历",
+      "target": "递归",
+      "type": "APPLIES_TO",
+      "evidence": "深度优先搜索通常基于递归实现",
+      "confidence": 0.9
+    }
+  ]
+}

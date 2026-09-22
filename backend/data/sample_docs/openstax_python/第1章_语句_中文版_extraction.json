@@ -1,0 +1,305 @@
+{
+  "entities": [
+    {
+      "name": "语句",
+      "category": "概念",
+      "description": "程序中的一条指令，描述要执行的某个动作。"
+    },
+    {
+      "name": "print()函数",
+      "category": "方法",
+      "description": "用于向用户显示输出的内置函数。"
+    },
+    {
+      "name": "input()函数",
+      "category": "方法",
+      "description": "用于从用户读取一行输入的内置函数。"
+    },
+    {
+      "name": "变量",
+      "category": "概念",
+      "description": "用于引用内存中值的名称。"
+    },
+    {
+      "name": "赋值语句",
+      "category": "概念",
+      "description": "使用赋值运算符将变量设置为某个值的语句。"
+    },
+    {
+      "name": "赋值运算符",
+      "category": "概念",
+      "description": "用于赋值的符号（=）。"
+    },
+    {
+      "name": "变量命名规则",
+      "category": "概念",
+      "description": "变量名由字母、数字和下划线组成，不能以数字开头，区分大小写。"
+    },
+    {
+      "name": "关键字",
+      "category": "概念",
+      "description": "Python中具有特殊功能的保留字，不能用作变量名。"
+    },
+    {
+      "name": "字符串",
+      "category": "概念",
+      "description": "由匹配的单引号或双引号括起来的字符序列。"
+    },
+    {
+      "name": "len()函数",
+      "category": "方法",
+      "description": "返回字符串长度的内置函数。"
+    },
+    {
+      "name": "连接",
+      "category": "方法",
+      "description": "使用连接运算符（+）按顺序组合两个或多个字符串的操作。"
+    },
+    {
+      "name": "整数",
+      "category": "概念",
+      "description": "表示整数的数值数据类型。"
+    },
+    {
+      "name": "浮点数",
+      "category": "概念",
+      "description": "表示小数的数值数据类型。"
+    },
+    {
+      "name": "算术运算符",
+      "category": "概念",
+      "description": "用于执行数学运算的运算符，如加、减、乘、除。"
+    },
+    {
+      "name": "运算符优先级",
+      "category": "概念",
+      "description": "决定表达式中运算符求值顺序的规则。"
+    },
+    {
+      "name": "错误信息",
+      "category": "概念",
+      "description": "Python在发生错误时显示的报告，包含行号、错误类型和细节。"
+    },
+    {
+      "name": "语法错误",
+      "category": "概念",
+      "description": "代码不符合Python语法规则时发生的错误。"
+    },
+    {
+      "name": "名称错误",
+      "category": "概念",
+      "description": "使用未定义的变量名时发生的错误。"
+    },
+    {
+      "name": "缩进错误",
+      "category": "概念",
+      "description": "代码缩进不正确时发生的错误。"
+    },
+    {
+      "name": "注释",
+      "category": "概念",
+      "description": "以井号字符（#）开头的解释代码的文本，运行时被忽略。"
+    },
+    {
+      "name": "DOCSTRING",
+      "category": "概念",
+      "description": "程序开头的字符串，用于文档化程序的目的和用法。"
+    },
+    {
+      "name": "PRINT()",
+      "category": "方法",
+      "description": "向用户输出一个或多个值的函数。"
+    },
+    {
+      "name": "INPUT()",
+      "category": "方法",
+      "description": "从用户读取一行输入的函数，可带提示。"
+    },
+    {
+      "name": "赋值",
+      "category": "概念",
+      "description": "使用 = 运算符为变量赋值或更新变量值。"
+    },
+    {
+      "name": "算术运算",
+      "category": "概念",
+      "description": "包括加法、减法、乘法、除法、幂运算等数字运算。"
+    },
+    {
+      "name": "LEN()",
+      "category": "方法",
+      "description": "返回字符串长度（字符数）的函数。"
+    },
+    {
+      "name": "TYPE()",
+      "category": "方法",
+      "description": "返回值的类型（或类）的函数。"
+    },
+    {
+      "name": "TIOBE 指数",
+      "category": "概念",
+      "description": "衡量编程语言流行度的指数，基于搜索引擎结果数量。"
+    },
+    {
+      "name": "Stack Overflow",
+      "category": "概念",
+      "description": "面向程序员的问题解答网站，可用于分析语言讨论频率。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "print()函数",
+      "target": "语句",
+      "type": "RELATED_TO",
+      "evidence": "语句 print(\"Good morning\") 指示 Python 向用户输出消息 \"Good morning\"。",
+      "confidence": 0.9
+    },
+    {
+      "source": "赋值语句",
+      "target": "变量",
+      "type": "RELATED_TO",
+      "evidence": "语句可以使用赋值运算符（=）将变量设置为某个值。",
+      "confidence": 0.9
+    },
+    {
+      "source": "赋值语句",
+      "target": "赋值运算符",
+      "type": "RELATED_TO",
+      "evidence": "语句可以使用赋值运算符（=）将变量设置为某个值。",
+      "confidence": 0.9
+    },
+    {
+      "source": "变量命名规则",
+      "target": "变量",
+      "type": "RELATED_TO",
+      "evidence": "变量名可以由字母、数字和下划线组成，长度不限。",
+      "confidence": 0.9
+    },
+    {
+      "source": "变量命名规则",
+      "target": "关键字",
+      "type": "RELATED_TO",
+      "evidence": "Python 有保留字，称为关键字，它们具有特殊功能，不能用作变量（或其他对象）的名称。",
+      "confidence": 0.9
+    },
+    {
+      "source": "len()函数",
+      "target": "字符串",
+      "type": "APPLIES_TO",
+      "evidence": "len() 函数在作用于字符串值时返回字符串长度。",
+      "confidence": 0.95
+    },
+    {
+      "source": "连接",
+      "target": "字符串",
+      "type": "APPLIES_TO",
+      "evidence": "连接是一种使用连接运算符（+）按顺序组合两个或多个字符串的操作。",
+      "confidence": 0.95
+    },
+    {
+      "source": "运算符优先级",
+      "target": "算术运算符",
+      "type": "RELATED_TO",
+      "evidence": "当计算中有多个运算符时，每个运算符按优先级顺序求值。",
+      "confidence": 0.9
+    },
+    {
+      "source": "错误信息",
+      "target": "语法错误",
+      "type": "RELATED_TO",
+      "evidence": "当发生错误时，Python 显示一条包含以下信息的信息：错误的行号。错误类型（例如：SyntaxError）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "错误信息",
+      "target": "名称错误",
+      "type": "RELATED_TO",
+      "evidence": "当发生错误时，Python 显示一条包含以下信息的信息：错误的行号。错误类型（例如：SyntaxError）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "错误信息",
+      "target": "缩进错误",
+      "type": "RELATED_TO",
+      "evidence": "当发生错误时，Python 显示一条包含以下信息的信息：错误的行号。错误类型（例如：SyntaxError）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "注释",
+      "target": "DOCSTRING",
+      "type": "RELATED_TO",
+      "evidence": "注释是解释代码在做什么的简短短语。... Python 程序可以选择以称为 docstring 的字符串开头。",
+      "confidence": 0.8
+    },
+    {
+      "source": "DOCSTRING",
+      "target": "字符串",
+      "type": "CONTAINS",
+      "evidence": "docstring 通常写成多行字符串（\"\"\"）。",
+      "confidence": 0.95
+    },
+    {
+      "source": "PRINT()",
+      "target": "变量",
+      "type": "APPLIES_TO",
+      "evidence": "使用此变量计算并输出以下结果：... 在 print 语句中执行基本算术。",
+      "confidence": 0.85
+    },
+    {
+      "source": "INPUT()",
+      "target": "变量",
+      "type": "APPLIES_TO",
+      "evidence": "使用 input() 显示每个提示... 读取输入后，程序应输出以下三行。",
+      "confidence": 0.85
+    },
+    {
+      "source": "赋值",
+      "target": "变量",
+      "type": "APPLIES_TO",
+      "evidence": "在 Python 中，变量在第一次赋值时开始存在。",
+      "confidence": 0.9
+    },
+    {
+      "source": "算术运算",
+      "target": "整数",
+      "type": "APPLIES_TO",
+      "evidence": "将两个数字的值相加。",
+      "confidence": 0.8
+    },
+    {
+      "source": "算术运算",
+      "target": "浮点数",
+      "type": "APPLIES_TO",
+      "evidence": "将两个数字的值相加。",
+      "confidence": 0.8
+    },
+    {
+      "source": "LEN()",
+      "target": "字符串",
+      "type": "APPLIES_TO",
+      "evidence": "len(string) 返回字符串的长度（字符数）。",
+      "confidence": 0.95
+    },
+    {
+      "source": "TYPE()",
+      "target": "整数",
+      "type": "APPLIES_TO",
+      "evidence": "type(value) 返回值的类型（或类）。例如：type(123) 是 <class 'int'>。",
+      "confidence": 0.9
+    },
+    {
+      "source": "TYPE()",
+      "target": "浮点数",
+      "type": "APPLIES_TO",
+      "evidence": "type(value) 返回值的类型（或类）。例如：type(123) 是 <class 'int'>。",
+      "confidence": 0.9
+    },
+    {
+      "source": "TYPE()",
+      "target": "字符串",
+      "type": "APPLIES_TO",
+      "evidence": "type(value) 返回值的类型（或类）。例如：type(123) 是 <class 'int'>。",
+      "confidence": 0.9
+    }
+  ]
+}

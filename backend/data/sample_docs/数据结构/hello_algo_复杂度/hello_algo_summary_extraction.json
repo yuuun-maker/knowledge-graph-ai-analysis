@@ -1,0 +1,151 @@
+{
+  "entities": [
+    {
+      "name": "算法效率评估",
+      "category": "概念",
+      "description": "衡量算法优劣的过程，主要评价指标包括时间效率和空间效率。"
+    },
+    {
+      "name": "时间复杂度",
+      "category": "概念",
+      "description": "衡量算法运行时间随数据量增长的趋势，用于评估算法效率。"
+    },
+    {
+      "name": "空间复杂度",
+      "category": "概念",
+      "description": "衡量算法占用内存空间随数据量增长的趋势。"
+    },
+    {
+      "name": "大O符号",
+      "category": "概念",
+      "description": "用于表示最差时间复杂度，对应函数渐近上界。"
+    },
+    {
+      "name": "最差时间复杂度",
+      "category": "概念",
+      "description": "使用大O符号表示，反映当n趋向正无穷时操作数量T(n)的增长级别。"
+    },
+    {
+      "name": "平均时间复杂度",
+      "category": "概念",
+      "description": "反映算法在随机数据输入下的运行效率，最接近实际应用中的算法性能。"
+    },
+    {
+      "name": "最佳时间复杂度",
+      "category": "概念",
+      "description": "算法在最佳输入情况下的时间复杂度，几乎不用。"
+    },
+    {
+      "name": "尾递归",
+      "category": "概念",
+      "description": "一种递归形式，理论上空间复杂度可以优化至O(1)，但多数编程语言不支持自动优化。"
+    },
+    {
+      "name": "函数",
+      "category": "概念",
+      "description": "可以被独立执行，所有参数都以显式传递的代码单元。"
+    },
+    {
+      "name": "方法",
+      "category": "概念",
+      "description": "与一个对象关联，被隐式传递给调用它的对象，能够对类的实例中包含的数据进行操作的代码单元。"
+    },
+    {
+      "name": "数据库索引",
+      "category": "概念",
+      "description": "用于加速数据库查询的数据结构，通常以空间换时间。"
+    },
+    {
+      "name": "B+树",
+      "category": "概念",
+      "description": "一种常用的数据库索引结构，占用较多内存空间以换取高效查询。"
+    },
+    {
+      "name": "哈希索引",
+      "category": "概念",
+      "description": "一种数据库索引结构，占用大量内存空间以换取O(1)的高效查询。"
+    },
+    {
+      "name": "哈希表",
+      "category": "概念",
+      "description": "一种以空间换时间的数据结构，用于高效查找。"
+    },
+    {
+      "name": "数组顺序查找",
+      "category": "方法",
+      "description": "在数组中按顺序查找元素的方法，节省内存但查找速度较慢。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "算法效率评估",
+      "target": "时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "时间效率和空间效率是衡量算法优劣的两个主要评价指标。",
+      "confidence": 0.95
+    },
+    {
+      "source": "算法效率评估",
+      "target": "空间复杂度",
+      "type": "CONTAINS",
+      "evidence": "时间效率和空间效率是衡量算法优劣的两个主要评价指标。",
+      "confidence": 0.95
+    },
+    {
+      "source": "时间复杂度",
+      "target": "最差时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "时间复杂度分为最差、最佳、平均时间复杂度",
+      "confidence": 0.95
+    },
+    {
+      "source": "时间复杂度",
+      "target": "平均时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "时间复杂度分为最差、最佳、平均时间复杂度",
+      "confidence": 0.95
+    },
+    {
+      "source": "时间复杂度",
+      "target": "最佳时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "时间复杂度分为最差、最佳、平均时间复杂度",
+      "confidence": 0.95
+    },
+    {
+      "source": "最差时间复杂度",
+      "target": "大O符号",
+      "type": "RELATED_TO",
+      "evidence": "最差时间复杂度使用大 O 符号表示",
+      "confidence": 0.9
+    },
+    {
+      "source": "尾递归",
+      "target": "空间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "尾递归的空间复杂度是 O(1) 吗？",
+      "confidence": 0.9
+    },
+    {
+      "source": "数据库索引",
+      "target": "B+树",
+      "type": "CONTAINS",
+      "evidence": "我们通常选择建立 B+ 树或哈希索引",
+      "confidence": 0.9
+    },
+    {
+      "source": "数据库索引",
+      "target": "哈希索引",
+      "type": "CONTAINS",
+      "evidence": "我们通常选择建立 B+ 树或哈希索引",
+      "confidence": 0.9
+    },
+    {
+      "source": "哈希表",
+      "target": "数组顺序查找",
+      "type": "RELATED_TO",
+      "evidence": "工程师可能会放弃使用哈希表，选择使用数组顺序查找",
+      "confidence": 0.85
+    }
+  ]
+}

@@ -1,0 +1,594 @@
+[
+  {
+    "text_id": "第2章_表达式_中文版_人工版_extraction",
+    "runs": [
+      {
+        "entities": [
+          {
+            "name": "表达式",
+            "category": "概念",
+            "description": "由字面量、变量和运算符组合而成，表示要计算的单个值。"
+          },
+          {
+            "name": "Python shell",
+            "category": "概念",
+            "description": "一种允许直接与Python解释器交互的程序，可以一次运行一行代码。"
+          },
+          {
+            "name": "解释器",
+            "category": "概念",
+            "description": "将源代码翻译成机器码并运行生成的程序的程序。"
+          },
+          {
+            "name": "类型转换",
+            "category": "概念",
+            "description": "将一种数据类型转换为另一种数据类型的过程。"
+          },
+          {
+            "name": "隐式类型转换",
+            "category": "概念",
+            "description": "Python解释器自动将一种数据类型转换为另一种，无需程序员指定。"
+          },
+          {
+            "name": "显式类型转换",
+            "category": "方法",
+            "description": "程序员使用int()、float()、str()等函数显式地将一种数据类型转换为另一种。"
+          },
+          {
+            "name": "INT()",
+            "category": "方法",
+            "description": "将数据类型转换为整数的函数，任何小数部分都被移除。"
+          },
+          {
+            "name": "FLOAT()",
+            "category": "方法",
+            "description": "将数据类型转换为浮点数的函数。"
+          },
+          {
+            "name": "STR()",
+            "category": "方法",
+            "description": "将数据类型转换为字符串的函数。"
+          },
+          {
+            "name": "混合数据类型",
+            "category": "概念",
+            "description": "在运算中组合不同数据类型的数字或字符串。"
+          },
+          {
+            "name": "浮点错误",
+            "category": "概念",
+            "description": "由于浮点数以二进制存储而导致的数值不准确。"
+          },
+          {
+            "name": "舍入误差",
+            "category": "概念",
+            "description": "浮点值被错误地存储为近似值时，近似值与正确值之间的差。"
+          },
+          {
+            "name": "溢出错误",
+            "category": "概念",
+            "description": "当值太大而无法存储时发生的错误。"
+          },
+          {
+            "name": "ROUND()",
+            "category": "方法",
+            "description": "将浮点数四舍五入到给定小数位数的函数，可用于减轻浮点错误。"
+          },
+          {
+            "name": "整数除法",
+            "category": "概念",
+            "description": "包括真除法和向下取整除法，以及取模运算。"
+          },
+          {
+            "name": "真除法",
+            "category": "方法",
+            "description": "使用/运算符的除法，在除法前将数字转换为浮点数。"
+          },
+          {
+            "name": "向下取整除法",
+            "category": "方法",
+            "description": "使用//运算符的除法，计算商，即除的次数。"
+          },
+          {
+            "name": "取模运算符",
+            "category": "方法",
+            "description": "使用%运算符计算余数。"
+          },
+          {
+            "name": "单位转换",
+            "category": "方法",
+            "description": "使用除法和取模在度量单位之间转换。"
+          },
+          {
+            "name": "math模块",
+            "category": "概念",
+            "description": "Python标准库中提供数学函数和常量的模块。"
+          },
+          {
+            "name": "内置函数",
+            "category": "概念",
+            "description": "Python中始终可用、不需要导入的函数，如print()、input()、float()等。"
+          },
+          {
+            "name": "MATH.SQRT()",
+            "category": "方法",
+            "description": "math模块中计算平方根的函数。"
+          },
+          {
+            "name": "MATH.CEIL()",
+            "category": "方法",
+            "description": "math模块中返回大于或等于x的最小整数的函数。"
+          },
+          {
+            "name": "MATH.FLOOR()",
+            "category": "方法",
+            "description": "math模块中返回小于或等于x的最大整数的函数。"
+          },
+          {
+            "name": "MATH.LOG()",
+            "category": "方法",
+            "description": "math模块中计算自然对数或指定底对数的函数。"
+          },
+          {
+            "name": "MATH.POW()",
+            "category": "方法",
+            "description": "math模块中计算x的y次幂的函数，将参数转换为float类型。"
+          },
+          {
+            "name": "MATH.COS()",
+            "category": "方法",
+            "description": "math模块中计算x弧度的余弦的函数。"
+          },
+          {
+            "name": "MATH.SIN()",
+            "category": "方法",
+            "description": "math模块中计算x弧度的正弦的函数。"
+          },
+          {
+            "name": "MATH.TAN()",
+            "category": "方法",
+            "description": "math模块中计算x弧度的正切的函数。"
+          },
+          {
+            "name": "MATH.PI",
+            "category": "概念",
+            "description": "math模块中表示圆周率的常量，约等于3.14159。"
+          },
+          {
+            "name": "MATH.E",
+            "category": "概念",
+            "description": "math模块中表示欧拉数的常量，约等于2.71828。"
+          },
+          {
+            "name": "MATH.TAU",
+            "category": "概念",
+            "description": "math模块中表示圆周与半径之比的常量，等于2π。"
+          },
+          {
+            "name": "代码格式化",
+            "category": "概念",
+            "description": "编写易读代码的实践，包括空格、空行和行长度等。"
+          },
+          {
+            "name": "PEP 8",
+            "category": "概念",
+            "description": "Python的官方风格指南，记录最佳实践。"
+          },
+          {
+            "name": "自动连接",
+            "category": "方法",
+            "description": "将长字符串分解为多行，Python自动连接相邻的字符串字面量。"
+          },
+          {
+            "name": "字符串连接",
+            "category": "概念",
+            "description": "将多个字符串合并为一个字符串的操作，可以使用 + 运算符或直接相邻书写。"
+          },
+          {
+            "name": "字符串字面量连接",
+            "category": "概念",
+            "description": "Python 自动将相邻的字符串字面量连接成一个字符串，无需使用 + 运算符。"
+          },
+          {
+            "name": "多行语句",
+            "category": "概念",
+            "description": "将一条长语句分成多行编写的技术，包括显式行连接和隐式行连接。"
+          },
+          {
+            "name": "显式行连接",
+            "category": "方法",
+            "description": "使用反斜杠字符将一条语句延续到下一行的方法。"
+          },
+          {
+            "name": "隐式行连接",
+            "category": "方法",
+            "description": "使用括号将一条语句隐式地延续到多行的方法。"
+          },
+          {
+            "name": "字符串格式化",
+            "category": "方法",
+            "description": "将非字符串值转换为字符串并与其他字符串组合，以生成格式化的输出。"
+          },
+          {
+            "name": "浮点数舍入误差",
+            "category": "概念",
+            "description": "浮点数运算中由于二进制表示导致的精度损失和舍入错误。"
+          },
+          {
+            "name": "math 模块",
+            "category": "概念",
+            "description": "Python 标准库中提供数学函数的模块。"
+          },
+          {
+            "name": "abs 函数",
+            "category": "方法",
+            "description": "返回一个数的绝对值。"
+          },
+          {
+            "name": "int 函数",
+            "category": "方法",
+            "description": "将字符串或浮点数转换为整数。"
+          },
+          {
+            "name": "float 函数",
+            "category": "方法",
+            "description": "将字符串或整数转换为浮点数。"
+          },
+          {
+            "name": "str 函数",
+            "category": "方法",
+            "description": "将浮点数或整数转换为字符串。"
+          },
+          {
+            "name": "round 函数",
+            "category": "方法",
+            "description": "将浮点数四舍五入到指定的小数位数。"
+          },
+          {
+            "name": "字符串重复",
+            "category": "方法",
+            "description": "使用 * 运算符创建字符串的多个副本。"
+          },
+          {
+            "name": "取模运算",
+            "category": "方法",
+            "description": "使用 % 运算符获取除法的余数。"
+          },
+          {
+            "name": "Python 应用领域",
+            "category": "概念",
+            "description": "Python 在商业、教育、美术、人文学科、科学等领域的应用。"
+          },
+          {
+            "name": "Python 应用程序",
+            "category": "概念",
+            "description": "使用 Python 构建的应用程序类型，如人工智能、数据可视化、科学计算、Web 开发等。"
+          },
+          {
+            "name": "TENSORFLOW",
+            "category": "概念",
+            "description": "用于人工智能和机器学习的 Python 库。"
+          },
+          {
+            "name": "MATPLOTLIB",
+            "category": "概念",
+            "description": "用于数据可视化的 Python 库。"
+          },
+          {
+            "name": "SCIPY",
+            "category": "概念",
+            "description": "用于科学计算的 Python 库。"
+          },
+          {
+            "name": "DJANGO",
+            "category": "概念",
+            "description": "用于 Web 开发的 Python 框架。"
+          }
+        ],
+        "relations": [
+          {
+            "source": "类型转换",
+            "target": "隐式类型转换",
+            "type": "CONTAINS",
+            "evidence": "Python 解释器使用隐式类型转换自动将一种数据类型转换为另一种。",
+            "confidence": 0.95
+          },
+          {
+            "source": "类型转换",
+            "target": "显式类型转换",
+            "type": "CONTAINS",
+            "evidence": "程序员可以使用显式类型转换将一种数据类型转换为另一种。",
+            "confidence": 0.95
+          },
+          {
+            "source": "显式类型转换",
+            "target": "INT()",
+            "type": "CONTAINS",
+            "evidence": "int() 将数据类型转换为整数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "显式类型转换",
+            "target": "FLOAT()",
+            "type": "CONTAINS",
+            "evidence": "float() 将数据类型转换为浮点数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "显式类型转换",
+            "target": "STR()",
+            "type": "CONTAINS",
+            "evidence": "str() 将数据类型转换为字符串。",
+            "confidence": 0.95
+          },
+          {
+            "source": "浮点错误",
+            "target": "舍入误差",
+            "type": "CONTAINS",
+            "evidence": "舍入误差发生在浮点值被错误地存储为近似值时。",
+            "confidence": 0.95
+          },
+          {
+            "source": "浮点错误",
+            "target": "溢出错误",
+            "type": "CONTAINS",
+            "evidence": "溢出错误发生在值太大而无法存储时。",
+            "confidence": 0.95
+          },
+          {
+            "source": "ROUND()",
+            "target": "浮点错误",
+            "type": "APPLIES_TO",
+            "evidence": "round() 函数可用于减轻浮点错误。",
+            "confidence": 0.95
+          },
+          {
+            "source": "整数除法",
+            "target": "真除法",
+            "type": "CONTAINS",
+            "evidence": "真除法（/）在除法前将数字转换为浮点数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "整数除法",
+            "target": "向下取整除法",
+            "type": "CONTAINS",
+            "evidence": "向下取整除法（//）计算商，即除的次数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "整数除法",
+            "target": "取模运算符",
+            "type": "CONTAINS",
+            "evidence": "取模运算符（%）计算余数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "向下取整除法",
+            "target": "单位转换",
+            "type": "APPLIES_TO",
+            "evidence": "程序可以使用向下取整除法和取模来分离单位。",
+            "confidence": 0.95
+          },
+          {
+            "source": "取模运算符",
+            "target": "单位转换",
+            "type": "APPLIES_TO",
+            "evidence": "程序可以使用向下取整除法和取模来分离单位。",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.SQRT()",
+            "type": "CONTAINS",
+            "evidence": "该模块定义了诸如 sqrt()（平方根）之类的函数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.CEIL()",
+            "type": "CONTAINS",
+            "evidence": "表 2.4 math 模块中的示例函数：math.ceil(x)",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.FLOOR()",
+            "type": "CONTAINS",
+            "evidence": "表 2.4 math 模块中的示例函数：math.floor(x)",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.LOG()",
+            "type": "CONTAINS",
+            "evidence": "表 2.4 math 模块中的示例函数：math.log(x)",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.POW()",
+            "type": "CONTAINS",
+            "evidence": "表 2.4 math 模块中的示例函数：math.pow(x, y)",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.COS()",
+            "type": "CONTAINS",
+            "evidence": "表 2.4 math 模块中的示例函数：math.cos(x)",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.SIN()",
+            "type": "CONTAINS",
+            "evidence": "表 2.4 math 模块中的示例函数：math.sin(x)",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.TAN()",
+            "type": "CONTAINS",
+            "evidence": "表 2.4 math 模块中的示例函数：math.tan(x)",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.PI",
+            "type": "CONTAINS",
+            "evidence": "表 2.3 math 模块中的示例常量：math.pi",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.E",
+            "type": "CONTAINS",
+            "evidence": "表 2.3 math 模块中的示例常量：math.e",
+            "confidence": 0.95
+          },
+          {
+            "source": "math模块",
+            "target": "MATH.TAU",
+            "type": "CONTAINS",
+            "evidence": "表 2.3 math 模块中的示例常量：math.tau",
+            "confidence": 0.95
+          },
+          {
+            "source": "代码格式化",
+            "target": "PEP 8",
+            "type": "RELATED_TO",
+            "evidence": "PEP 8 是 Python 的官方风格指南。",
+            "confidence": 0.95
+          },
+          {
+            "source": "代码格式化",
+            "target": "自动连接",
+            "type": "CONTAINS",
+            "evidence": "PEP 8 建议每行代码少于 80 个字符。这样，程序员就不需要水平滚动来阅读代码。上面的程序可以通过分解原始字符串来重写",
+            "confidence": 0.85
+          },
+          {
+            "source": "字符串连接",
+            "target": "字符串字面量连接",
+            "type": "CONTAINS",
+            "evidence": "Python 自动连接多个字符串。在这种情况下不需要 + 运算符。",
+            "confidence": 0.9
+          },
+          {
+            "source": "多行语句",
+            "target": "显式行连接",
+            "type": "CONTAINS",
+            "evidence": "Python 提供了两种编写多行语句的方法：显式行连接，使用 \\ 字符",
+            "confidence": 0.95
+          },
+          {
+            "source": "多行语句",
+            "target": "隐式行连接",
+            "type": "CONTAINS",
+            "evidence": "Python 提供了两种编写多行语句的方法：隐式行连接，使用括号",
+            "confidence": 0.95
+          },
+          {
+            "source": "PEP 8",
+            "target": "隐式行连接",
+            "type": "RELATED_TO",
+            "evidence": "PEP 8 建议尽可能避免使用显式行连接。",
+            "confidence": 0.8
+          },
+          {
+            "source": "类型转换",
+            "target": "int 函数",
+            "type": "CONTAINS",
+            "evidence": "int(x) 将 x（字符串或浮点数）转换为整数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "类型转换",
+            "target": "float 函数",
+            "type": "CONTAINS",
+            "evidence": "float(x) 将 x（字符串或整数）转换为浮点数。",
+            "confidence": 0.95
+          },
+          {
+            "source": "类型转换",
+            "target": "str 函数",
+            "type": "CONTAINS",
+            "evidence": "str(x) 将 x（浮点数或整数）转换为字符串。",
+            "confidence": 0.95
+          },
+          {
+            "source": "字符串格式化",
+            "target": "str 函数",
+            "type": "APPLIES_TO",
+            "evidence": "字符串可以与其他类型连接。例如：\" $\" + str(cost)。",
+            "confidence": 0.9
+          },
+          {
+            "source": "整数除法",
+            "target": "取模运算",
+            "type": "CONTAINS",
+            "evidence": "整数可以使用 // 和 % 精确除法。",
+            "confidence": 0.9
+          },
+          {
+            "source": "math 模块",
+            "target": "abs 函数",
+            "type": "CONTAINS",
+            "evidence": "像 math 这样的模块提供了许多有用的函数。",
+            "confidence": 0.8
+          },
+          {
+            "source": "math 模块",
+            "target": "round 函数",
+            "type": "CONTAINS",
+            "evidence": "像 math 这样的模块提供了许多有用的函数。",
+            "confidence": 0.8
+          },
+          {
+            "source": "Python 应用程序",
+            "target": "TENSORFLOW",
+            "type": "RELATED_TO",
+            "evidence": "人工智能 工程师开发支持图像和语音识别的模型。例如：TensorFlow 库。",
+            "confidence": 0.85
+          },
+          {
+            "source": "Python 应用程序",
+            "target": "MATPLOTLIB",
+            "type": "RELATED_TO",
+            "evidence": "数据可视化 统计学家创建图表以理解大量数据。例如：Matplotlib 库。",
+            "confidence": 0.85
+          },
+          {
+            "source": "Python 应用程序",
+            "target": "SCIPY",
+            "type": "RELATED_TO",
+            "evidence": "科学计算 Python 非常适用于进行实验和分析数据。例如：SciPy 项目。",
+            "confidence": 0.85
+          },
+          {
+            "source": "Python 应用程序",
+            "target": "DJANGO",
+            "type": "RELATED_TO",
+            "evidence": "Web 开发 Python 可以运行交互式网站。例如：Instagram 是用 Django（一个 Python 框架）构建的。",
+            "confidence": 0.85
+          }
+        ],
+        "error": null,
+        "raw_relation_count": 42,
+        "dropped_counts": {
+          "duplicate": 1
+        },
+        "dropped_relations": [
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "向下取整除法",
+            "reason_code": "duplicate",
+            "detail": "重复三元组（多因分块重叠）"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,489 @@
+{
+  "entities": [
+    {
+      "name": "物理学",
+      "category": "概念",
+      "description": "关注描述能量、物质、空间和时间的相互作用，尤其关注每个现象背后存在的基本机制。"
+    },
+    {
+      "name": "物理定律",
+      "category": "概念",
+      "description": "对我们周围宇宙的简洁描述，是全人类对一切自然过程所遵循的潜在法则或规则的陈述。"
+    },
+    {
+      "name": "模型",
+      "category": "概念",
+      "description": "对某种通常过于困难或不可能直接展示的事物的表示，以实验证据为根据，但只在有限情境下准确。"
+    },
+    {
+      "name": "理论",
+      "category": "概念",
+      "description": "对自然界模式的一种解释，得到科学证据支持，并被不同研究者群体多次验证。"
+    },
+    {
+      "name": "定律",
+      "category": "概念",
+      "description": "使用简洁语言描述自然界中一种普遍化的模式，得到科学证据和重复实验支持，通常可用数学方程表达。"
+    },
+    {
+      "name": "原理",
+      "category": "概念",
+      "description": "适用性较不广泛的陈述，如帕斯卡原理，仅适用于流体。"
+    },
+    {
+      "name": "科学方法",
+      "category": "方法",
+      "description": "科学家探究并收集关于世界信息的过程，通常包括观察、提出问题、研究、提出假说、实验、分析结果和得出结论。"
+    },
+    {
+      "name": "假说",
+      "category": "概念",
+      "description": "科学方法中针对研究主题提出的可检验的推测。"
+    },
+    {
+      "name": "经典物理学",
+      "category": "概念",
+      "description": "物理学从文艺复兴到19世纪末的发展，在特定条件下（低速、宏观、弱引力场）对宇宙给出极其精确的描述。"
+    },
+    {
+      "name": "现代物理学",
+      "category": "概念",
+      "description": "20世纪初开始的革命性发现转变而来的物理学，由相对论和量子力学两个革命性理论组成。"
+    },
+    {
+      "name": "相对论",
+      "category": "概念",
+      "description": "现代物理学理论之一，处理极快运动或强引力场（如太阳附近）的物体。"
+    },
+    {
+      "name": "量子力学",
+      "category": "概念",
+      "description": "现代物理学理论之一，处理小到显微镜无法看到的物体。"
+    },
+    {
+      "name": "相对论量子力学",
+      "category": "概念",
+      "description": "相对论和量子力学结合的理论，描述高速运动或经历强引力场的小物体的行为，是普遍适用理论。"
+    },
+    {
+      "name": "物理量",
+      "category": "概念",
+      "description": "通过指定如何测量或说明如何从其他测量中计算来定义的量，如距离、时间、平均速度。"
+    },
+    {
+      "name": "单位",
+      "category": "概念",
+      "description": "物理量测量中使用的标准化值，如米、千米。"
+    },
+    {
+      "name": "SI单位",
+      "category": "概念",
+      "description": "也称为公制，是科学家和数学家公认的标准体系，包括基本单位和导出单位。"
+    },
+    {
+      "name": "英制单位",
+      "category": "概念",
+      "description": "也称为习惯单位或帝国单位，历史上曾被大英帝国统治过的国家使用，至今仍在美国广泛使用。"
+    },
+    {
+      "name": "基本SI单位",
+      "category": "概念",
+      "description": "贯穿本书使用的基本单位，包括长度（米）、质量（千克）、时间（秒）、电流（安培）。"
+    },
+    {
+      "name": "导出单位",
+      "category": "概念",
+      "description": "由基本单位通过组合或运算导出的单位。"
+    },
+    {
+      "name": "单位换算",
+      "category": "方法",
+      "description": "在SI单位和英制单位之间进行数值转换的方法。"
+    },
+    {
+      "name": "科学记数法",
+      "category": "方法",
+      "description": "用10的幂次表示数值的方法，用于书写SI单位前缀等。"
+    },
+    {
+      "name": "准确度",
+      "category": "概念",
+      "description": "测量值与真实值的接近程度。"
+    },
+    {
+      "name": "精密度",
+      "category": "概念",
+      "description": "多次测量结果之间的一致程度。"
+    },
+    {
+      "name": "有效数字",
+      "category": "概念",
+      "description": "测量中能够有意义地表示测量精度的数字位数。"
+    },
+    {
+      "name": "近似",
+      "category": "方法",
+      "description": "在计算或表示中采用接近但不完全精确的值的方法。"
+    },
+    {
+      "name": "基本单位",
+      "category": "概念",
+      "description": "用于测量基本物理量的单位，在本书中基本物理量包括长度、质量、时间和电流。"
+    },
+    {
+      "name": "秒",
+      "category": "概念",
+      "description": "SI时间单位，符号s，现定义为铯原子特定振动9,192,631,770次所需的时间。"
+    },
+    {
+      "name": "米",
+      "category": "概念",
+      "description": "SI长度单位，符号m，现定义为光在真空中1/299,792,458秒内传播的距离。"
+    },
+    {
+      "name": "千克",
+      "category": "概念",
+      "description": "SI质量单位，符号kg，现根据秒、米和普朗克常数h定义。"
+    },
+    {
+      "name": "公制前缀",
+      "category": "概念",
+      "description": "表示10的幂次的词头，用于构成SI单位的倍数和分数单位，如千、毫、微等。"
+    },
+    {
+      "name": "数量级",
+      "category": "概念",
+      "description": "以公制表示的值的量级，每个10的幂次代表一个数量级，用于粗略估计值的大小。"
+    },
+    {
+      "name": "换算因子",
+      "category": "概念",
+      "description": "一个比值，表示一种单位的多少个等于另一种单位，用于单位换算。"
+    },
+    {
+      "name": "量纲分析",
+      "category": "方法",
+      "description": "通过追踪单位来检查计算正确性和进行单位换算的方法。"
+    },
+    {
+      "name": "不确定度",
+      "category": "概念",
+      "description": "对测量值偏离标准值或期望值多少的定量度量，通常记为δA。"
+    },
+    {
+      "name": "百分不确定度",
+      "category": "公式",
+      "description": "不确定度占测量值的百分比，定义为%unc = δA/A × 100%。"
+    },
+    {
+      "name": "平均速度",
+      "category": "概念",
+      "description": "行驶距离除以行驶时间，是运动学中的一个基本概念。"
+    },
+    {
+      "name": "科学定律",
+      "category": "概念",
+      "description": "用简洁语言或数学公式描述的、得到科学证据和重复实验支持的自然界普遍化模式。"
+    },
+    {
+      "name": "科学理论",
+      "category": "概念",
+      "description": "对自然界模式的解释，得到科学证据支持并被不同研究者群体多次验证。"
+    },
+    {
+      "name": "百分比相加法",
+      "category": "方法",
+      "description": "通过乘法或除法计算出的量的百分不确定度，是计算中所用各项百分不确定度之和。"
+    },
+    {
+      "name": "有效数字的乘除规则",
+      "category": "方法",
+      "description": "乘除测量值时，最终答案只能包含与最不精密值相同数量的有效数字。"
+    },
+    {
+      "name": "有效数字的加减规则",
+      "category": "方法",
+      "description": "加减测量值时，最终答案不能包含多于最不精密值的十进制位数。"
+    },
+    {
+      "name": "近似估算",
+      "category": "方法",
+      "description": "基于已知量或经验对未知量进行粗略估计的方法。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "物理学",
+      "target": "物理定律",
+      "type": "RELATED_TO",
+      "evidence": "一套少得惊人且统一的物理定律就能解释我们所观察到的一切。",
+      "confidence": 0.9
+    },
+    {
+      "source": "物理学",
+      "target": "经典物理学",
+      "type": "CONTAINS",
+      "evidence": "物理学从文艺复兴到19世纪末的发展被称为经典物理学。",
+      "confidence": 0.95
+    },
+    {
+      "source": "物理学",
+      "target": "现代物理学",
+      "type": "CONTAINS",
+      "evidence": "它被20世纪初开始的革命性发现转变为现代物理学。",
+      "confidence": 0.95
+    },
+    {
+      "source": "现代物理学",
+      "target": "相对论",
+      "type": "CONTAINS",
+      "evidence": "现代物理学本身由两个革命性的理论组成：相对论和量子力学。",
+      "confidence": 0.95
+    },
+    {
+      "source": "现代物理学",
+      "target": "量子力学",
+      "type": "CONTAINS",
+      "evidence": "现代物理学本身由两个革命性的理论组成：相对论和量子力学。",
+      "confidence": 0.95
+    },
+    {
+      "source": "相对论",
+      "target": "相对论量子力学",
+      "type": "PRECEDES",
+      "evidence": "这两个理论的结合就是相对论量子力学。",
+      "confidence": 0.9
+    },
+    {
+      "source": "量子力学",
+      "target": "相对论量子力学",
+      "type": "PRECEDES",
+      "evidence": "这两个理论的结合就是相对论量子力学。",
+      "confidence": 0.9
+    },
+    {
+      "source": "经典物理学",
+      "target": "现代物理学",
+      "type": "PRECEDES",
+      "evidence": "理解现代物理学需要经典物理学的知识。",
+      "confidence": 0.95
+    },
+    {
+      "source": "科学方法",
+      "target": "假说",
+      "type": "CONTAINS",
+      "evidence": "科学家通常会针对该主题进行一些研究，然后提出假说。",
+      "confidence": 0.9
+    },
+    {
+      "source": "SI单位",
+      "target": "基本SI单位",
+      "type": "CONTAINS",
+      "evidence": "表1.1给出了贯穿本书使用的基本SI单位。",
+      "confidence": 0.95
+    },
+    {
+      "source": "SI单位",
+      "target": "导出单位",
+      "type": "CONTAINS",
+      "evidence": "SI单位：基本单位与导出单位。",
+      "confidence": 0.9
+    },
+    {
+      "source": "单位换算",
+      "target": "SI单位",
+      "type": "APPLIES_TO",
+      "evidence": "在SI单位和英制单位下进行单位换算。",
+      "confidence": 0.9
+    },
+    {
+      "source": "单位换算",
+      "target": "英制单位",
+      "type": "APPLIES_TO",
+      "evidence": "在SI单位和英制单位下进行单位换算。",
+      "confidence": 0.9
+    },
+    {
+      "source": "科学记数法",
+      "target": "SI单位",
+      "type": "APPLIES_TO",
+      "evidence": "解释SI单位中最常见的前缀，并能用科学记数法书写它们。",
+      "confidence": 0.85
+    },
+    {
+      "source": "物理量",
+      "target": "单位",
+      "type": "RELATED_TO",
+      "evidence": "物理量的测量用单位表示，单位是标准化的值。",
+      "confidence": 0.9
+    },
+    {
+      "source": "准确度",
+      "target": "精密度",
+      "type": "RELATED_TO",
+      "evidence": "准确度、精密度与有效数字。",
+      "confidence": 0.8
+    },
+    {
+      "source": "有效数字",
+      "target": "准确度",
+      "type": "RELATED_TO",
+      "evidence": "准确度、精密度与有效数字。",
+      "confidence": 0.8
+    },
+    {
+      "source": "有效数字",
+      "target": "精密度",
+      "type": "RELATED_TO",
+      "evidence": "准确度、精密度与有效数字。",
+      "confidence": 0.8
+    },
+    {
+      "source": "近似",
+      "target": "有效数字",
+      "type": "RELATED_TO",
+      "evidence": "1.4 近似（Approximation）。",
+      "confidence": 0.7
+    },
+    {
+      "source": "SI单位",
+      "target": "基本单位",
+      "type": "CONTAINS",
+      "evidence": "表1.1给出了贯穿本书使用的基本SI单位。",
+      "confidence": 0.95
+    },
+    {
+      "source": "基本单位",
+      "target": "秒",
+      "type": "CONTAINS",
+      "evidence": "SI时间单位——秒（缩写为s）",
+      "confidence": 0.95
+    },
+    {
+      "source": "基本单位",
+      "target": "米",
+      "type": "CONTAINS",
+      "evidence": "SI长度单位是米（缩写为m）",
+      "confidence": 0.95
+    },
+    {
+      "source": "基本单位",
+      "target": "千克",
+      "type": "CONTAINS",
+      "evidence": "SI质量单位是千克（缩写为kg）",
+      "confidence": 0.95
+    },
+    {
+      "source": "单位换算",
+      "target": "换算因子",
+      "type": "RELATED_TO",
+      "evidence": "接下来，我们需要确定一个联系米和千米的换算因子。换算因子（conversion factor）是一个比值，表示一种单位的多少个等于另一种单位。",
+      "confidence": 0.9
+    },
+    {
+      "source": "单位换算",
+      "target": "量纲分析",
+      "type": "RELATED_TO",
+      "evidence": "单位换算与量纲分析",
+      "confidence": 0.8
+    },
+    {
+      "source": "准确度",
+      "target": "不确定度",
+      "type": "RELATED_TO",
+      "evidence": "测量系统的准确度和精密度程度与测量的不确定度（uncertainty）有关。",
+      "confidence": 0.9
+    },
+    {
+      "source": "精密度",
+      "target": "不确定度",
+      "type": "RELATED_TO",
+      "evidence": "测量系统的准确度和精密度程度与测量的不确定度（uncertainty）有关。",
+      "confidence": 0.9
+    },
+    {
+      "source": "百分不确定度",
+      "target": "不确定度",
+      "type": "RELATED_TO",
+      "evidence": "表达不确定度的一种方法是作为测量值的百分比。如果一次测量以不确定度 δA 表示，那么百分不确定度（percent uncertainty，%unc）被定义为",
+      "confidence": 0.9
+    },
+    {
+      "source": "平均速度",
+      "target": "单位换算",
+      "type": "APPLIES_TO",
+      "evidence": "计算你的平均速度（a）以千米每小时（km/h）为单位和（b）以米每秒（m/s）为单位。",
+      "confidence": 0.85
+    },
+    {
+      "source": "单位",
+      "target": "基本单位",
+      "type": "CONTAINS",
+      "evidence": "所有单位都可以表示为四个基本单位的组合。",
+      "confidence": 0.95
+    },
+    {
+      "source": "单位",
+      "target": "导出单位",
+      "type": "CONTAINS",
+      "evidence": "导出单位可以通过基本单位的代数组合计算出的单位。",
+      "confidence": 0.95
+    },
+    {
+      "source": "单位换算",
+      "target": "换算因子",
+      "type": "APPLIES_TO",
+      "evidence": "单位换算涉及把一种单位表示的值改变为另一种单位。这是通过使用换算因子完成的。",
+      "confidence": 0.95
+    },
+    {
+      "source": "有效数字的乘除规则",
+      "target": "有效数字",
+      "type": "APPLIES_TO",
+      "evidence": "乘除测量值时，最终答案只能包含与最不精密值相同数量的有效数字。",
+      "confidence": 0.95
+    },
+    {
+      "source": "有效数字的加减规则",
+      "target": "有效数字",
+      "type": "APPLIES_TO",
+      "evidence": "加减测量值时，最终答案不能包含多于最不精密值的十进制位数。",
+      "confidence": 0.95
+    },
+    {
+      "source": "百分比相加法",
+      "target": "百分不确定度",
+      "type": "APPLIES_TO",
+      "evidence": "通过乘法或除法计算出的量的百分不确定度，是计算中所用各项百分不确定度之和。",
+      "confidence": 0.95
+    },
+    {
+      "source": "科学方法",
+      "target": "科学定律",
+      "type": "RELATED_TO",
+      "evidence": "科学定律和理论表达了自然界的普遍真理以及它们所包含的知识体系。",
+      "confidence": 0.8
+    },
+    {
+      "source": "科学方法",
+      "target": "科学理论",
+      "type": "RELATED_TO",
+      "evidence": "科学定律和理论表达了自然界的普遍真理以及它们所包含的知识体系。",
+      "confidence": 0.8
+    },
+    {
+      "source": "科学理论",
+      "target": "科学定律",
+      "type": "RELATED_TO",
+      "evidence": "科学定律和理论表达了自然界的普遍真理以及它们所包含的知识体系。",
+      "confidence": 0.8
+    },
+    {
+      "source": "近似估算",
+      "target": "近似",
+      "type": "APPLIES_TO",
+      "evidence": "科学家常常近似估算量的值，以进行计算和分析系统。",
+      "confidence": 0.9
+    }
+  ]
+}

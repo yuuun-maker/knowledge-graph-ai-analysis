@@ -1,5 +1,4 @@
 <template>
-  <el-config-provider :locale="epLocale">
   <!-- 独立整页路由（登录 / 注册 / 邀请落地 / 文档阅读器）不套主框架，做到真正全屏 -->
   <router-view v-if="isStandalone" v-slot="{ Component }">
     <transition name="page" mode="out-in">
@@ -43,7 +42,7 @@
           text
           size="small"
           class="user-logout"
-          :title="t('app.logout')"
+          :title="'退出登录'"
           @click="handleLogout"
         >
           <el-icon><SwitchButton /></el-icon>
@@ -102,7 +101,7 @@
         <el-button
           text
           class="collapse-btn"
-          :title="store.sidebarCollapsed ? t('app.expandSidebar') : t('app.collapseSidebar')"
+          :title="store.sidebarCollapsed ? '展开侧栏' : '收起侧栏'"
           @click="store.toggleSidebar()"
         >
           <el-icon>
@@ -117,29 +116,11 @@
       <el-header class="app-header kg-glass" height="58px">
         <div class="header-left">
           <el-breadcrumb separator="/" class="app-breadcrumb">
-            <el-breadcrumb-item :to="{ path: '/course-center' }">{{ t('app.home') }}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/course-center' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-for="(c, i) in breadcrumbs" :key="i">{{ c }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="header-right">
-          <el-dropdown class="lang-switch" trigger="click" @command="setLocale">
-            <el-button text class="lang-switch-btn">
-              <el-icon><Connection /></el-icon>
-              <span>{{ currentLangLabel }}</span>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item
-                  v-for="o in localeOptions"
-                  :key="o.value"
-                  :command="o.value"
-                  :disabled="o.value === locale"
-                >
-                  {{ o.label }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
           <span class="header-greet">
             <span class="greet-hi">{{ greetText }}</span>
             <b>{{ store.username }}</b>
@@ -170,7 +151,6 @@
          教师端的选中态由 TeacherView 同步写入） -->
     <AIChatWidget v-if="store.isLoggedIn" />
   </el-container>
-  </el-config-provider>
 </template>
 
 <script setup>
@@ -179,21 +159,13 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import {
   HomeFilled, DataAnalysis, Reading, User, UserFilled, EditPen, Notebook, Compass, Fold, Expand, SwitchButton, Share,
-  Picture, Lock, CircleClose, Connection,
+  Picture, Lock, CircleClose,
 } from '@element-plus/icons-vue'
 import { useAppStore } from './stores/app'
-import { useI18n } from './i18n'
-import elemZhCn from 'element-plus/dist/locale/zh-cn.mjs'
-import elemEn from 'element-plus/dist/locale/en.mjs'
 import AIChatWidget from './components/AIChatWidget.vue'
 import BrandMark from './components/BrandMark.vue'
 
 const store = useAppStore()
-const { t, locale, setLocale, localeOptions } = useI18n()
-const currentLangLabel = computed(() => localeOptions.value.find((o) => o.value === locale.value)?.label || '')
-// Element Plus 组件语言联动
-const EP_LOCALES = { 'zh-CN': elemZhCn, 'en-US': elemEn }
-const epLocale = computed(() => EP_LOCALES[locale.value] || elemZhCn)
 const route = useRoute()
 const router = useRouter()
 
@@ -215,7 +187,6 @@ const teacherMenu = [
       { path: '/profile?tab=basic', title: '基本资料', icon: UserFilled },
       { path: '/profile?tab=password', title: '密码管理', icon: Lock },
       { path: '/profile?tab=deactivate', title: '注销账号', icon: CircleClose },
-      { path: '/profile?tab=language', title: '语言', icon: Connection },
     ],
   },
 ]
@@ -242,7 +213,6 @@ const studentMenu = [
       { path: '/profile?tab=basic', title: '基本资料', icon: UserFilled },
       { path: '/profile?tab=password', title: '密码管理', icon: Lock },
       { path: '/profile?tab=deactivate', title: '注销账号', icon: CircleClose },
-      { path: '/profile?tab=language', title: '语言', icon: Connection },
     ],
   },
 ]
@@ -259,7 +229,6 @@ const activeMenu = computed(() => {
     return map[route.query.tab] || '/student'
   }
   if (route.path === '/profile') {
-    const map = { basic: '/profile?tab=basic', password: '/profile?tab=password', deactivate: '/profile?tab=deactivate', language: '/profile?tab=language' }
     return map[route.query.tab] || '/profile?tab=basic'
   }
   return route.path
@@ -310,7 +279,7 @@ const healthText = computed(() => {
 
 async function handleLogout() {
   try {
-    await ElMessageBox.confirm(t('app.logoutConfirm'), t('app.logoutConfirmTitle'), { type: 'warning' })
+    await ElMessageBox.confirm('确定要退出登录吗？', '提示', { type: 'warning' })
     store.logout()
     await router.replace('/login')
   } catch { /* 取消 */ }
@@ -634,16 +603,4 @@ onMounted(() => {
   .header-greet { display: none; }
   .app-main { padding: 14px; }
 }
-</style>
-
-<style scoped>
-.lang-switch { margin-right: 14px; }
-.lang-switch-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-.lang-switch-btn:hover { color: var(--brand-500, #4f6ef7); }
 </style>

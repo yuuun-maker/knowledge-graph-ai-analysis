@@ -223,14 +223,6 @@
       </el-card>
     </div>
 
-    <!-- 语言 -->
-    <div v-show="activeSection === 'language'" class="panel">
-      <el-card class="page-card" shadow="never">
-        <el-divider content-position="left">语言</el-divider>
-        <el-empty description="语言设置功能开发中" />
-      </el-card>
-    </div>
-
     <!-- 更换头像弹窗 -->
     <el-dialog
       v-model="avatarDialog"
@@ -304,7 +296,7 @@ const router = useRouter()
 
 // 菜单在最左侧应用导航栏（App.vue 侧栏）中的「个人中心」分组下，
 // 这里根据路由参数 tab 决定展示哪个面板
-const SECTIONS = ['basic', 'password', 'deactivate', 'language']
+const SECTIONS = ['basic', 'password', 'deactivate']
 const activeSection = computed(() => {
   const t = route.query.tab
   return SECTIONS.includes(t) ? t : 'basic'

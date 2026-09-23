@@ -229,7 +229,8 @@ const activeMenu = computed(() => {
     return map[route.query.tab] || '/student'
   }
   if (route.path === '/profile') {
-    return map[route.query.tab] || '/profile?tab=basic'
+    const profileMap = { basic: '/profile?tab=basic', password: '/profile?tab=password', deactivate: '/profile?tab=deactivate' }
+    return profileMap[route.query.tab] || '/profile?tab=basic'
   }
   return route.path
 })

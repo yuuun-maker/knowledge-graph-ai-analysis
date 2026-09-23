@@ -12,7 +12,6 @@ from openai import OpenAI
 
 from ..core.config import settings
 from ..core.database import db
-from ..core.sql_database import sql_db
 from .embedding import EmbeddingClient, KnowledgeEmbedder
 
 _logger = logging.getLogger(__name__)
@@ -52,12 +51,16 @@ def _coerce_document_id(document_id):
         return None
 
 
-def _cosine(a: List[float], b: List[float]) -> float:
-    """余弦相似度（纯 Python 实现，避免引入 numpy 重依赖）"""
+def _cosine(a: List[float], b: List[float], norm_a: float = None) -> float:
+    """余弦相似度（纯 Python 实现，避免引入 numpy 重依赖）
+
+    norm_a：a 的 L2 范数。批量比较（如对一个查询向量排序整个索引）时 a 固定不变，
+    传入可省掉每次都重算 a 的范数——1024 维下这是相当可观的一笔重复计算。
+    """
     if not a or not b or len(a) != len(b):
         return 0.0
     dot = sum(x * y for x, y in zip(a, b))
-    na = math.sqrt(sum(x * x for x in a))
+    na = math.sqrt(sum(x * x for x in a)) if norm_a is None else norm_a
     nb = math.sqrt(sum(y * y for y in b))
     if na == 0.0 or nb == 0.0:
         return 0.0
@@ -102,8 +105,8 @@ class QAService:
         if cid is None or did is None:
             return []  # 缺少文档作用域，退回关键词
         try:
-            self.indexer.ensure_index(cid, did)
-            rows = sql_db.get_embeddings_by_document(cid, did)
+            # ensure_index 判定新鲜后直接返回向量，故此处不再另查一次
+            rows = self.indexer.ensure_index(cid, did)
             if not rows:
                 return []
             q_vec = self.embedder.embed([question])[0]
@@ -114,7 +117,8 @@ class QAService:
             _logger.warning("向量检索不可用，本次退回关键词检索: %s", e, exc_info=True)
             return []
 
-        ranked = sorted(rows, key=lambda r: -_cosine(q_vec, r["embedding"]))[:top_k]
+        q_norm = math.sqrt(sum(x * x for x in q_vec))
+        ranked = sorted(rows, key=lambda r: -_cosine(q_vec, r["embedding"], q_norm))[:top_k]
 
         # 按 kp_id 回查节点元数据，拼接上下文（限定文档）
         kp_ids = [r["kp_id"] for r in ranked]
@@ -222,12 +226,19 @@ class QAService:
         return [_format_node(n) for n in self.search_related_nodes(
             question, course_id, document_id, top_k, allowed_ids)]
 
-    async def ask(self, question: str, course_id=None, document_id=None,
-                  allowed_ids: List[int] = None) -> str:
-        """回答问题（RAG 模式）"""
-        # 1. 检索相关知识（向量优先，文档作用域）
-        contexts = self.search_related_knowledge(question, course_id, document_id,
-                                                 allowed_ids=allowed_ids)
+    async def ask_with_sources(self, question: str, course_id=None, document_id=None,
+                               allowed_ids: List[int] = None) -> dict:
+        """回答问题（RAG 模式），返回 {answer, sources}。
+
+        检索只跑一次，sources 就是本次真正喂给 LLM 的上下文——两者必然一致。
+        需要引用来源时必须用这个方法，而不是 ask() 之后再自行检索一遍：那会让同一次
+        提问把整条检索链路跑两遍（含两次外部 embedding 调用），且第二遍的结果可能
+        与喂给 LLM 的上下文不同（例如期间索引被重建）。
+        """
+        # 1. 检索相关知识（向量优先，文档作用域）；结构化节点既作上下文也作引用来源
+        sources = self.search_related_nodes(question, course_id, document_id,
+                                            allowed_ids=allowed_ids)
+        contexts = [_format_node(n) for n in sources]
         context_text = "\n".join(contexts) if contexts else "暂无相关课程知识"
 
         # 2. 调用 LLM 生成回答
@@ -242,6 +253,13 @@ class QAService:
                 max_tokens=1024,
                 timeout=settings.QA_TIMEOUT,
             )
-            return response.choices[0].message.content.strip()
+            answer = response.choices[0].message.content.strip()
         except Exception as e:
-            return f"抱歉，问答服务暂时不可用：{str(e)}"
+            answer = f"抱歉，问答服务暂时不可用：{str(e)}"
+        return {"answer": answer, "sources": sources}
+
+    async def ask(self, question: str, course_id=None, document_id=None,
+                  allowed_ids: List[int] = None) -> str:
+        """回答问题（RAG 模式），仅返回答案文本；需要引用来源请用 ask_with_sources"""
+        result = await self.ask_with_sources(question, course_id, document_id, allowed_ids)
+        return result["answer"]

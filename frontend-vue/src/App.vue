@@ -34,7 +34,7 @@
           <template v-else>{{ avatarText }}</template>
         </div>
         <div class="user-meta">
-          <div class="user-name" :title="store.username">{{ store.username }}</div>
+          <div class="user-name" :title="store.displayName">{{ store.displayName }}</div>
           <div class="user-role" :class="store.role">{{ roleText }}</div>
         </div>
         <el-button
@@ -123,7 +123,7 @@
         <div class="header-right">
           <span class="header-greet">
             <span class="greet-hi">{{ greetText }}</span>
-            <b>{{ store.username }}</b>
+            <b>{{ store.displayName }}</b>
           </span>
           <div class="header-avatar user-avatar" :class="store.role" @click="router.push('/profile')">
             <img
@@ -229,6 +229,7 @@ const activeMenu = computed(() => {
     return map[route.query.tab] || '/student'
   }
   if (route.path === '/profile') {
+    const map = { basic: '/profile?tab=basic', password: '/profile?tab=password', deactivate: '/profile?tab=deactivate' }
     return map[route.query.tab] || '/profile?tab=basic'
   }
   return route.path
@@ -252,7 +253,9 @@ function studentTabTitle(t) {
   return { overview: '学习总览', documents: '课程文档', browse: '图谱浏览', qa: '智能问答', path: '学习路径推荐', favorites: '收藏夹', practice: '做题练习' }[t] || ''
 }
 
-const avatarText = computed(() => (store.user?.real_name || store.username || 'U').slice(0, 1).toUpperCase())
+// 无头像时回退的首字母：取自侧栏展示的同一个名字（昵称 > 真实姓名 > 用户名），
+// 与 ProfileView 的 initial 保持一致，避免「显示小智、字母却是 E」的错位
+const avatarText = computed(() => (store.displayName || 'U').slice(0, 1).toUpperCase())
 // 真实头像优先，无头像或图片加载失败时回退到上面的首字母色块
 const avatarFailed = ref(false)
 const showAvatar = computed(() => !!store.avatarUrl && !avatarFailed.value)

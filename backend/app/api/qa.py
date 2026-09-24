@@ -1,6 +1,8 @@
 """
 智能问答 API（对齐规划文档 6.4，响应格式统一 {code, message, data, timestamp}）
 """
+import asyncio
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
@@ -46,8 +48,12 @@ async def ask_question(request: QuestionRequest, current_user: dict = Depends(ge
                                   allowed_ids=allowed_ids)
 
     # 获取引用来源（结构化：kp_id/name/category/description，供前端"证据链"展示）
-    sources = qa_service.search_related_nodes(request.question, request.course_id,
-                                              request.document_id, allowed_ids=allowed_ids)
+    # 阶段 G（async 修复）：这里原先**直接同步调用** —— 它内部同样是 embedding + SQLite +
+    # Neo4j 同步调用（还会触发 ensure_index 建索引，可能更慢），在 async 端点里会阻塞事件循环。
+    # 与 qa_service.ask 一样放线程池执行；原为同步调用，故此处不会引入额外行为变化。
+    sources = await asyncio.to_thread(qa_service.search_related_nodes, request.question,
+                                      request.course_id, request.document_id,
+                                      allowed_ids=allowed_ids)
 
     return success({
         "question": request.question,

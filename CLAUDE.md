@@ -53,7 +53,7 @@ curl http://localhost:8000/health
 
 改代码时注意以下现状，这些都是实测过代码得出的结论：
 
-1. **同步阻塞代码跑在 async 端点里**：`openai` 同步客户端、Neo4j 同步驱动、文件读写全部直接在 `async def` 中调用，会阻塞事件循环。新增代码若做网络/IO，要么沿用现状保持一致，要么整体迁移到 `AsyncOpenAI`/`run_in_executor`（后者是更正确的方向）
+1. **同步阻塞代码跑在 async 端点里**：`openai` 同步客户端、Neo4j 同步驱动、文件读写全部直接在 `async def` 中调用，会阻塞事件循环。新增代码若做网络/IO，要么沿用现状保持一致，要么整体迁移到 `AsyncOpenAI`/`run_in_executor`（后者是更正确的方向）。**部分已修**：问答链路（`qa_service.ask()`、`api/qa.py::ask_question`）已改用 `asyncio.to_thread`，见 `docs/题库与推荐系统设计.md` §13.11；**其余端点仍是现状**（未清零的技术债）
 2. **Cypher 注入风险**：`kg_manager.py` 用 f-string 把 LLM 输出的关系类型拼进 Cypher。同时 Neo4j **不支持参数化关系类型**（`[r:$rel_type]` 是语法错误），`delete_relationship` 传 `rel_type` 时必然失败
 3. **节点 MERGE 只按 `name`**：不同课程的同名知识点会互相覆盖 `course_id` 属性，跨课程数据会串
 4. **关系创建失败被静默吞掉**（`except: pass`），中文关系类型若不被 Neo4j 接受，整批关系会无声消失
@@ -62,3 +62,11 @@ curl http://localhost:8000/health
 7. **DeepSeek 没有 Embedding API**：RAG 向量化必须换供应商（计划书未覆盖此风险；推荐 SiliconFlow 的 `BAAI/bge-m3`，OpenAI 兼容，可复用现有客户端）
 8. `api/auth.py` 是纯占位符（TODO JWT），任何"认证"相关功能都尚未实现
 9. 根目录 `hello.py` 是遗留测试文件，无业务价值
+10. **SQLite 已开 WAL + `busy_timeout=15000`**（`_connect()` / `init_tables()`，见 `docs/数据库设计.md` §八）。
+    三件必须遵守的事：① **备份一律用 `sql_db.backup_to()`，不要 `shutil.copy2(app.db)`** ——
+    WAL 下裸拷会**静默丢掉**还在 `app.db-wal` 里的提交（而回滚方式正是「恢复 backup/ 下的备份」）；
+    ② WAL 会产生 `app.db-wal` / `app.db-shm` 边车文件（已 gitignore，**不要提交**）；
+    ③ **`backend/data/app.db` 是被 git 跟踪的**，而 WAL 下「主文件」可能不含最近提交 ——
+    提交前先让写事务结束/触发 checkpoint（最稳妥：`sql_db.backup_to()` 出一份再提交，
+    或干脆用 `git rm --cached` 把它移出版本库）。
+    回退：`SQLITE_JOURNAL_MODE=delete`

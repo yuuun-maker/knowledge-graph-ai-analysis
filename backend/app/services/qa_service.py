@@ -3,7 +3,12 @@
 
 检索链路：问题 embedding → 与课程知识点向量做余弦相似度 → top_k 上下文 → LLM 生成。
 未配置 embedding key 或向量检索失败时，自动退回关键词检索（保证功能可用）。
+
+阶段 G（async 修复）：本模块的检索与 LLM 调用都是**同步阻塞**的
+（openai 同步客户端 / Neo4j 同步驱动 / SQLite），故 `ask()` 把整段逻辑放进
+`asyncio.to_thread` 执行，避免阻塞事件循环（见 `ask()` 的说明）。
 """
+import asyncio
 import math
 from typing import List
 
@@ -13,6 +18,7 @@ from ..core.config import settings
 from ..core.database import db
 from ..core.sql_database import sql_db
 from .embedding import EmbeddingClient, KnowledgeEmbedder
+from .vector_index import vector_index
 
 
 QA_SYSTEM_PROMPT = """你是一个课程学习助手。请基于提供的课程知识图谱内容回答学生的问题。
@@ -100,17 +106,18 @@ class QAService:
             return []  # 缺少文档作用域，退回关键词
         try:
             self.indexer.ensure_index(cid, did)
-            rows = sql_db.get_embeddings_by_document(cid, did)
-            if not rows:
-                return []
             q_vec = self.embedder.embed([question])[0]
         except Exception:
             return []  # embedding 不可用（未配置 key / 网络异常等），退回关键词
 
-        ranked = sorted(rows, key=lambda r: -_cosine(q_vec, r["embedding"]))[:top_k]
+        # L2 阶段 E：检索改走 VectorIndex（numpy 矩阵 + 进程内缓存），
+        # 不再每次「全量读库 + 逐条纯 Python 余弦」；无向量时返回空 → 上层退回关键词检索
+        ranked = vector_index.kp_search(cid, did, q_vec, top_k)
+        if not ranked:
+            return []
 
         # 按 kp_id 回查节点元数据，拼接上下文（限定文档）
-        kp_ids = [r["kp_id"] for r in ranked]
+        kp_ids = [kp_id for kp_id, _ in ranked]
         nodes = {}
         recs = db.query(
             "MATCH (n:KnowledgePoint {course_id: $cid, document_id: $did}) "
@@ -122,7 +129,7 @@ class QAService:
             if n:
                 nodes[n.get("kp_id")] = n
 
-        return [self._node_dict(nodes[r["kp_id"]]) for r in ranked if r["kp_id"] in nodes]
+        return [self._node_dict(nodes[kp_id]) for kp_id, _ in ranked if kp_id in nodes]
 
     # ---------- 关键词检索（兜底） ----------
 
@@ -217,7 +224,27 @@ class QAService:
 
     async def ask(self, question: str, course_id=None, document_id=None,
                   allowed_ids: List[int] = None) -> str:
-        """回答问题（RAG 模式）"""
+        """回答问题（RAG 模式）。
+
+        阶段 G（async 修复）——**为什么必须放线程池**：
+
+        这条链路整段都是同步阻塞的：
+          · `search_related_knowledge` → embedder 的 HTTP 调用、`VectorIndex` 的 SQLite 读、
+            Neo4j 同步驱动查询；
+          · `client.chat.completions.create` 是 **openai 同步客户端**，`QA_TIMEOUT` 量级是秒。
+        在 `async def` 里直接跑会**占住整个事件循环**：一个学生提问期间，
+        同进程内**所有**其他请求（包括别人的提问）都只能排队 —— 并发下体验直接塌掉。
+
+        故把整段同步逻辑交给 `asyncio.to_thread`。这与项目内既有做法一致
+        （`knowledge_extractor._extract_single` / `relation_completion._call_llm` 都这样处理），
+        且**不改动任何业务逻辑与异常处理**（原 try/except 原样保留在同步实现里）。
+        """
+        return await asyncio.to_thread(self._ask_blocking, question, course_id,
+                                       document_id, allowed_ids)
+
+    def _ask_blocking(self, question: str, course_id=None, document_id=None,
+                      allowed_ids: List[int] = None) -> str:
+        """`ask()` 的同步实现体。**运行在线程池中，禁止在此使用 asyncio API。**"""
         # 1. 检索相关知识（向量优先，文档作用域）
         contexts = self.search_related_knowledge(question, course_id, document_id,
                                                  allowed_ids=allowed_ids)

@@ -1161,6 +1161,14 @@ class SQLDatabase:
             "SELECT * FROM t_document WHERE course_id = ? ORDER BY doc_id", (course_id,),
         )
 
+    def list_all_documents(self) -> list:
+        """全部文档记录（按课程 + 文档号排序）。
+
+        供跨课程的批量维护脚本使用（如 scripts/rebuild_missing_graphs.py
+        扫描「记录说抽取完成、Neo4j 里却没有节点」的文档）。
+        """
+        return self._query("SELECT * FROM t_document ORDER BY course_id, doc_id")
+
     def count_documents_by_course(self, course_id: int) -> int:
         return self._query_one(
             "SELECT count(*) AS cnt FROM t_document WHERE course_id = ?", (course_id,),

@@ -9,6 +9,7 @@ import os
 from ..core.codes import gen_join_code
 from ..core.database import db
 from ..core.sql_database import JOIN_MODES, sql_db
+from ..core.storage import resolve_document_path
 from .profile_service import ProfileService
 
 
@@ -110,13 +111,15 @@ class CourseService:
             course_ids=course_ids, exclude_course_ids=exclude_course_ids,
         )
 
-        # 可管理该课程 => 可以看加课码
+        # 可管理该课程 => 可以看加课码；同时记录当前用户成员关系，供前端区分主讲/协作教师
         manageable = set()
+        membership_map = {}
         if viewer:
             for c in rows:
                 if c["teacher_id"] == viewer["user_id"]:
                     manageable.add(c["course_id"])
             for m in sql_db.list_memberships_by_user(viewer["user_id"]):
+                membership_map[m["course_id"]] = m
                 if m["role"] == "teacher" and m["status"] == "approved":
                     manageable.add(m["course_id"])
 
@@ -162,6 +165,13 @@ class CourseService:
             if cid in manageable:
                 item["join_code"] = r.get("join_code")
             item.update(_member_summary(member_counts.get(cid)))
+            if viewer:
+                # 与 list_my_courses 同一套约定：创建者即使没有成员行也算教师
+                is_owner = r["teacher_id"] == viewer["user_id"]
+                m = membership_map.get(cid) or {}
+                item["is_owner"] = is_owner
+                item["my_role"] = m.get("role") or ("teacher" if is_owner else None)
+                item["my_status"] = m.get("status") or ("approved" if is_owner else None)
             items.append(item)
 
         return {"ok": True, "code": 0, "message": "success",
@@ -355,9 +365,10 @@ class CourseService:
             return {"ok": False, "code": 2008, "message": "删除课程需二次确认（confirm=true）"}
 
         # 1. 删除文档文件（本地文件系统）
+        # 路径解析见 core/storage：历史行的 file_path 可能是其他机器的路径，需回退定位
         docs = sql_db.list_documents_by_course(course_id)
         for d in docs:
-            p = d.get("file_path")
+            p = resolve_document_path(d)
             if p and os.path.exists(p):
                 try:
                     os.remove(p)

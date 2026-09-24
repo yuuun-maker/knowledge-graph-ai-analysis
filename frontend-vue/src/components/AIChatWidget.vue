@@ -5,22 +5,53 @@
     - 复用现有问答接口 api.ask(question, courseId, documentId)
     - 消息结构与主问答页一致：{ role, content, sources, error }
   -->
-  <div class="ai-widget-fab" :class="{ 'is-open': open }" :title="open ? '收起' : 'AI 助教'" @click="toggle">
+  <div
+    class="ai-widget-fab"
+    :class="{ 'is-open': open, 'is-dragging': dragging }"
+    :style="fabStyle"
+    :title="open ? '收起' : 'AI 助教（可拖动）'"
+    @click="toggle"
+    @pointerdown="onFabPointerDown"
+  >
     <el-icon v-if="open" :size="20"><Close /></el-icon>
-    <span v-else class="ai-fab-robot">🤖</span>
+    <svg
+      v-else
+      class="ai-fab-icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+      <path d="M20 3v4" />
+      <path d="M22 5h-4" />
+      <path d="M4 17v2" />
+      <path d="M5 18H3" />
+    </svg>
   </div>
 
   <transition name="ai-panel">
-    <div v-show="open" class="ai-widget-panel">
+    <div v-show="open" class="ai-widget-panel" :style="panelStyle">
       <!-- 头部：助教身份 + 问候 + 课程上下文 -->
       <div class="ai-panel-header">
         <div class="ai-header-row">
-          <div class="ai-avatar">🤖</div>
+          <div class="ai-avatar">
+            <svg class="ai-avatar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+              <path d="M20 3v4" />
+              <path d="M22 5h-4" />
+              <path d="M4 17v2" />
+              <path d="M5 18H3" />
+            </svg>
+          </div>
           <div class="ai-header-text">
             <div class="ai-title">Hi～我是你的 AI 助教小智</div>
             <div class="ai-subtitle">课程学习中欢迎随时提问，小智将全力为你答疑解惑，共同进步哦！</div>
           </div>
-          <el-icon class="ai-close" :size="15" title="收起" @click="toggle"><Close /></el-icon>
+          <el-icon class="ai-close" :size="18" title="收起" aria-label="收起" @click="toggle"><Close /></el-icon>
         </div>
         <div class="ai-header-bottom">
           <div class="ai-context-chip" :class="{ empty: !hasContext }">
@@ -112,6 +143,79 @@ const question = ref('')
 const asking = ref(false)
 const chatBoxRef = ref(null)
 
+/* ===== 悬浮球拖动 =====
+ * fabPos 为 null 时使用样式表默认的右下角位置；拖动后切换为内联 left/top。
+ * 点击与拖动通过位移阈值（6px）区分；位置持久化到 localStorage，刷新后保持。 */
+const FAB_SIZE = 58
+const FAB_MARGIN = 8
+const DRAG_KEY = 'ai-fab-pos'
+const fabPos = ref(loadFabPos())
+const dragging = ref(false)
+const dragMoved = ref(false)
+let dragStart = null
+
+function loadFabPos() {
+  try {
+    const p = JSON.parse(localStorage.getItem(DRAG_KEY) || 'null')
+    if (p && Number.isFinite(p.x) && Number.isFinite(p.y)) return clampFab(p.x, p.y)
+  } catch (e) { /* 忽略损坏的缓存 */ }
+  return null
+}
+function clampFab(x, y) {
+  const w = window.innerWidth
+  const h = window.innerHeight
+  return {
+    x: Math.min(Math.max(x, FAB_MARGIN), w - FAB_SIZE - FAB_MARGIN),
+    y: Math.min(Math.max(y, FAB_MARGIN), h - FAB_SIZE - FAB_MARGIN),
+  }
+}
+const fabStyle = computed(() =>
+  fabPos.value
+    ? { left: fabPos.value.x + 'px', top: fabPos.value.y + 'px', right: 'auto', bottom: 'auto' }
+    : {}
+)
+/* 面板跟随悬浮球：优先在悬浮球上方展开，横向按悬浮球所在半屏对齐，并钳制在视口内 */
+const panelStyle = computed(() => {
+  if (!fabPos.value) return {}
+  const w = window.innerWidth
+  const h = window.innerHeight
+  const pw = Math.min(380, w - 32)
+  const ph = Math.min(600, Math.round(h * 0.72))
+  const f = fabPos.value
+  const left = f.x + FAB_SIZE / 2 < w / 2 ? f.x : f.x + FAB_SIZE - pw
+  const top = f.y >= ph + FAB_MARGIN * 2 ? f.y - 10 - ph : f.y + FAB_SIZE + 10
+  return {
+    left: Math.min(Math.max(left, FAB_MARGIN), Math.max(w - pw - FAB_MARGIN, FAB_MARGIN)) + 'px',
+    top: Math.min(Math.max(top, FAB_MARGIN), Math.max(h - ph - FAB_MARGIN, FAB_MARGIN)) + 'px',
+    right: 'auto',
+    bottom: 'auto',
+  }
+})
+function onFabPointerDown(e) {
+  if (e.button !== undefined && e.button !== 0) return
+  dragging.value = true
+  dragMoved.value = false
+  const rect = e.currentTarget.getBoundingClientRect()
+  dragStart = { px: e.clientX, py: e.clientY, x: rect.left, y: rect.top }
+  window.addEventListener('pointermove', onFabPointerMove)
+  window.addEventListener('pointerup', onFabPointerUp, { once: true })
+}
+function onFabPointerMove(e) {
+  if (!dragging.value || !dragStart) return
+  const dx = e.clientX - dragStart.px
+  const dy = e.clientY - dragStart.py
+  if (!dragMoved.value && Math.hypot(dx, dy) < 6) return
+  dragMoved.value = true
+  fabPos.value = clampFab(dragStart.x + dx, dragStart.y + dy)
+}
+function onFabPointerUp() {
+  window.removeEventListener('pointermove', onFabPointerMove)
+  dragging.value = false
+  if (dragMoved.value && fabPos.value) {
+    try { localStorage.setItem(DRAG_KEY, JSON.stringify(fabPos.value)) } catch (e) { /* 忽略 */ }
+  }
+}
+
 // 首条问候消息（清空对话后也会回到这条）
 const GREETING = '你好！我是你的 AI 助教小智～\n课程学习中遇到任何疑问随时问我，我会结合课程知识图谱为你解答。'
 const messages = ref([{ role: 'ai', content: GREETING, sources: [], greeting: true }])
@@ -119,6 +223,8 @@ const messages = ref([{ role: 'ai', content: GREETING, sources: [], greeting: tr
 const hasContext = computed(() => Boolean(effCourseId.value && effDocumentId.value))
 
 function toggle() {
+  // 拖动结束后松手会触发 click，此处抑制，避免误开/误关面板
+  if (dragMoved.value) { dragMoved.value = false; return }
   open.value = !open.value
   if (open.value) scrollToBottom()
 }
@@ -196,10 +302,11 @@ function scrollToBottom() {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: grab;
   color: #fff;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   user-select: none;
+  touch-action: none;
 }
 /* 未展开时的呼吸光环，吸引注意但不喧宾夺主 */
 .ai-widget-fab:not(.is-open)::before {
@@ -219,9 +326,24 @@ function scrollToBottom() {
   transform: scale(1.08);
   box-shadow: 0 10px 30px rgba(91, 108, 246, 0.65), inset 0 1px 0 rgba(255,255,255,.35);
 }
-.ai-fab-robot {
-  font-size: 26px;
-  line-height: 1;
+.ai-fab-icon {
+  width: 26px;
+  height: 26px;
+}
+.ai-avatar-icon {
+  width: 22px;
+  height: 22px;
+}
+/* 拖动中：停掉过渡与脉冲，跟随更跟手 */
+.ai-widget-fab.is-dragging {
+  cursor: grabbing;
+  transition: none;
+  transform: scale(1.06);
+  box-shadow: 0 12px 32px rgba(91, 108, 246, 0.7), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.ai-widget-fab.is-dragging::before {
+  animation: none;
+  opacity: 0;
 }
 
 /* ===== 悬浮面板 ===== */
@@ -291,17 +413,27 @@ function scrollToBottom() {
   color: #b6b1cf;
   line-height: 1.6;
 }
+/* 关闭按钮：常驻圆底 + 描边，明显可见，悬停高亮放大 */
 .ai-close {
-  color: #8f8aa8;
+  color: #dcd8ee;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  transition: background 0.15s ease, color 0.15s ease;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
 }
 .ai-close:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
 }
 .ai-header-bottom {
   display: flex;

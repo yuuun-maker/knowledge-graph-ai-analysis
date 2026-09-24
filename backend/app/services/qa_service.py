@@ -9,6 +9,7 @@
 `asyncio.to_thread` 执行，避免阻塞事件循环（见 `ask()` 的说明）。
 """
 import asyncio
+import logging
 import math
 from typing import List
 
@@ -19,6 +20,8 @@ from ..core.database import db
 from ..core.sql_database import sql_db
 from .embedding import EmbeddingClient, KnowledgeEmbedder
 from .vector_index import vector_index
+
+_logger = logging.getLogger(__name__)
 
 
 QA_SYSTEM_PROMPT = """你是一个课程学习助手。请基于提供的课程知识图谱内容回答学生的问题。
@@ -107,8 +110,12 @@ class QAService:
         try:
             self.indexer.ensure_index(cid, did)
             q_vec = self.embedder.embed([question])[0]
-        except Exception:
-            return []  # embedding 不可用（未配置 key / 网络异常等），退回关键词
+        except Exception as e:
+            # embedding 不可用（未配置 key / 网络异常等）退回关键词检索。
+            # 这里必须留下日志：静默吞掉会让「向量检索整条失效」伪装成「知识库为空」，
+            # 排查时无从下手。
+            _logger.warning("向量检索不可用，本次退回关键词检索: %s", e, exc_info=True)
+            return []
 
         # L2 阶段 E：检索改走 VectorIndex（numpy 矩阵 + 进程内缓存），
         # 不再每次「全量读库 + 逐条纯 Python 余弦」；无向量时返回空 → 上层退回关键词检索

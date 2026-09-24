@@ -262,30 +262,6 @@ body {
   background: rgba(91, 141, 239, .22);
   transform: translateY(0);
 }
-
-/* text / link 主按钮：还原为透明底蓝字，避免继承上面的深色渐变导致文字看不清 */
-.el-button--primary.is-text,
-.el-button--primary.is-link {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  color: #3b5bdb;
-}
-.el-button--primary.is-text:hover,
-.el-button--primary.is-text:focus,
-.el-button--primary.is-link:hover,
-.el-button--primary.is-link:focus {
-  background: rgba(91, 141, 239, .08);
-  color: #2f4ec7;
-  transform: none;
-  box-shadow: none;
-}
-.el-button--primary.is-text:active,
-.el-button--primary.is-link:active {
-  background: rgba(91, 141, 239, .14);
-  color: #2f4ec7;
-  transform: none;
-}
 .el-button {
   border-radius: 9px;
   transition: all .2s ease;

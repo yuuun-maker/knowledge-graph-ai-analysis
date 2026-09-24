@@ -132,7 +132,6 @@
               <el-button size="small" @click="$emit('members', c)">学生管理</el-button>
               <el-button size="small" text @click="$emit('settings', c)">设置</el-button>
               <el-button v-if="c.is_owner !== false" size="small" type="danger" text @click="$emit('delete', c)">删除</el-button>
-              <el-button v-else size="small" text @click="$emit('leave', c)">退出</el-button>
             </template>
             <template v-else>
               <el-button size="small" type="primary" @click="$emit('enter', c)">
@@ -180,9 +179,8 @@
           <div class="row-stat"><b>{{ c.node_count ?? 0 }}</b><span>知识点</span></div>
           <div class="row-stat"><b>{{ c.member_count ?? 0 }}</b><span>成员</span></div>
         </div>
-        <div v-if="role !== 'teacher'" class="row-progress">
+        <div v-if="role !== 'teacher' && c.progress != null" class="row-progress">
           <el-progress
-            v-if="c.progress != null"
             type="circle"
             :percentage="Number(c.progress) || 0"
             :width="46"
@@ -213,7 +211,6 @@
             <el-button size="small" @click="$emit('members', c)">学生管理</el-button>
             <el-button size="small" text @click="$emit('settings', c)">设置</el-button>
             <el-button v-if="c.is_owner !== false" size="small" type="danger" text @click="$emit('delete', c)">删除</el-button>
-            <el-button v-else size="small" text @click="$emit('leave', c)">退出</el-button>
           </template>
           <template v-else>
             <el-button size="small" type="primary" @click="$emit('enter', c)">
@@ -676,6 +673,5 @@ async function copyText(text) {
   min-width: 236px;
   justify-content: flex-end;
 }
-.row-actions .is-hidden { visibility: hidden; pointer-events: none; }
 .row-actions :deep(.el-button + .el-button) { margin-left: 0; }
 </style>

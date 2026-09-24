@@ -23,6 +23,16 @@ env/
 data/uploads/
 backend/data/uploads/
 
+# SQLite 开发库：每台机器本地生成，含课程/文档记录与知识点向量索引，不随仓库流转。
+# 历史上它被 git 跟踪，导致换机器后「文档记录说已抽取完成、Neo4j 里却没有节点」，
+# RAG 检索恒为空、AI 只答「知识库中没有相关内容」且全程无报错。
+# 重建图谱见 backend/scripts/rebuild_missing_graphs.py。
+# 注意：backend/data/uploads/ 也需要按同样理由排除，但历史文件仍在跟踪中，见 README。
+backend/data/app.db
+backend/data/app.db-wal
+backend/data/app.db-shm
+backend/data/app.db-journal
+
 # Neo4j
 neo4j/data/
 

@@ -28,6 +28,13 @@ const router = createRouter({
       meta: { title: '登录', public: true },
     },
     {
+      // 注册：独立整页（与登录页同样的左右分栏布局），未登录可访问
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue'),
+      meta: { title: '注册', public: true },
+    },
+    {
       path: '/',
       redirect: { path: '/course-center', query: { tab: 'mine' } },
     },
@@ -79,7 +86,8 @@ router.beforeEach((to) => {
   if (!to.meta?.public && !token) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
-  if (to.name === 'login' && token) {
+  // 已登录用户不应再看到登录 / 注册页
+  if ((to.name === 'login' || to.name === 'register') && token) {
     return homeFor(role)
   }
   // 学生访问教师专属页（数据总览 / 教师端课程管理）→ 转「学习总览」驾驶舱，

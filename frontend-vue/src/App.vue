@@ -1,5 +1,5 @@
 <template>
-  <!-- 独立整页路由（登录 / 邀请落地 / 文档阅读器）不套主框架，做到真正全屏 -->
+  <!-- 独立整页路由（登录 / 注册 / 邀请落地 / 文档阅读器）不套主框架，做到真正全屏 -->
   <router-view v-if="isStandalone" v-slot="{ Component }">
     <transition name="page" mode="out-in">
       <component :is="Component" />
@@ -23,7 +23,16 @@
 
       <!-- 用户信息 -->
       <div v-show="!store.sidebarCollapsed" class="sidebar-user">
-        <div class="user-avatar" :class="store.role">{{ avatarText }}</div>
+        <div class="user-avatar" :class="store.role">
+          <img
+            v-if="showAvatar"
+            :src="store.avatarUrl"
+            class="user-avatar-img"
+            alt=""
+            @error="avatarFailed = true"
+          />
+          <template v-else>{{ avatarText }}</template>
+        </div>
         <div class="user-meta">
           <div class="user-name" :title="store.username">{{ store.username }}</div>
           <div class="user-role" :class="store.role">{{ roleText }}</div>
@@ -40,7 +49,16 @@
         </el-button>
       </div>
       <div v-show="store.sidebarCollapsed" class="sidebar-user-collapsed">
-        <div class="user-avatar small" :class="store.role">{{ avatarText }}</div>
+        <div class="user-avatar small" :class="store.role">
+          <img
+            v-if="showAvatar"
+            :src="store.avatarUrl"
+            class="user-avatar-img"
+            alt=""
+            @error="avatarFailed = true"
+          />
+          <template v-else>{{ avatarText }}</template>
+        </div>
       </div>
 
       <!-- 导航菜单 -->
@@ -108,7 +126,14 @@
             <b>{{ store.username }}</b>
           </span>
           <div class="header-avatar user-avatar" :class="store.role" @click="router.push('/profile')">
-            {{ avatarText }}
+            <img
+              v-if="showAvatar"
+              :src="store.avatarUrl"
+              class="user-avatar-img"
+              alt=""
+              @error="avatarFailed = true"
+            />
+            <template v-else>{{ avatarText }}</template>
           </div>
         </div>
       </el-header>
@@ -122,17 +147,18 @@
       </el-main>
     </el-container>
 
-    <!-- 全局 AI 助手（仅学生端；教师端不显示。课程上下文由 AIChatWidget 从 store.learningContext 读取） -->
-    <AIChatWidget v-if="store.isLoggedIn && !store.isTeacher" />
+    <!-- 全局 AI 助手（教师 / 学生共用；课程上下文由 AIChatWidget 从 store.learningContext 读取，
+         教师端的选中态由 TeacherView 同步写入） -->
+    <AIChatWidget v-if="store.isLoggedIn" />
   </el-container>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import {
-  HomeFilled, DataAnalysis, Reading, User, EditPen, Notebook, Compass, Fold, Expand, SwitchButton,
+  HomeFilled, DataAnalysis, Reading, User, EditPen, Notebook, Compass, Fold, Expand, SwitchButton, Share,
 } from '@element-plus/icons-vue'
 import { useAppStore } from './stores/app'
 import AIChatWidget from './components/AIChatWidget.vue'
@@ -143,13 +169,14 @@ const route = useRoute()
 const router = useRouter()
 
 // 这些路由自带整页布局，不显示侧边栏 / 顶栏 / 全局 AI 悬浮球
-const STANDALONE_ROUTES = new Set(['login', 'invite', 'reader'])
+const STANDALONE_ROUTES = new Set(['login', 'register', 'invite', 'reader'])
 const isStandalone = computed(() => STANDALONE_ROUTES.has(route.name))
 
 const teacherMenu = [
   { path: '/course-center', title: '课程中心', icon: HomeFilled },
   { path: '/dashboard', title: '数据总览', icon: DataAnalysis },
   { path: '/teacher', title: '课程管理', icon: EditPen },
+  { path: '/teacher?tab=preview', title: '图谱管理', icon: Share },
   { path: '/teacher?tab=questions', title: '题库管理', icon: Notebook },
   { path: '/profile', title: '个人中心', icon: User },
 ]
@@ -173,7 +200,11 @@ const studentMenu = [
 const menuItems = computed(() => (store.role === 'teacher' ? teacherMenu : studentMenu))
 
 const activeMenu = computed(() => {
-  if (route.path === '/teacher') return route.fullPath.includes('questions') ? '/teacher?tab=questions' : '/teacher'
+  if (route.path === '/teacher') {
+    if (route.query.tab === 'questions') return '/teacher?tab=questions'
+    if (route.query.tab === 'preview' || route.query.tab === 'edit') return '/teacher?tab=preview'
+    return '/teacher'
+  }
   if (route.path === '/student') {
     const map = { documents: '/student?tab=documents', browse: '/student?tab=browse', practice: '/student?tab=practice' }
     return map[route.query.tab] || '/student'
@@ -193,13 +224,18 @@ const breadcrumbs = computed(() => {
   return map[route.path] || []
 })
 function tabTitle(t) {
-  return { courses: '我的课程', documents: '课程文档', preview: '图谱预览', edit: '编辑图谱', monitor: '教学监测', questions: '题库管理', members: '学生管理' }[t] || ''
+  return { courses: '我的课程', documents: '课程文档', preview: '图谱管理', edit: '图谱管理', monitor: '教学监测', questions: '题库管理', members: '学生管理' }[t] || ''
 }
 function studentTabTitle(t) {
   return { overview: '学习总览', documents: '课程文档', browse: '图谱浏览', qa: '智能问答', path: '学习路径推荐', favorites: '收藏夹', practice: '做题练习' }[t] || ''
 }
 
 const avatarText = computed(() => (store.user?.real_name || store.username || 'U').slice(0, 1).toUpperCase())
+// 真实头像优先，无头像或图片加载失败时回退到上面的首字母色块
+const avatarFailed = ref(false)
+const showAvatar = computed(() => !!store.avatarUrl && !avatarFailed.value)
+// 更换头像后 avatarUrl 会带新的版本号（?v=时间戳），此时重置失败标记再试一次
+watch(() => store.avatarUrl, () => { avatarFailed.value = false })
 const roleText = computed(() => (store.role === 'teacher' ? '教师' : '学生'))
 const greetText = computed(() => {
   const h = new Date().getHours()
@@ -332,6 +368,8 @@ onMounted(() => {
   box-shadow: 0 4px 10px -3px rgba(91,141,239,.6);
 }
 .user-avatar.small { width: 32px; height: 32px; font-size: 14px; }
+/* 真实头像图片：铺满色块并跟随圆角，非正方形图用 cover 裁切不变形 */
+.user-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 .user-avatar.teacher { background: linear-gradient(135deg, #f5a623, #f4794d); box-shadow: 0 4px 10px -3px rgba(245,166,35,.55); }
 .user-meta { flex: 1; min-width: 0; }
 .user-name {

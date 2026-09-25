@@ -6,7 +6,7 @@
 - 接口层（api/questions.py、api/practice.py）只做参数解析与响应包装
 
 作用域与安全口径（本项目两条硬纪律）：
-1. 教师端每个方法都做「课程归属校验」：course.teacher_id != user_id → 4003，
+1. 教师端每个方法都做「课程归属校验」：非主讲时要求为本课程已批准的协作教师，否则 → 4003，
    不能只依赖 require_teacher（否则任何教师都能改别人的题库）。
 2. 学生端出题走 _public_view() 白名单投影，**绝不下发 answer / analysis**（防泄题）；
    正确答案与解析只在该题提交后随判分结果返回。
@@ -385,8 +385,10 @@ def _course_for_teacher(course_id: int, user_id: int) -> tuple:
     if course is None:
         return None, {"ok": False, "code": 2001, "message": f"课程不存在: course_id={course_id}"}
     if course["teacher_id"] != user_id:
-        return None, {"ok": False, "code": 4003,
-                      "message": "无权限：仅该课程所属教师可管理其题库"}
+        member = sql_db.get_membership(course_id, user_id)
+        if not member or member.get("role") != "teacher" or member.get("status") != "approved":
+            return None, {"ok": False, "code": 4003,
+                          "message": "无权限：仅该课程的主讲或协作教师可管理其题库"}
     return course, None
 
 
@@ -398,7 +400,7 @@ def _question_for_teacher(question_id: int, user_id: int) -> tuple:
     _, err = _course_for_teacher(question["course_id"], user_id)
     if err:
         return None, {"ok": False, "code": 4003,
-                      "message": "无权限：仅该题目所属课程的教师可操作"}
+                      "message": "无权限：仅该题目所属课程的主讲或协作教师可操作"}
     return question, None
 
 

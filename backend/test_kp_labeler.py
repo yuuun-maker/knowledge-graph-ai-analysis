@@ -23,6 +23,7 @@ except Exception:
     pass
 
 import app.services.kp_labeler as labeler
+from app.core.config import settings
 from app.core.security import hash_password
 from app.core.sql_database import sql_db
 from app.services.kp_labeler import (
@@ -228,7 +229,9 @@ def main():
           f"kp_a_after_dry={kp_a_after_dry} applied={dry['data']['applied']}")
     check("批量标注：meta 暴露权重与降级标记",
           "weights" in dry["data"]["meta"]
-          and dry["data"]["meta"]["embedding_configured"] is False
+          # 不再硬编码 False：本机若配了 EMBEDDING_API_KEY，向量路本就该是配置好的。
+          # 该断言的原意是「如实暴露降级状态」，故改为与环境实际配置比对。
+          and dry["data"]["meta"]["embedding_configured"] is bool(settings.EMBEDDING_API_KEY)
           and dry["data"]["meta"]["graph_available"] is False, str(dry["data"]["meta"]))
     check("批量标注：无候选的题如实返回空候选",
           any(it["question_id"] == q_b and not it["candidates"] for it in dry["data"]["items"]),
@@ -295,6 +298,10 @@ def main():
     sql_db._execute("DELETE FROM t_question_embedding WHERE question_id = ?", (q_a,))
     q_row = sql_db.get_question(q_a)
     fake2 = _FakeEmbedder({question_text(q_row): [0.5, 0.5]})
+    # 上面批次标注的 label_questions 会用自己的 embedder 顺手写下题目向量——
+    # 本机配了 EMBEDDING_API_KEY 时是真写库。要断言「首次写入」，须先清掉缓存，
+    # 否则这里命中缓存返回 0（缓存命中本身由下一条 check 覆盖）。
+    sql_db._execute("DELETE FROM t_question_embedding WHERE question_id = ?", (q_a,))
     check("题目向量写入成功",
           ensure_question_vectors([q_row], course_id, fake2) == 1
           and sql_db.get_question_embedding(q_a) is not None)

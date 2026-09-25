@@ -1,0 +1,805 @@
+{
+  "entities": [
+    {
+      "name": "原子理论",
+      "category": "概念",
+      "description": "关于物质由原子组成的理论，包括道尔顿原子理论及其发展。"
+    },
+    {
+      "name": "道尔顿原子理论",
+      "category": "概念",
+      "description": "道尔顿提出的关于原子和物质行为的假说，包括原子不可分割、同种元素原子相同等公设。"
+    },
+    {
+      "name": "定比定律",
+      "category": "定理",
+      "description": "纯化合物所有样品都含有相同比例（按质量）的相同元素。"
+    },
+    {
+      "name": "倍比定律",
+      "category": "定理",
+      "description": "当两种元素形成多种化合物时，固定质量的一种元素与另一种元素的质量成小整数比。"
+    },
+    {
+      "name": "阴极射线",
+      "category": "概念",
+      "description": "在低压气体放电管中产生的可见光束，由阴极发射。"
+    },
+    {
+      "name": "电子",
+      "category": "概念",
+      "description": "带负电的亚原子粒子，质量远小于原子。"
+    },
+    {
+      "name": "油滴实验",
+      "category": "方法",
+      "description": "密立根用于测量电子电荷的实验。"
+    },
+    {
+      "name": "原子核",
+      "category": "概念",
+      "description": "原子中心带正电的微小区域，集中了原子的大部分质量。"
+    },
+    {
+      "name": "质子",
+      "category": "概念",
+      "description": "原子核中带正电的亚原子粒子。"
+    },
+    {
+      "name": "中子",
+      "category": "概念",
+      "description": "原子核中不带电的亚原子粒子，质量与质子相近。"
+    },
+    {
+      "name": "同位素",
+      "category": "概念",
+      "description": "同一元素中质量不同的原子，具有相同的质子数但中子数不同。"
+    },
+    {
+      "name": "原子序数",
+      "category": "概念",
+      "description": "原子核中的质子数，决定元素的种类。"
+    },
+    {
+      "name": "质量数",
+      "category": "概念",
+      "description": "原子中质子数和中子数的总和。"
+    },
+    {
+      "name": "离子",
+      "category": "概念",
+      "description": "带电的原子或分子，通过获得或失去电子形成。"
+    },
+    {
+      "name": "阳离子",
+      "category": "概念",
+      "description": "带正电的离子，原子失去电子形成。"
+    },
+    {
+      "name": "阴离子",
+      "category": "概念",
+      "description": "带负电的离子，原子获得电子形成。"
+    },
+    {
+      "name": "原子质量单位",
+      "category": "概念",
+      "description": "用于表示原子质量的单位，定义为碳-12原子质量的1/12。"
+    },
+    {
+      "name": "化学符号",
+      "category": "概念",
+      "description": "表示元素或元素原子的缩写。"
+    },
+    {
+      "name": "元素周期表",
+      "category": "概念",
+      "description": "按原子序数排列所有已知元素的表格。"
+    },
+    {
+      "name": "化学式",
+      "category": "概念",
+      "description": "用元素符号和数字表示化合物组成的式子。"
+    },
+    {
+      "name": "分子化合物",
+      "category": "概念",
+      "description": "由分子组成的化合物，通常由非金属元素通过共价键结合。"
+    },
+    {
+      "name": "离子化合物",
+      "category": "概念",
+      "description": "由离子组成的化合物，通常由金属和非金属元素通过离子键结合。"
+    },
+    {
+      "name": "化学命名法",
+      "category": "方法",
+      "description": "根据规则对化学物质进行命名的系统方法。"
+    },
+    {
+      "name": "同位素符号",
+      "category": "概念",
+      "description": "表示特定同位素的符号，将质量数作为左上标写在元素符号左侧，原子序数有时作为左下标。"
+    },
+    {
+      "name": "原子质量",
+      "category": "概念",
+      "description": "元素天然样品中所有同位素的加权平均质量，等于每种同位素的质量乘以其分数丰度之和。"
+    },
+    {
+      "name": "平均原子质量的计算",
+      "category": "方法",
+      "description": "通过各同位素的质量乘以其分数丰度并求和来计算元素的平均原子质量。"
+    },
+    {
+      "name": "百分丰度的计算",
+      "category": "方法",
+      "description": "根据平均质量和同位素质量，通过代数方程求解各同位素的百分组成。"
+    },
+    {
+      "name": "质谱法",
+      "category": "方法",
+      "description": "一种通过质谱仪分析样品中原子或分子的质量和电荷，以确定同位素丰度和识别物质的实验方法。"
+    },
+    {
+      "name": "分子式",
+      "category": "概念",
+      "description": "用化学符号和下标表示分子中原子类型和数目的式子。"
+    },
+    {
+      "name": "结构式",
+      "category": "概念",
+      "description": "用符号和线条表示分子中原子连接方式和键合排列的式子。"
+    },
+    {
+      "name": "实验式",
+      "category": "概念",
+      "description": "表示化合物中原子类型和最简整数比的式子。"
+    },
+    {
+      "name": "同分异构体",
+      "category": "概念",
+      "description": "具有相同化学式但不同分子结构的化合物。"
+    },
+    {
+      "name": "结构异构体",
+      "category": "概念",
+      "description": "分子中原子的连接方式不同的同分异构体。"
+    },
+    {
+      "name": "空间异构体",
+      "category": "概念",
+      "description": "原子在空间中的相对取向不同的同分异构体。"
+    },
+    {
+      "name": "周期律",
+      "category": "定理",
+      "description": "元素的性质是它们原子序数的周期函数。"
+    },
+    {
+      "name": "金属",
+      "category": "概念",
+      "description": "有光泽、可延展、可锻、能良好传导热和电的元素。"
+    },
+    {
+      "name": "非金属",
+      "category": "概念",
+      "description": "外观暗淡、不可延展、不可锻、热和电的不良导体的元素。"
+    },
+    {
+      "name": "类金属",
+      "category": "概念",
+      "description": "能较好地传导热和电，并具有金属和非金属一些性质的元素。"
+    },
+    {
+      "name": "主族元素",
+      "category": "概念",
+      "description": "位于元素周期表第1、2和13-18列的元素，也称为代表性元素。"
+    },
+    {
+      "name": "过渡金属",
+      "category": "概念",
+      "description": "位于元素周期表第3-12列的元素。"
+    },
+    {
+      "name": "内过渡金属",
+      "category": "概念",
+      "description": "位于元素周期表底部的两行元素，包括镧系和锕系元素。"
+    },
+    {
+      "name": "碱金属",
+      "category": "概念",
+      "description": "第1族元素（氢除外），具有相似的化学性质，形成1+阳离子。"
+    },
+    {
+      "name": "碱土金属",
+      "category": "概念",
+      "description": "第2族元素，具有相似性质，形成2+阳离子。"
+    },
+    {
+      "name": "卤素",
+      "category": "概念",
+      "description": "第17族元素，包括氟、氯、溴、碘等，形成1-阴离子。"
+    },
+    {
+      "name": "稀有气体",
+      "category": "概念",
+      "description": "第18族元素，也称为惰性气体，化学性质稳定。"
+    },
+    {
+      "name": "单原子离子",
+      "category": "概念",
+      "description": "只由一个原子形成的离子。"
+    },
+    {
+      "name": "多原子离子",
+      "category": "概念",
+      "description": "由两个或多个原子通过共价键结合而成的带电单元。"
+    },
+    {
+      "name": "含氧酸根阴离子",
+      "category": "概念",
+      "description": "含有一个或多个氧原子的多原子阴离子。"
+    },
+    {
+      "name": "离子键",
+      "category": "概念",
+      "description": "带相反电荷的离子之间的静电吸引力。"
+    },
+    {
+      "name": "共价键",
+      "category": "概念",
+      "description": "键合原子的带正电原子核与共享电子对之间的吸引力。"
+    },
+    {
+      "name": "命名法",
+      "category": "概念",
+      "description": "为化合物命名的系统规则。"
+    },
+    {
+      "name": "二元化合物",
+      "category": "概念",
+      "description": "只含有两种元素的化合物。"
+    },
+    {
+      "name": "水合物",
+      "category": "概念",
+      "description": "晶体中含有水分子作为组成部分的离子化合物。"
+    },
+    {
+      "name": "酸",
+      "category": "概念",
+      "description": "溶于水时能释放氢离子H+的化合物。"
+    },
+    {
+      "name": "二元酸",
+      "category": "概念",
+      "description": "由氢和另一种非金属元素组成的酸。"
+    },
+    {
+      "name": "含氧酸",
+      "category": "概念",
+      "description": "含有氢、氧和至少一种其他元素，并以赋予化合物酸性的方式键合的化合物。"
+    },
+    {
+      "name": "预测离子电荷",
+      "category": "方法",
+      "description": "利用元素周期表预测主族元素形成离子的电荷的方法。"
+    },
+    {
+      "name": "书写离子化合物化学式",
+      "category": "方法",
+      "description": "根据电荷平衡原则写出离子化合物化学式的方法。"
+    },
+    {
+      "name": "命名离子化合物",
+      "category": "方法",
+      "description": "根据阳离子和阴离子的名称命名离子化合物的系统方法。"
+    },
+    {
+      "name": "命名分子化合物",
+      "category": "方法",
+      "description": "使用希腊语前缀表示原子数目来命名分子化合物的方法。"
+    },
+    {
+      "name": "命名酸",
+      "category": "方法",
+      "description": "根据酸的类型（二元酸或含氧酸）使用特定规则命名酸的方法。"
+    },
+    {
+      "name": "二元酸命名法",
+      "category": "方法",
+      "description": "命名二元酸的规则：将氢改为hydro-，非金属元素名称加-ic后缀，并添加acid。"
+    },
+    {
+      "name": "含氧酸命名法",
+      "category": "方法",
+      "description": "命名含氧酸的规则：省略氢，以阴离子词根开头，将-ate替换为-ic或-ite替换为-ous，并添加acid。"
+    },
+    {
+      "name": "氢离子",
+      "category": "概念",
+      "description": "酸溶于水时释放的H+离子。"
+    },
+    {
+      "name": "共价化合物",
+      "category": "概念",
+      "description": "由两种或更多不同元素的原子形成的分子组成的化合物。"
+    },
+    {
+      "name": "平均质量公式",
+      "category": "公式",
+      "description": "平均质量 = Σi (分数丰度 × 同位素质量)i，用于计算元素的原子质量。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "道尔顿原子理论",
+      "target": "定比定律",
+      "type": "RELATED_TO",
+      "evidence": "道尔顿知道法国化学家约瑟夫·普鲁斯特的实验，后者证明纯化合物的所有样品都含有相同比例（按质量）的相同元素。这一陈述被称为定比定律",
+      "confidence": 0.9
+    },
+    {
+      "source": "道尔顿原子理论",
+      "target": "倍比定律",
+      "type": "RELATED_TO",
+      "evidence": "道尔顿还利用普鲁斯特的数据以及他自己实验的结果，阐述了一条有趣的定律。倍比定律指出",
+      "confidence": 0.9
+    },
+    {
+      "source": "阴极射线",
+      "target": "电子",
+      "type": "RELATED_TO",
+      "evidence": "他的阴极射线粒子就是我们今天所称的电子",
+      "confidence": 0.95
+    },
+    {
+      "source": "油滴实验",
+      "target": "电子",
+      "type": "APPLIES_TO",
+      "evidence": "密立根通过他的“油滴”实验揭示了更多关于电子的信息",
+      "confidence": 0.9
+    },
+    {
+      "source": "原子核",
+      "target": "质子",
+      "type": "CONTAINS",
+      "evidence": "原子核含有原子几乎所有的质量，而质子数只提供了其中一半或更少",
+      "confidence": 0.9
+    },
+    {
+      "source": "原子核",
+      "target": "中子",
+      "type": "CONTAINS",
+      "evidence": "原子核中存在中性粒子的观点",
+      "confidence": 0.9
+    },
+    {
+      "source": "同位素",
+      "target": "中子",
+      "type": "RELATED_TO",
+      "evidence": "它们质量不同是因为它们的中子数不同",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子",
+      "target": "阳离子",
+      "type": "CONTAINS",
+      "evidence": "当一个原子失去一个或多个电子时，就形成带正电的原子，称为阳离子",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子",
+      "target": "阴离子",
+      "type": "CONTAINS",
+      "evidence": "获得一个或多个电子的原子将表现出负电荷，称为阴离子",
+      "confidence": 0.95
+    },
+    {
+      "source": "化学符号",
+      "target": "元素周期表",
+      "type": "RELATED_TO",
+      "evidence": "所有已知元素及其符号都在图2.26的元素周期表中",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学式",
+      "target": "分子化合物",
+      "type": "RELATED_TO",
+      "evidence": "化学式表示分子化合物的组成",
+      "confidence": 0.8
+    },
+    {
+      "source": "化学式",
+      "target": "离子化合物",
+      "type": "RELATED_TO",
+      "evidence": "化学式表示离子化合物的组成",
+      "confidence": 0.8
+    },
+    {
+      "source": "化学命名法",
+      "target": "分子化合物",
+      "type": "APPLIES_TO",
+      "evidence": "化学命名法用于命名分子化合物",
+      "confidence": 0.8
+    },
+    {
+      "source": "化学命名法",
+      "target": "离子化合物",
+      "type": "APPLIES_TO",
+      "evidence": "化学命名法用于命名离子化合物",
+      "confidence": 0.8
+    },
+    {
+      "source": "同位素",
+      "target": "同位素符号",
+      "type": "RELATED_TO",
+      "evidence": "任何元素特定同位素的符号，都是把质量数作为左上标写在元素符号左侧",
+      "confidence": 0.9
+    },
+    {
+      "source": "原子质量",
+      "target": "平均原子质量的计算",
+      "type": "RELATED_TO",
+      "evidence": "平均质量 = Σi (分数丰度 × 同位素质量)i",
+      "confidence": 0.9
+    },
+    {
+      "source": "平均原子质量的计算",
+      "target": "百分丰度的计算",
+      "type": "RELATED_TO",
+      "evidence": "我们还可以做这种计算的变体，如下一个例子所示。",
+      "confidence": 0.8
+    },
+    {
+      "source": "质谱法",
+      "target": "同位素",
+      "type": "APPLIES_TO",
+      "evidence": "同位素的丰度和天然丰度可以用一种称为质谱仪（mass spectrometer）的仪器通过实验确定。",
+      "confidence": 0.95
+    },
+    {
+      "source": "分子式",
+      "target": "实验式",
+      "type": "RELATED_TO",
+      "evidence": "分子式总是实验式的整数倍。",
+      "confidence": 0.9
+    },
+    {
+      "source": "同分异构体",
+      "target": "结构异构体",
+      "type": "CONTAINS",
+      "evidence": "乙酸和甲酸甲酯是结构异构体（structural isomers）——分子中原子的连接方式不同的化合物。",
+      "confidence": 0.9
+    },
+    {
+      "source": "同分异构体",
+      "target": "空间异构体",
+      "type": "CONTAINS",
+      "evidence": "还有各种类型的空间异构体（spatial isomers），其中原子在空间中的相对取向可以不同。",
+      "confidence": 0.9
+    },
+    {
+      "source": "元素周期表",
+      "target": "金属",
+      "type": "CONTAINS",
+      "evidence": "我们可以把元素分成具有共同性质的大类：金属（metals，有光泽、可延展、热和电的良导体——黄色阴影）",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "非金属",
+      "type": "CONTAINS",
+      "evidence": "非金属（nonmetals，外观暗淡、热和电的不良导体——绿色阴影）",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "类金属",
+      "type": "CONTAINS",
+      "evidence": "类金属（metalloids，能较好地传导热和电，并具有金属的一些性质和非金属的一些性质——紫色阴影）",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "主族元素",
+      "type": "CONTAINS",
+      "evidence": "元素还可以分为主族元素（main-group elements，或代表性元素），位于标记为1、2和13–18的列中",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "过渡金属",
+      "type": "CONTAINS",
+      "evidence": "过渡金属（transition metals），位于标记为3–12的列中",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "内过渡金属",
+      "type": "CONTAINS",
+      "evidence": "内过渡金属（inner transition metals），位于表格底部的两行中",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "碱金属",
+      "type": "CONTAINS",
+      "evidence": "第1族（第一列）的元素形成由一个元素原子和一个氢原子组成的化合物。这些元素（氢除外）被称为碱金属（alkali metals）",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "碱土金属",
+      "type": "CONTAINS",
+      "evidence": "第2族（第二列）的元素形成由一个元素原子和两个氢原子组成的化合物：这些称为碱土金属（alkaline earth metals）",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "卤素",
+      "type": "CONTAINS",
+      "evidence": "卤素（halogens，第17族）",
+      "confidence": 0.95
+    },
+    {
+      "source": "元素周期表",
+      "target": "稀有气体",
+      "type": "CONTAINS",
+      "evidence": "稀有气体（noble gases，第18族，也称为惰性气体）",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子化合物",
+      "target": "离子",
+      "type": "RELATED_TO",
+      "evidence": "在形成某些化合物时，原子获得或失去电子，并形成称为离子的带电粒子",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子",
+      "target": "单原子离子",
+      "type": "CONTAINS",
+      "evidence": "我们到目前为止讨论的离子称为单原子离子",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子",
+      "target": "多原子离子",
+      "type": "CONTAINS",
+      "evidence": "我们还发现许多多原子离子",
+      "confidence": 0.95
+    },
+    {
+      "source": "多原子离子",
+      "target": "含氧酸根阴离子",
+      "type": "CONTAINS",
+      "evidence": "含氧酸根阴离子是含有一个或多个氧原子的多原子离子",
+      "confidence": 0.95
+    },
+    {
+      "source": "离子键",
+      "target": "离子化合物",
+      "type": "RELATED_TO",
+      "evidence": "含有离子并由离子键结合的化合物称为离子化合物",
+      "confidence": 0.9
+    },
+    {
+      "source": "共价键",
+      "target": "分子化合物",
+      "type": "RELATED_TO",
+      "evidence": "这些分子化合物（共价化合物）在原子共享而不是转移电子时产生",
+      "confidence": 0.9
+    },
+    {
+      "source": "离子化合物",
+      "target": "化学式",
+      "type": "RELATED_TO",
+      "evidence": "离子化合物的化学式必须具有这样的离子比例，使正电荷和负电荷的数量相等",
+      "confidence": 0.85
+    },
+    {
+      "source": "化学式",
+      "target": "实验式",
+      "type": "RELATED_TO",
+      "evidence": "这些化学式就是本章前面介绍过的实验式",
+      "confidence": 0.8
+    },
+    {
+      "source": "命名法",
+      "target": "离子化合物",
+      "type": "APPLIES_TO",
+      "evidence": "要命名一种无机化合物，我们需要考虑几个问题的答案。首先，这种化合物是离子的还是分子的？",
+      "confidence": 0.9
+    },
+    {
+      "source": "命名法",
+      "target": "分子化合物",
+      "type": "APPLIES_TO",
+      "evidence": "要命名一种无机化合物，我们需要考虑几个问题的答案。首先，这种化合物是离子的还是分子的？",
+      "confidence": 0.9
+    },
+    {
+      "source": "命名法",
+      "target": "酸",
+      "type": "APPLIES_TO",
+      "evidence": "本模块描述了一种用于命名简单离子和分子化合物的方法...以及一类特定且非常重要的化合物——酸",
+      "confidence": 0.9
+    },
+    {
+      "source": "二元化合物",
+      "target": "命名法",
+      "type": "RELATED_TO",
+      "evidence": "其中最简单的是二元化合物——只含有两种元素的化合物",
+      "confidence": 0.8
+    },
+    {
+      "source": "水合物",
+      "target": "命名法",
+      "type": "RELATED_TO",
+      "evidence": "离子水合物的名称是通过给无水化合物的名称添加一个术语导出的",
+      "confidence": 0.85
+    },
+    {
+      "source": "二元酸",
+      "target": "酸",
+      "type": "CONTAINS",
+      "evidence": "如果化合物是二元酸（由氢和另一种非金属元素组成）",
+      "confidence": 0.95
+    },
+    {
+      "source": "含氧酸",
+      "target": "酸",
+      "type": "CONTAINS",
+      "evidence": "我们将简要讨论称为含氧酸的重要化合物——含有氢、氧和至少一种其他元素，并以赋予化合物酸性的方式键合的化合物",
+      "confidence": 0.95
+    },
+    {
+      "source": "预测离子电荷",
+      "target": "元素周期表",
+      "type": "APPLIES_TO",
+      "evidence": "你可以用元素周期表预测原子会形成阴离子还是阳离子，而且你常常可以预测所得离子的电荷",
+      "confidence": 0.95
+    },
+    {
+      "source": "书写离子化合物化学式",
+      "target": "离子化合物",
+      "type": "APPLIES_TO",
+      "evidence": "我们可以利用这个观察来帮助写出离子化合物的化学式",
+      "confidence": 0.95
+    },
+    {
+      "source": "命名离子化合物",
+      "target": "离子化合物",
+      "type": "APPLIES_TO",
+      "evidence": "要命名一种无机化合物，我们需要考虑几个问题的答案。首先，这种化合物是离子的还是分子的？",
+      "confidence": 0.9
+    },
+    {
+      "source": "命名分子化合物",
+      "target": "分子化合物",
+      "type": "APPLIES_TO",
+      "evidence": "为处理这种情况，我们使用一种与离子化合物命名有些相似的方法，但添加前缀来指定每种元素的原子数目",
+      "confidence": 0.9
+    },
+    {
+      "source": "命名酸",
+      "target": "酸",
+      "type": "APPLIES_TO",
+      "evidence": "为表示这种独特的化学性质，水与酸的混合物被赋予一个从化合物名称导出的名称",
+      "confidence": 0.9
+    },
+    {
+      "source": "酸",
+      "target": "二元酸",
+      "type": "CONTAINS",
+      "evidence": "一些含氢化合物属于一类称为酸（acids）的重要物质。",
+      "confidence": 0.9
+    },
+    {
+      "source": "酸",
+      "target": "含氧酸",
+      "type": "CONTAINS",
+      "evidence": "我们将简要讨论称为含氧酸（oxyacids）的重要化合物",
+      "confidence": 0.9
+    },
+    {
+      "source": "二元酸命名法",
+      "target": "二元酸",
+      "type": "APPLIES_TO",
+      "evidence": "如果化合物是二元酸（由氢和另一种非金属元素组成）：1. 单词“hydrogen”（氢）改为前缀hydro- 2. 另一种非金属元素的名称通过添加后缀-ic修改 3. 添加单词“acid”（酸）作为第二个词",
+      "confidence": 0.95
+    },
+    {
+      "source": "含氧酸命名法",
+      "target": "含氧酸",
+      "type": "APPLIES_TO",
+      "evidence": "命名含氧酸：1. 省略“hydrogen”（氢） 2. 以阴离子的词根名称开头 3. 把-ate替换为-ic，或把-ite替换为-ous 4. 添加“acid”（酸）",
+      "confidence": 0.95
+    },
+    {
+      "source": "含氧酸",
+      "target": "多原子离子",
+      "type": "RELATED_TO",
+      "evidence": "典型的含氧酸由氢与含氧多原子离子结合组成。",
+      "confidence": 0.9
+    },
+    {
+      "source": "含氧酸命名法",
+      "target": "阴离子",
+      "type": "RELATED_TO",
+      "evidence": "以阴离子的词根名称开头",
+      "confidence": 0.8
+    },
+    {
+      "source": "二元酸",
+      "target": "氢离子",
+      "type": "RELATED_TO",
+      "evidence": "许多酸溶于水时会释放氢离子H+",
+      "confidence": 0.8
+    },
+    {
+      "source": "含氧酸",
+      "target": "氢离子",
+      "type": "RELATED_TO",
+      "evidence": "含有氢、氧和至少一种其他元素，并以赋予化合物酸性的方式键合的化合物（你将在后面的章节中学到细节）",
+      "confidence": 0.7
+    },
+    {
+      "source": "离子化合物",
+      "target": "离子键",
+      "type": "RELATED_TO",
+      "evidence": "离子键：离子化合物中带相反电荷离子之间的静电吸引力",
+      "confidence": 0.9
+    },
+    {
+      "source": "分子化合物",
+      "target": "共价化合物",
+      "type": "RELATED_TO",
+      "evidence": "分子化合物（也称为共价化合物）",
+      "confidence": 0.95
+    },
+    {
+      "source": "共价化合物",
+      "target": "共价键",
+      "type": "RELATED_TO",
+      "evidence": "共价键：分子原子的原子核与原子之间的电子对之间的吸引力",
+      "confidence": 0.8
+    },
+    {
+      "source": "元素周期表",
+      "target": "原子序数",
+      "type": "RELATED_TO",
+      "evidence": "元素按原子序数递增排列成称为周期的行和称为族的列",
+      "confidence": 0.9
+    },
+    {
+      "source": "同位素",
+      "target": "原子质量",
+      "type": "RELATED_TO",
+      "evidence": "当一种天然存在的元素由几种同位素组成时，该元素的原子质量表示所涉及同位素质量的平均值。",
+      "confidence": 0.9
+    },
+    {
+      "source": "平均质量公式",
+      "target": "原子质量",
+      "type": "APPLIES_TO",
+      "evidence": "平均质量 = Σi (分数丰度 × 同位素质量)i",
+      "confidence": 0.9
+    },
+    {
+      "source": "分子式",
+      "target": "结构式",
+      "type": "RELATED_TO",
+      "evidence": "结构式指示分子中原子的键合排列。",
+      "confidence": 0.8
+    },
+    {
+      "source": "同分异构体",
+      "target": "分子式",
+      "type": "RELATED_TO",
+      "evidence": "同分异构体是具有相同分子式但原子排列不同的化合物。",
+      "confidence": 0.9
+    }
+  ]
+}

@@ -16,7 +16,7 @@ except Exception:
 
 from app.services.document_parser import DocumentParser
 
-SAMPLE_TXT = os.path.join("data", "sample_docs", "数据结构第一章.txt")
+SAMPLE_TXT = os.path.join("data", "sample_docs", "数据结构", "数据结构第一章.txt")
 DEFAULT_PDF = r"C:\Users\20472\Downloads\03会议材料-2026赛题手册.pdf"
 
 

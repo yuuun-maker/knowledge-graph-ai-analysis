@@ -1,0 +1,299 @@
+{
+  "entities": [
+    {
+      "name": "二叉树",
+      "category": "概念",
+      "description": "一种非线性数据结构，每个节点包含一个值以及两个指针，分别指向其左子节点和右子节点。"
+    },
+    {
+      "name": "左子树",
+      "category": "概念",
+      "description": "对于二叉树中的某个节点，其左子节点及其以下形成的树被称为该节点的左子树。"
+    },
+    {
+      "name": "右子树",
+      "category": "概念",
+      "description": "对于二叉树中的某个节点，其右子节点及其以下形成的树被称为该节点的右子树。"
+    },
+    {
+      "name": "根节点",
+      "category": "概念",
+      "description": "二叉树中最顶层的节点，没有父节点。"
+    },
+    {
+      "name": "叶节点",
+      "category": "概念",
+      "description": "二叉树中没有子节点的节点。"
+    },
+    {
+      "name": "层",
+      "category": "概念",
+      "description": "二叉树中节点的层级，根节点通常在第0层或第1层。"
+    },
+    {
+      "name": "度",
+      "category": "概念",
+      "description": "二叉树中节点拥有的子节点数量。"
+    },
+    {
+      "name": "边",
+      "category": "概念",
+      "description": "二叉树中连接父节点和子节点的连线。"
+    },
+    {
+      "name": "高度",
+      "category": "概念",
+      "description": "二叉树中从根节点到最远叶节点的边数。"
+    },
+    {
+      "name": "深度",
+      "category": "概念",
+      "description": "二叉树中从根节点到该节点的边数。"
+    },
+    {
+      "name": "完美二叉树",
+      "category": "概念",
+      "description": "一种二叉树类型，所有层的节点都完全填满，是最理想的状态。"
+    },
+    {
+      "name": "完全二叉树",
+      "category": "概念",
+      "description": "一种二叉树类型，除最后一层外其他层都填满，且最后一层节点靠左排列。"
+    },
+    {
+      "name": "完满二叉树",
+      "category": "概念",
+      "description": "一种二叉树类型，每个节点要么没有子节点，要么有两个子节点。"
+    },
+    {
+      "name": "平衡二叉树",
+      "category": "概念",
+      "description": "一种二叉树类型，左右子树高度差不超过1，保持平衡。"
+    },
+    {
+      "name": "数组表示",
+      "category": "方法",
+      "description": "将二叉树节点值和空位按层序遍历顺序排列，并根据父节点与子节点之间的索引映射关系来实现指针。"
+    },
+    {
+      "name": "层序遍历",
+      "category": "方法",
+      "description": "一种广度优先搜索方法，体现逐层遍历方式，通常通过队列来实现。"
+    },
+    {
+      "name": "前序遍历",
+      "category": "方法",
+      "description": "一种深度优先搜索方法，按照根-左-右的顺序遍历二叉树，通常使用递归实现。"
+    },
+    {
+      "name": "中序遍历",
+      "category": "方法",
+      "description": "一种深度优先搜索方法，按照左-根-右的顺序遍历二叉树，通常使用递归实现。"
+    },
+    {
+      "name": "后序遍历",
+      "category": "方法",
+      "description": "一种深度优先搜索方法，按照左-右-根的顺序遍历二叉树，通常使用递归实现。"
+    },
+    {
+      "name": "二叉搜索树",
+      "category": "概念",
+      "description": "一种高效的元素查找数据结构，其查找、插入和删除操作的时间复杂度均为O(log n)。"
+    },
+    {
+      "name": "AVL树",
+      "category": "概念",
+      "description": "也称平衡二叉搜索树，通过旋转操作确保在不断插入和删除节点后树仍然保持平衡。"
+    },
+    {
+      "name": "右旋",
+      "category": "方法",
+      "description": "AVL树的一种旋转操作，用于处理失衡节点，恢复平衡。"
+    },
+    {
+      "name": "左旋",
+      "category": "方法",
+      "description": "AVL树的一种旋转操作，用于处理失衡节点，恢复平衡。"
+    },
+    {
+      "name": "先右旋再左旋",
+      "category": "方法",
+      "description": "AVL树的一种旋转操作，用于处理失衡节点，恢复平衡。"
+    },
+    {
+      "name": "先左旋再右旋",
+      "category": "方法",
+      "description": "AVL树的一种旋转操作，用于处理失衡节点，恢复平衡。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "二叉树",
+      "target": "左子树",
+      "type": "CONTAINS",
+      "evidence": "对于二叉树中的某个节点，其左（右）子节点及其以下形成的树被称为该节点的左（右）子树。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "右子树",
+      "type": "CONTAINS",
+      "evidence": "对于二叉树中的某个节点，其左（右）子节点及其以下形成的树被称为该节点的左（右）子树。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "根节点",
+      "type": "CONTAINS",
+      "evidence": "二叉树的相关术语包括根节点、叶节点、层、度、边、高度和深度等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "叶节点",
+      "type": "CONTAINS",
+      "evidence": "二叉树的相关术语包括根节点、叶节点、层、度、边、高度和深度等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "层",
+      "type": "CONTAINS",
+      "evidence": "二叉树的相关术语包括根节点、叶节点、层、度、边、高度和深度等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "度",
+      "type": "CONTAINS",
+      "evidence": "二叉树的相关术语包括根节点、叶节点、层、度、边、高度和深度等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "边",
+      "type": "CONTAINS",
+      "evidence": "二叉树的相关术语包括根节点、叶节点、层、度、边、高度和深度等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "高度",
+      "type": "CONTAINS",
+      "evidence": "二叉树的相关术语包括根节点、叶节点、层、度、边、高度和深度等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "深度",
+      "type": "CONTAINS",
+      "evidence": "二叉树的相关术语包括根节点、叶节点、层、度、边、高度和深度等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "完美二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见的二叉树类型有完美二叉树、完全二叉树、完满二叉树和平衡二叉树。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "完全二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见的二叉树类型有完美二叉树、完全二叉树、完满二叉树和平衡二叉树。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "完满二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见的二叉树类型有完美二叉树、完全二叉树、完满二叉树和平衡二叉树。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "平衡二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见的二叉树类型有完美二叉树、完全二叉树、完满二叉树和平衡二叉树。",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "数组表示",
+      "type": "RELATED_TO",
+      "evidence": "二叉树可以用数组表示，方法是将节点值和空位按层序遍历顺序排列，并根据父节点与子节点之间的索引映射关系来实现指针。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "层序遍历",
+      "type": "RELATED_TO",
+      "evidence": "二叉树的层序遍历是一种广度优先搜索方法，它体现了“一圈一圈向外扩展”的逐层遍历方式，通常通过队列来实现。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "前序遍历",
+      "type": "RELATED_TO",
+      "evidence": "前序、中序、后序遍历皆属于深度优先搜索，它们体现了“先走到尽头，再回溯继续”的遍历方式，通常使用递归来实现。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "中序遍历",
+      "type": "RELATED_TO",
+      "evidence": "前序、中序、后序遍历皆属于深度优先搜索，它们体现了“先走到尽头，再回溯继续”的遍历方式，通常使用递归来实现。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "后序遍历",
+      "type": "RELATED_TO",
+      "evidence": "前序、中序、后序遍历皆属于深度优先搜索，它们体现了“先走到尽头，再回溯继续”的遍历方式，通常使用递归来实现。",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉搜索树",
+      "target": "二叉树",
+      "type": "CONTAINS",
+      "evidence": "二叉搜索树是一种高效的元素查找数据结构",
+      "confidence": 0.9
+    },
+    {
+      "source": "AVL树",
+      "target": "二叉搜索树",
+      "type": "CONTAINS",
+      "evidence": "AVL 树，也称平衡二叉搜索树",
+      "confidence": 0.95
+    },
+    {
+      "source": "AVL树",
+      "target": "右旋",
+      "type": "CONTAINS",
+      "evidence": "AVL 树的旋转操作包括右旋、左旋、先右旋再左旋、先左旋再右旋。",
+      "confidence": 0.95
+    },
+    {
+      "source": "AVL树",
+      "target": "左旋",
+      "type": "CONTAINS",
+      "evidence": "AVL 树的旋转操作包括右旋、左旋、先右旋再左旋、先左旋再右旋。",
+      "confidence": 0.95
+    },
+    {
+      "source": "AVL树",
+      "target": "先右旋再左旋",
+      "type": "CONTAINS",
+      "evidence": "AVL 树的旋转操作包括右旋、左旋、先右旋再左旋、先左旋再右旋。",
+      "confidence": 0.95
+    },
+    {
+      "source": "AVL树",
+      "target": "先左旋再右旋",
+      "type": "CONTAINS",
+      "evidence": "AVL 树的旋转操作包括右旋、左旋、先右旋再左旋、先左旋再右旋。",
+      "confidence": 0.95
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+{
+  "entities": [
+    {
+      "name": "时间复杂度",
+      "category": "概念",
+      "description": "衡量算法运行时间随数据量增长趋势的指标，用大O记号表示。"
+    },
+    {
+      "name": "运行时间",
+      "category": "概念",
+      "description": "算法实际执行所需的时间，可通过统计计算操作时间求和得到。"
+    },
+    {
+      "name": "时间增长趋势",
+      "category": "概念",
+      "description": "算法运行时间随输入数据量变大时的变化趋势，是时间复杂度分析的核心。"
+    },
+    {
+      "name": "大O记号",
+      "category": "概念",
+      "description": "表示函数渐近上界的数学符号，记为O(f(n))。"
+    },
+    {
+      "name": "渐近上界",
+      "category": "概念",
+      "description": "描述函数T(n)在n趋于无穷大时的增长上限，即存在常数c和n0使得T(n) ≤ c·f(n)。"
+    },
+    {
+      "name": "操作数量",
+      "category": "概念",
+      "description": "算法中基本操作执行的次数，通常记为T(n)，是输入数据大小n的函数。"
+    },
+    {
+      "name": "常数阶",
+      "category": "概念",
+      "description": "时间复杂度O(1)，操作数量与输入数据大小n无关。"
+    },
+    {
+      "name": "线性阶",
+      "category": "概念",
+      "description": "时间复杂度O(n)，操作数量随输入数据大小n线性增长。"
+    },
+    {
+      "name": "平方阶",
+      "category": "概念",
+      "description": "时间复杂度O(n^2)，操作数量随输入数据大小n平方增长，常见于嵌套循环。"
+    },
+    {
+      "name": "指数阶",
+      "category": "概念",
+      "description": "时间复杂度O(2^n)，操作数量随输入数据大小n指数增长，常见于递归和穷举法。"
+    },
+    {
+      "name": "对数阶",
+      "category": "概念",
+      "description": "时间复杂度O(log n)，操作数量随输入数据大小n对数增长，常见于分治策略。"
+    },
+    {
+      "name": "线性对数阶",
+      "category": "概念",
+      "description": "时间复杂度O(n log n)，常见于嵌套循环和主流排序算法。"
+    },
+    {
+      "name": "阶乘阶",
+      "category": "概念",
+      "description": "时间复杂度O(n!)，对应全排列问题，增长极快。"
+    },
+    {
+      "name": "统计操作数量",
+      "category": "方法",
+      "description": "逐行统计代码中操作执行次数，并忽略常数项和系数，以简化T(n)的步骤。"
+    },
+    {
+      "name": "判断渐近上界",
+      "category": "方法",
+      "description": "根据T(n)中最高阶的项确定时间复杂度O(f(n))的步骤。"
+    },
+    {
+      "name": "最差时间复杂度",
+      "category": "概念",
+      "description": "算法在所有输入情况下的最大运行时间增长趋势。"
+    },
+    {
+      "name": "最佳时间复杂度",
+      "category": "概念",
+      "description": "算法在所有输入情况下的最小运行时间增长趋势。"
+    },
+    {
+      "name": "平均时间复杂度",
+      "category": "概念",
+      "description": "算法在所有可能输入下的运行时间期望值的增长趋势。"
+    },
+    {
+      "name": "对数阶时间复杂度",
+      "category": "概念",
+      "description": "时间复杂度为 O(log n) 的阶，底数不影响复杂度，通常省略底数。"
+    },
+    {
+      "name": "线性对数阶时间复杂度",
+      "category": "概念",
+      "description": "时间复杂度为 O(n log n) 的阶，常出现于嵌套循环中。"
+    },
+    {
+      "name": "阶乘阶时间复杂度",
+      "category": "概念",
+      "description": "时间复杂度为 O(n!) 的阶，对应全排列问题，通常使用递归实现。"
+    },
+    {
+      "name": "Ω记号",
+      "category": "概念",
+      "description": "表示函数渐近下界的数学记号，用于描述最佳时间复杂度。"
+    },
+    {
+      "name": "Θ记号",
+      "category": "概念",
+      "description": "表示函数渐近紧确界的数学记号，用于描述平均时间复杂度。"
+    },
+    {
+      "name": "对数换底公式",
+      "category": "公式",
+      "description": "用于转换不同底数的对数，公式为 O(log_m n) = O(log_k n / log_k m) = O(log_k n)。"
+    },
+    {
+      "name": "全排列",
+      "category": "概念",
+      "description": "给定 n 个互不重复的元素，求其所有可能的排列方案，方案数量为 n!。"
+    },
+    {
+      "name": "递归",
+      "category": "方法",
+      "description": "一种通过函数调用自身来解决问题的方法，常用于实现阶乘等计算。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "时间复杂度",
+      "target": "时间增长趋势",
+      "type": "RELATED_TO",
+      "evidence": "时间复杂度分析统计的不是算法运行时间，而是算法运行时间随着数据量变大时的增长趋势。",
+      "confidence": 0.95
+    },
+    {
+      "source": "时间复杂度",
+      "target": "大O记号",
+      "type": "RELATED_TO",
+      "evidence": "我们将线性阶的时间复杂度记为 O(n) ，这个数学符号称为大 O 记号（big-O notation）",
+      "confidence": 0.95
+    },
+    {
+      "source": "大O记号",
+      "target": "渐近上界",
+      "type": "RELATED_TO",
+      "evidence": "这个数学符号称为大 O 记号（big-O notation），表示函数 T(n) 的渐近上界（asymptotic upper bound）。",
+      "confidence": 0.95
+    },
+    {
+      "source": "时间复杂度",
+      "target": "操作数量",
+      "type": "RELATED_TO",
+      "evidence": "时间复杂度分析本质上是计算“操作数量 T(n)”的渐近上界",
+      "confidence": 0.95
+    },
+    {
+      "source": "统计操作数量",
+      "target": "操作数量",
+      "type": "APPLIES_TO",
+      "evidence": "首先统计操作数量，然后判断渐近上界。",
+      "confidence": 0.9
+    },
+    {
+      "source": "判断渐近上界",
+      "target": "渐近上界",
+      "type": "APPLIES_TO",
+      "evidence": "首先统计操作数量，然后判断渐近上界。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "常数阶",
+      "type": "CONTAINS",
+      "evidence": "常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "线性阶",
+      "type": "CONTAINS",
+      "evidence": "常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "平方阶",
+      "type": "CONTAINS",
+      "evidence": "常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "指数阶",
+      "type": "CONTAINS",
+      "evidence": "常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "对数阶",
+      "type": "CONTAINS",
+      "evidence": "常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "线性对数阶",
+      "type": "CONTAINS",
+      "evidence": "常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "阶乘阶",
+      "type": "CONTAINS",
+      "evidence": "常见的时间复杂度类型如下图所示（按照从低到高的顺序排列）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "最差时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "最差、最佳、平均时间复杂度",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "最佳时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "最差、最佳、平均时间复杂度",
+      "confidence": 0.9
+    },
+    {
+      "source": "时间复杂度",
+      "target": "平均时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "最差、最佳、平均时间复杂度",
+      "confidence": 0.9
+    },
+    {
+      "source": "对数换底公式",
+      "target": "对数阶时间复杂度",
+      "type": "APPLIES_TO",
+      "evidence": "通过对数换底公式，我们可以得到具有不同底数、相等的时间复杂度",
+      "confidence": 0.95
+    },
+    {
+      "source": "递归",
+      "target": "阶乘阶时间复杂度",
+      "type": "APPLIES_TO",
+      "evidence": "阶乘通常使用递归实现",
+      "confidence": 0.95
+    },
+    {
+      "source": "全排列",
+      "target": "阶乘阶时间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "阶乘阶对应数学上的“全排列”问题",
+      "confidence": 0.9
+    },
+    {
+      "source": "大O记号",
+      "target": "最差时间复杂度",
+      "type": "APPLIES_TO",
+      "evidence": "“最差时间复杂度”对应函数渐近上界，使用大 O 记号表示",
+      "confidence": 0.95
+    },
+    {
+      "source": "Ω记号",
+      "target": "最佳时间复杂度",
+      "type": "APPLIES_TO",
+      "evidence": "“最佳时间复杂度”对应函数渐近下界，用 Ω 记号表示",
+      "confidence": 0.95
+    },
+    {
+      "source": "Θ记号",
+      "target": "平均时间复杂度",
+      "type": "APPLIES_TO",
+      "evidence": "平均时间复杂度可以体现算法在随机输入数据下的运行效率，用 Θ 记号来表示",
+      "confidence": 0.95
+    }
+  ]
+}

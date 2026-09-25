@@ -1,0 +1,462 @@
+{
+  "entities": [
+    {
+      "name": "式量",
+      "category": "概念",
+      "description": "物质化学式中所有原子的平均原子质量之和，用于描述共价化合物和离子化合物的质量。"
+    },
+    {
+      "name": "分子质量",
+      "category": "概念",
+      "description": "共价物质单个分子的平均质量，等于分子式中所有原子的平均原子质量之和。"
+    },
+    {
+      "name": "摩尔",
+      "category": "概念",
+      "description": "物质的量的单位，定义为含有与12 g纯12C中原子数目相同的离散实体的物质的量。"
+    },
+    {
+      "name": "阿伏伽德罗数",
+      "category": "概念",
+      "description": "一摩尔物质中所含的实体数，约为6.022×10^23/mol，是基本常数。"
+    },
+    {
+      "name": "摩尔质量",
+      "category": "概念",
+      "description": "1摩尔物质以克为单位的质量，数值上等于其以amu为单位的式量或原子量。"
+    },
+    {
+      "name": "质量、摩尔数和粒子数之间的换算",
+      "category": "方法",
+      "description": "利用摩尔质量和阿伏伽德罗数在物质的质量、摩尔数和原子或分子数之间进行相互计算的方法。"
+    },
+    {
+      "name": "百分组成",
+      "category": "概念",
+      "description": "化合物中每种元素的质量百分比，可由实验测定或从化学式计算得出。"
+    },
+    {
+      "name": "实验式",
+      "category": "概念",
+      "description": "化合物中各元素原子最简单整数比的化学式，可通过元素质量或百分组成推导。"
+    },
+    {
+      "name": "分子式",
+      "category": "概念",
+      "description": "表示分子中原子实际种类和数目的化学式，可通过实验式和摩尔质量确定。"
+    },
+    {
+      "name": "由元素质量确定实验式",
+      "category": "方法",
+      "description": "通过将各元素质量转换为摩尔数，再除以最小摩尔数得到整数比，从而确定实验式的方法。"
+    },
+    {
+      "name": "由百分组成确定实验式",
+      "category": "方法",
+      "description": "利用化合物的百分组成计算各元素质量，进而按常规方法推导实验式的方法。"
+    },
+    {
+      "name": "由分子式或实验式计算百分组成",
+      "category": "方法",
+      "description": "利用化学式和原子质量或摩尔质量计算化合物中各元素质量百分比的方法。"
+    },
+    {
+      "name": "分子式的推导",
+      "category": "方法",
+      "description": "通过比较化合物的分子质量或摩尔质量与实验式质量，确定分子式的方法。"
+    },
+    {
+      "name": "摩尔浓度",
+      "category": "概念",
+      "description": "溶液中溶质的物质的量浓度，定义为每升溶液中所含溶质的摩尔数。"
+    },
+    {
+      "name": "溶液",
+      "category": "概念",
+      "description": "由溶质和溶剂组成的均相混合物。"
+    },
+    {
+      "name": "稀释",
+      "category": "概念",
+      "description": "通过加入溶剂使溶液浓度降低的过程。"
+    },
+    {
+      "name": "稀释方程",
+      "category": "公式",
+      "description": "描述稀释前后溶液浓度和体积关系的方程：C1V1 = C2V2。"
+    },
+    {
+      "name": "质量百分比",
+      "category": "概念",
+      "description": "溶液中组分的质量与溶液质量之比，以百分比表示。"
+    },
+    {
+      "name": "体积百分比",
+      "category": "概念",
+      "description": "溶液中溶质体积与溶液体积之比，以百分比表示。"
+    },
+    {
+      "name": "质量-体积百分比",
+      "category": "概念",
+      "description": "溶质质量与溶液体积之比，以百分比表示。"
+    },
+    {
+      "name": "百万分率",
+      "category": "概念",
+      "description": "表示极低浓度的单位，定义为溶质质量与溶液质量之比乘以10^6。"
+    },
+    {
+      "name": "十亿分率",
+      "category": "概念",
+      "description": "表示极低浓度的单位，定义为溶质质量与溶液质量之比乘以10^9。"
+    },
+    {
+      "name": "水溶液",
+      "category": "概念",
+      "description": "以水为溶剂的溶液"
+    },
+    {
+      "name": "Avogadro常数",
+      "category": "概念",
+      "description": "实验测定的构成1摩尔物质的实体数量值，等于6.022 × 10²³ mol⁻¹"
+    },
+    {
+      "name": "浓的",
+      "category": "概念",
+      "description": "描述含有相对较高浓度溶质的溶液的定性术语"
+    },
+    {
+      "name": "浓度",
+      "category": "概念",
+      "description": "溶液中溶质和溶剂相对量的定量度量"
+    },
+    {
+      "name": "稀的",
+      "category": "概念",
+      "description": "描述含有相对较低浓度溶质的溶液的定性术语"
+    },
+    {
+      "name": "溶解",
+      "category": "概念",
+      "description": "描述溶质组分分散在溶剂中的过程"
+    },
+    {
+      "name": "经验式量",
+      "category": "概念",
+      "description": "经验式中所有原子的平均原子质量之和"
+    },
+    {
+      "name": "质量分数组成",
+      "category": "概念",
+      "description": "化合物中各元素的质量百分比"
+    },
+    {
+      "name": "溶质",
+      "category": "概念",
+      "description": "溶液中被溶解的物质"
+    },
+    {
+      "name": "溶剂",
+      "category": "概念",
+      "description": "溶液中用于溶解溶质的物质"
+    },
+    {
+      "name": "稀释方程式",
+      "category": "公式",
+      "description": "稀释前后溶液浓度与体积之间的关系式 C1V1 = C2V2"
+    },
+    {
+      "name": "摩尔浓度公式",
+      "category": "公式",
+      "description": "摩尔浓度等于溶质的摩尔数除以溶液的升数"
+    },
+    {
+      "name": "质量百分比公式",
+      "category": "公式",
+      "description": "质量百分比等于溶质的质量除以溶液的质量乘以100%"
+    },
+    {
+      "name": "ppm公式",
+      "category": "公式",
+      "description": "ppm等于溶质的质量除以溶液的质量乘以10⁶"
+    },
+    {
+      "name": "ppb公式",
+      "category": "公式",
+      "description": "ppb等于溶质的质量除以溶液的质量乘以10⁹"
+    },
+    {
+      "name": "经验式",
+      "category": "概念",
+      "description": "化合物中各元素原子最简整数比的化学式"
+    }
+  ],
+  "relations": [
+    {
+      "source": "式量",
+      "target": "分子质量",
+      "type": "RELATED_TO",
+      "evidence": "对于共价物质，化学式表示构成该物质单个分子的原子的数量和种类；因此，式量可以正确地称为分子质量。",
+      "confidence": 0.95
+    },
+    {
+      "source": "摩尔",
+      "target": "阿伏伽德罗数",
+      "type": "RELATED_TO",
+      "evidence": "构成一摩尔的实体数量已通过实验确定为 6.02214179 × 10^23，这是一个基本常数，为纪念意大利科学家 Amedeo Avogadro 而命名为阿伏伽德罗数（NA）或阿伏伽德罗常数。",
+      "confidence": 0.95
+    },
+    {
+      "source": "摩尔",
+      "target": "摩尔质量",
+      "type": "RELATED_TO",
+      "evidence": "一种元素（或化合物）的摩尔质量是 1 摩尔该物质以克为单位的质量，这一性质以克每摩尔（g/mol）为单位表示。",
+      "confidence": 0.95
+    },
+    {
+      "source": "式量",
+      "target": "摩尔质量",
+      "type": "RELATED_TO",
+      "evidence": "任何物质的摩尔质量在数值上等于其以 amu 为单位的原子量或化学式量。",
+      "confidence": 0.95
+    },
+    {
+      "source": "质量、摩尔数和粒子数之间的换算",
+      "target": "摩尔质量",
+      "type": "APPLIES_TO",
+      "evidence": "物质的摩尔量可以通过将其质量（g）除以其摩尔质量（g/mol）来计算。",
+      "confidence": 0.95
+    },
+    {
+      "source": "质量、摩尔数和粒子数之间的换算",
+      "target": "阿伏伽德罗数",
+      "type": "APPLIES_TO",
+      "evidence": "使用 Avogadro 常数（N_A）将该摩尔量转换为 Cu 原子的数目。",
+      "confidence": 0.95
+    },
+    {
+      "source": "由元素质量确定实验式",
+      "target": "实验式",
+      "type": "APPLIES_TO",
+      "evidence": "实验式是通过实验测得的元素质量推导出来的。",
+      "confidence": 0.95
+    },
+    {
+      "source": "由百分组成确定实验式",
+      "target": "实验式",
+      "type": "APPLIES_TO",
+      "evidence": "百分组成可用于计算任意方便质量的化合物中存在的元素质量；然后可以按通常方式使用这些质量来推导实验式。",
+      "confidence": 0.95
+    },
+    {
+      "source": "由分子式或实验式计算百分组成",
+      "target": "百分组成",
+      "type": "APPLIES_TO",
+      "evidence": "化合物的百分组成可以很容易地由其式量和组成元素的原子质量推导出来。",
+      "confidence": 0.95
+    },
+    {
+      "source": "实验式",
+      "target": "分子式",
+      "type": "PRECEDES",
+      "evidence": "确定分子式还需要额外的信息（如本节后面所讨论的）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "分子式的推导",
+      "target": "分子式",
+      "type": "APPLIES_TO",
+      "evidence": "分子式的推导",
+      "confidence": 0.95
+    },
+    {
+      "source": "分子式的推导",
+      "target": "实验式",
+      "type": "PRECEDES",
+      "evidence": "确定构成共价化合物单个分子的原子的绝对数量，需要同时了解其经验式以及其分子质量或摩尔质量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "稀释方程",
+      "target": "稀释",
+      "type": "APPLIES_TO",
+      "evidence": "这一关系式通常被称为稀释方程。",
+      "confidence": 0.95
+    },
+    {
+      "source": "摩尔浓度",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "摩尔浓度（M）是化学中许多应用的有用浓度单位。摩尔浓度定义为恰好1升（1 L）溶液中所含溶质的摩尔数",
+      "confidence": 0.9
+    },
+    {
+      "source": "质量百分比",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "溶液组分的质量百分比定义为该组分的质量与溶液质量之比",
+      "confidence": 0.9
+    },
+    {
+      "source": "体积百分比",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "由液体溶质溶于液体溶剂形成的溶液的浓度通常表示为体积百分比",
+      "confidence": 0.9
+    },
+    {
+      "source": "质量-体积百分比",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "质量-体积百分比是溶质质量与溶液体积之比",
+      "confidence": 0.9
+    },
+    {
+      "source": "百万分率",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "极低的溶质浓度通常用适当小的单位表示，如百万分率（ppm）或十亿分率（ppb）",
+      "confidence": 0.9
+    },
+    {
+      "source": "十亿分率",
+      "target": "溶液",
+      "type": "RELATED_TO",
+      "evidence": "极低的溶质浓度通常用适当小的单位表示，如百万分率（ppm）或十亿分率（ppb）",
+      "confidence": 0.9
+    },
+    {
+      "source": "水溶液",
+      "target": "溶剂",
+      "type": "RELATED_TO",
+      "evidence": "水溶液是以水为溶剂的溶液",
+      "confidence": 0.9
+    },
+    {
+      "source": "水溶液",
+      "target": "溶质",
+      "type": "RELATED_TO",
+      "evidence": "水溶液是以水为溶剂的溶液",
+      "confidence": 0.9
+    },
+    {
+      "source": "浓度",
+      "target": "摩尔浓度",
+      "type": "CONTAINS",
+      "evidence": "浓度可以用各种单位来测量，其中一个非常有用的单位是摩尔浓度",
+      "confidence": 0.95
+    },
+    {
+      "source": "浓度",
+      "target": "质量百分比",
+      "type": "CONTAINS",
+      "evidence": "基于溶液组分质量、体积或两者的百分比浓度适用于表示相对较高的浓度",
+      "confidence": 0.9
+    },
+    {
+      "source": "浓度",
+      "target": "质量-体积百分比",
+      "type": "CONTAINS",
+      "evidence": "基于溶液组分质量、体积或两者的百分比浓度适用于表示相对较高的浓度",
+      "confidence": 0.9
+    },
+    {
+      "source": "浓度",
+      "target": "体积百分比",
+      "type": "CONTAINS",
+      "evidence": "基于溶液组分质量、体积或两者的百分比浓度适用于表示相对较高的浓度",
+      "confidence": 0.9
+    },
+    {
+      "source": "浓度",
+      "target": "百万分率",
+      "type": "CONTAINS",
+      "evidence": "较低的浓度则方便地用ppm或ppb单位表示",
+      "confidence": 0.9
+    },
+    {
+      "source": "浓度",
+      "target": "十亿分率",
+      "type": "CONTAINS",
+      "evidence": "较低的浓度则方便地用ppm或ppb单位表示",
+      "confidence": 0.9
+    },
+    {
+      "source": "稀释",
+      "target": "浓度",
+      "type": "RELATED_TO",
+      "evidence": "向溶液中加入溶剂以降低溶质浓度的过程",
+      "confidence": 0.9
+    },
+    {
+      "source": "稀释方程式",
+      "target": "稀释",
+      "type": "APPLIES_TO",
+      "evidence": "稀释方程式是稀释前后溶液浓度与体积之间的简单关系",
+      "confidence": 0.9
+    },
+    {
+      "source": "摩尔浓度公式",
+      "target": "摩尔浓度",
+      "type": "APPLIES_TO",
+      "evidence": "M = 溶质的摩尔数 / 溶液的升数",
+      "confidence": 0.95
+    },
+    {
+      "source": "质量百分比公式",
+      "target": "质量百分比",
+      "type": "APPLIES_TO",
+      "evidence": "质量百分比 = 溶质的质量 / 溶液的质量 × 100",
+      "confidence": 0.95
+    },
+    {
+      "source": "ppm公式",
+      "target": "百万分率",
+      "type": "APPLIES_TO",
+      "evidence": "ppm = 溶质的质量 / 溶液的质量 × 10⁶ ppm",
+      "confidence": 0.95
+    },
+    {
+      "source": "ppb公式",
+      "target": "十亿分率",
+      "type": "APPLIES_TO",
+      "evidence": "ppb = 溶质的质量 / 溶液的质量 × 10⁹ ppb",
+      "confidence": 0.95
+    },
+    {
+      "source": "摩尔",
+      "target": "Avogadro常数",
+      "type": "RELATED_TO",
+      "evidence": "构成1摩尔物质的实体数为6.022 × 10²³，这一数量称为Avogadro常数",
+      "confidence": 0.95
+    },
+    {
+      "source": "质量分数组成",
+      "target": "经验式",
+      "type": "PRECEDES",
+      "evidence": "化合物的百分组成提供了化合物中每种元素的质量百分比，通常通过实验测定并用于推导化合物的经验式",
+      "confidence": 0.9
+    },
+    {
+      "source": "经验式",
+      "target": "分子式",
+      "type": "PRECEDES",
+      "evidence": "共价化合物的经验式质量可与该化合物的分子质量或摩尔质量进行比较，从而推导出分子式",
+      "confidence": 0.9
+    },
+    {
+      "source": "经验式量",
+      "target": "经验式",
+      "type": "RELATED_TO",
+      "evidence": "经验式量是经验式中所有原子的平均原子质量之和",
+      "confidence": 0.9
+    },
+    {
+      "source": "式量",
+      "target": "分子式",
+      "type": "RELATED_TO",
+      "evidence": "对于共价化合物，这也是分子质量",
+      "confidence": 0.8
+    }
+  ]
+}

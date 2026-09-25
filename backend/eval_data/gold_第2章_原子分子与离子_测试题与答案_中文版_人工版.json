@@ -1,0 +1,210 @@
+[
+  {
+    "text_id": "化学_原子分子与离子_第2章_测试题",
+    "source": "data/sample_docs/openstax_化学/第2章_原子分子与离子_测试题与答案_中文版.txt",
+    "entities": [
+      {
+        "name": "道尔顿原子理论",
+        "category": "概念",
+        "description": "道尔顿提出的原子理论公设体系，测试题围绕哪些观察会违反其公设展开。"
+      },
+      {
+        "name": "定比定律",
+        "category": "定理",
+        "description": "给定化合物中各元素的质量比例（百分比）总是固定的。"
+      },
+      {
+        "name": "倍比定律",
+        "category": "定理",
+        "description": "当两种元素形成多种化合物时，与固定质量的一种元素化合的另一种元素的质量成简单整数比。"
+      },
+      {
+        "name": "同位素",
+        "category": "概念",
+        "description": "质子数相同但中子数不同、因而质量不同的同一元素原子。"
+      },
+      {
+        "name": "电子",
+        "category": "概念",
+        "description": "带负电的亚原子粒子，电荷大小与质子相同但质量小得多。"
+      },
+      {
+        "name": "质子",
+        "category": "概念",
+        "description": "原子核内带正电的亚原子粒子，其数目决定元素的原子序数。"
+      },
+      {
+        "name": "中子",
+        "category": "概念",
+        "description": "原子核内不带电的亚原子粒子，质量与质子大致相同。"
+      },
+      {
+        "name": "汤姆森葡萄干布丁模型",
+        "category": "概念",
+        "description": "正电荷均匀分布在整个原子中、电子嵌入其中的原子模型。"
+      },
+      {
+        "name": "卢瑟福原子模型",
+        "category": "概念",
+        "description": "原子中心有一个小的带正电的原子核、原子内部大部分是空空间的模型。"
+      },
+      {
+        "name": "原子序数",
+        "category": "概念",
+        "description": "原子核中的质子数，与质量数、电荷一起用于书写离子符号。"
+      },
+      {
+        "name": "离子",
+        "category": "概念",
+        "description": "通过得失电子形成的带电原子或分子，可用符号表示其电荷和组成。"
+      },
+      {
+        "name": "平均原子质量",
+        "category": "概念",
+        "description": "由各天然同位素的质量及其丰度加权求得的元素原子平均质量。"
+      },
+      {
+        "name": "分子式",
+        "category": "概念",
+        "description": "用元素符号和下标表示分子中各原子实际数目的化学式。"
+      },
+      {
+        "name": "实验式",
+        "category": "概念",
+        "description": "以原子最简整数比表示化合物组成的化学式。"
+      },
+      {
+        "name": "结构异构体",
+        "category": "概念",
+        "description": "化学组成（原子的类型和数目）相同但原子连接结构不同的化合物。"
+      },
+      {
+        "name": "元素周期表",
+        "category": "概念",
+        "description": "按原子序数排列元素的表格，用于判断元素类别并预测化合物是离子的还是共价的。"
+      },
+      {
+        "name": "离子化合物",
+        "category": "概念",
+        "description": "由阳离子和阴离子通过离子键结合形成的化合物。"
+      },
+      {
+        "name": "共价化合物",
+        "category": "概念",
+        "description": "原子间共享电子、由共价键结合形成的化合物。"
+      },
+      {
+        "name": "化学命名法",
+        "category": "方法",
+        "description": "根据化合物类型用系统规则命名化合物或由名称写出化学式的方法。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "道尔顿原子理论",
+        "target": "定比定律",
+        "type": "RELATED_TO",
+        "evidence": "这个陈述违反了道尔顿的第四条公设：在给定化合物中，每种类型的原子数（因此百分比）总是具有相同的比例。",
+        "core": true
+      },
+      {
+        "source": "定比定律",
+        "target": "倍比定律",
+        "type": "RELATED_TO",
+        "evidence": "这些数据提供了定比定律、倍比定律、两者皆非还是两者的例子？",
+        "core": false
+      },
+      {
+        "source": "道尔顿原子理论",
+        "target": "同位素",
+        "type": "RELATED_TO",
+        "evidence": "同位素的存在违反了道尔顿原子理论的一个原始观点。",
+        "core": true
+      },
+      {
+        "source": "电子",
+        "target": "质子",
+        "type": "RELATED_TO",
+        "evidence": "电子和质子的相似之处：它们都是亚原子粒子，都是带电的，且电荷大小相等（1.602×10^-19 C）。",
+        "core": true
+      },
+      {
+        "source": "质子",
+        "target": "中子",
+        "type": "RELATED_TO",
+        "evidence": "两者都是位于原子核内的亚原子粒子。两者具有大致相同的质量。",
+        "core": true
+      },
+      {
+        "source": "汤姆森葡萄干布丁模型",
+        "target": "卢瑟福原子模型",
+        "type": "RELATED_TO",
+        "evidence": "预测并检验α粒子射向卢瑟福原子模型的行为。",
+        "core": false
+      },
+      {
+        "source": "中子",
+        "target": "同位素",
+        "type": "PRECEDES",
+        "evidence": "同位素总是在中子数上不同。",
+        "core": true
+      },
+      {
+        "source": "原子序数",
+        "target": "质子",
+        "type": "RELATED_TO",
+        "evidence": "它们总是在质子数和电子数（对于中性原子）上相同，因此具有相同的原子序数和化学性质。",
+        "core": false
+      },
+      {
+        "source": "同位素",
+        "target": "平均原子质量",
+        "type": "PRECEDES",
+        "evidence": "一种元素具有以下天然丰度和同位素质量：……计算该元素的平均原子质量。",
+        "core": true
+      },
+      {
+        "source": "分子式",
+        "target": "实验式",
+        "type": "RELATED_TO",
+        "evidence": "写出以下化合物的分子式和实验式：",
+        "core": true
+      },
+      {
+        "source": "结构异构体",
+        "target": "分子式",
+        "type": "RELATED_TO",
+        "evidence": "这些分子具有相同的化学组成（原子的类型和数目）但不同的化学结构。它们是结构异构体。",
+        "core": false
+      },
+      {
+        "source": "元素周期表",
+        "target": "离子化合物",
+        "type": "PRECEDES",
+        "evidence": "使用元素周期表，预测以下氯化物是离子的还是共价的：KCl、NCl3、ICl、MgCl2、PCl5和CCl4。",
+        "core": true
+      },
+      {
+        "source": "离子",
+        "target": "离子化合物",
+        "type": "PRECEDES",
+        "evidence": "对于以下每对离子，写出它们将形成的化合物的化学式：",
+        "core": false
+      },
+      {
+        "source": "化学命名法",
+        "target": "离子化合物",
+        "type": "APPLIES_TO",
+        "evidence": "以下每种化合物都含有一种可以表现出不止一种离子电荷的金属。命名这些化合物：",
+        "core": true
+      },
+      {
+        "source": "离子化合物",
+        "target": "共价化合物",
+        "type": "RELATED_TO",
+        "evidence": "使用元素周期表，预测以下氯化物是离子的还是共价的：KCl、NCl3、ICl、MgCl2、PCl5和CCl4。",
+        "core": false
+      }
+    ]
+  }
+]

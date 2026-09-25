@@ -1,0 +1,532 @@
+{
+  "entities": [
+    {
+      "name": "化学方程式",
+      "category": "概念",
+      "description": "用化学式表示化学反应中反应物和生成物及其相对数量的式子。"
+    },
+    {
+      "name": "配平化学方程式",
+      "category": "方法",
+      "description": "通过调整系数使方程式两侧每种元素的原子数相等的过程。"
+    },
+    {
+      "name": "观察法配平",
+      "category": "方法",
+      "description": "通过观察比较方程式两侧原子数目来调整系数以实现配平的方法。"
+    },
+    {
+      "name": "分子方程式",
+      "category": "概念",
+      "description": "以完整化学式表示反应物和生成物的化学方程式，不明确显示离子物种。"
+    },
+    {
+      "name": "完全离子方程式",
+      "category": "概念",
+      "description": "将可溶性离子化合物表示为解离离子的化学方程式，显示所有离子。"
+    },
+    {
+      "name": "净离子方程式",
+      "category": "概念",
+      "description": "消去旁观离子后，仅显示实际参与反应的离子的化学方程式。"
+    },
+    {
+      "name": "旁观离子",
+      "category": "概念",
+      "description": "在反应前后以相同形式存在、未参与化学变化的离子。"
+    },
+    {
+      "name": "沉淀反应",
+      "category": "概念",
+      "description": "溶解的物质反应生成一种或多种固体产物的反应。"
+    },
+    {
+      "name": "溶解性规则",
+      "category": "概念",
+      "description": "用于预测离子化合物在水中溶解性的经验规律。"
+    },
+    {
+      "name": "酸碱反应",
+      "category": "概念",
+      "description": "氢离子从一种化学物种转移到另一种化学物种的反应。"
+    },
+    {
+      "name": "中和反应",
+      "category": "概念",
+      "description": "酸和碱反应生成盐和水的特定酸碱反应。"
+    },
+    {
+      "name": "强酸",
+      "category": "概念",
+      "description": "溶于水后完全反应产生水合氢离子的酸。"
+    },
+    {
+      "name": "弱酸",
+      "category": "概念",
+      "description": "溶于水后仅部分反应产生水合氢离子的酸。"
+    },
+    {
+      "name": "强碱",
+      "category": "概念",
+      "description": "溶于水后完全解离产生氢氧根离子的碱。"
+    },
+    {
+      "name": "弱碱",
+      "category": "概念",
+      "description": "溶于水后仅部分反应产生氢氧根离子的碱。"
+    },
+    {
+      "name": "氧化还原反应",
+      "category": "概念",
+      "description": "涉及电子转移的化学反应，通常表现为元素氧化态的变化。"
+    },
+    {
+      "name": "氧化态",
+      "category": "概念",
+      "description": "化合物中元素原子的表观电荷，用于判断氧化还原反应。"
+    },
+    {
+      "name": "反应计量学",
+      "category": "概念",
+      "description": "研究化学反应中反应物和生成物之间定量关系的学科。"
+    },
+    {
+      "name": "反应产率",
+      "category": "概念",
+      "description": "实际得到的产物量与理论最大产物量的比值。"
+    },
+    {
+      "name": "定量化学分析",
+      "category": "概念",
+      "description": "确定物质组成或含量的化学分析方法。"
+    },
+    {
+      "name": "酸碱中和反应",
+      "category": "概念",
+      "description": "酸与碱反应生成盐和水的反应，如H3O+与OH−反应生成水。"
+    },
+    {
+      "name": "抗酸剂",
+      "category": "概念",
+      "description": "用于中和胃酸的物质，如氢氧化铝、氢氧化镁等。"
+    },
+    {
+      "name": "氢氧化铝",
+      "category": "概念",
+      "description": "一种抗酸剂活性成分，化学式为Al(OH)3，常引起便秘。"
+    },
+    {
+      "name": "氢氧化镁",
+      "category": "概念",
+      "description": "一种抗酸剂活性成分，常与氢氧化铝配合使用以平衡副作用。"
+    },
+    {
+      "name": "碳酸氢钠",
+      "category": "概念",
+      "description": "小苏打，化学式为NaHCO3，是一种碱，用于烘焙中与酸反应产生二氧化碳。"
+    },
+    {
+      "name": "泡打粉",
+      "category": "概念",
+      "description": "碳酸氢钠与一种或多种酸式盐的组合，遇水反应产生二氧化碳。"
+    },
+    {
+      "name": "发酵",
+      "category": "概念",
+      "description": "有益细菌利用糖类产生乳酸等废物的过程，用于腌制保存蔬菜。"
+    },
+    {
+      "name": "氧化",
+      "category": "概念",
+      "description": "氧化数升高的过程，或失去电子。"
+    },
+    {
+      "name": "还原",
+      "category": "概念",
+      "description": "氧化数降低的过程，或得到电子。"
+    },
+    {
+      "name": "氧化数",
+      "category": "概念",
+      "description": "化合物中元素的氧化态，指若该化合物为离子化合物时其原子所带的电荷。"
+    },
+    {
+      "name": "半反应",
+      "category": "概念",
+      "description": "表示氧化还原反应中每个反应物去向的方程式，分别显示氧化和还原过程。"
+    },
+    {
+      "name": "氧化剂",
+      "category": "概念",
+      "description": "被还原的物质，能夺取电子使其他物质氧化。"
+    },
+    {
+      "name": "还原剂",
+      "category": "概念",
+      "description": "被氧化的物质，能提供电子使其他物质还原。"
+    },
+    {
+      "name": "半反应法",
+      "category": "方法",
+      "description": "一种配平氧化还原反应方程式的系统方法，包括写出半反应、配平原子和电荷等步骤。"
+    },
+    {
+      "name": "化学计量学",
+      "category": "概念",
+      "description": "研究化学反应中反应物和产物之间定量关系的学科。"
+    },
+    {
+      "name": "化学计量因子",
+      "category": "概念",
+      "description": "由配平化学方程式推导出的系数比，用于关联反应物和产物的量。"
+    },
+    {
+      "name": "限量反应物",
+      "category": "概念",
+      "description": "在反应中完全消耗并限制产物生成量的反应物。"
+    },
+    {
+      "name": "理论产率",
+      "category": "概念",
+      "description": "按照化学计量关系计算，反应可能产生的最大产物量。"
+    },
+    {
+      "name": "百分产率",
+      "category": "公式",
+      "description": "实际产率与理论产率的比值乘以100%，表示反应效率。"
+    },
+    {
+      "name": "绿色化学",
+      "category": "概念",
+      "description": "设计化学产品和工艺以最大限度减少有害物质使用和废物产生的哲学方法。"
+    },
+    {
+      "name": "原子经济性",
+      "category": "概念",
+      "description": "衡量合成工艺效率的指标，定义为最终产物的质量占所有反应物质量的百分比。"
+    },
+    {
+      "name": "实际产率",
+      "category": "概念",
+      "description": "化学反应中实际生成的产物量。"
+    },
+    {
+      "name": "定量分析",
+      "category": "概念",
+      "description": "测定样品中某物质的量或浓度的分析方法。"
+    },
+    {
+      "name": "滴定分析",
+      "category": "方法",
+      "description": "一种定量化学分析方法，涉及测量完全与样品中分析物反应所需的反应物溶液的体积。"
+    },
+    {
+      "name": "滴定剂",
+      "category": "概念",
+      "description": "在滴定分析中含有已知浓度、可与分析物反应的物质的溶液。"
+    },
+    {
+      "name": "分析物",
+      "category": "概念",
+      "description": "在滴定分析中待测浓度或量的物质。"
+    },
+    {
+      "name": "等当点",
+      "category": "概念",
+      "description": "在滴定分析中与待测物完全反应所需的滴定剂溶液体积；根据滴定反应为样品待测物提供化学计量量的滴定剂。"
+    },
+    {
+      "name": "终点",
+      "category": "概念",
+      "description": "滴定剂溶液的测量体积，该体积使样品溶液的外观或其他性质产生符合化学计量等当量所预期的变化。"
+    },
+    {
+      "name": "指示剂",
+      "category": "概念",
+      "description": "在滴定分析中加入样品中以允许目视检测终点的物质。"
+    },
+    {
+      "name": "重量分析",
+      "category": "方法",
+      "description": "涉及通过物理或化学过程将待测物从样品中分离，并随后对待测物、反应产物和/或样品进行质量测定的定量化学分析方法。"
+    },
+    {
+      "name": "燃烧分析",
+      "category": "方法",
+      "description": "通过收集并称量气态燃烧产物来测定化合物元素组成的重量分析技术。"
+    },
+    {
+      "name": "摩尔浓度",
+      "category": "概念",
+      "description": "溶液中溶质的摩尔量与溶液体积的比值，常用单位mol/L。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "化学方程式",
+      "target": "配平化学方程式",
+      "type": "RELATED_TO",
+      "evidence": "配平方程式 4.1节中描述的化学方程式是配平的，意味着反应中涉及的每种元素在反应物侧和生成物侧所表示的原子数相等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "配平化学方程式",
+      "target": "观察法配平",
+      "type": "CONTAINS",
+      "evidence": "配平的化学方程式通常可以通过一种相当简单的方法从某些化学反应的定性描述中推导出来，这种方法称为观察法配平。",
+      "confidence": 0.95
+    },
+    {
+      "source": "分子方程式",
+      "target": "完全离子方程式",
+      "type": "PRECEDES",
+      "evidence": "明确表示所有溶解的离子得到完全离子方程式。在这个特定情况下，溶解的离子化合物的化学式被其解离离子的化学式所取代",
+      "confidence": 0.8
+    },
+    {
+      "source": "完全离子方程式",
+      "target": "净离子方程式",
+      "type": "PRECEDES",
+      "evidence": "这些旁观离子——即维持电荷中性所必需的离子——在此过程中既没有发生化学变化也没有发生物理变化，因此它们可以从方程式中消去，得到更简洁的表示，称为净离子方程式",
+      "confidence": 0.85
+    },
+    {
+      "source": "净离子方程式",
+      "target": "旁观离子",
+      "type": "RELATED_TO",
+      "evidence": "这些旁观离子——即维持电荷中性所必需的离子——在此过程中既没有发生化学变化也没有发生物理变化，因此它们可以从方程式中消去，得到更简洁的表示，称为净离子方程式",
+      "confidence": 0.9
+    },
+    {
+      "source": "沉淀反应",
+      "target": "溶解性规则",
+      "type": "APPLIES_TO",
+      "evidence": "为了预测沉淀反应所生成固体的种类，只需参考已观察到的许多离子化合物的溶解性规律（表4.1）。",
+      "confidence": 0.95
+    },
+    {
+      "source": "酸碱反应",
+      "target": "中和反应",
+      "type": "CONTAINS",
+      "evidence": "中和反应是一种特定类型的酸碱反应，其中反应物是酸和碱（但不是水），产物通常是盐和水",
+      "confidence": 0.95
+    },
+    {
+      "source": "强酸",
+      "target": "弱酸",
+      "type": "RELATED_TO",
+      "evidence": "以这种方式完全反应的酸称为强酸，而 HCl 只是被归类为强酸的少数常见酸化合物之一（表 4.2）。数量多得多的化合物表现为弱酸，仅与水部分反应",
+      "confidence": 0.8
+    },
+    {
+      "source": "强碱",
+      "target": "弱碱",
+      "type": "RELATED_TO",
+      "evidence": "这些碱以及在水中的完全解离的其他氢氧化物被认为是强碱。与离子氢氧化物不同，一些化合物在溶解时通过与水分子发生化学反应而产生氢氧根离子。在所有情况下，这些化合物仅部分反应，因此被归类为弱碱。",
+      "confidence": 0.8
+    },
+    {
+      "source": "氧化还原反应",
+      "target": "氧化态",
+      "type": "RELATED_TO",
+      "evidence": "计算化合物中元素的氧化态",
+      "confidence": 0.7
+    },
+    {
+      "source": "酸碱中和反应",
+      "target": "抗酸剂",
+      "type": "APPLIES_TO",
+      "evidence": "抗酸剂以氢氧化铝 Al(OH)3 为活性成分。氢氧化铝往往引起便秘，一些抗酸剂将氢氧化铝与氢氧化镁配合使用，以平衡这两种物质的副作用。",
+      "confidence": 0.8
+    },
+    {
+      "source": "抗酸剂",
+      "target": "氢氧化铝",
+      "type": "CONTAINS",
+      "evidence": "几种抗酸剂以氢氧化铝 Al(OH)3 为活性成分。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抗酸剂",
+      "target": "氢氧化镁",
+      "type": "CONTAINS",
+      "evidence": "一些抗酸剂将氢氧化铝与氢氧化镁配合使用，以平衡这两种物质的副作用。",
+      "confidence": 0.9
+    },
+    {
+      "source": "碳酸氢钠",
+      "target": "泡打粉",
+      "type": "CONTAINS",
+      "evidence": "泡打粉是碳酸氢钠与一种或多种酸式盐的组合",
+      "confidence": 0.95
+    },
+    {
+      "source": "氧化还原反应",
+      "target": "氧化",
+      "type": "CONTAINS",
+      "evidence": "氧化 = 失去电子",
+      "confidence": 0.9
+    },
+    {
+      "source": "氧化还原反应",
+      "target": "还原",
+      "type": "CONTAINS",
+      "evidence": "还原 = 得到电子",
+      "confidence": 0.9
+    },
+    {
+      "source": "氧化还原反应",
+      "target": "氧化数",
+      "type": "RELATED_TO",
+      "evidence": "利用氧化数的概念，人们建立了氧化还原反应的全面定义。",
+      "confidence": 0.9
+    },
+    {
+      "source": "氧化还原反应",
+      "target": "半反应",
+      "type": "CONTAINS",
+      "evidence": "以称为半反应的方式表示每种反应物的去向",
+      "confidence": 0.9
+    },
+    {
+      "source": "氧化剂",
+      "target": "氧化还原反应",
+      "type": "RELATED_TO",
+      "evidence": "氧化剂 = 被还原的物质",
+      "confidence": 0.9
+    },
+    {
+      "source": "还原剂",
+      "target": "氧化还原反应",
+      "type": "RELATED_TO",
+      "evidence": "还原剂 = 被氧化的物质",
+      "confidence": 0.9
+    },
+    {
+      "source": "半反应法",
+      "target": "氧化还原反应",
+      "type": "APPLIES_TO",
+      "evidence": "一种非常有用的方法是半反应法，包括以下步骤：",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学计量学",
+      "target": "化学计量因子",
+      "type": "CONTAINS",
+      "evidence": "配平方程式中的系数用于推导化学计量因子",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学计量学",
+      "target": "限量反应物",
+      "type": "CONTAINS",
+      "evidence": "确定给定情况下的限量反应物和过量反应物，需要计算所提供每种反应物的摩尔量，并将其与配平化学方程式中表示的化学计量量进行比较。",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学计量学",
+      "target": "理论产率",
+      "type": "CONTAINS",
+      "evidence": "按照适当的配平化学方程式的化学计量关系计算，反应可能产生的产物量称为反应的理论产率。",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学计量学",
+      "target": "百分产率",
+      "type": "CONTAINS",
+      "evidence": "百分产率 = 实际产率 / 理论产率 × 100%",
+      "confidence": 0.9
+    },
+    {
+      "source": "绿色化学",
+      "target": "原子经济性",
+      "type": "CONTAINS",
+      "evidence": "一个工艺的原子经济性是衡量这种效率的指标",
+      "confidence": 0.9
+    },
+    {
+      "source": "百分产率",
+      "target": "实际产率",
+      "type": "RELATED_TO",
+      "evidence": "百分产率 = 实际产率 / 理论产率 × 100%",
+      "confidence": 0.95
+    },
+    {
+      "source": "百分产率",
+      "target": "理论产率",
+      "type": "RELATED_TO",
+      "evidence": "百分产率 = 实际产率 / 理论产率 × 100%",
+      "confidence": 0.95
+    },
+    {
+      "source": "限量反应物",
+      "target": "理论产率",
+      "type": "PRECEDES",
+      "evidence": "所提供的信息表明硫酸铜是限量反应物，因此理论产率为",
+      "confidence": 0.9
+    },
+    {
+      "source": "滴定分析",
+      "target": "滴定剂",
+      "type": "RELATED_TO",
+      "evidence": "典型的滴定分析涉及使用滴定管，将含有已知浓度某物质的溶液（滴定剂）逐次增量加入到含有待测浓度物质的样品溶液（分析物）中。",
+      "confidence": 0.95
+    },
+    {
+      "source": "滴定分析",
+      "target": "分析物",
+      "type": "RELATED_TO",
+      "evidence": "典型的滴定分析涉及使用滴定管，将含有已知浓度某物质的溶液（滴定剂）逐次增量加入到含有待测浓度物质的样品溶液（分析物）中。",
+      "confidence": 0.95
+    },
+    {
+      "source": "滴定分析",
+      "target": "等当点",
+      "type": "RELATED_TO",
+      "evidence": "测量与分析物完全反应所需的滴定剂溶液体积（滴定的等当点）即可计算分析物浓度。",
+      "confidence": 0.95
+    },
+    {
+      "source": "滴定分析",
+      "target": "终点",
+      "type": "RELATED_TO",
+      "evidence": "实际测得的滴定剂体积称为终点。",
+      "confidence": 0.95
+    },
+    {
+      "source": "滴定分析",
+      "target": "指示剂",
+      "type": "RELATED_TO",
+      "evidence": "向样品溶液中加入称为指示剂的特殊染料，以在滴定的等当点处或非常接近等当点处引起颜色变化。",
+      "confidence": 0.95
+    },
+    {
+      "source": "重量分析",
+      "target": "沉淀反应",
+      "type": "RELATED_TO",
+      "evidence": "同样常见的是重量分析技术，其中待测物经历本章前面所述类型的沉淀反应。",
+      "confidence": 0.9
+    },
+    {
+      "source": "重量分析",
+      "target": "燃烧分析",
+      "type": "CONTAINS",
+      "evidence": "燃烧分析是一种重量分析方法",
+      "confidence": 0.95
+    },
+    {
+      "source": "配平化学方程式",
+      "target": "化学计量学",
+      "type": "PRECEDES",
+      "evidence": "配平的化学方程式可用于描述反应的化学计量关系",
+      "confidence": 0.9
+    },
+    {
+      "source": "滴定分析",
+      "target": "摩尔浓度",
+      "type": "APPLIES_TO",
+      "evidence": "利用所提供的HCl溶液体积和摩尔浓度的定义，HCl浓度为：M = mol HCl / L 溶液",
+      "confidence": 0.85
+    }
+  ]
+}

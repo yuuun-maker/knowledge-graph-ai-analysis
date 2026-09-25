@@ -1,0 +1,71 @@
+{
+  "entities": [
+    {
+      "name": "算法效率",
+      "category": "概念",
+      "description": "衡量算法优劣的主要评价指标，包括时间效率和空间效率两个维度。"
+    },
+    {
+      "name": "时间复杂度",
+      "category": "概念",
+      "description": "算法运行所需时间资源与输入数据规模之间的关系。"
+    },
+    {
+      "name": "空间复杂度",
+      "category": "概念",
+      "description": "算法运行所需空间资源与输入数据规模之间的关系。"
+    },
+    {
+      "name": "实际测试",
+      "category": "方法",
+      "description": "通过运行算法并监控记录运行时间和内存占用情况来评估算法效率的方法。"
+    },
+    {
+      "name": "理论估算",
+      "category": "方法",
+      "description": "仅通过计算来评估算法效率的方法，即渐近复杂度分析。"
+    },
+    {
+      "name": "渐近复杂度分析",
+      "category": "方法",
+      "description": "通过计算评估算法效率的方法，描述算法运行所需时间和空间资源与输入数据规模之间的增长趋势。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "算法效率",
+      "target": "时间复杂度",
+      "type": "CONTAINS",
+      "evidence": "时间效率：算法运行时间的长短。",
+      "confidence": 0.9
+    },
+    {
+      "source": "算法效率",
+      "target": "空间复杂度",
+      "type": "CONTAINS",
+      "evidence": "空间效率：算法占用内存空间的大小。",
+      "confidence": 0.9
+    },
+    {
+      "source": "理论估算",
+      "target": "渐近复杂度分析",
+      "type": "RELATED_TO",
+      "evidence": "这种估算方法被称为渐近复杂度分析（asymptotic complexity analysis），简称复杂度分析。",
+      "confidence": 0.95
+    },
+    {
+      "source": "渐近复杂度分析",
+      "target": "时间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "“时间和空间资源”分别对应时间复杂度（time complexity）和空间复杂度（space complexity）。",
+      "confidence": 0.9
+    },
+    {
+      "source": "渐近复杂度分析",
+      "target": "空间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "“时间和空间资源”分别对应时间复杂度（time complexity）和空间复杂度（space complexity）。",
+      "confidence": 0.9
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "entities": [
+    {
+      "name": "模型生物",
+      "category": "概念",
+      "description": "用于研究生物现象的动物物种，期望所学知识广泛适用于其他物种。"
+    },
+    {
+      "name": "IACUC",
+      "category": "概念",
+      "description": "负责审查拟议动物研究的机构，重点确保动物不感到疼痛并采取措施尽量减少疼痛。"
+    },
+    {
+      "name": "比较神经科学",
+      "category": "概念",
+      "description": "在宏观、中观和微观尺度上比较不同物种神经系统的学科。"
+    },
+    {
+      "name": "灰质",
+      "category": "概念",
+      "description": "中枢神经系统中主要由神经元胞体组成的区域。"
+    },
+    {
+      "name": "白质",
+      "category": "概念",
+      "description": "中枢神经系统中主要由有髓轴突组成的区域。"
+    },
+    {
+      "name": "端脑",
+      "category": "概念",
+      "description": "大脑半球的主要部分，包括皮层和皮层下结构。"
+    },
+    {
+      "name": "核团",
+      "category": "概念",
+      "description": "鸟类端脑中神经元聚集形成的团块状结构，而非层状组织。"
+    },
+    {
+      "name": "isocortex-DVR假设",
+      "category": "概念",
+      "description": "关于哺乳动物和鸟类脑同源区域定义的假设，考虑区域如何与其他脑区连接。"
+    },
+    {
+      "name": "DVR",
+      "category": "概念",
+      "description": "鸟类端脑中的背侧室嵴区域，可能与哺乳动物新皮层同源。"
+    },
+    {
+      "name": "新皮层",
+      "category": "概念",
+      "description": "哺乳动物端脑中具有层状结构的区域，参与高级认知功能。"
+    },
+    {
+      "name": "皮层脑体积比例",
+      "category": "概念",
+      "description": "皮层体积占全脑体积的比例，人类在灵长类中具有最高比例。"
+    },
+    {
+      "name": "ALLOMETRY",
+      "category": "概念",
+      "description": "不同脑区对总脑体积比例贡献随总脑体积变化而变化的现象。"
+    },
+    {
+      "name": "grade shift",
+      "category": "概念",
+      "description": "灵长类皮层体积比例比仅基于总脑大小预测的更大的现象。"
+    },
+    {
+      "name": "TRACT-TRACERS",
+      "category": "方法",
+      "description": "注射到感兴趣脑区以追踪神经通路的化合物。"
+    },
+    {
+      "name": "静息态fMRI",
+      "category": "方法",
+      "description": "用于测量人类自主脑活动的成像技术。"
+    },
+    {
+      "name": "功能MR成像",
+      "category": "方法",
+      "description": "最直接测量血液波动的成像技术。"
+    },
+    {
+      "name": "顺行tracers",
+      "category": "概念",
+      "description": "从细胞体移动到轴突/轴突终末的追踪剂。"
+    },
+    {
+      "name": "扩散MRI",
+      "category": "方法",
+      "description": "用于推断人脑连接的技术。"
+    },
+    {
+      "name": "伴侣偏好测定",
+      "category": "方法",
+      "description": "通过观察雄性田鼠与之前交配的雌性及新雌性相处时间来评估配对 bonding 的行为测试。"
+    },
+    {
+      "name": "一夫一妻制",
+      "category": "概念",
+      "description": "配对 bonding 物种的成员，雄性田鼠与之前交配的雌性在一起的时间多于与新雌性在一起的时间。"
+    },
+    {
+      "name": "一夫多妻制",
+      "category": "概念",
+      "description": "非配对 bonding 物种的成员，雄性田鼠通常偏好新伴侣。"
+    },
+    {
+      "name": "脑类器官",
+      "category": "概念",
+      "description": "在体外从干细胞生长的三维球体，用于研究脑发育和进化。"
+    },
+    {
+      "name": "单细胞RNAseq",
+      "category": "方法",
+      "description": "用于研究不同细胞群在人类和大型猿类发育过程中何时出现的技术。"
+    },
+    {
+      "name": "无机染料",
+      "category": "概念",
+      "description": "沿轴突被动扩散以允许追踪神经通路的化合物。"
+    },
+    {
+      "name": "电子显微镜",
+      "category": "方法",
+      "description": "用于可视化突触的技术。"
+    },
+    {
+      "name": "干细胞",
+      "category": "概念",
+      "description": "在体外用于生长类器官的细胞来源。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "比较神经科学",
+      "target": "灰质",
+      "type": "RELATED_TO",
+      "evidence": "灰质和白质的明显组织：在鸟类和哺乳动物端脑中相同。",
+      "confidence": 0.8
+    },
+    {
+      "source": "比较神经科学",
+      "target": "白质",
+      "type": "RELATED_TO",
+      "evidence": "灰质和白质的明显组织：在鸟类和哺乳动物端脑中相同。",
+      "confidence": 0.8
+    },
+    {
+      "source": "端脑",
+      "target": "灰质",
+      "type": "CONTAINS",
+      "evidence": "灰质和白质的明显组织：在鸟类和哺乳动物端脑中相同。",
+      "confidence": 0.9
+    },
+    {
+      "source": "端脑",
+      "target": "白质",
+      "type": "CONTAINS",
+      "evidence": "灰质和白质的明显组织：在鸟类和哺乳动物端脑中相同。",
+      "confidence": 0.9
+    },
+    {
+      "source": "端脑",
+      "target": "核团",
+      "type": "CONTAINS",
+      "evidence": "因为它们的神经元组织成核团而不是层。",
+      "confidence": 0.9
+    },
+    {
+      "source": "isocortex-DVR假设",
+      "target": "DVR",
+      "type": "RELATED_TO",
+      "evidence": "在isocortex-DVR假设中，什么考虑驱动哺乳动物和鸟类脑同源区域的定义？",
+      "confidence": 0.8
+    },
+    {
+      "source": "isocortex-DVR假设",
+      "target": "新皮层",
+      "type": "RELATED_TO",
+      "evidence": "在isocortex-DVR假设中，什么考虑驱动哺乳动物和鸟类脑同源区域的定义？",
+      "confidence": 0.8
+    },
+    {
+      "source": "DVR",
+      "target": "新皮层",
+      "type": "RELATED_TO",
+      "evidence": "鸟类DVR与哺乳动物脑中的什么同源？c. 新皮层",
+      "confidence": 0.9
+    },
+    {
+      "source": "ALLOMETRY",
+      "target": "皮层脑体积比例",
+      "type": "RELATED_TO",
+      "evidence": "基于皮层的allometry，你预期皮层相对于人类有多大？",
+      "confidence": 0.8
+    },
+    {
+      "source": "grade shift",
+      "target": "皮层脑体积比例",
+      "type": "RELATED_TO",
+      "evidence": "灵长类脑皮层体积比例的“grade shift”意味着：灵长类皮层比仅基于灵长类总脑大小预测的更大。",
+      "confidence": 0.9
+    },
+    {
+      "source": "伴侣偏好测定",
+      "target": "一夫一妻制",
+      "type": "APPLIES_TO",
+      "evidence": "在伴侣偏好测定中，雄性田鼠与之前交配的雌性在一起的时间多于与新雌性在一起的时间。关于这只雄性田鼠，最可能正确的是什么？a. 这只雄性田鼠是一夫一妻制配对 bonding 物种的成员。",
+      "confidence": 0.9
+    },
+    {
+      "source": "伴侣偏好测定",
+      "target": "一夫多妻制",
+      "type": "APPLIES_TO",
+      "evidence": "在伴侣偏好测定中，雄性田鼠与之前交配的雌性在一起的时间多于与新雌性在一起的时间。关于这只雄性田鼠，最可能正确的是什么？b. 这只雄性田鼠是一夫多妻制物种的成员。",
+      "confidence": 0.9
+    },
+    {
+      "source": "单细胞RNAseq",
+      "target": "脑类器官",
+      "type": "APPLIES_TO",
+      "evidence": "你将使用类器官来模拟这两个物种的神经发育。哪种技术最能帮助你研究你的问题？a. 单细胞RNAseq",
+      "confidence": 0.9
+    },
+    {
+      "source": "干细胞",
+      "target": "脑类器官",
+      "type": "RELATED_TO",
+      "evidence": "类器官是在体外从______生长的三维球体。",
+      "confidence": 0.9
+    }
+  ]
+}

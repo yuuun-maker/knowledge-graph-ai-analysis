@@ -57,6 +57,7 @@ async def ask_question(request: QuestionRequest, current_user: dict = Depends(ge
 
     return success({
         "question": request.question,
-        "answer": answer,
-        "sources": sources,
+        "answer": result["answer"],
+        # 结构化引用来源（kp_id/name/category/description），供前端"证据链"展示
+        "sources": result["sources"],
     })

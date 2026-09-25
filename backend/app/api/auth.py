@@ -8,10 +8,11 @@
 import datetime
 
 import jwt
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from ..core.config import settings
+from ..core.dependencies import get_current_user
 from ..core.response import success, error
 from ..core.security import hash_password, verify_password
 from ..core.sql_database import sql_db
@@ -30,6 +31,15 @@ class UserRegister(BaseModel):
 
 class UserLogin(BaseModel):
     username: str
+    password: str
+
+
+class ChangePassword(BaseModel):
+    old_password: str
+    new_password: str
+
+
+class DeactivateAccount(BaseModel):
     password: str
 
 
@@ -75,6 +85,9 @@ def login(user: UserLogin):
     db_user = sql_db.get_user_by_username(username)
     if not db_user or not verify_password(user.password, db_user["password_hash"]):
         return error(2002, "用户名或密码错误")
+    # 已注销（软停用）账号禁止登录
+    if not db_user.get("is_active", 1):
+        return error(2004, "该账号已注销，无法登录")
 
     # 课程中心改造：登录响应追加 display_name / nickname / avatar_url，
     # 让侧边栏首屏就能显示昵称与头像，不必等 /api/v1/profile 返回。
@@ -95,3 +108,42 @@ def login(user: UserLogin):
                 db_user["user_id"], profile.get("avatar_url")),
         },
     })
+
+
+@router.post("/change-password")
+def change_password(body: ChangePassword, current_user: dict = Depends(get_current_user)):
+    """修改当前登录用户密码（校验原密码；仅本人）"""
+    old_password = body.old_password or ""
+    new_password = body.new_password or ""
+    if not old_password:
+        return error(1001, "请输入原密码")
+    if len(new_password) < 6:
+        return error(1001, "新密码长度至少 6 位")
+
+    db_user = sql_db.get_user_by_id(current_user["user_id"])
+    if not db_user:
+        return error(2001, "用户不存在")
+    if not verify_password(old_password, db_user["password_hash"]):
+        return error(2003, "原密码不正确")
+    if verify_password(new_password, db_user["password_hash"]):
+        return error(1001, "新密码不能与原密码相同")
+
+    sql_db.update_password(current_user["user_id"], hash_password(new_password))
+    return success({"user_id": current_user["user_id"]})
+
+
+@router.post("/deactivate")
+def deactivate_account(body: DeactivateAccount, current_user: dict = Depends(get_current_user)):
+    """注销（停用）当前登录账号：校验密码后置 is_active=0，仅本人可操作"""
+    password = body.password or ""
+    if not password:
+        return error(1001, "请输入密码")
+
+    db_user = sql_db.get_user_by_id(current_user["user_id"])
+    if not db_user:
+        return error(2001, "用户不存在")
+    if not verify_password(password, db_user["password_hash"]):
+        return error(2002, "密码不正确")
+
+    sql_db.deactivate_user(current_user["user_id"])
+    return success({"user_id": current_user["user_id"]})

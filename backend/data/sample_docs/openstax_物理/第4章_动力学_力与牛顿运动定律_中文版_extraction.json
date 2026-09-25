@@ -1,0 +1,642 @@
+{
+  "entities": [
+    {
+      "name": "动力学",
+      "category": "概念",
+      "description": "研究导致物体和系统运动的力的学科。"
+    },
+    {
+      "name": "力",
+      "category": "概念",
+      "description": "推或拉，既有大小又有方向的矢量量。"
+    },
+    {
+      "name": "牛顿第一运动定律",
+      "category": "定理",
+      "description": "除非受到净外力作用，静止物体保持静止，运动物体保持恒定速度运动。"
+    },
+    {
+      "name": "惯性",
+      "category": "概念",
+      "description": "物体保持静止或保持恒定速度运动的性质。"
+    },
+    {
+      "name": "质量",
+      "category": "概念",
+      "description": "物体中物质的量，是惯性的量度，不随位置变化。"
+    },
+    {
+      "name": "牛顿第二运动定律",
+      "category": "定理",
+      "description": "系统的加速度与作用在系统上的合外力成正比且方向相同，并与其质量成反比。"
+    },
+    {
+      "name": "净外力",
+      "category": "概念",
+      "description": "作用在系统上的所有外力的矢量和。"
+    },
+    {
+      "name": "系统",
+      "category": "概念",
+      "description": "所关注的对象或对象集合，其边界用于区分外力和内力。"
+    },
+    {
+      "name": "外力",
+      "category": "概念",
+      "description": "作用于所关注系统之外的力。"
+    },
+    {
+      "name": "内力",
+      "category": "概念",
+      "description": "作用于系统内部各元素之间的力。"
+    },
+    {
+      "name": "受力分析图",
+      "category": "方法",
+      "description": "用于图示作用在物体上的所有外力的技术，物体用孤立点表示。"
+    },
+    {
+      "name": "牛顿第三运动定律",
+      "category": "定理",
+      "description": "每当一个物体对另一个物体施加力时，第一个物体也受到大小相等、方向相反的力。"
+    },
+    {
+      "name": "重量",
+      "category": "概念",
+      "description": "来自最近的大天体对物体施加的引力，等于质量乘以重力加速度。"
+    },
+    {
+      "name": "自由落体",
+      "category": "概念",
+      "description": "物体仅受重力作用时的下落状态。"
+    },
+    {
+      "name": "摩擦力",
+      "category": "概念",
+      "description": "阻碍相互接触的物体彼此相对运动的力。"
+    },
+    {
+      "name": "法向力",
+      "category": "概念",
+      "description": "表面垂直作用于物体的支持力。"
+    },
+    {
+      "name": "张力",
+      "category": "概念",
+      "description": "绳子、缆绳等传递的拉力。"
+    },
+    {
+      "name": "牛顿运动定律",
+      "category": "定理",
+      "description": "描述力与运动关系的三个基本定律，是动力学的基础。"
+    },
+    {
+      "name": "经典力学",
+      "category": "概念",
+      "description": "适用于物体速度远小于光速且尺寸大于分子大小的力学理论。"
+    },
+    {
+      "name": "四种基本力",
+      "category": "概念",
+      "description": "自然界中的四种基本相互作用力。"
+    },
+    {
+      "name": "重力分解为分量",
+      "category": "方法",
+      "description": "将重力分解为平行于斜面和垂直于斜面的分量，以便分析斜面上的运动。"
+    },
+    {
+      "name": "问题求解策略",
+      "category": "方法",
+      "description": "应用牛顿运动定律解决问题的系统步骤，包括画草图、受力分析等。"
+    },
+    {
+      "name": "系统选择",
+      "category": "方法",
+      "description": "在分析力学问题时，选择合适的研究系统以应用牛顿第二定律。"
+    },
+    {
+      "name": "惯性参考系",
+      "category": "概念",
+      "description": "牛顿定律成立的参考系，其中所有力都是真实的。"
+    },
+    {
+      "name": "受力图",
+      "category": "方法",
+      "description": "显示研究对象所受所有外力的示意图，用于应用牛顿第二定律。"
+    },
+    {
+      "name": "阻力",
+      "category": "概念",
+      "description": "流体（如空气或水）对运动物体施加的摩擦力，阻碍物体运动。"
+    },
+    {
+      "name": "重力",
+      "category": "概念",
+      "description": "地球对物体的吸引力，大小等于物体的重量。"
+    },
+    {
+      "name": "牛顿第一定律",
+      "category": "定理",
+      "description": "物体不受外力时保持静止或匀速直线运动状态。"
+    },
+    {
+      "name": "牛顿第二定律",
+      "category": "定理",
+      "description": "物体的加速度与所受净外力成正比，与质量成反比，方向与净外力相同。"
+    },
+    {
+      "name": "牛顿第三定律",
+      "category": "定理",
+      "description": "两个物体之间的作用力和反作用力大小相等、方向相反。"
+    },
+    {
+      "name": "运动学",
+      "category": "概念",
+      "description": "描述物体运动（位置、速度、加速度）而不涉及力的物理学分支。"
+    },
+    {
+      "name": "引力",
+      "category": "概念",
+      "description": "四种基本力之一，总是吸引的，在宏观尺度上支配天体运动。"
+    },
+    {
+      "name": "电磁力",
+      "category": "概念",
+      "description": "四种基本力之一，包括电力和磁力，可以是吸引或排斥的。"
+    },
+    {
+      "name": "弱核力",
+      "category": "概念",
+      "description": "四种基本力之一，作用范围极短，与放射性衰变等过程有关。"
+    },
+    {
+      "name": "强核力",
+      "category": "概念",
+      "description": "四种基本力之一，作用范围极短，束缚原子核中的质子和中子。"
+    },
+    {
+      "name": "力场",
+      "category": "概念",
+      "description": "描述力在空间中分布的场，是传递力的媒介。"
+    },
+    {
+      "name": "粒子交换",
+      "category": "概念",
+      "description": "力通过交换载体粒子来传递的机制，深化了场的概念。"
+    },
+    {
+      "name": "大统一理论",
+      "category": "概念",
+      "description": "试图将四种基本力统一为一种力的理论框架。"
+    },
+    {
+      "name": "电弱力",
+      "category": "概念",
+      "description": "电磁力和弱核力在极高能量下统一的表现形式。"
+    },
+    {
+      "name": "引力波",
+      "category": "概念",
+      "description": "由大质量天体加速运动产生的时空涟漪，以光速传播。"
+    },
+    {
+      "name": "惯性定律",
+      "category": "定理",
+      "description": "见牛顿第一运动定律，静止的物体保持静止，或者如果处于运动中则保持以恒定速度运动，除非受到合外力的作用"
+    },
+    {
+      "name": "加速度",
+      "category": "概念",
+      "description": "物体速度在一段时间内变化的速率"
+    },
+    {
+      "name": "合外力",
+      "category": "概念",
+      "description": "作用在物体或系统上的所有外力的矢量和；使质量加速"
+    },
+    {
+      "name": "推力",
+      "category": "概念",
+      "description": "响应于向后的力而将物体向前推的反作用力；火箭、飞机和汽车由推力反作用力向前推动"
+    },
+    {
+      "name": "载体粒子",
+      "category": "概念",
+      "description": "自然界的一种基本粒子，其周围具有特征力场；光子是电磁力的载体粒子"
+    },
+    {
+      "name": "解题策略",
+      "category": "方法",
+      "description": "解决涉及牛顿运动定律的问题的步骤：画草图、确定已知量和未知量、画受力分析图、写牛顿第二定律、检查答案"
+    }
+  ],
+  "relations": [
+    {
+      "source": "牛顿运动定律",
+      "target": "动力学",
+      "type": "RELATED_TO",
+      "evidence": "牛顿运动定律是动力学的基础。",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第一运动定律",
+      "type": "CONTAINS",
+      "evidence": "牛顿运动定律是动力学的基础。这些定律提供了一个例子...",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第二运动定律",
+      "type": "CONTAINS",
+      "evidence": "牛顿运动定律是动力学的基础。这些定律提供了一个例子...",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第三运动定律",
+      "type": "CONTAINS",
+      "evidence": "牛顿运动定律是动力学的基础。这些定律提供了一个例子...",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第一运动定律",
+      "target": "惯性",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第一定律通常被称为惯性定律。",
+      "confidence": 0.95
+    },
+    {
+      "source": "质量",
+      "target": "惯性",
+      "type": "RELATED_TO",
+      "evidence": "物体的惯性由其质量来量度。",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "净外力",
+      "type": "RELATED_TO",
+      "evidence": "系统的加速度与作用在系统上的合外力成正比且方向相同，并与其质量成反比。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "系统的加速度与作用在系统上的合外力成正比且方向相同，并与其质量成反比。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "重量",
+      "type": "APPLIES_TO",
+      "evidence": "利用Galileo的结果和牛顿第二定律，我们可以推导出重量的方程。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "自由落体",
+      "type": "APPLIES_TO",
+      "evidence": "当物体上的合外力就是其重量时，我们说它处于自由落体状态。",
+      "confidence": 0.85
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "系统",
+      "type": "APPLIES_TO",
+      "evidence": "牛顿第三定律在分析力的来源和理解哪些力是系统的外力方面具有实际用途。",
+      "confidence": 0.9
+    },
+    {
+      "source": "受力分析图",
+      "target": "牛顿运动定律",
+      "type": "APPLIES_TO",
+      "evidence": "受力分析图在分析作用在系统上的力时非常有用，在牛顿运动定律的研究和应用中被广泛采用。",
+      "confidence": 0.9
+    },
+    {
+      "source": "经典力学",
+      "target": "牛顿运动定律",
+      "type": "CONTAINS",
+      "evidence": "这些限制定义了经典力学的范围... 我们在本章中考虑的所有情况...都属于经典物理学的范畴。",
+      "confidence": 0.85
+    },
+    {
+      "source": "四种基本力",
+      "target": "力",
+      "type": "CONTAINS",
+      "evidence": "扩展专题：四种基本力——简介",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "系统选择",
+      "type": "APPLIES_TO",
+      "evidence": "应用牛顿第三定律来定义系统并解决运动问题。",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "问题求解策略",
+      "type": "APPLIES_TO",
+      "evidence": "应用牛顿第三定律来定义系统并解决运动问题。",
+      "confidence": 0.9
+    },
+    {
+      "source": "重力分解为分量",
+      "target": "法向力",
+      "type": "RELATED_TO",
+      "evidence": "重力的垂直分量 通常在大小上等于法向力 ，方向相反。",
+      "confidence": 0.9
+    },
+    {
+      "source": "重力分解为分量",
+      "target": "张力",
+      "type": "RELATED_TO",
+      "evidence": "将重力分解为分量有助于分析张力问题。",
+      "confidence": 0.7
+    },
+    {
+      "source": "问题求解策略",
+      "target": "系统选择",
+      "type": "CONTAINS",
+      "evidence": "问题求解策略包括选择系统。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "问题求解策略",
+      "type": "APPLIES_TO",
+      "evidence": "使用牛顿运动定律解决问题。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "系统选择",
+      "type": "APPLIES_TO",
+      "evidence": "选择系统对应用牛顿第二定律至关重要。",
+      "confidence": 0.85
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第一定律",
+      "type": "CONTAINS",
+      "evidence": "牛顿运动定律包括牛顿第一定律、第二定律和第三定律。",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第二定律",
+      "type": "CONTAINS",
+      "evidence": "牛顿运动定律包括牛顿第一定律、第二定律和第三定律。",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿运动定律",
+      "target": "牛顿第三定律",
+      "type": "CONTAINS",
+      "evidence": "牛顿运动定律包括牛顿第一定律、第二定律和第三定律。",
+      "confidence": 0.95
+    },
+    {
+      "source": "问题求解策略",
+      "target": "牛顿运动定律",
+      "type": "APPLIES_TO",
+      "evidence": "理解并应用问题求解程序，使用牛顿运动定律解决问题。",
+      "confidence": 0.9
+    },
+    {
+      "source": "受力图",
+      "target": "牛顿第二定律",
+      "type": "APPLIES_TO",
+      "evidence": "一旦画出受力图，就可以应用牛顿第二定律来解决问题。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二定律",
+      "target": "受力图",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第二定律只涉及外力。一旦确定了所关注的系统，就可以确定哪些力是外力，哪些是内力，这是应用牛顿第二定律的必要步骤。",
+      "confidence": 0.8
+    },
+    {
+      "source": "牛顿第三定律",
+      "target": "受力图",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第三定律可用于确定力是施加在系统各组成部分之间（内力），还是施加在系统与外部某物之间（外力）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "运动学",
+      "target": "牛顿运动定律",
+      "type": "RELATED_TO",
+      "evidence": "牛顿运动定律也可以与本文前面讨论过的其他概念结合起来，用于求解运动问题。例如，力产生加速度，而加速度是运动学的主题，因此前面几章与此相关。",
+      "confidence": 0.9
+    },
+    {
+      "source": "四种基本力",
+      "target": "引力",
+      "type": "CONTAINS",
+      "evidence": "四种基本力是引力、电磁力、弱核力和强核力。",
+      "confidence": 0.95
+    },
+    {
+      "source": "四种基本力",
+      "target": "电磁力",
+      "type": "CONTAINS",
+      "evidence": "四种基本力是引力、电磁力、弱核力和强核力。",
+      "confidence": 0.95
+    },
+    {
+      "source": "四种基本力",
+      "target": "弱核力",
+      "type": "CONTAINS",
+      "evidence": "四种基本力是引力、电磁力、弱核力和强核力。",
+      "confidence": 0.95
+    },
+    {
+      "source": "四种基本力",
+      "target": "强核力",
+      "type": "CONTAINS",
+      "evidence": "四种基本力是引力、电磁力、弱核力和强核力。",
+      "confidence": 0.95
+    },
+    {
+      "source": "电磁力",
+      "target": "摩擦力",
+      "type": "CONTAINS",
+      "evidence": "摩擦力、张力以及我们直接体验到的所有其他类型的力（当然，引力除外）都是由于原子和分子的电磁相互作用。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电磁力",
+      "target": "张力",
+      "type": "CONTAINS",
+      "evidence": "摩擦力、张力以及我们直接体验到的所有其他类型的力（当然，引力除外）都是由于原子和分子的电磁相互作用。",
+      "confidence": 0.9
+    },
+    {
+      "source": "力场",
+      "target": "四种基本力",
+      "type": "RELATED_TO",
+      "evidence": "力场的概念也用于与电荷相关的情境，并在《电荷与电场》中介绍。它对所有基本力来说也是一个有用的概念。",
+      "confidence": 0.8
+    },
+    {
+      "source": "粒子交换",
+      "target": "力场",
+      "type": "RELATED_TO",
+      "evidence": "这种粒子交换的思想深化了场的概念，而不是与它相矛盾。",
+      "confidence": 0.9
+    },
+    {
+      "source": "大统一理论",
+      "target": "四种基本力",
+      "type": "APPLIES_TO",
+      "evidence": "将所有力统一为一种力的尝试属于大统一理论（GUTs）的范畴。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电弱力",
+      "target": "电磁力",
+      "type": "CONTAINS",
+      "evidence": "电磁力和弱核力是无法区分的。它们现在可以被认为是同一种力的不同表现形式，称为电弱力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "电弱力",
+      "target": "弱核力",
+      "type": "CONTAINS",
+      "evidence": "电磁力和弱核力是无法区分的。它们现在可以被认为是同一种力的不同表现形式，称为电弱力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "引力波",
+      "target": "引力",
+      "type": "RELATED_TO",
+      "evidence": "对引力波的寻找已经进行了许多年。100多年前，Einstein作为其广义相对论的一部分预言了这些波的存在。",
+      "confidence": 0.8
+    },
+    {
+      "source": "动力学",
+      "target": "力",
+      "type": "RELATED_TO",
+      "evidence": "动力学是研究力如何影响物体运动的学科。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第一运动定律",
+      "target": "惯性定律",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第一运动定律指出，静止的物体保持静止，或者，如果处于运动中，则保持以恒定速度运动，除非受到净外力的作用。这也被称为惯性定律。",
+      "confidence": 0.95
+    },
+    {
+      "source": "牛顿第一运动定律",
+      "target": "合外力",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第一运动定律指出，静止的物体保持静止，或者，如果处于运动中，则保持以恒定速度运动，除非受到净外力的作用。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "合外力",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第二运动定律指出，系统的加速度与作用在系统上的净外力成正比且方向相同，并与其质量成反比。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "加速度",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第二运动定律指出，系统的加速度与作用在系统上的净外力成正比且方向相同，并与其质量成反比。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第二运动定律",
+      "target": "系统",
+      "type": "RELATED_TO",
+      "evidence": "牛顿第二运动定律指出，系统的加速度与作用在系统上的净外力成正比且方向相同，并与其质量成反比。",
+      "confidence": 0.9
+    },
+    {
+      "source": "牛顿第三运动定律",
+      "target": "推力",
+      "type": "RELATED_TO",
+      "evidence": "推力是一种反作用力，响应向后的力而将物体向前推动。火箭、飞机和汽车通过推力反作用力被向前推动。",
+      "confidence": 0.9
+    },
+    {
+      "source": "重量",
+      "target": "自由落体",
+      "type": "RELATED_TO",
+      "evidence": "如果作用在物体上的唯一力是重力，则该物体处于自由落体状态。",
+      "confidence": 0.9
+    },
+    {
+      "source": "重量",
+      "target": "法向力",
+      "type": "RELATED_TO",
+      "evidence": "当物体静止在表面上时，表面对物体施加一个支持物体重量的力。这个支持力垂直于表面并远离表面。它被称为法向力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "重量",
+      "target": "张力",
+      "type": "RELATED_TO",
+      "evidence": "当绳索支撑静止物体的重量时，绳索中的张力等于物体的重量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "惯性参考系",
+      "target": "牛顿第一运动定律",
+      "type": "RELATED_TO",
+      "evidence": "在任何惯性参考系中（即未加速或旋转的参考系），牛顿定律具有本章给出的简单形式，所有力都是具有物理来源的真实力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "惯性参考系",
+      "target": "牛顿第二运动定律",
+      "type": "RELATED_TO",
+      "evidence": "在任何惯性参考系中（即未加速或旋转的参考系），牛顿定律具有本章给出的简单形式，所有力都是具有物理来源的真实力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "惯性参考系",
+      "target": "牛顿第三运动定律",
+      "type": "RELATED_TO",
+      "evidence": "在任何惯性参考系中（即未加速或旋转的参考系），牛顿定律具有本章给出的简单形式，所有力都是具有物理来源的真实力。",
+      "confidence": 0.9
+    },
+    {
+      "source": "四种基本力",
+      "target": "力场",
+      "type": "RELATED_TO",
+      "evidence": "力场围绕产生力的物体，是该力的载体。",
+      "confidence": 0.8
+    },
+    {
+      "source": "四种基本力",
+      "target": "载体粒子",
+      "type": "RELATED_TO",
+      "evidence": "载体粒子 自然界的一种基本粒子，其周围具有特征力场；光子是电磁力的载体粒子",
+      "confidence": 0.8
+    },
+    {
+      "source": "解题策略",
+      "target": "受力图",
+      "type": "APPLIES_TO",
+      "evidence": "要解决涉及牛顿运动定律的问题，请遵循以下步骤：...画出受力分析图，即显示作用在物体上所有力的草图。",
+      "confidence": 0.9
+    },
+    {
+      "source": "解题策略",
+      "target": "牛顿第二运动定律",
+      "type": "APPLIES_TO",
+      "evidence": "要解决涉及牛顿运动定律的问题，请遵循以下步骤：...在水平和竖直方向上写出牛顿第二定律，并加上作用在物体上的力。",
+      "confidence": 0.9
+    }
+  ]
+}

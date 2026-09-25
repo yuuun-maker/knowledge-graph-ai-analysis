@@ -1,0 +1,441 @@
+{
+  "entities": [
+    {
+      "name": "比较神经科学",
+      "category": "概念",
+      "description": "研究人类和非人类动物，以更好地理解不同物种间脑结构、功能、进化和发育的学科。"
+    },
+    {
+      "name": "模型系统",
+      "category": "概念",
+      "description": "研究以了解生物现象的动物，期望所学知识广泛适用于其他物种。"
+    },
+    {
+      "name": "同源性",
+      "category": "概念",
+      "description": "描述从共同祖先进化而来的结构或器官的术语，用于比较不同物种的神经结构。"
+    },
+    {
+      "name": "端脑",
+      "category": "概念",
+      "description": "前脑的主要组成部分，包括大脑皮层和几个皮层下结构（如基底神经节、杏仁核、海马）。"
+    },
+    {
+      "name": "大脑皮层",
+      "category": "概念",
+      "description": "端脑的一部分，在哺乳动物中由灰质和白质组成，灰质通常组织成六层。"
+    },
+    {
+      "name": "灰质",
+      "category": "概念",
+      "description": "主要包含神经元和胶质细胞的细胞体的脑组织。"
+    },
+    {
+      "name": "白质",
+      "category": "概念",
+      "description": "包含胶质细胞和轴突的脑组织，许多轴突被髓鞘包围。"
+    },
+    {
+      "name": "髓鞘",
+      "category": "概念",
+      "description": "包围轴突的脂肪鞘，赋予白质白色。"
+    },
+    {
+      "name": "鸟类端脑",
+      "category": "概念",
+      "description": "鸟类的前脑结构，细分为纹状体、hyper、meso和nidopallium，组织成核团而非层状。"
+    },
+    {
+      "name": "背侧心室嵴",
+      "category": "概念",
+      "description": "鸟类端脑中的结构，包含离散核团，接收广泛的丘脑输入。"
+    },
+    {
+      "name": "isocortex-DVR假设",
+      "category": "概念",
+      "description": "认为鸟类的背侧心室嵴与哺乳动物大脑皮层同源的假设。"
+    },
+    {
+      "name": "claustroamygdala-DVR假设",
+      "category": "概念",
+      "description": "规定DVR的哺乳动物同源物由claustrum、endopiriform nuclei和amygdala组成的假设。"
+    },
+    {
+      "name": "field homology",
+      "category": "概念",
+      "description": "来源于进化保守区域的细胞群，但可能分布在多样的形态结构中。"
+    },
+    {
+      "name": "ALLOMETRY",
+      "category": "概念",
+      "description": "比例随整体大小变化的现象，用于描述脑区相对大小比例的变化。"
+    },
+    {
+      "name": "grade shifts",
+      "category": "概念",
+      "description": "脑区可能比基于给定脑大小预期的大或小，表明脑部分大小与行为或环境需求之间没有明确的一对一联系。"
+    },
+    {
+      "name": "类器官",
+      "category": "概念",
+      "description": "来源于干细胞，生长成与真实器官有许多共同特征的团块，可用于研究生物过程和测试治疗。"
+    },
+    {
+      "name": "IACUC",
+      "category": "概念",
+      "description": "机构动物护理和使用委员会，负责审查和批准动物研究提案，确保伦理和负责任的研究。"
+    },
+    {
+      "name": "脑区大小与功能关系",
+      "category": "概念",
+      "description": "在控制整体脑大小后，脑区扩大或缩小与物种行为功能之间的关联。"
+    },
+    {
+      "name": "异速生长",
+      "category": "概念",
+      "description": "脑区大小随整体脑大小变化的规律，用于区分相对扩大或缩小。"
+    },
+    {
+      "name": "皮层区域大小与感觉能力关联",
+      "category": "概念",
+      "description": "在考虑异速生长后，皮层区域大小与感觉能力之间通常存在的关联。"
+    },
+    {
+      "name": "经验依赖可塑性",
+      "category": "概念",
+      "description": "经验在一定程度上塑造脑区大小的神经基础。"
+    },
+    {
+      "name": "皮层可塑性",
+      "category": "概念",
+      "description": "皮层根据环境输入重组的能力，由环境决定。"
+    },
+    {
+      "name": "TRACT-TRACERS",
+      "category": "方法",
+      "description": "注射到脑区并主动扩散穿过神经元以标记轴突投射的追踪剂。"
+    },
+    {
+      "name": "可扩散染料",
+      "category": "方法",
+      "description": "通过被动运输穿过脑细胞，用于识别固定组织死后投射的染料。"
+    },
+    {
+      "name": "顺行tracers",
+      "category": "概念",
+      "description": "被注射部位神经元细胞体摄取并沿轴突向终末过程扩散的追踪剂。"
+    },
+    {
+      "name": "逆行tracers",
+      "category": "概念",
+      "description": "被神经元终末摄取并逆行扩散回细胞体的追踪剂。"
+    },
+    {
+      "name": "单突触tract-tracers",
+      "category": "概念",
+      "description": "保留在穿透的神经元内，不扩散到邻近神经元的追踪剂。"
+    },
+    {
+      "name": "跨突触tract-tracers",
+      "category": "概念",
+      "description": "跨突触扩散以在整个网络中扩散的追踪剂。"
+    },
+    {
+      "name": "小世界组织",
+      "category": "概念",
+      "description": "脑网络由高度连接的细胞 coupled with 稀疏的长程投射组成的组织原则。"
+    },
+    {
+      "name": "结构MRI",
+      "category": "方法",
+      "description": "评估脑软组织组织结构的磁共振成像技术。"
+    },
+    {
+      "name": "功能磁共振成像",
+      "category": "方法",
+      "description": "依赖血液波动（BOLD信号）来推断神经元活动水平的磁共振成像技术。"
+    },
+    {
+      "name": "静息态fMRI",
+      "category": "方法",
+      "description": "测量静息时BOLD信号的自发低频波动以研究脑功能架构的fMRI方法。"
+    },
+    {
+      "name": "扩散MRI",
+      "category": "方法",
+      "description": "依赖水分子扩散来推断神经结构组成和纤维方向的MRI技术。"
+    },
+    {
+      "name": "扩散MRI tractography",
+      "category": "方法",
+      "description": "利用扩散MRI数据重建脑内纤维位置和方向的技术。"
+    },
+    {
+      "name": "神经发生",
+      "category": "概念",
+      "description": "产生神经元的整个发育过程。"
+    },
+    {
+      "name": "突触发生",
+      "category": "概念",
+      "description": "突触产生的发育过程。"
+    },
+    {
+      "name": "细胞出生日期测定",
+      "category": "方法",
+      "description": "给予化合物标记增殖细胞，以追踪细胞迁移和最终位置的技木。"
+    },
+    {
+      "name": "脑类器官",
+      "category": "概念",
+      "description": "在体外从干细胞生长的三维球体，可用于研究脑发育和进化。"
+    },
+    {
+      "name": "RNA测序",
+      "category": "方法",
+      "description": "通过提取RNA、逆转录为cDNA并测序来测量基因表达的技术。"
+    },
+    {
+      "name": "逆转录",
+      "category": "方法",
+      "description": "将RNA转化为双链DNA（cDNA）的过程。"
+    },
+    {
+      "name": "转录本读取与基因组比对",
+      "category": "方法",
+      "description": "将测序得到的转录本核苷酸序列与基因组模板匹配的过程。"
+    },
+    {
+      "name": "CDNA",
+      "category": "概念",
+      "description": "由RNA逆转录得到的双链DNA，因其与RNA互补而得名。"
+    },
+    {
+      "name": "转录本比对",
+      "category": "方法",
+      "description": "将转录本中的核苷酸序列与基因组模板匹配，从而将转录本比对到相应基因的过程。"
+    },
+    {
+      "name": "基因表达",
+      "category": "概念",
+      "description": "基因被转录的程度，可通过比对到每个基因的读取数来量化。"
+    },
+    {
+      "name": "单细胞RNA测序",
+      "category": "方法",
+      "description": "从单个细胞捕获RNA并进行测序，以识别组织内单个细胞的转录谱。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "比较神经科学",
+      "target": "同源性",
+      "type": "RELATED_TO",
+      "evidence": "比较神经科学家使用同源性（homology）概念来比较不同物种的神经结构。",
+      "confidence": 0.9
+    },
+    {
+      "source": "端脑",
+      "target": "大脑皮层",
+      "type": "CONTAINS",
+      "evidence": "端脑包括大脑皮层和几个皮层下结构",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "灰质",
+      "type": "CONTAINS",
+      "evidence": "哺乳动物大脑皮层由灰质和白质组成",
+      "confidence": 0.95
+    },
+    {
+      "source": "大脑皮层",
+      "target": "白质",
+      "type": "CONTAINS",
+      "evidence": "哺乳动物大脑皮层由灰质和白质组成",
+      "confidence": 0.95
+    },
+    {
+      "source": "白质",
+      "target": "髓鞘",
+      "type": "CONTAINS",
+      "evidence": "在白质中，许多这些轴突被脂肪鞘称为髓鞘（myelin）包围。",
+      "confidence": 0.9
+    },
+    {
+      "source": "鸟类端脑",
+      "target": "背侧心室嵴",
+      "type": "CONTAINS",
+      "evidence": "鸟类背侧心室嵴（dorsal ventricular ridge, DVR）包含离散核团",
+      "confidence": 0.9
+    },
+    {
+      "source": "isocortex-DVR假设",
+      "target": "背侧心室嵴",
+      "type": "RELATED_TO",
+      "evidence": "研究人员利用这些见解认为鸟类的背侧心室嵴与哺乳动物大脑皮层同源。这被称为isocortex-DVR假设。",
+      "confidence": 0.9
+    },
+    {
+      "source": "isocortex-DVR假设",
+      "target": "大脑皮层",
+      "type": "RELATED_TO",
+      "evidence": "研究人员利用这些见解认为鸟类的背侧心室嵴与哺乳动物大脑皮层同源。这被称为isocortex-DVR假设。",
+      "confidence": 0.9
+    },
+    {
+      "source": "claustroamygdala-DVR假设",
+      "target": "背侧心室嵴",
+      "type": "RELATED_TO",
+      "evidence": "基于发育field考虑同源性被称为claustroamygdala-DVR假设，该假设规定DVR的哺乳动物同源物由claustrum、endopiriform nuclei和amygdala组成",
+      "confidence": 0.9
+    },
+    {
+      "source": "field homology",
+      "target": "同源性",
+      "type": "RELATED_TO",
+      "evidence": "Field homology指的是来源于进化保守区域的细胞群，但可能 populated 在多样的形态结构中。",
+      "confidence": 0.8
+    },
+    {
+      "source": "ALLOMETRY",
+      "target": "大脑皮层",
+      "type": "RELATED_TO",
+      "evidence": "说大脑皮层具有正allometry意味着大脑皮层在更大的脑中变得相对扩大。",
+      "confidence": 0.9
+    },
+    {
+      "source": "grade shifts",
+      "target": "ALLOMETRY",
+      "type": "RELATED_TO",
+      "evidence": "一些脑区以allometry预测的方式在不同物种间变化。也就是说，脑区体积的比例差异由总脑体积变化解释。在其他情况下，我们观察到grade shifts。",
+      "confidence": 0.8
+    },
+    {
+      "source": "类器官",
+      "target": "模型系统",
+      "type": "RELATED_TO",
+      "evidence": "有新兴替代方案可能减少对动物模型的需求。在本章后面，我们将讨论一个令人兴奋的新前沿，它有很大潜力减少对动物的需求。我们指的是类器官（organoids）。",
+      "confidence": 0.8
+    },
+    {
+      "source": "IACUC",
+      "target": "模型系统",
+      "type": "RELATED_TO",
+      "evidence": "任何动物研究必须首先得到研究人员所在机构的机构动物护理和使用委员会（Institutional animal care and use committee, IACUC）的批准。",
+      "confidence": 0.8
+    },
+    {
+      "source": "TRACT-TRACERS",
+      "target": "顺行tracers",
+      "type": "CONTAINS",
+      "evidence": "有各种tract-tracers。包括顺行、逆行、单突触和跨突触tracers",
+      "confidence": 0.95
+    },
+    {
+      "source": "TRACT-TRACERS",
+      "target": "逆行tracers",
+      "type": "CONTAINS",
+      "evidence": "有各种tract-tracers。包括顺行、逆行、单突触和跨突触tracers",
+      "confidence": 0.95
+    },
+    {
+      "source": "TRACT-TRACERS",
+      "target": "单突触tract-tracers",
+      "type": "CONTAINS",
+      "evidence": "有各种tract-tracers。包括顺行、逆行、单突触和跨突触tracers",
+      "confidence": 0.95
+    },
+    {
+      "source": "TRACT-TRACERS",
+      "target": "跨突触tract-tracers",
+      "type": "CONTAINS",
+      "evidence": "有各种tract-tracers。包括顺行、逆行、单突触和跨突触tracers",
+      "confidence": 0.95
+    },
+    {
+      "source": "TRACT-TRACERS",
+      "target": "小世界组织",
+      "type": "RELATED_TO",
+      "evidence": "tract-tracers的信息汇编产生了关于通路特性的见解...脑网络遵循小世界组织",
+      "confidence": 0.7
+    },
+    {
+      "source": "扩散MRI",
+      "target": "扩散MRI tractography",
+      "type": "CONTAINS",
+      "evidence": "扩散MRI tractography可用于记录不同物种投射模式的异同。",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经发生",
+      "target": "突触发生",
+      "type": "PRECEDES",
+      "evidence": "在猕猴和猫中，突触发生在神经发生减弱时发生",
+      "confidence": 0.85
+    },
+    {
+      "source": "RNA测序",
+      "target": "逆转录",
+      "type": "CONTAINS",
+      "evidence": "将RNA转化回DNA的过程称为逆转录",
+      "confidence": 0.9
+    },
+    {
+      "source": "RNA测序",
+      "target": "转录本读取与基因组比对",
+      "type": "CONTAINS",
+      "evidence": "然后转录本读取与基因组比对",
+      "confidence": 0.9
+    },
+    {
+      "source": "经验依赖可塑性",
+      "target": "皮层可塑性",
+      "type": "RELATED_TO",
+      "evidence": "一系列聚焦于经验依赖可塑性神经基础和跨物种比较的研究系统地显示了经验与皮层区域大小之间的联系",
+      "confidence": 0.8
+    },
+    {
+      "source": "逆转录",
+      "target": "CDNA",
+      "type": "RELATED_TO",
+      "evidence": "我们将所得DNA称为“cDNA”，因为它是从其制成的RNA复制（或互补）的",
+      "confidence": 0.9
+    },
+    {
+      "source": "RNA测序",
+      "target": "转录本比对",
+      "type": "CONTAINS",
+      "evidence": "然后转录本读取与基因组比对",
+      "confidence": 0.9
+    },
+    {
+      "source": "转录本比对",
+      "target": "基因表达",
+      "type": "RELATED_TO",
+      "evidence": "比对到每个基因的读取数被用作基因表达的指标",
+      "confidence": 0.9
+    },
+    {
+      "source": "单细胞RNA测序",
+      "target": "RNA测序",
+      "type": "CONTAINS",
+      "evidence": "存在各种方法测量单个细胞的基因表达。图4.15显示了一种常见的方法来进行单细胞RNA测序。",
+      "confidence": 0.9
+    },
+    {
+      "source": "RNA测序",
+      "target": "脑类器官",
+      "type": "APPLIES_TO",
+      "evidence": "一项研究使用RNA测序比较了人类和黑猩猩脑类器官的转录谱",
+      "confidence": 0.9
+    },
+    {
+      "source": "单细胞RNA测序",
+      "target": "脑类器官",
+      "type": "APPLIES_TO",
+      "evidence": "另一项研究依赖人类、黑猩猩和猕猴的单细胞RNA测序数据，发现人类脑类器官的成熟比其他非人灵长类慢",
+      "confidence": 0.9
+    }
+  ]
+}

@@ -63,22 +63,25 @@ class KnowledgeEmbedder:
         )
         return {r["kp_id"] for r in recs if r.get("kp_id")}
 
-    def ensure_index(self, course_id, document_id) -> int:
-        """确保文档知识点向量与图谱一致；不一致时重建，返回向量条数。
+    def ensure_index(self, course_id, document_id) -> list:
+        """确保文档知识点向量与图谱一致，返回该文档的全部向量行 [{kp_id, embedding}]。
 
         「有向量就跳过」是错的：重新抽取会让 kp_id 全部更换，教师增删改节点也会
         改变知识点集合，此时旧向量全部指向已不存在的节点 —— 向量检索会一直返回空，
         而因为表里「非空」，索引永远不会重建。故改为比对 kp_id 集合是否一致。
+
+        返回值即调用方检索所需的那份向量：比对阶段只读 kp_id 列（不反序列化向量），
+        判定新鲜后整取一次返回。旧实现返回条数、由调用方再查一遍，等于每问一次
+        多解析一遍全部向量文本。
         """
         if course_id is None or document_id is None:
-            return 0
+            return []
         current = self._current_kp_ids(course_id, document_id)
         if not current:
-            return 0  # 图谱为空（节点尚未抽取），交给关键词检索兜底
-        stored = {r["kp_id"] for r in sql_db.get_embeddings_by_document(course_id, document_id)}
-        if stored == current:
-            return len(stored)
-        return self.build_index(course_id, document_id)
+            return []  # 图谱为空（节点尚未抽取），交给关键词检索兜底
+        if sql_db.get_embedding_kp_ids(course_id, document_id) != current:
+            self.build_index(course_id, document_id)
+        return sql_db.get_embeddings_by_document(course_id, document_id)
 
     def build_index(self, course_id, document_id) -> int:
         """为文档全部知识点生成并持久化 embedding；无 key 或无知识点时返回 0。

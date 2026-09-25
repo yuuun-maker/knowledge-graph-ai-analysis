@@ -1,0 +1,404 @@
+[
+  {
+    "text_id": "化学_物质组成与溶液_第3章",
+    "source": "data/sample_docs/openstax_化学/第3章_物质组成与溶液_中文版.txt",
+    "entities": [
+      {
+        "name": "平均原子质量",
+        "category": "概念",
+        "description": "元素原子的平均质量，以原子质量单位（amu）表示，是计算式量的基础。"
+      },
+      {
+        "name": "式量",
+        "category": "概念",
+        "description": "化学式中所有原子的平均原子质量之和，以原子质量单位表示。"
+      },
+      {
+        "name": "分子质量",
+        "category": "概念",
+        "description": "共价物质单个分子的平均质量，等于分子式中所有原子的平均原子质量之和。"
+      },
+      {
+        "name": "共价化合物",
+        "category": "概念",
+        "description": "化学式表示构成其单个分子的原子数量和种类的化合物，其式量可正确地称为分子质量。"
+      },
+      {
+        "name": "离子化合物",
+        "category": "概念",
+        "description": "由离散的阳离子和阴离子按一定比例结合形成的电中性化合物，其化学式不代表离散分子。"
+      },
+      {
+        "name": "摩尔",
+        "category": "概念",
+        "description": "物质的量的单位，定义为含有与恰好12 g纯12C样品中原子数目相同的离散实体的量。"
+      },
+      {
+        "name": "阿伏伽德罗数",
+        "category": "概念",
+        "description": "构成1摩尔物质的实体数量，是实验确定的基本常数6.022×10²³/mol。"
+      },
+      {
+        "name": "摩尔质量",
+        "category": "概念",
+        "description": "1摩尔物质以克为单位的质量，以g/mol为单位，数值上等于其以amu为单位的式量。"
+      },
+      {
+        "name": "质量与摩尔数换算",
+        "category": "方法",
+        "description": "将物质的质量（g）除以其摩尔质量（g/mol）以求得摩尔数的计算方法。"
+      },
+      {
+        "name": "摩尔数与粒子数换算",
+        "category": "方法",
+        "description": "将物质的摩尔数乘以阿伏伽德罗常数以得到原子或分子数目的计算方法。"
+      },
+      {
+        "name": "因式标记法",
+        "category": "方法",
+        "description": "通过单位约去支持和检验计算正确性的方法，广泛用于质量、摩尔数等量的换算。"
+      },
+      {
+        "name": "百分组成",
+        "category": "概念",
+        "description": "化合物中每种元素的质量百分比，可由实验测定或由化学式计算得出。"
+      },
+      {
+        "name": "百分组成公式",
+        "category": "公式",
+        "description": "某元素的质量百分比等于该元素的质量除以化合物的质量再乘以100%。"
+      },
+      {
+        "name": "实验式",
+        "category": "概念",
+        "description": "表示化合物中各元素原子相对数量的最简整数比化学式。"
+      },
+      {
+        "name": "分子式",
+        "category": "概念",
+        "description": "表示共价化合物单个分子中原子实际种类和数目的化学式。"
+      },
+      {
+        "name": "实验式量",
+        "category": "概念",
+        "description": "实验式中表示的所有原子的平均原子质量之和。"
+      },
+      {
+        "name": "实验式确定",
+        "category": "方法",
+        "description": "由各元素质量求摩尔数、除以最小摩尔数并化为最小整数比，从而推导实验式的方法。"
+      },
+      {
+        "name": "分子式确定",
+        "category": "方法",
+        "description": "将化合物的分子质量或摩尔质量除以其实验式质量得到式单元数n，再由实验式推导分子式的方法。"
+      },
+      {
+        "name": "混合物",
+        "category": "概念",
+        "description": "含有两种或多种物理混合的物质的样品，其相对组成在决定其性质方面起重要作用。"
+      },
+      {
+        "name": "溶液",
+        "category": "概念",
+        "description": "组成和性质在整个体积中均匀的均相混合物。"
+      },
+      {
+        "name": "溶剂",
+        "category": "概念",
+        "description": "溶液中浓度通常显著大于其他组分、作为分散或溶解其他组分介质的组分。"
+      },
+      {
+        "name": "溶质",
+        "category": "概念",
+        "description": "溶液中以远低于溶剂的浓度存在的组分。"
+      },
+      {
+        "name": "水溶液",
+        "category": "概念",
+        "description": "以水为溶剂的溶液。"
+      },
+      {
+        "name": "浓度",
+        "category": "概念",
+        "description": "溶液中各组分相对量的定量度量，可用多种测量单位进行评估。"
+      },
+      {
+        "name": "摩尔浓度",
+        "category": "概念",
+        "description": "定义为恰好1升溶液中所含溶质摩尔数的浓度单位（M）。"
+      },
+      {
+        "name": "摩尔浓度公式",
+        "category": "公式",
+        "description": "摩尔浓度等于溶质的摩尔数除以溶液的升数。"
+      },
+      {
+        "name": "稀释",
+        "category": "概念",
+        "description": "通过加入溶剂使溶液浓度降低的过程，稀释前后溶质的量不变。"
+      },
+      {
+        "name": "稀释方程",
+        "category": "公式",
+        "description": "稀释前后溶液浓度与体积之间的数学关系式 M1L1 = M2L2，一般写作 C1V1 = C2V2。"
+      },
+      {
+        "name": "质量百分比",
+        "category": "概念",
+        "description": "溶液组分的质量与溶液质量之比，以百分比表示。"
+      },
+      {
+        "name": "质量百分比公式",
+        "category": "公式",
+        "description": "质量百分比等于溶质的质量除以溶液的质量再乘以100%。"
+      },
+      {
+        "name": "体积百分比",
+        "category": "概念",
+        "description": "液体溶质体积与溶液体积之比，以百分比表示（%vol 或 (v/v)%）。"
+      },
+      {
+        "name": "质量-体积百分比",
+        "category": "概念",
+        "description": "溶质质量与溶液体积之比，以百分比表示，常用于生物化学和医学应用。"
+      },
+      {
+        "name": "百万分率",
+        "category": "概念",
+        "description": "表示极低溶质浓度的单位，定义为溶质质量与溶液质量之比乘以10⁶。"
+      },
+      {
+        "name": "十亿分率",
+        "category": "概念",
+        "description": "表示极低溶质浓度的单位，定义为溶质质量与溶液质量之比乘以10⁹。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "平均原子质量",
+        "target": "式量",
+        "type": "PRECEDES",
+        "evidence": "式量，即通过将物质化学式中表示的所有原子的平均原子质量相加",
+        "core": true
+      },
+      {
+        "source": "共价化合物",
+        "target": "分子质量",
+        "type": "RELATED_TO",
+        "evidence": "对于共价物质，化学式表示构成该物质单个分子的原子的数量和种类；因此，式量可以正确地称为分子质量。",
+        "core": true
+      },
+      {
+        "source": "离子化合物",
+        "target": "式量",
+        "type": "RELATED_TO",
+        "evidence": "离子化合物的式量计算方法与共价化合物的式量相同：将化合物化学式中所有原子的平均原子质量相加。",
+        "core": false
+      },
+      {
+        "source": "摩尔",
+        "target": "摩尔质量",
+        "type": "PRECEDES",
+        "evidence": "一种元素（或化合物）的摩尔质量是 1 摩尔该物质以克为单位的质量",
+        "core": true
+      },
+      {
+        "source": "摩尔",
+        "target": "阿伏伽德罗数",
+        "type": "RELATED_TO",
+        "evidence": "构成一摩尔的实体数量已通过实验确定为 6.02214179 × 1023，这是一个基本常数",
+        "core": true
+      },
+      {
+        "source": "摩尔质量",
+        "target": "式量",
+        "type": "RELATED_TO",
+        "evidence": "任何物质的摩尔质量在数值上等于其以 amu 为单位的原子量或化学式量。",
+        "core": true
+      },
+      {
+        "source": "质量与摩尔数换算",
+        "target": "摩尔质量",
+        "type": "APPLIES_TO",
+        "evidence": "物质的摩尔量可以通过将其质量（g）除以其摩尔质量（g/mol）来计算",
+        "core": true
+      },
+      {
+        "source": "摩尔数与粒子数换算",
+        "target": "阿伏伽德罗数",
+        "type": "APPLIES_TO",
+        "evidence": "使用 Avogadro 常数（N_A）将该摩尔量转换为 Cu 原子的数目",
+        "core": true
+      },
+      {
+        "source": "因式标记法",
+        "target": "质量与摩尔数换算",
+        "type": "APPLIES_TO",
+        "evidence": "因式标记法支持这种数学方法，因为单位“g”被消去",
+        "core": false
+      },
+      {
+        "source": "百分组成",
+        "target": "实验式",
+        "type": "PRECEDES",
+        "evidence": "百分组成可用于计算任意方便质量的化合物中存在的元素质量；然后可以按通常方式使用这些质量来推导实验式。",
+        "core": true
+      },
+      {
+        "source": "实验式",
+        "target": "分子式",
+        "type": "PRECEDES",
+        "evidence": "确定构成共价化合物单个分子的原子的绝对数量，需要同时了解其经验式以及其分子质量或摩尔质量。",
+        "core": true
+      },
+      {
+        "source": "实验式",
+        "target": "实验式量",
+        "type": "RELATED_TO",
+        "evidence": "经验式质量是经验式中表示的所有原子的平均原子质量之和。",
+        "core": false
+      },
+      {
+        "source": "实验式确定",
+        "target": "实验式",
+        "type": "APPLIES_TO",
+        "evidence": "这些摩尔量用于计算整数比，从而可以推导出物质的实验式。",
+        "core": true
+      },
+      {
+        "source": "分子式确定",
+        "target": "实验式量",
+        "type": "APPLIES_TO",
+        "evidence": "分子式是通过比较化合物的分子质量或摩尔质量与其经验式质量推导得到的。",
+        "core": true
+      },
+      {
+        "source": "分子式确定",
+        "target": "摩尔质量",
+        "type": "APPLIES_TO",
+        "evidence": "如果已知物质的分子（或摩尔）质量，则可以将其除以经验式质量，得到每个分子的经验式单元数（n）",
+        "core": false
+      },
+      {
+        "source": "百分组成公式",
+        "target": "百分组成",
+        "type": "APPLIES_TO",
+        "evidence": "这些测量结果可用于计算化合物的百分组成，其定义为化合物中每种元素的质量百分比。",
+        "core": true
+      },
+      {
+        "source": "摩尔浓度公式",
+        "target": "摩尔浓度",
+        "type": "APPLIES_TO",
+        "evidence": "摩尔浓度定义为恰好1升（1 L）溶液中所含溶质的摩尔数",
+        "core": true
+      },
+      {
+        "source": "稀释方程",
+        "target": "稀释",
+        "type": "APPLIES_TO",
+        "evidence": "这一关系式通常被称为稀释方程。",
+        "core": true
+      },
+      {
+        "source": "混合物",
+        "target": "溶液",
+        "type": "CONTAINS",
+        "evidence": "溶液此前被定义为均相混合物",
+        "core": true
+      },
+      {
+        "source": "溶液",
+        "target": "溶剂",
+        "type": "CONTAINS",
+        "evidence": "这种组分称为溶剂，可将其视为分散或溶解其他组分的介质。",
+        "core": true
+      },
+      {
+        "source": "溶液",
+        "target": "溶质",
+        "type": "CONTAINS",
+        "evidence": "溶质是溶液中通常以远低于溶剂的浓度存在的组分。",
+        "core": true
+      },
+      {
+        "source": "溶液",
+        "target": "水溶液",
+        "type": "CONTAINS",
+        "evidence": "以水为溶剂的溶液称为水溶液。",
+        "core": false
+      },
+      {
+        "source": "浓度",
+        "target": "溶液",
+        "type": "RELATED_TO",
+        "evidence": "给定溶液组分的相对量称为其浓度。",
+        "core": true
+      },
+      {
+        "source": "浓度",
+        "target": "摩尔浓度",
+        "type": "CONTAINS",
+        "evidence": "浓度可以用各种单位来测量，其中一个非常有用的单位是摩尔浓度",
+        "core": true
+      },
+      {
+        "source": "浓度",
+        "target": "质量百分比",
+        "type": "CONTAINS",
+        "evidence": "百分比也常用于表示混合物的组成，包括溶液。",
+        "core": false
+      },
+      {
+        "source": "浓度",
+        "target": "体积百分比",
+        "type": "CONTAINS",
+        "evidence": "由液体溶质溶于液体溶剂形成的溶液的浓度通常表示为体积百分比",
+        "core": false
+      },
+      {
+        "source": "浓度",
+        "target": "质量-体积百分比",
+        "type": "CONTAINS",
+        "evidence": "“混合”百分比单位由溶质质量和溶液体积推导而来，在某些生物化学和医学应用中很常用。",
+        "core": false
+      },
+      {
+        "source": "浓度",
+        "target": "百万分率",
+        "type": "CONTAINS",
+        "evidence": "极低的溶质浓度通常用适当小的单位表示，如百万分率（ppm）或十亿分率（ppb）。",
+        "core": false
+      },
+      {
+        "source": "浓度",
+        "target": "十亿分率",
+        "type": "CONTAINS",
+        "evidence": "极低的溶质浓度通常用适当小的单位表示，如百万分率（ppm）或十亿分率（ppb）。",
+        "core": false
+      },
+      {
+        "source": "稀释",
+        "target": "浓度",
+        "type": "RELATED_TO",
+        "evidence": "稀释是指通过加入溶剂使溶液浓度降低的过程。",
+        "core": true
+      },
+      {
+        "source": "质量百分比公式",
+        "target": "质量百分比",
+        "type": "APPLIES_TO",
+        "evidence": "溶液组分的质量百分比定义为该组分的质量与溶液质量之比，以百分比表示",
+        "core": false
+      },
+      {
+        "source": "质量百分比",
+        "target": "百分组成",
+        "type": "RELATED_TO",
+        "evidence": "在本章前面，百分比组成被引入作为化合物中给定元素相对量的量度。百分比也常用于表示混合物的组成，包括溶液。",
+        "core": false
+      }
+    ]
+  }
+]

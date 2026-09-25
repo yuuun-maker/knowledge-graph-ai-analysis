@@ -1,0 +1,282 @@
+{
+  "entities": [
+    {
+      "name": "二叉树",
+      "category": "概念",
+      "description": "一种非线性数据结构，每个节点最多有两个子节点，体现分治逻辑。"
+    },
+    {
+      "name": "节点",
+      "category": "概念",
+      "description": "二叉树的基本单元，包含值、左子节点引用和右子节点引用。"
+    },
+    {
+      "name": "父节点",
+      "category": "概念",
+      "description": "拥有子节点的节点，其引用指向左子节点和右子节点。"
+    },
+    {
+      "name": "左子节点",
+      "category": "概念",
+      "description": "父节点左侧引用的节点。"
+    },
+    {
+      "name": "右子节点",
+      "category": "概念",
+      "description": "父节点右侧引用的节点。"
+    },
+    {
+      "name": "左子树",
+      "category": "概念",
+      "description": "以左子节点为根的子树。"
+    },
+    {
+      "name": "右子树",
+      "category": "概念",
+      "description": "以右子节点为根的子树。"
+    },
+    {
+      "name": "根节点",
+      "category": "概念",
+      "description": "位于二叉树顶层的节点，没有父节点。"
+    },
+    {
+      "name": "叶节点",
+      "category": "概念",
+      "description": "没有子节点的节点，其两个指针均指向None。"
+    },
+    {
+      "name": "边",
+      "category": "概念",
+      "description": "连接两个节点的线段，即节点引用（指针）。"
+    },
+    {
+      "name": "层",
+      "category": "概念",
+      "description": "节点所在的层级，从顶至底递增，根节点所在层为1。"
+    },
+    {
+      "name": "度",
+      "category": "概念",
+      "description": "节点的子节点数量，在二叉树中取值范围是0、1、2。"
+    },
+    {
+      "name": "二叉树的高度",
+      "category": "概念",
+      "description": "从根节点到最远叶节点所经过的边的数量。"
+    },
+    {
+      "name": "节点的深度",
+      "category": "概念",
+      "description": "从根节点到该节点所经过的边的数量。"
+    },
+    {
+      "name": "节点的高度",
+      "category": "概念",
+      "description": "从距离该节点最远的叶节点到该节点所经过的边的数量。"
+    },
+    {
+      "name": "初始化二叉树",
+      "category": "方法",
+      "description": "与链表类似，首先初始化节点，然后构建引用（指针）。"
+    },
+    {
+      "name": "插入节点",
+      "category": "方法",
+      "description": "在二叉树中通过修改指针来插入节点。"
+    },
+    {
+      "name": "删除节点",
+      "category": "方法",
+      "description": "在二叉树中通过修改指针来删除节点，通常意味着删除该节点及其所有子树。"
+    },
+    {
+      "name": "完美二叉树",
+      "category": "概念",
+      "description": "所有层的节点都被完全填满的二叉树，叶节点的度为0，其余所有节点的度都为2。"
+    },
+    {
+      "name": "完全二叉树",
+      "category": "概念",
+      "description": "仅允许最底层的节点不完全填满，且最底层的节点必须从左至右依次连续填充的二叉树。"
+    },
+    {
+      "name": "完满二叉树",
+      "category": "概念",
+      "description": "除了叶节点之外，其余所有节点都有两个子节点的二叉树。"
+    },
+    {
+      "name": "平衡二叉树",
+      "category": "概念",
+      "description": "任意节点的左子树和右子树的高度之差的绝对值不超过1的二叉树。"
+    },
+    {
+      "name": "二叉树的退化",
+      "category": "概念",
+      "description": "当所有节点都偏向一侧时，二叉树退化为链表，各项操作变为线性操作。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "二叉树",
+      "target": "节点",
+      "type": "CONTAINS",
+      "evidence": "二叉树的基本单元是节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "节点",
+      "target": "左子节点",
+      "type": "CONTAINS",
+      "evidence": "每个节点都有两个引用（指针），分别指向左子节点和右子节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "节点",
+      "target": "右子节点",
+      "type": "CONTAINS",
+      "evidence": "每个节点都有两个引用（指针），分别指向左子节点和右子节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "节点",
+      "target": "父节点",
+      "type": "RELATED_TO",
+      "evidence": "该节点被称为这两个子节点的父节点",
+      "confidence": 0.9
+    },
+    {
+      "source": "左子节点",
+      "target": "左子树",
+      "type": "CONTAINS",
+      "evidence": "将该节点的左子节点及其以下节点形成的树称为该节点的左子树",
+      "confidence": 0.95
+    },
+    {
+      "source": "右子节点",
+      "target": "右子树",
+      "type": "CONTAINS",
+      "evidence": "同理可得右子树",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "根节点",
+      "type": "CONTAINS",
+      "evidence": "根节点（root node）：位于二叉树顶层的节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "叶节点",
+      "type": "CONTAINS",
+      "evidence": "叶节点（leaf node）：没有子节点的节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "边",
+      "type": "CONTAINS",
+      "evidence": "边（edge）：连接两个节点的线段",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "层",
+      "type": "CONTAINS",
+      "evidence": "节点所在的层（level）：从顶至底递增",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "度",
+      "type": "CONTAINS",
+      "evidence": "节点的度（degree）：节点的子节点的数量",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "二叉树的高度",
+      "type": "CONTAINS",
+      "evidence": "二叉树的高度（height）：从根节点到最远叶节点所经过的边的数量",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "节点的深度",
+      "type": "CONTAINS",
+      "evidence": "节点的深度（depth）：从根节点到该节点所经过的边的数量",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "节点的高度",
+      "type": "CONTAINS",
+      "evidence": "节点的高度（height）：从距离该节点最远的叶节点到该节点所经过的边的数量",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "初始化二叉树",
+      "type": "CONTAINS",
+      "evidence": "二叉树基本操作：初始化二叉树",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "插入节点",
+      "type": "CONTAINS",
+      "evidence": "插入与删除节点",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "删除节点",
+      "type": "CONTAINS",
+      "evidence": "插入与删除节点",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树",
+      "target": "完美二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见二叉树类型：完美二叉树",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "完全二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见二叉树类型：完全二叉树",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "完满二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见二叉树类型：完满二叉树",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "平衡二叉树",
+      "type": "CONTAINS",
+      "evidence": "常见二叉树类型：平衡二叉树",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树",
+      "target": "二叉树的退化",
+      "type": "CONTAINS",
+      "evidence": "二叉树的退化",
+      "confidence": 0.9
+    },
+    {
+      "source": "完美二叉树",
+      "target": "完全二叉树",
+      "type": "CONTAINS",
+      "evidence": "完美二叉树也是一棵完全二叉树",
+      "confidence": 0.95
+    }
+  ]
+}

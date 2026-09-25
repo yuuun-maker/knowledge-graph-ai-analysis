@@ -1,0 +1,329 @@
+{
+  "entities": [
+    {
+      "name": "假说",
+      "category": "概念",
+      "description": "对观察到的现象提出的可检验的试探性解释，尚未经过充分验证。"
+    },
+    {
+      "name": "定律",
+      "category": "概念",
+      "description": "陈述一个被一致观察到的现象，可用于预测。"
+    },
+    {
+      "name": "理论",
+      "category": "概念",
+      "description": "对大量证据进行综合解释的广泛接受的观点。"
+    },
+    {
+      "name": "宏观领域",
+      "category": "概念",
+      "description": "化学中涉及宏观可观测性质（如质量、体积、颜色等）的领域。"
+    },
+    {
+      "name": "微观领域",
+      "category": "概念",
+      "description": "化学中涉及微观粒子（如原子、分子等）的领域。"
+    },
+    {
+      "name": "符号领域",
+      "category": "概念",
+      "description": "化学中用于表示宏观或微观特征的符号系统（如化学式、元素符号等）。"
+    },
+    {
+      "name": "质量",
+      "category": "概念",
+      "description": "物体所含物质的量的量度，不随位置变化。"
+    },
+    {
+      "name": "重量",
+      "category": "概念",
+      "description": "重力对物体的作用力，会随重力加速度的变化而变化。"
+    },
+    {
+      "name": "固体",
+      "category": "概念",
+      "description": "具有固定形状和体积的物质状态。"
+    },
+    {
+      "name": "液体",
+      "category": "概念",
+      "description": "具有固定体积但无固定形状、可流动的物质状态。"
+    },
+    {
+      "name": "气体",
+      "category": "概念",
+      "description": "无固定形状和体积、可压缩和膨胀的物质状态。"
+    },
+    {
+      "name": "非均匀混合物",
+      "category": "概念",
+      "description": "组成不均匀、各部分的性质不同、可以观察到不同相的混合物。"
+    },
+    {
+      "name": "均匀混合物",
+      "category": "概念",
+      "description": "组成均匀、各部分的性质相同、只有一个相的混合物。"
+    },
+    {
+      "name": "纯物质",
+      "category": "概念",
+      "description": "具有确定的组成和确定的性质的物质，包括元素和化合物。"
+    },
+    {
+      "name": "元素",
+      "category": "概念",
+      "description": "由同种原子组成、不能通过化学方法分解为更简单物质的纯净物。"
+    },
+    {
+      "name": "化合物",
+      "category": "概念",
+      "description": "由两种或多种不同元素的原子以固定比例通过化学键结合而成的纯净物。"
+    },
+    {
+      "name": "原子",
+      "category": "概念",
+      "description": "元素的最小单位，由原子核和电子组成。"
+    },
+    {
+      "name": "分子",
+      "category": "概念",
+      "description": "由两个或多个原子通过化学键结合而成的粒子。"
+    },
+    {
+      "name": "物质守恒定律",
+      "category": "概念",
+      "description": "在封闭系统中，化学反应前后物质的总质量保持不变。"
+    },
+    {
+      "name": "物理性质",
+      "category": "概念",
+      "description": "不涉及物质化学组成变化的性质，如颜色、熔点、沸点、密度等。"
+    },
+    {
+      "name": "化学性质",
+      "category": "概念",
+      "description": "涉及物质化学组成变化的性质，如可燃性、反应性等。"
+    },
+    {
+      "name": "物理变化",
+      "category": "概念",
+      "description": "不产生新物质的变化，如状态变化、溶解等。"
+    },
+    {
+      "name": "化学变化",
+      "category": "概念",
+      "description": "产生新物质的变化，如燃烧、发酵等。"
+    },
+    {
+      "name": "广延性质",
+      "category": "概念",
+      "description": "值取决于所考虑的物质量的性质，如体积、质量、热等。"
+    },
+    {
+      "name": "强度性质",
+      "category": "概念",
+      "description": "值与所考虑的物质量无关的性质，如温度、密度、沸点等。"
+    },
+    {
+      "name": "密度",
+      "category": "公式",
+      "description": "物质的质量与其体积之比，d = m/V，是一种强度性质。"
+    },
+    {
+      "name": "SI基本单位",
+      "category": "概念",
+      "description": "国际单位制中用于基本物理量的单位，如米、千克、秒等。"
+    },
+    {
+      "name": "SI导出单位",
+      "category": "概念",
+      "description": "由SI基本单位通过乘除运算导出的单位，如m/s、kg/m³等。"
+    },
+    {
+      "name": "SI前缀",
+      "category": "概念",
+      "description": "用于表示SI单位倍数或分数的词头，如千(k)、厘(c)、毫(m)等。"
+    },
+    {
+      "name": "科学记数法",
+      "category": "方法",
+      "description": "用10的幂表示数值的方法，便于表示很大或很小的数。"
+    },
+    {
+      "name": "有效数字",
+      "category": "概念",
+      "description": "测量中能够有意义地表示测量精度的数字位数。"
+    },
+    {
+      "name": "准确度",
+      "category": "概念",
+      "description": "测量结果与真实值的接近程度。"
+    },
+    {
+      "name": "精密度",
+      "category": "概念",
+      "description": "多次测量结果之间的一致程度。"
+    },
+    {
+      "name": "换算因子",
+      "category": "方法",
+      "description": "用于在不同单位之间进行转换的比值。"
+    },
+    {
+      "name": "温度换算",
+      "category": "方法",
+      "description": "在不同温标（摄氏度、华氏度、开尔文）之间进行转换的方法。"
+    },
+    {
+      "name": "浮沉条件",
+      "category": "概念",
+      "description": "根据物体密度与液体密度的比较判断物体浮起或下沉的条件。"
+    },
+    {
+      "name": "精确数",
+      "category": "概念",
+      "description": "由计数或定义得到的没有不确定性的数，具有无限位有效数字。"
+    },
+    {
+      "name": "单位换算",
+      "category": "方法",
+      "description": "利用换算因子在不同单位之间进行数值转换的方法。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "质量",
+      "target": "重量",
+      "type": "RELATED_TO",
+      "evidence": "因为质量是物体所含物质的量的量度，不随位置变化；而重量是重力对物体的作用力，会随重力加速度的变化而变化。",
+      "confidence": 0.9
+    },
+    {
+      "source": "固体",
+      "target": "液体",
+      "type": "RELATED_TO",
+      "evidence": "什么性质区分固体与液体？液体与气体？固体与气体？",
+      "confidence": 0.8
+    },
+    {
+      "source": "液体",
+      "target": "气体",
+      "type": "RELATED_TO",
+      "evidence": "什么性质区分固体与液体？液体与气体？固体与气体？",
+      "confidence": 0.8
+    },
+    {
+      "source": "固体",
+      "target": "气体",
+      "type": "RELATED_TO",
+      "evidence": "什么性质区分固体与液体？液体与气体？固体与气体？",
+      "confidence": 0.8
+    },
+    {
+      "source": "非均匀混合物",
+      "target": "均匀混合物",
+      "type": "RELATED_TO",
+      "evidence": "非均匀混合物与均匀混合物有何不同？它们有何相似？",
+      "confidence": 0.8
+    },
+    {
+      "source": "均匀混合物",
+      "target": "纯物质",
+      "type": "RELATED_TO",
+      "evidence": "均匀混合物与纯物质有何不同？它们有何相似？",
+      "confidence": 0.8
+    },
+    {
+      "source": "元素",
+      "target": "化合物",
+      "type": "RELATED_TO",
+      "evidence": "元素与化合物有何不同？它们有何相似？",
+      "confidence": 0.8
+    },
+    {
+      "source": "原子",
+      "target": "分子",
+      "type": "RELATED_TO",
+      "evidence": "原子与分子有何不同？它们有哪些相同之处？",
+      "confidence": 0.8
+    },
+    {
+      "source": "物理性质",
+      "target": "化学性质",
+      "type": "RELATED_TO",
+      "evidence": "把以下段落中六个划线性质分类为化学的或物理的",
+      "confidence": 0.7
+    },
+    {
+      "source": "物理变化",
+      "target": "化学变化",
+      "type": "RELATED_TO",
+      "evidence": "把以下各变化分类为物理的或化学的",
+      "confidence": 0.7
+    },
+    {
+      "source": "广延性质",
+      "target": "强度性质",
+      "type": "RELATED_TO",
+      "evidence": "解释广延性质与强度性质之间的区别。",
+      "confidence": 0.8
+    },
+    {
+      "source": "密度",
+      "target": "质量",
+      "type": "RELATED_TO",
+      "evidence": "物质的密度（d）是一种强度性质，定义为它的质量（m）与其体积（V）之比。",
+      "confidence": 0.9
+    },
+    {
+      "source": "准确度",
+      "target": "精密度",
+      "type": "RELATED_TO",
+      "evidence": "把以下各组测量分类为准确的、精密的、两者皆是或两者皆非。",
+      "confidence": 0.8
+    },
+    {
+      "source": "科学记数法",
+      "target": "有效数字",
+      "type": "RELATED_TO",
+      "evidence": "用科学记数法表示以下各数，并带正确的有效数字",
+      "confidence": 0.7
+    },
+    {
+      "source": "换算因子",
+      "target": "有效数字",
+      "type": "RELATED_TO",
+      "evidence": "你的换算因子可以证明多少位有效数字？",
+      "confidence": 0.7
+    },
+    {
+      "source": "温度换算",
+      "target": "SI基本单位",
+      "type": "RELATED_TO",
+      "evidence": "把金的沸腾温度2966 °C换算成华氏度和开尔文。",
+      "confidence": 0.6
+    },
+    {
+      "source": "密度",
+      "target": "浮沉条件",
+      "type": "PRECEDES",
+      "evidence": "如果块的密度小于汞密度，块也会浮起",
+      "confidence": 0.9
+    },
+    {
+      "source": "单位换算",
+      "target": "换算因子",
+      "type": "APPLIES_TO",
+      "evidence": "换算因子：1 oz = 978 g / 34.5 oz ≈ 28.35 g/oz",
+      "confidence": 0.9
+    },
+    {
+      "source": "有效数字",
+      "target": "精确数",
+      "type": "RELATED_TO",
+      "evidence": "精确（无限位）",
+      "confidence": 0.8
+    }
+  ]
+}

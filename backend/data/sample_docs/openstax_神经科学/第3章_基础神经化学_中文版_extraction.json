@@ -1,0 +1,549 @@
+{
+  "entities": [
+    {
+      "name": "神经化学",
+      "category": "概念",
+      "description": "研究脑内所有化学过程的学科，聚焦于神经递质的产生、储存、释放、受体作用及失活。"
+    },
+    {
+      "name": "神经递质",
+      "category": "概念",
+      "description": "神经元释放的化学物质，用于神经元之间的通讯，使一个神经元能够影响其他神经元的行为。"
+    },
+    {
+      "name": "血脑屏障",
+      "category": "概念",
+      "description": "脑内的防火墙结构，拥有专门的转运机制主动将营养物质转运入脑。"
+    },
+    {
+      "name": "突触囊泡",
+      "category": "概念",
+      "description": "聚集在突触前终末的小球体，内部中空，储存神经递质分子以备释放。"
+    },
+    {
+      "name": "动作电位",
+      "category": "概念",
+      "description": "到达轴突末端时打开电压依赖性钙通道，允许钙离子进入，启动神经递质释放。"
+    },
+    {
+      "name": "突触间隙",
+      "category": "概念",
+      "description": "神经元之间的小空间，神经递质释放后在此处浓度短暂升高。"
+    },
+    {
+      "name": "突触",
+      "category": "概念",
+      "description": "两个神经元通过释放神经递质分子进行通讯的连接处。"
+    },
+    {
+      "name": "受体",
+      "category": "概念",
+      "description": "位于突触后膜表面的蛋白质，与神经递质结合并触发靶细胞中的反应。"
+    },
+    {
+      "name": "离子型受体",
+      "category": "概念",
+      "description": "跨膜分子，作为配体门控离子通道，允许离子进出细胞。"
+    },
+    {
+      "name": "代谢型受体",
+      "category": "概念",
+      "description": "与G蛋白相连的受体，激活G蛋白进而激活第二信使，无离子通道。"
+    },
+    {
+      "name": "G蛋白",
+      "category": "概念",
+      "description": "与代谢型受体相连的小化学物质，被激活后继续激活第二信使。"
+    },
+    {
+      "name": "第二信使",
+      "category": "概念",
+      "description": "代谢型受体激活后产生的化学物质，功能是去激活其他颗粒。"
+    },
+    {
+      "name": "重摄取",
+      "category": "方法",
+      "description": "神经递质失活的主要机制，通过突触前膜上的转运体重新吸收神经递质。"
+    },
+    {
+      "name": "酪氨酸",
+      "category": "概念",
+      "description": "饮食氨基酸前体，用于合成多巴胺、去甲肾上腺素和肾上腺素。"
+    },
+    {
+      "name": "多巴胺",
+      "category": "概念",
+      "description": "由酪氨酸合成的神经递质，参与运动控制、奖励体验等多种功能。"
+    },
+    {
+      "name": "去甲肾上腺素",
+      "category": "概念",
+      "description": "由多巴胺合成的神经递质，是唤醒的主要组成部分，影响记忆形成。"
+    },
+    {
+      "name": "肾上腺素",
+      "category": "概念",
+      "description": "由去甲肾上腺素合成的神经递质/激素，产生强烈情绪的外周表现。"
+    },
+    {
+      "name": "酪氨酸羟化酶",
+      "category": "概念",
+      "description": "将酪氨酸转化为L-DOPA的酶，是多巴胺合成的限速步骤，需要铁离子。"
+    },
+    {
+      "name": "L-DOPA",
+      "category": "概念",
+      "description": "酪氨酸羟化酶催化酪氨酸生成的中间产物，可进一步转化为多巴胺。"
+    },
+    {
+      "name": "芳香族氨基酸脱羧酶",
+      "category": "概念",
+      "description": "将L-DOPA转化为多巴胺的酶，去除一个二氧化碳分子。"
+    },
+    {
+      "name": "多巴胺-β-羟化酶",
+      "category": "概念",
+      "description": "囊泡酶，将多巴胺转化为去甲肾上腺素，需要铜。"
+    },
+    {
+      "name": "苯乙醇胺-N-甲基转移酶",
+      "category": "概念",
+      "description": "将去甲肾上腺素转化为肾上腺素的酶，通过添加甲基。"
+    },
+    {
+      "name": "单胺氧化酶",
+      "category": "概念",
+      "description": "分解代谢多巴胺、去甲肾上腺素和血清素的酶。"
+    },
+    {
+      "name": "儿茶酚-O-甲基转移酶",
+      "category": "概念",
+      "description": "分解代谢多巴胺和去甲肾上腺素的酶。"
+    },
+    {
+      "name": "血清素",
+      "category": "概念",
+      "description": "由色氨酸合成的神经递质，调节情绪、睡眠、食欲等多种功能。"
+    },
+    {
+      "name": "色氨酸",
+      "category": "概念",
+      "description": "饮食氨基酸前体，用于合成血清素。"
+    },
+    {
+      "name": "色氨酸羟化酶",
+      "category": "概念",
+      "description": "将色氨酸转化为5-羟色氨酸的酶，是血清素产生的限速步骤。"
+    },
+    {
+      "name": "5-羟色氨酸",
+      "category": "概念",
+      "description": "色氨酸羟化酶催化色氨酸生成的中间产物，可进一步转化为血清素。"
+    },
+    {
+      "name": "5HT-1A受体",
+      "category": "概念",
+      "description": "一种血清素受体，在调节情绪和焦虑中起潜在作用。"
+    },
+    {
+      "name": "神经肽",
+      "category": "概念",
+      "description": "由氨基酸链组成的神经递质，大小不一，可与经典神经递质一起释放。"
+    },
+    {
+      "name": "褪黑素",
+      "category": "概念",
+      "description": "由松果体内细胞利用色氨酸产生的激素，与睡眠调节相关。"
+    },
+    {
+      "name": "神经肽的合成",
+      "category": "方法",
+      "description": "神经肽的合成过程，包括DNA转录翻译、内质网和高尔基体加工，最终包装在突触囊泡中。"
+    },
+    {
+      "name": "内啡肽",
+      "category": "概念",
+      "description": "内源性阿片肽家族之一，调节疼痛信号、神经内分泌和情绪，与阿片受体相互作用。"
+    },
+    {
+      "name": "催产素",
+      "category": "概念",
+      "description": "一种神经肽，在下丘脑合成，影响社会依恋、信任、母婴 bonding 等行为功能。"
+    },
+    {
+      "name": "谷氨酸",
+      "category": "概念",
+      "description": "主要的兴奋性神经递质，由谷氨酰胺合成，参与学习等生理过程。"
+    },
+    {
+      "name": "GABA",
+      "category": "概念",
+      "description": "主要的抑制性神经递质，由谷氨酸转化而成，调节神经元兴奋性。"
+    },
+    {
+      "name": "谷氨酸和GABA的合成",
+      "category": "方法",
+      "description": "谷氨酸和GABA的合成过程，始于谷氨酰胺，需要星形胶质细胞参与，GABA由谷氨酸脱羧酶催化生成。"
+    },
+    {
+      "name": "谷氨酸受体",
+      "category": "概念",
+      "description": "包括代谢型和离子型受体，离子型受体如NMDA、AMPA和kainate受体，介导兴奋性突触后反应。"
+    },
+    {
+      "name": "GABA受体",
+      "category": "概念",
+      "description": "分为GABA-A和GABA-B等，GABA-A是配体门控离子通道，GABA-B是G蛋白偶联受体，介导抑制性作用。"
+    },
+    {
+      "name": "谷氨酸和GABA的失活",
+      "category": "方法",
+      "description": "谷氨酸和GABA通过转运体被星形胶质细胞摄取并转化，从而失活。"
+    },
+    {
+      "name": "组胺",
+      "category": "概念",
+      "description": "一种神经递质，影响唤醒、垂体激素分泌、抑制进食和认知功能。"
+    },
+    {
+      "name": "组胺的合成",
+      "category": "方法",
+      "description": "组胺由组氨酸脱羧反应生成，由L-组氨酸脱羧酶催化。"
+    },
+    {
+      "name": "组胺受体",
+      "category": "概念",
+      "description": "组胺与G蛋白偶联受体H1至H4结合，H1和H2产生去极化，H3作为自身受体。"
+    },
+    {
+      "name": "组胺的失活",
+      "category": "方法",
+      "description": "组胺主要通过酶组胺-N-甲基转移酶分解代谢失活。"
+    },
+    {
+      "name": "内源性大麻素",
+      "category": "概念",
+      "description": "脂肪衍生的神经递质，如anandamide和2-AG，不储存在囊泡中，通过逆行神经传递起作用。"
+    },
+    {
+      "name": "内源性大麻素的合成",
+      "category": "方法",
+      "description": "内源性大麻素从膜磷脂合成，2-AG由DAGL催化，anandamide由PLD催化。"
+    },
+    {
+      "name": "内源性大麻素受体",
+      "category": "概念",
+      "description": "包括CB1和CB2受体，CB1在脑中丰富，CB2水平较低，介导内源性大麻素的作用。"
+    },
+    {
+      "name": "内源性大麻素的失活",
+      "category": "方法",
+      "description": "内源性大麻素通过重摄取或酶如FAAH和MAGL分解代谢失活。"
+    },
+    {
+      "name": "前列腺素",
+      "category": "概念",
+      "description": "由花生四烯酸通过环氧合酶合成的脂质神经递质，参与炎症、发热和神经保护等。"
+    },
+    {
+      "name": "前列腺素的合成",
+      "category": "方法",
+      "description": "前列腺素由花生四烯酸通过环氧合酶合成，不储存在囊泡中，按需产生。"
+    },
+    {
+      "name": "乙酰胆碱",
+      "category": "概念",
+      "description": "由乙酸和胆碱合成的神经递质，影响学习、记忆、注意力和运动控制。"
+    },
+    {
+      "name": "乙酰胆碱的合成",
+      "category": "方法",
+      "description": "乙酰胆碱通过胆碱乙酰转移酶将乙酸转移到胆碱上合成，乙酰基来源于糖。"
+    },
+    {
+      "name": "乙酰胆碱受体",
+      "category": "概念",
+      "description": "包括毒蕈碱型和烟碱型受体，烟碱型是配体门控离子通道，毒蕈碱型是G蛋白偶联受体。"
+    },
+    {
+      "name": "神经类固醇",
+      "category": "概念",
+      "description": "由星形胶质细胞和神经元产生的类固醇，调节脑兴奋性，如孕烯醇酮和孕酮。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "神经化学",
+      "target": "神经递质",
+      "type": "RELATED_TO",
+      "evidence": "神经化学是研究脑内所有化学过程的学科。本章将聚焦于与行为神经科学最相关的一组化学物质的产生、储存、释放、受体作用及失活。",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经递质",
+      "target": "突触囊泡",
+      "type": "RELATED_TO",
+      "evidence": "一旦合成，大多数神经递质分子会被主动转运到突触囊泡中",
+      "confidence": 0.9
+    },
+    {
+      "source": "动作电位",
+      "target": "突触囊泡",
+      "type": "RELATED_TO",
+      "evidence": "动作电位到达轴突末端时，会打开一组电压依赖性钙通道，允许钙离子进入...突触囊泡要么与其细胞壁融合...将神经递质释放到...突触间隙",
+      "confidence": 0.8
+    },
+    {
+      "source": "突触囊泡",
+      "target": "突触间隙",
+      "type": "RELATED_TO",
+      "evidence": "突触囊泡要么与其细胞壁融合...将神经递质释放到神经元之间的小空间，称为突触间隙",
+      "confidence": 0.9
+    },
+    {
+      "source": "突触",
+      "target": "突触间隙",
+      "type": "CONTAINS",
+      "evidence": "两个神经元通过释放神经递质分子进行通讯的连接处称为突触。由于突触是非常小的空间，释放后神经递质分子在突触中的浓度会短暂地变得非常高。",
+      "confidence": 0.8
+    },
+    {
+      "source": "受体",
+      "target": "离子型受体",
+      "type": "CONTAINS",
+      "evidence": "这些受体分为两种一般类型：离子型（ionotropic）或代谢型（metabotropic）受体",
+      "confidence": 0.95
+    },
+    {
+      "source": "受体",
+      "target": "代谢型受体",
+      "type": "CONTAINS",
+      "evidence": "这些受体分为两种一般类型：离子型（ionotropic）或代谢型（metabotropic）受体",
+      "confidence": 0.95
+    },
+    {
+      "source": "代谢型受体",
+      "target": "G蛋白",
+      "type": "RELATED_TO",
+      "evidence": "代谢型受体没有“通道”可以打开或关闭。相反，它们与另一种称为“G蛋白”的小化学物质相连。",
+      "confidence": 0.9
+    },
+    {
+      "source": "G蛋白",
+      "target": "第二信使",
+      "type": "RELATED_TO",
+      "evidence": "一旦被激活，G蛋白本身继续激活另一个分子...这个新分子称为“第二信使”",
+      "confidence": 0.9
+    },
+    {
+      "source": "重摄取",
+      "target": "神经递质",
+      "type": "APPLIES_TO",
+      "evidence": "失活的主要机制是重摄取...重摄取是通过位于轴突终末（突触前）膜上的蛋白质转运体重新吸收神经递质。",
+      "confidence": 0.9
+    },
+    {
+      "source": "酪氨酸",
+      "target": "多巴胺",
+      "type": "PRECEDES",
+      "evidence": "多巴胺、去甲肾上腺素和肾上腺素依次由相同的饮食氨基酸前体酪氨酸合成。",
+      "confidence": 0.9
+    },
+    {
+      "source": "多巴胺",
+      "target": "去甲肾上腺素",
+      "type": "PRECEDES",
+      "evidence": "在去甲肾上腺素和肾上腺素神经元中，一旦多巴胺被转运到囊泡中，它可以通过囊泡酶多巴胺-β-羟化酶转化为去甲肾上腺素",
+      "confidence": 0.9
+    },
+    {
+      "source": "去甲肾上腺素",
+      "target": "肾上腺素",
+      "type": "PRECEDES",
+      "evidence": "脑干中一个非常小的神经元群还表达一种酶...将去甲肾上腺素转化为神经递质肾上腺素",
+      "confidence": 0.9
+    },
+    {
+      "source": "酪氨酸羟化酶",
+      "target": "L-DOPA",
+      "type": "RELATED_TO",
+      "evidence": "酪氨酸通过酪氨酸羟化酶在苯环上添加一个羟基分子转化为L-DOPA",
+      "confidence": 0.9
+    },
+    {
+      "source": "L-DOPA",
+      "target": "多巴胺",
+      "type": "PRECEDES",
+      "evidence": "L-DOPA通过芳香族氨基酸脱羧酶...转化为多巴胺",
+      "confidence": 0.9
+    },
+    {
+      "source": "芳香族氨基酸脱羧酶",
+      "target": "多巴胺",
+      "type": "RELATED_TO",
+      "evidence": "L-DOPA通过芳香族氨基酸脱羧酶...转化为多巴胺",
+      "confidence": 0.9
+    },
+    {
+      "source": "多巴胺-β-羟化酶",
+      "target": "去甲肾上腺素",
+      "type": "RELATED_TO",
+      "evidence": "多巴胺可以通过囊泡酶多巴胺-β-羟化酶转化为去甲肾上腺素",
+      "confidence": 0.9
+    },
+    {
+      "source": "苯乙醇胺-N-甲基转移酶",
+      "target": "肾上腺素",
+      "type": "RELATED_TO",
+      "evidence": "苯乙醇胺-N-甲基转移酶...将去甲肾上腺素转化为神经递质肾上腺素",
+      "confidence": 0.9
+    },
+    {
+      "source": "单胺氧化酶",
+      "target": "多巴胺",
+      "type": "APPLIES_TO",
+      "evidence": "留在突触间隙中的多巴胺和去甲肾上腺素分子被酶单胺氧化酶（MAO）和儿茶酚-O-甲基转移酶（COMT）分解代谢",
+      "confidence": 0.9
+    },
+    {
+      "source": "单胺氧化酶",
+      "target": "去甲肾上腺素",
+      "type": "APPLIES_TO",
+      "evidence": "留在突触间隙中的多巴胺和去甲肾上腺素分子被酶单胺氧化酶（MAO）和儿茶酚-O-甲基转移酶（COMT）分解代谢",
+      "confidence": 0.9
+    },
+    {
+      "source": "儿茶酚-O-甲基转移酶",
+      "target": "多巴胺",
+      "type": "APPLIES_TO",
+      "evidence": "留在突触间隙中的多巴胺和去甲肾上腺素分子被酶单胺氧化酶（MAO）和儿茶酚-O-甲基转移酶（COMT）分解代谢",
+      "confidence": 0.9
+    },
+    {
+      "source": "儿茶酚-O-甲基转移酶",
+      "target": "去甲肾上腺素",
+      "type": "APPLIES_TO",
+      "evidence": "留在突触间隙中的多巴胺和去甲肾上腺素分子被酶单胺氧化酶（MAO）和儿茶酚-O-甲基转移酶（COMT）分解代谢",
+      "confidence": 0.9
+    },
+    {
+      "source": "色氨酸",
+      "target": "血清素",
+      "type": "PRECEDES",
+      "evidence": "神经递质血清素由一分子氨基酸色氨酸构建。",
+      "confidence": 0.9
+    },
+    {
+      "source": "色氨酸羟化酶",
+      "target": "5-羟色氨酸",
+      "type": "RELATED_TO",
+      "evidence": "色氨酸通过色氨酸羟化酶在苯环上添加一个羟基分子转化为5-羟色氨酸",
+      "confidence": 0.9
+    },
+    {
+      "source": "5-羟色氨酸",
+      "target": "血清素",
+      "type": "PRECEDES",
+      "evidence": "5-羟色氨酸通过芳香族氨基酸脱羧酶...转化为血清素",
+      "confidence": 0.9
+    },
+    {
+      "source": "芳香族氨基酸脱羧酶",
+      "target": "血清素",
+      "type": "RELATED_TO",
+      "evidence": "5-羟色氨酸通过芳香族氨基酸脱羧酶...转化为血清素",
+      "confidence": 0.9
+    },
+    {
+      "source": "单胺氧化酶",
+      "target": "血清素",
+      "type": "APPLIES_TO",
+      "evidence": "未被重摄取去除的血清素分子被酶单胺氧化酶分解代谢",
+      "confidence": 0.9
+    },
+    {
+      "source": "5HT-1A受体",
+      "target": "血清素",
+      "type": "RELATED_TO",
+      "evidence": "考虑一种称为5HT-1A的血清素受体。",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经肽",
+      "target": "神经递质",
+      "type": "CONTAINS",
+      "evidence": "神经肽类神经递质可以非常小...也可以相当大...",
+      "confidence": 0.8
+    },
+    {
+      "source": "色氨酸",
+      "target": "褪黑素",
+      "type": "PRECEDES",
+      "evidence": "穿过血脑屏障的非常少量色氨酸分子被松果体内细胞用于产生褪黑素",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经肽",
+      "target": "内啡肽",
+      "type": "CONTAINS",
+      "evidence": "内啡肽是4个内源性阿片肽家族之一",
+      "confidence": 0.95
+    },
+    {
+      "source": "神经肽",
+      "target": "催产素",
+      "type": "CONTAINS",
+      "evidence": "催产素是一种神经肽",
+      "confidence": 0.95
+    },
+    {
+      "source": "谷氨酸",
+      "target": "GABA",
+      "type": "PRECEDES",
+      "evidence": "如果神经元是GABA能神经元，谷氨酸通过谷氨酸脱羧酶转化为GABA",
+      "confidence": 0.9
+    },
+    {
+      "source": "谷氨酸",
+      "target": "谷氨酸受体",
+      "type": "RELATED_TO",
+      "evidence": "谷氨酸信号激活一个受体家族",
+      "confidence": 0.8
+    },
+    {
+      "source": "GABA",
+      "target": "GABA受体",
+      "type": "RELATED_TO",
+      "evidence": "GABA受体分为GABA-A和GABA-B",
+      "confidence": 0.8
+    },
+    {
+      "source": "组胺",
+      "target": "组胺受体",
+      "type": "RELATED_TO",
+      "evidence": "组胺与G蛋白偶联受体结合，命名为H1至H4",
+      "confidence": 0.8
+    },
+    {
+      "source": "内源性大麻素",
+      "target": "内源性大麻素受体",
+      "type": "RELATED_TO",
+      "evidence": "两种不同类型的内源性大麻素受体遍布脑和身体",
+      "confidence": 0.8
+    },
+    {
+      "source": "乙酰胆碱",
+      "target": "乙酰胆碱受体",
+      "type": "RELATED_TO",
+      "evidence": "大多数脑中的乙酰胆碱受体是毒蕈碱亚型，而不到10%是烟碱型",
+      "confidence": 0.8
+    },
+    {
+      "source": "神经类固醇",
+      "target": "GABA受体",
+      "type": "RELATED_TO",
+      "evidence": "孕酮转化为别孕烯醇酮，它可以增强GABA受体的功能",
+      "confidence": 0.8
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "entities": [
+    {
+      "name": "布尔值",
+      "category": "概念",
+      "description": "Python中表示真或假的数据类型，只有True和False两个值。"
+    },
+    {
+      "name": "布尔运算",
+      "category": "概念",
+      "description": "对布尔值进行的逻辑运算，包括and、or、not。"
+    },
+    {
+      "name": "比较运算符",
+      "category": "概念",
+      "description": "用于比较两个值的运算符，如<、>、==、!=等，返回布尔值。"
+    },
+    {
+      "name": "if-else语句",
+      "category": "概念",
+      "description": "根据条件真假选择执行不同代码块的控制结构。"
+    },
+    {
+      "name": "运算符优先级",
+      "category": "概念",
+      "description": "决定表达式中不同运算符求值顺序的规则。"
+    },
+    {
+      "name": "链式决策",
+      "category": "概念",
+      "description": "使用if-elif-else结构依次检查多个条件并执行第一个为真的分支。"
+    },
+    {
+      "name": "嵌套决策",
+      "category": "概念",
+      "description": "在一个决策语句的分支内部再包含另一个决策语句的结构。"
+    },
+    {
+      "name": "条件表达式",
+      "category": "概念",
+      "description": "一种简洁的根据条件选择值的表达式，形式为X if condition else Y。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "布尔运算",
+      "target": "布尔值",
+      "type": "APPLIES_TO",
+      "evidence": "布尔运算（Boolean operations）",
+      "confidence": 0.9
+    },
+    {
+      "source": "比较运算符",
+      "target": "布尔值",
+      "type": "APPLIES_TO",
+      "evidence": "compare_result = (x <= 13)",
+      "confidence": 0.9
+    },
+    {
+      "source": "if-else语句",
+      "target": "布尔值",
+      "type": "APPLIES_TO",
+      "evidence": "if age < 12:",
+      "confidence": 0.9
+    },
+    {
+      "source": "链式决策",
+      "target": "if-else语句",
+      "type": "CONTAINS",
+      "evidence": "链式决策（Chained decisions）",
+      "confidence": 0.9
+    },
+    {
+      "source": "嵌套决策",
+      "target": "if-else语句",
+      "type": "CONTAINS",
+      "evidence": "嵌套决策（Nested decisions）",
+      "confidence": 0.9
+    },
+    {
+      "source": "条件表达式",
+      "target": "if-else语句",
+      "type": "RELATED_TO",
+      "evidence": "以下 if-else 语句的条件表达式版本是什么？",
+      "confidence": 0.9
+    },
+    {
+      "source": "运算符优先级",
+      "target": "布尔运算",
+      "type": "RELATED_TO",
+      "evidence": "运算符优先级（Operator precedence）",
+      "confidence": 0.8
+    }
+  ]
+}

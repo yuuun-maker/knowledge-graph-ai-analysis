@@ -20,7 +20,7 @@ from app.core.sql_database import sql_db
 from app.services.document_service import DocumentService
 from app.services.kg_manager import KnowledgeGraphManager
 
-PDF_PATH = os.path.join("data", "sample_docs", "数据结构第一章.pdf")
+PDF_PATH = os.path.join("data", "sample_docs", "数据结构", "数据结构第一章.pdf")
 COURSE_NAME = "数据结构（整数ID验证）"
 
 

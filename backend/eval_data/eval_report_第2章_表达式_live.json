@@ -1,0 +1,2659 @@
+{
+  "evaluation_version": "2.0",
+  "relation_types": [
+    "PRECEDES",
+    "CONTAINS",
+    "RELATED_TO",
+    "APPLIES_TO"
+  ],
+  "entity_categories": [
+    "概念",
+    "定理",
+    "公式",
+    "方法"
+  ],
+  "metric_policy": {
+    "relation_primary": "precision_on_Full_set__recall_on_Core_set",
+    "relation_core": "conservative_lower_bound",
+    "relation_full": "strict_match_against_full_gold",
+    "entity_primary": "name_exact_after_frozen_normalization",
+    "relation_pair": "auxiliary_only_ignore_type_and_direction",
+    "confidence_is_not_accuracy": true,
+    "accuracy_source": "manual_gold_annotation"
+  },
+  "normalization": {
+    "version": "n1",
+    "aliases": {
+      "满二叉树": "完美二叉树",
+      "广度优先搜索": "广度优先遍历",
+      "深度优先搜索": "深度优先遍历",
+      "BFS": "广度优先遍历",
+      "DFS": "深度优先遍历",
+      "节点的高度": "高度",
+      "节点高度": "高度",
+      "二叉树的高度": "高度",
+      "节点的深度": "深度",
+      "AVL树": "AVL 树",
+      "旋转操作": "旋转",
+      "先右旋再左旋": "先右旋后左旋",
+      "先左旋再右旋": "先左旋后右旋",
+      "插入操作": "插入节点",
+      "删除操作": "删除节点",
+      "查找操作": "查找节点",
+      "索引映射公式": "映射公式",
+      "数组表示法": "数组表示",
+      "顺序存储结构": "顺序表",
+      "链式存储结构": "链表"
+    },
+    "aliases_sha256": "960bb3117d7fe9ef6f22280d318bf6ede3f746f58df3a8ed8e147f5f6c9dfad5"
+  },
+  "gold_sha256": {
+    "第2章_表达式_中文版_人工版_extraction": "ff47418dd349de0008ca2b00d49427c94d86701fef55049cca4fcd92bcb18d16"
+  },
+  "runs": 1,
+  "warnings": [],
+  "stability": {
+    "entity_precision": {
+      "mean": 0.5536,
+      "std": 0.0,
+      "min": 0.5536,
+      "max": 0.5536,
+      "values": [
+        0.5536
+      ]
+    },
+    "entity_recall": {
+      "mean": 0.4429,
+      "std": 0.0,
+      "min": 0.4429,
+      "max": 0.4429,
+      "values": [
+        0.4429
+      ]
+    },
+    "entity_f1": {
+      "mean": 0.4921,
+      "std": 0.0,
+      "min": 0.4921,
+      "max": 0.4921,
+      "values": [
+        0.4921
+      ]
+    },
+    "entity_category_accuracy": {
+      "mean": 0.8065,
+      "std": 0.0,
+      "min": 0.8065,
+      "max": 0.8065,
+      "values": [
+        0.8065
+      ]
+    },
+    "relation_primary_precision": {
+      "mean": 0.1951,
+      "std": 0.0,
+      "min": 0.1951,
+      "max": 0.1951,
+      "values": [
+        0.1951
+      ]
+    },
+    "relation_primary_recall": {
+      "mean": 0.1429,
+      "std": 0.0,
+      "min": 0.1429,
+      "max": 0.1429,
+      "values": [
+        0.1429
+      ]
+    },
+    "relation_primary_f1": {
+      "mean": 0.1649,
+      "std": 0.0,
+      "min": 0.1649,
+      "max": 0.1649,
+      "values": [
+        0.1649
+      ]
+    },
+    "relation_core_precision": {
+      "mean": 0.1951,
+      "std": 0.0,
+      "min": 0.1951,
+      "max": 0.1951,
+      "values": [
+        0.1951
+      ]
+    },
+    "relation_core_recall": {
+      "mean": 0.1429,
+      "std": 0.0,
+      "min": 0.1429,
+      "max": 0.1429,
+      "values": [
+        0.1429
+      ]
+    },
+    "relation_core_f1": {
+      "mean": 0.1649,
+      "std": 0.0,
+      "min": 0.1649,
+      "max": 0.1649,
+      "values": [
+        0.1649
+      ]
+    },
+    "relation_full_precision": {
+      "mean": 0.1951,
+      "std": 0.0,
+      "min": 0.1951,
+      "max": 0.1951,
+      "values": [
+        0.1951
+      ]
+    },
+    "relation_full_recall": {
+      "mean": 0.1176,
+      "std": 0.0,
+      "min": 0.1176,
+      "max": 0.1176,
+      "values": [
+        0.1176
+      ]
+    },
+    "relation_full_f1": {
+      "mean": 0.1468,
+      "std": 0.0,
+      "min": 0.1468,
+      "max": 0.1468,
+      "values": [
+        0.1468
+      ]
+    },
+    "relation_pair_precision": {
+      "mean": 0.2439,
+      "std": 0.0,
+      "min": 0.2439,
+      "max": 0.2439,
+      "values": [
+        0.2439
+      ]
+    },
+    "relation_pair_recall": {
+      "mean": 0.1471,
+      "std": 0.0,
+      "min": 0.1471,
+      "max": 0.1471,
+      "values": [
+        0.1471
+      ]
+    },
+    "relation_pair_f1": {
+      "mean": 0.1835,
+      "std": 0.0,
+      "min": 0.1835,
+      "max": 0.1835,
+      "values": [
+        0.1835
+      ]
+    },
+    "relation_macro_f1_active": {
+      "mean": 0.1013,
+      "std": 0.0,
+      "min": 0.1013,
+      "max": 0.1013,
+      "values": [
+        0.1013
+      ]
+    },
+    "direction_error_rate": {
+      "mean": 0.0488,
+      "std": 0.0,
+      "min": 0.0488,
+      "max": 0.0488,
+      "values": [
+        0.0488
+      ]
+    }
+  },
+  "entity_frequency": {
+    "DJANGO": 1,
+    "FLOAT()": 1,
+    "INT()": 1,
+    "MATH.CEIL()": 1,
+    "MATH.COS()": 1,
+    "MATH.E": 1,
+    "MATH.FLOOR()": 1,
+    "MATH.LOG()": 1,
+    "MATH.PI": 1,
+    "MATH.POW()": 1,
+    "MATH.SIN()": 1,
+    "MATH.SQRT()": 1,
+    "MATH.TAN()": 1,
+    "MATH.TAU": 1,
+    "MATPLOTLIB": 1,
+    "PEP 8": 1,
+    "Python shell": 1,
+    "Python 应用程序": 1,
+    "Python 应用领域": 1,
+    "ROUND()": 1,
+    "SCIPY": 1,
+    "STR()": 1,
+    "TENSORFLOW": 1,
+    "abs 函数": 1,
+    "float 函数": 1,
+    "int 函数": 1,
+    "math 模块": 1,
+    "math模块": 1,
+    "round 函数": 1,
+    "str 函数": 1,
+    "代码格式化": 1,
+    "内置函数": 1,
+    "单位转换": 1,
+    "取模运算": 1,
+    "取模运算符": 1,
+    "向下取整除法": 1,
+    "多行语句": 1,
+    "字符串字面量连接": 1,
+    "字符串格式化": 1,
+    "字符串连接": 1,
+    "字符串重复": 1,
+    "整数除法": 1,
+    "显式类型转换": 1,
+    "显式行连接": 1,
+    "浮点数舍入误差": 1,
+    "浮点错误": 1,
+    "混合数据类型": 1,
+    "溢出错误": 1,
+    "真除法": 1,
+    "类型转换": 1,
+    "自动连接": 1,
+    "舍入误差": 1,
+    "表达式": 1,
+    "解释器": 1,
+    "隐式类型转换": 1,
+    "隐式行连接": 1
+  },
+  "relation_frequency": {
+    "PEP 8 -[RELATED_TO]-> 隐式行连接": 1,
+    "Python 应用程序 -[RELATED_TO]-> DJANGO": 1,
+    "Python 应用程序 -[RELATED_TO]-> MATPLOTLIB": 1,
+    "Python 应用程序 -[RELATED_TO]-> SCIPY": 1,
+    "Python 应用程序 -[RELATED_TO]-> TENSORFLOW": 1,
+    "ROUND() -[APPLIES_TO]-> 浮点错误": 1,
+    "math 模块 -[CONTAINS]-> abs 函数": 1,
+    "math 模块 -[CONTAINS]-> round 函数": 1,
+    "math模块 -[CONTAINS]-> MATH.CEIL()": 1,
+    "math模块 -[CONTAINS]-> MATH.COS()": 1,
+    "math模块 -[CONTAINS]-> MATH.E": 1,
+    "math模块 -[CONTAINS]-> MATH.FLOOR()": 1,
+    "math模块 -[CONTAINS]-> MATH.LOG()": 1,
+    "math模块 -[CONTAINS]-> MATH.PI": 1,
+    "math模块 -[CONTAINS]-> MATH.POW()": 1,
+    "math模块 -[CONTAINS]-> MATH.SIN()": 1,
+    "math模块 -[CONTAINS]-> MATH.SQRT()": 1,
+    "math模块 -[CONTAINS]-> MATH.TAN()": 1,
+    "math模块 -[CONTAINS]-> MATH.TAU": 1,
+    "代码格式化 -[CONTAINS]-> 自动连接": 1,
+    "代码格式化 -[RELATED_TO]-> PEP 8": 1,
+    "取模运算符 -[APPLIES_TO]-> 单位转换": 1,
+    "向下取整除法 -[APPLIES_TO]-> 单位转换": 1,
+    "多行语句 -[CONTAINS]-> 显式行连接": 1,
+    "多行语句 -[CONTAINS]-> 隐式行连接": 1,
+    "字符串格式化 -[APPLIES_TO]-> str 函数": 1,
+    "字符串连接 -[CONTAINS]-> 字符串字面量连接": 1,
+    "整数除法 -[CONTAINS]-> 取模运算": 1,
+    "整数除法 -[CONTAINS]-> 取模运算符": 1,
+    "整数除法 -[CONTAINS]-> 向下取整除法": 1,
+    "整数除法 -[CONTAINS]-> 真除法": 1,
+    "显式类型转换 -[CONTAINS]-> FLOAT()": 1,
+    "显式类型转换 -[CONTAINS]-> INT()": 1,
+    "显式类型转换 -[CONTAINS]-> STR()": 1,
+    "浮点错误 -[CONTAINS]-> 溢出错误": 1,
+    "浮点错误 -[CONTAINS]-> 舍入误差": 1,
+    "类型转换 -[CONTAINS]-> float 函数": 1,
+    "类型转换 -[CONTAINS]-> int 函数": 1,
+    "类型转换 -[CONTAINS]-> str 函数": 1,
+    "类型转换 -[CONTAINS]-> 显式类型转换": 1,
+    "类型转换 -[CONTAINS]-> 隐式类型转换": 1
+  },
+  "error_taxonomy_across_runs": {
+    "fabricated": {
+      "mean": 31.0,
+      "values": [
+        31
+      ]
+    },
+    "direction_reversed": {
+      "mean": 2.0,
+      "values": [
+        2
+      ]
+    },
+    "type_confused": {
+      "mean": 0.0,
+      "values": [
+        0
+      ]
+    },
+    "synonym_split": {
+      "mean": 0.0,
+      "values": [
+        0
+      ]
+    },
+    "missed_core": {
+      "mean": 48.0,
+      "values": [
+        48
+      ]
+    },
+    "invalid_endpoint": {
+      "mean": 0.0,
+      "values": [
+        0
+      ]
+    },
+    "invalid_relation_type": {
+      "mean": 0.0,
+      "values": [
+        0
+      ]
+    },
+    "dangling_endpoint": {
+      "mean": 0.0,
+      "values": [
+        0
+      ]
+    },
+    "duplicate": {
+      "mean": 1.0,
+      "values": [
+        1
+      ]
+    },
+    "low_confidence": {
+      "mean": 0.0,
+      "values": [
+        0
+      ]
+    },
+    "dropped_total": {
+      "mean": 1.0,
+      "values": [
+        1
+      ]
+    },
+    "pred_raw_total": {
+      "mean": 42.0,
+      "values": [
+        42
+      ]
+    },
+    "pred_total": {
+      "mean": 41.0,
+      "values": [
+        41
+      ]
+    },
+    "core_total": {
+      "mean": 56.0,
+      "values": [
+        56
+      ]
+    },
+    "full_total": {
+      "mean": 68.0,
+      "values": [
+        68
+      ]
+    }
+  },
+  "reconciliation": {
+    "identity": "pred_raw_total == pred_total + dropped_total",
+    "raw_source": "extractor",
+    "balanced_all_runs": true,
+    "per_run": [
+      {
+        "raw": 42,
+        "scored": 41,
+        "dropped": 1,
+        "reconciles": true
+      }
+    ]
+  },
+  "summary": {
+    "entity_micro": {
+      "tp": 31,
+      "fp": 25,
+      "fn": 39,
+      "precision": 0.5536,
+      "recall": 0.4429,
+      "f1": 0.4921
+    },
+    "entity_macro": {
+      "precision": 0.5536,
+      "recall": 0.4429,
+      "f1": 0.4921
+    },
+    "entity_category_accuracy": 0.8065,
+    "relation_primary_micro": {
+      "pred_total": 41,
+      "core_total": 56,
+      "full_total": 68,
+      "hit_core": 8,
+      "hit_full": 8,
+      "precision": 0.1951,
+      "recall": 0.1429,
+      "f1": 0.1649
+    },
+    "relation_core_micro": {
+      "tp": 8,
+      "fp": 33,
+      "fn": 48,
+      "precision": 0.1951,
+      "recall": 0.1429,
+      "f1": 0.1649
+    },
+    "relation_full_micro": {
+      "tp": 8,
+      "fp": 33,
+      "fn": 60,
+      "precision": 0.1951,
+      "recall": 0.1176,
+      "f1": 0.1468
+    },
+    "relation_strict_micro": {
+      "tp": 8,
+      "fp": 33,
+      "fn": 60,
+      "precision": 0.1951,
+      "recall": 0.1176,
+      "f1": 0.1468
+    },
+    "relation_strict_macro_by_document": {
+      "precision": 0.1951,
+      "recall": 0.1176,
+      "f1": 0.1468
+    },
+    "relation_pair_auxiliary_micro": {
+      "tp": 10,
+      "fp": 31,
+      "fn": 58,
+      "precision": 0.2439,
+      "recall": 0.1471,
+      "f1": 0.1835
+    },
+    "relation_by_type": {
+      "PRECEDES": {
+        "gold_total": 0,
+        "pred_total": 0,
+        "micro": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "mean_document_f1": 0.0,
+        "active_document_f1": 0.0
+      },
+      "CONTAINS": {
+        "gold_total": 28,
+        "pred_total": 31,
+        "micro": {
+          "tp": 7,
+          "fp": 24,
+          "fn": 21,
+          "precision": 0.2258,
+          "recall": 0.25,
+          "f1": 0.2373
+        },
+        "mean_document_f1": 0.2373,
+        "active_document_f1": 0.2373
+      },
+      "RELATED_TO": {
+        "gold_total": 24,
+        "pred_total": 6,
+        "micro": {
+          "tp": 1,
+          "fp": 5,
+          "fn": 23,
+          "precision": 0.1667,
+          "recall": 0.0417,
+          "f1": 0.0667
+        },
+        "mean_document_f1": 0.0667,
+        "active_document_f1": 0.0667
+      },
+      "APPLIES_TO": {
+        "gold_total": 16,
+        "pred_total": 4,
+        "micro": {
+          "tp": 0,
+          "fp": 4,
+          "fn": 16,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "mean_document_f1": 0.0,
+        "active_document_f1": 0.0
+      }
+    },
+    "relation_macro_f1": {
+      "all_types": 0.076,
+      "active_types": 0.1013,
+      "active_type_names": [
+        "CONTAINS",
+        "RELATED_TO",
+        "APPLIES_TO"
+      ]
+    },
+    "direction_error_rate": 0.0488,
+    "error_taxonomy_totals": {
+      "fabricated": 31,
+      "direction_reversed": 2,
+      "type_confused": 0,
+      "synonym_split": 0,
+      "invalid_endpoint": 0,
+      "invalid_relation_type": 0,
+      "dangling_endpoint": 0,
+      "duplicate": 1,
+      "low_confidence": 0,
+      "missed_core": 48,
+      "pred_raw_total": 42,
+      "pred_total": 41,
+      "dropped_total": 1,
+      "core_total": 56,
+      "full_total": 68
+    },
+    "accounting": {
+      "raw_source": "extractor",
+      "raw": 42,
+      "scored": 41,
+      "dropped": 1,
+      "balanced": true
+    }
+  },
+  "per_run_summaries": [
+    {
+      "entity_micro": {
+        "tp": 31,
+        "fp": 25,
+        "fn": 39,
+        "precision": 0.5536,
+        "recall": 0.4429,
+        "f1": 0.4921
+      },
+      "entity_macro": {
+        "precision": 0.5536,
+        "recall": 0.4429,
+        "f1": 0.4921
+      },
+      "entity_category_accuracy": 0.8065,
+      "relation_primary_micro": {
+        "pred_total": 41,
+        "core_total": 56,
+        "full_total": 68,
+        "hit_core": 8,
+        "hit_full": 8,
+        "precision": 0.1951,
+        "recall": 0.1429,
+        "f1": 0.1649
+      },
+      "relation_core_micro": {
+        "tp": 8,
+        "fp": 33,
+        "fn": 48,
+        "precision": 0.1951,
+        "recall": 0.1429,
+        "f1": 0.1649
+      },
+      "relation_full_micro": {
+        "tp": 8,
+        "fp": 33,
+        "fn": 60,
+        "precision": 0.1951,
+        "recall": 0.1176,
+        "f1": 0.1468
+      },
+      "relation_strict_micro": {
+        "tp": 8,
+        "fp": 33,
+        "fn": 60,
+        "precision": 0.1951,
+        "recall": 0.1176,
+        "f1": 0.1468
+      },
+      "relation_strict_macro_by_document": {
+        "precision": 0.1951,
+        "recall": 0.1176,
+        "f1": 0.1468
+      },
+      "relation_pair_auxiliary_micro": {
+        "tp": 10,
+        "fp": 31,
+        "fn": 58,
+        "precision": 0.2439,
+        "recall": 0.1471,
+        "f1": 0.1835
+      },
+      "relation_by_type": {
+        "PRECEDES": {
+          "gold_total": 0,
+          "pred_total": 0,
+          "micro": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "mean_document_f1": 0.0,
+          "active_document_f1": 0.0
+        },
+        "CONTAINS": {
+          "gold_total": 28,
+          "pred_total": 31,
+          "micro": {
+            "tp": 7,
+            "fp": 24,
+            "fn": 21,
+            "precision": 0.2258,
+            "recall": 0.25,
+            "f1": 0.2373
+          },
+          "mean_document_f1": 0.2373,
+          "active_document_f1": 0.2373
+        },
+        "RELATED_TO": {
+          "gold_total": 24,
+          "pred_total": 6,
+          "micro": {
+            "tp": 1,
+            "fp": 5,
+            "fn": 23,
+            "precision": 0.1667,
+            "recall": 0.0417,
+            "f1": 0.0667
+          },
+          "mean_document_f1": 0.0667,
+          "active_document_f1": 0.0667
+        },
+        "APPLIES_TO": {
+          "gold_total": 16,
+          "pred_total": 4,
+          "micro": {
+            "tp": 0,
+            "fp": 4,
+            "fn": 16,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "mean_document_f1": 0.0,
+          "active_document_f1": 0.0
+        }
+      },
+      "relation_macro_f1": {
+        "all_types": 0.076,
+        "active_types": 0.1013,
+        "active_type_names": [
+          "CONTAINS",
+          "RELATED_TO",
+          "APPLIES_TO"
+        ]
+      },
+      "direction_error_rate": 0.0488,
+      "error_taxonomy_totals": {
+        "fabricated": 31,
+        "direction_reversed": 2,
+        "type_confused": 0,
+        "synonym_split": 0,
+        "invalid_endpoint": 0,
+        "invalid_relation_type": 0,
+        "dangling_endpoint": 0,
+        "duplicate": 1,
+        "low_confidence": 0,
+        "missed_core": 48,
+        "pred_raw_total": 42,
+        "pred_total": 41,
+        "dropped_total": 1,
+        "core_total": 56,
+        "full_total": 68
+      },
+      "accounting": {
+        "raw_source": "extractor",
+        "raw": 42,
+        "scored": 41,
+        "dropped": 1,
+        "balanced": true
+      }
+    }
+  ],
+  "documents": [
+    {
+      "text_id": "第2章_表达式_中文版_人工版_extraction",
+      "gold": {
+        "entity_count": 70,
+        "relation_core_count": 56,
+        "relation_full_count": 68
+      },
+      "entity": {
+        "tp": 31,
+        "fp": 25,
+        "fn": 39,
+        "precision": 0.5536,
+        "recall": 0.4429,
+        "f1": 0.4921
+      },
+      "entity_category": {
+        "gold_entity_count": 70,
+        "pred_entity_count": 56,
+        "evaluated_entity_count": 31,
+        "correct": 25,
+        "accuracy": 0.8065
+      },
+      "relation_primary": {
+        "pred_total": 41,
+        "core_total": 56,
+        "full_total": 68,
+        "hit_core": 8,
+        "hit_full": 8,
+        "precision": 0.1951,
+        "recall": 0.1429,
+        "f1": 0.1649
+      },
+      "relation_core": {
+        "tp": 8,
+        "fp": 33,
+        "fn": 48,
+        "precision": 0.1951,
+        "recall": 0.1429,
+        "f1": 0.1649
+      },
+      "relation_full": {
+        "tp": 8,
+        "fp": 33,
+        "fn": 60,
+        "precision": 0.1951,
+        "recall": 0.1176,
+        "f1": 0.1468
+      },
+      "relation_pair_auxiliary": {
+        "tp": 10,
+        "fp": 31,
+        "fn": 58,
+        "precision": 0.2439,
+        "recall": 0.1471,
+        "f1": 0.1835
+      },
+      "relation_direction_error_rate": 0.0488,
+      "relations_by_type": {
+        "PRECEDES": {
+          "gold": 0,
+          "pred": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "CONTAINS": {
+          "gold": 28,
+          "pred": 31,
+          "tp": 7,
+          "fp": 24,
+          "fn": 21,
+          "precision": 0.2258,
+          "recall": 0.25,
+          "f1": 0.2373
+        },
+        "RELATED_TO": {
+          "gold": 24,
+          "pred": 6,
+          "tp": 1,
+          "fp": 5,
+          "fn": 23,
+          "precision": 0.1667,
+          "recall": 0.0417,
+          "f1": 0.0667
+        },
+        "APPLIES_TO": {
+          "gold": 16,
+          "pred": 4,
+          "tp": 0,
+          "fp": 4,
+          "fn": 16,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "error_taxonomy": {
+        "counts": {
+          "fabricated": 31,
+          "direction_reversed": 2,
+          "type_confused": 0,
+          "synonym_split": 0,
+          "invalid_endpoint": 0,
+          "invalid_relation_type": 0,
+          "dangling_endpoint": 0,
+          "duplicate": 1,
+          "low_confidence": 0,
+          "missed_core": 48,
+          "pred_raw_total": 42,
+          "pred_total": 41,
+          "dropped_total": 1,
+          "core_total": 56,
+          "full_total": 68
+        },
+        "accounting": {
+          "identity": "pred_raw_total == pred_total + dropped_total",
+          "raw_source": "extractor",
+          "balanced": true
+        },
+        "direction_reversed": [
+          {
+            "source": "取模运算符",
+            "type": "APPLIES_TO",
+            "target": "单位转换",
+            "gold_type": "APPLIES_TO"
+          },
+          {
+            "source": "向下取整除法",
+            "type": "APPLIES_TO",
+            "target": "单位转换",
+            "gold_type": "APPLIES_TO"
+          }
+        ],
+        "type_confused": [],
+        "synonym_split": [],
+        "dropped_relations": [
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "向下取整除法",
+            "reason_code": "duplicate",
+            "detail": "重复三元组（多因分块重叠）"
+          }
+        ],
+        "missed_core": [
+          {
+            "source": "PEP 8",
+            "type": "RELATED_TO",
+            "target": "显式行连接"
+          },
+          {
+            "source": "PYTHON",
+            "type": "RELATED_TO",
+            "target": "解释型语言"
+          },
+          {
+            "source": "PYTHON",
+            "type": "RELATED_TO",
+            "target": "高级语言"
+          },
+          {
+            "source": "Python shell",
+            "type": "RELATED_TO",
+            "target": "解释器"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "Web开发"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "人工智能"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "数据可视化"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "科学计算"
+          },
+          {
+            "source": "Web开发",
+            "type": "RELATED_TO",
+            "target": "DJANGO"
+          },
+          {
+            "source": "Web开发",
+            "type": "RELATED_TO",
+            "target": "INSTAGRAM"
+          },
+          {
+            "source": "float()函数",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "int()函数",
+            "type": "APPLIES_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.ceil()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.floor()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.log()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.pow()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.sqrt()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "RELATED_TO",
+            "target": "import语句"
+          },
+          {
+            "source": "round()函数",
+            "type": "APPLIES_TO",
+            "target": "浮点错误"
+          },
+          {
+            "source": "str()函数",
+            "type": "APPLIES_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "人工智能",
+            "type": "RELATED_TO",
+            "target": "TENSORFLOW"
+          },
+          {
+            "source": "单位转换",
+            "type": "APPLIES_TO",
+            "target": "取模运算符"
+          },
+          {
+            "source": "单位转换",
+            "type": "APPLIES_TO",
+            "target": "向下取整除法"
+          },
+          {
+            "source": "单位转换",
+            "type": "RELATED_TO",
+            "target": "模数"
+          },
+          {
+            "source": "取模运算",
+            "type": "RELATED_TO",
+            "target": "取模运算符"
+          },
+          {
+            "source": "取模运算符",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "向下取整除法",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "字符串重复运算",
+            "type": "APPLIES_TO",
+            "target": "字符串"
+          },
+          {
+            "source": "数据可视化",
+            "type": "RELATED_TO",
+            "target": "MATPLOTLIB"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "float()函数"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "int()函数"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "str()函数"
+          },
+          {
+            "source": "标准库",
+            "type": "CONTAINS",
+            "target": "math模块"
+          },
+          {
+            "source": "标准库",
+            "type": "CONTAINS",
+            "target": "内置函数"
+          },
+          {
+            "source": "浮点数",
+            "type": "RELATED_TO",
+            "target": "二进制"
+          },
+          {
+            "source": "混合数据类型",
+            "type": "RELATED_TO",
+            "target": "字符串"
+          },
+          {
+            "source": "混合数据类型",
+            "type": "RELATED_TO",
+            "target": "整数"
+          },
+          {
+            "source": "混合数据类型",
+            "type": "RELATED_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "真除法",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "科学计算",
+            "type": "RELATED_TO",
+            "target": "SCIPY"
+          },
+          {
+            "source": "自动连接",
+            "type": "RELATED_TO",
+            "target": "字符串字面量连接"
+          },
+          {
+            "source": "表达式",
+            "type": "CONTAINS",
+            "target": "变量"
+          },
+          {
+            "source": "表达式",
+            "type": "CONTAINS",
+            "target": "字面量"
+          },
+          {
+            "source": "表达式",
+            "type": "CONTAINS",
+            "target": "运算符"
+          },
+          {
+            "source": "解释型语言",
+            "type": "RELATED_TO",
+            "target": "解释器"
+          },
+          {
+            "source": "语句",
+            "type": "CONTAINS",
+            "target": "表达式"
+          },
+          {
+            "source": "隐式类型转换",
+            "type": "APPLIES_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "高级语言",
+            "type": "RELATED_TO",
+            "target": "机器码"
+          }
+        ],
+        "fabricated": [
+          {
+            "source": "PEP 8",
+            "type": "RELATED_TO",
+            "target": "隐式行连接"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "DJANGO"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "MATPLOTLIB"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "SCIPY"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "TENSORFLOW"
+          },
+          {
+            "source": "ROUND()",
+            "type": "APPLIES_TO",
+            "target": "浮点错误"
+          },
+          {
+            "source": "math 模块",
+            "type": "CONTAINS",
+            "target": "abs 函数"
+          },
+          {
+            "source": "math 模块",
+            "type": "CONTAINS",
+            "target": "round 函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.CEIL()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.COS()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.FLOOR()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.LOG()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.POW()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.SIN()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.SQRT()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.TAN()"
+          },
+          {
+            "source": "代码格式化",
+            "type": "CONTAINS",
+            "target": "自动连接"
+          },
+          {
+            "source": "字符串格式化",
+            "type": "APPLIES_TO",
+            "target": "str 函数"
+          },
+          {
+            "source": "字符串连接",
+            "type": "CONTAINS",
+            "target": "字符串字面量连接"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "取模运算"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "取模运算符"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "向下取整除法"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "真除法"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "FLOAT()"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "INT()"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "STR()"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "float 函数"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "int 函数"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "str 函数"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "显式类型转换"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "隐式类型转换"
+          }
+        ]
+      },
+      "false_positive_relations": [
+        {
+          "source": "PEP 8",
+          "type": "RELATED_TO",
+          "target": "隐式行连接"
+        },
+        {
+          "source": "Python 应用程序",
+          "type": "RELATED_TO",
+          "target": "DJANGO"
+        },
+        {
+          "source": "Python 应用程序",
+          "type": "RELATED_TO",
+          "target": "MATPLOTLIB"
+        },
+        {
+          "source": "Python 应用程序",
+          "type": "RELATED_TO",
+          "target": "SCIPY"
+        },
+        {
+          "source": "Python 应用程序",
+          "type": "RELATED_TO",
+          "target": "TENSORFLOW"
+        },
+        {
+          "source": "ROUND()",
+          "type": "APPLIES_TO",
+          "target": "浮点错误"
+        },
+        {
+          "source": "math 模块",
+          "type": "CONTAINS",
+          "target": "abs 函数"
+        },
+        {
+          "source": "math 模块",
+          "type": "CONTAINS",
+          "target": "round 函数"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.CEIL()"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.COS()"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.FLOOR()"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.LOG()"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.POW()"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.SIN()"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.SQRT()"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "MATH.TAN()"
+        },
+        {
+          "source": "代码格式化",
+          "type": "CONTAINS",
+          "target": "自动连接"
+        },
+        {
+          "source": "取模运算符",
+          "type": "APPLIES_TO",
+          "target": "单位转换"
+        },
+        {
+          "source": "向下取整除法",
+          "type": "APPLIES_TO",
+          "target": "单位转换"
+        },
+        {
+          "source": "字符串格式化",
+          "type": "APPLIES_TO",
+          "target": "str 函数"
+        },
+        {
+          "source": "字符串连接",
+          "type": "CONTAINS",
+          "target": "字符串字面量连接"
+        },
+        {
+          "source": "整数除法",
+          "type": "CONTAINS",
+          "target": "取模运算"
+        },
+        {
+          "source": "整数除法",
+          "type": "CONTAINS",
+          "target": "取模运算符"
+        },
+        {
+          "source": "整数除法",
+          "type": "CONTAINS",
+          "target": "向下取整除法"
+        },
+        {
+          "source": "整数除法",
+          "type": "CONTAINS",
+          "target": "真除法"
+        },
+        {
+          "source": "显式类型转换",
+          "type": "CONTAINS",
+          "target": "FLOAT()"
+        },
+        {
+          "source": "显式类型转换",
+          "type": "CONTAINS",
+          "target": "INT()"
+        },
+        {
+          "source": "显式类型转换",
+          "type": "CONTAINS",
+          "target": "STR()"
+        },
+        {
+          "source": "类型转换",
+          "type": "CONTAINS",
+          "target": "float 函数"
+        },
+        {
+          "source": "类型转换",
+          "type": "CONTAINS",
+          "target": "int 函数"
+        },
+        {
+          "source": "类型转换",
+          "type": "CONTAINS",
+          "target": "str 函数"
+        },
+        {
+          "source": "类型转换",
+          "type": "CONTAINS",
+          "target": "显式类型转换"
+        },
+        {
+          "source": "类型转换",
+          "type": "CONTAINS",
+          "target": "隐式类型转换"
+        }
+      ],
+      "false_negative_relations": [
+        {
+          "source": "PEP 8",
+          "type": "RELATED_TO",
+          "target": "显式行连接"
+        },
+        {
+          "source": "PYTHON",
+          "type": "RELATED_TO",
+          "target": "解释型语言"
+        },
+        {
+          "source": "PYTHON",
+          "type": "RELATED_TO",
+          "target": "高级语言"
+        },
+        {
+          "source": "Python shell",
+          "type": "RELATED_TO",
+          "target": "解释器"
+        },
+        {
+          "source": "Python应用",
+          "type": "CONTAINS",
+          "target": "Web开发"
+        },
+        {
+          "source": "Python应用",
+          "type": "CONTAINS",
+          "target": "人工智能"
+        },
+        {
+          "source": "Python应用",
+          "type": "CONTAINS",
+          "target": "数据可视化"
+        },
+        {
+          "source": "Python应用",
+          "type": "CONTAINS",
+          "target": "科学计算"
+        },
+        {
+          "source": "Web开发",
+          "type": "RELATED_TO",
+          "target": "DJANGO"
+        },
+        {
+          "source": "Web开发",
+          "type": "RELATED_TO",
+          "target": "INSTAGRAM"
+        },
+        {
+          "source": "float()函数",
+          "type": "APPLIES_TO",
+          "target": "整数"
+        },
+        {
+          "source": "int()函数",
+          "type": "APPLIES_TO",
+          "target": "浮点数"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "math.ceil()函数"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "math.floor()函数"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "math.log()函数"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "math.pow()函数"
+        },
+        {
+          "source": "math模块",
+          "type": "CONTAINS",
+          "target": "math.sqrt()函数"
+        },
+        {
+          "source": "math模块",
+          "type": "RELATED_TO",
+          "target": "import语句"
+        },
+        {
+          "source": "round()函数",
+          "type": "APPLIES_TO",
+          "target": "浮点错误"
+        },
+        {
+          "source": "str()函数",
+          "type": "APPLIES_TO",
+          "target": "浮点数"
+        },
+        {
+          "source": "人工智能",
+          "type": "RELATED_TO",
+          "target": "TENSORFLOW"
+        },
+        {
+          "source": "单位转换",
+          "type": "APPLIES_TO",
+          "target": "取模运算符"
+        },
+        {
+          "source": "单位转换",
+          "type": "APPLIES_TO",
+          "target": "向下取整除法"
+        },
+        {
+          "source": "单位转换",
+          "type": "RELATED_TO",
+          "target": "模数"
+        },
+        {
+          "source": "取模运算",
+          "type": "RELATED_TO",
+          "target": "取模运算符"
+        },
+        {
+          "source": "取模运算符",
+          "type": "APPLIES_TO",
+          "target": "整数"
+        },
+        {
+          "source": "向下取整除法",
+          "type": "APPLIES_TO",
+          "target": "整数"
+        },
+        {
+          "source": "字符串重复运算",
+          "type": "APPLIES_TO",
+          "target": "字符串"
+        },
+        {
+          "source": "数据可视化",
+          "type": "RELATED_TO",
+          "target": "MATPLOTLIB"
+        },
+        {
+          "source": "显式类型转换",
+          "type": "CONTAINS",
+          "target": "float()函数"
+        },
+        {
+          "source": "显式类型转换",
+          "type": "CONTAINS",
+          "target": "int()函数"
+        },
+        {
+          "source": "显式类型转换",
+          "type": "CONTAINS",
+          "target": "str()函数"
+        },
+        {
+          "source": "标准库",
+          "type": "CONTAINS",
+          "target": "math模块"
+        },
+        {
+          "source": "标准库",
+          "type": "CONTAINS",
+          "target": "内置函数"
+        },
+        {
+          "source": "浮点数",
+          "type": "RELATED_TO",
+          "target": "二进制"
+        },
+        {
+          "source": "混合数据类型",
+          "type": "RELATED_TO",
+          "target": "字符串"
+        },
+        {
+          "source": "混合数据类型",
+          "type": "RELATED_TO",
+          "target": "整数"
+        },
+        {
+          "source": "混合数据类型",
+          "type": "RELATED_TO",
+          "target": "浮点数"
+        },
+        {
+          "source": "真除法",
+          "type": "APPLIES_TO",
+          "target": "整数"
+        },
+        {
+          "source": "科学计算",
+          "type": "RELATED_TO",
+          "target": "SCIPY"
+        },
+        {
+          "source": "自动连接",
+          "type": "RELATED_TO",
+          "target": "字符串字面量连接"
+        },
+        {
+          "source": "表达式",
+          "type": "CONTAINS",
+          "target": "变量"
+        },
+        {
+          "source": "表达式",
+          "type": "CONTAINS",
+          "target": "字面量"
+        },
+        {
+          "source": "表达式",
+          "type": "CONTAINS",
+          "target": "运算符"
+        },
+        {
+          "source": "解释型语言",
+          "type": "RELATED_TO",
+          "target": "解释器"
+        },
+        {
+          "source": "语句",
+          "type": "CONTAINS",
+          "target": "表达式"
+        },
+        {
+          "source": "隐式类型转换",
+          "type": "APPLIES_TO",
+          "target": "浮点数"
+        },
+        {
+          "source": "高级语言",
+          "type": "RELATED_TO",
+          "target": "机器码"
+        }
+      ],
+      "type_confusions": []
+    }
+  ],
+  "documents_per_run": [
+    [
+      {
+        "text_id": "第2章_表达式_中文版_人工版_extraction",
+        "gold": {
+          "entity_count": 70,
+          "relation_core_count": 56,
+          "relation_full_count": 68
+        },
+        "entity": {
+          "tp": 31,
+          "fp": 25,
+          "fn": 39,
+          "precision": 0.5536,
+          "recall": 0.4429,
+          "f1": 0.4921
+        },
+        "entity_category": {
+          "gold_entity_count": 70,
+          "pred_entity_count": 56,
+          "evaluated_entity_count": 31,
+          "correct": 25,
+          "accuracy": 0.8065
+        },
+        "relation_primary": {
+          "pred_total": 41,
+          "core_total": 56,
+          "full_total": 68,
+          "hit_core": 8,
+          "hit_full": 8,
+          "precision": 0.1951,
+          "recall": 0.1429,
+          "f1": 0.1649
+        },
+        "relation_core": {
+          "tp": 8,
+          "fp": 33,
+          "fn": 48,
+          "precision": 0.1951,
+          "recall": 0.1429,
+          "f1": 0.1649
+        },
+        "relation_full": {
+          "tp": 8,
+          "fp": 33,
+          "fn": 60,
+          "precision": 0.1951,
+          "recall": 0.1176,
+          "f1": 0.1468
+        },
+        "relation_pair_auxiliary": {
+          "tp": 10,
+          "fp": 31,
+          "fn": 58,
+          "precision": 0.2439,
+          "recall": 0.1471,
+          "f1": 0.1835
+        },
+        "relation_direction_error_rate": 0.0488,
+        "relations_by_type": {
+          "PRECEDES": {
+            "gold": 0,
+            "pred": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "CONTAINS": {
+            "gold": 28,
+            "pred": 31,
+            "tp": 7,
+            "fp": 24,
+            "fn": 21,
+            "precision": 0.2258,
+            "recall": 0.25,
+            "f1": 0.2373
+          },
+          "RELATED_TO": {
+            "gold": 24,
+            "pred": 6,
+            "tp": 1,
+            "fp": 5,
+            "fn": 23,
+            "precision": 0.1667,
+            "recall": 0.0417,
+            "f1": 0.0667
+          },
+          "APPLIES_TO": {
+            "gold": 16,
+            "pred": 4,
+            "tp": 0,
+            "fp": 4,
+            "fn": 16,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        },
+        "error_taxonomy": {
+          "counts": {
+            "fabricated": 31,
+            "direction_reversed": 2,
+            "type_confused": 0,
+            "synonym_split": 0,
+            "invalid_endpoint": 0,
+            "invalid_relation_type": 0,
+            "dangling_endpoint": 0,
+            "duplicate": 1,
+            "low_confidence": 0,
+            "missed_core": 48,
+            "pred_raw_total": 42,
+            "pred_total": 41,
+            "dropped_total": 1,
+            "core_total": 56,
+            "full_total": 68
+          },
+          "accounting": {
+            "identity": "pred_raw_total == pred_total + dropped_total",
+            "raw_source": "extractor",
+            "balanced": true
+          },
+          "direction_reversed": [
+            {
+              "source": "取模运算符",
+              "type": "APPLIES_TO",
+              "target": "单位转换",
+              "gold_type": "APPLIES_TO"
+            },
+            {
+              "source": "向下取整除法",
+              "type": "APPLIES_TO",
+              "target": "单位转换",
+              "gold_type": "APPLIES_TO"
+            }
+          ],
+          "type_confused": [],
+          "synonym_split": [],
+          "dropped_relations": [
+            {
+              "source": "整数除法",
+              "type": "CONTAINS",
+              "target": "向下取整除法",
+              "reason_code": "duplicate",
+              "detail": "重复三元组（多因分块重叠）"
+            }
+          ],
+          "missed_core": [
+            {
+              "source": "PEP 8",
+              "type": "RELATED_TO",
+              "target": "显式行连接"
+            },
+            {
+              "source": "PYTHON",
+              "type": "RELATED_TO",
+              "target": "解释型语言"
+            },
+            {
+              "source": "PYTHON",
+              "type": "RELATED_TO",
+              "target": "高级语言"
+            },
+            {
+              "source": "Python shell",
+              "type": "RELATED_TO",
+              "target": "解释器"
+            },
+            {
+              "source": "Python应用",
+              "type": "CONTAINS",
+              "target": "Web开发"
+            },
+            {
+              "source": "Python应用",
+              "type": "CONTAINS",
+              "target": "人工智能"
+            },
+            {
+              "source": "Python应用",
+              "type": "CONTAINS",
+              "target": "数据可视化"
+            },
+            {
+              "source": "Python应用",
+              "type": "CONTAINS",
+              "target": "科学计算"
+            },
+            {
+              "source": "Web开发",
+              "type": "RELATED_TO",
+              "target": "DJANGO"
+            },
+            {
+              "source": "Web开发",
+              "type": "RELATED_TO",
+              "target": "INSTAGRAM"
+            },
+            {
+              "source": "float()函数",
+              "type": "APPLIES_TO",
+              "target": "整数"
+            },
+            {
+              "source": "int()函数",
+              "type": "APPLIES_TO",
+              "target": "浮点数"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "math.ceil()函数"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "math.floor()函数"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "math.log()函数"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "math.pow()函数"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "math.sqrt()函数"
+            },
+            {
+              "source": "math模块",
+              "type": "RELATED_TO",
+              "target": "import语句"
+            },
+            {
+              "source": "round()函数",
+              "type": "APPLIES_TO",
+              "target": "浮点错误"
+            },
+            {
+              "source": "str()函数",
+              "type": "APPLIES_TO",
+              "target": "浮点数"
+            },
+            {
+              "source": "人工智能",
+              "type": "RELATED_TO",
+              "target": "TENSORFLOW"
+            },
+            {
+              "source": "单位转换",
+              "type": "APPLIES_TO",
+              "target": "取模运算符"
+            },
+            {
+              "source": "单位转换",
+              "type": "APPLIES_TO",
+              "target": "向下取整除法"
+            },
+            {
+              "source": "单位转换",
+              "type": "RELATED_TO",
+              "target": "模数"
+            },
+            {
+              "source": "取模运算",
+              "type": "RELATED_TO",
+              "target": "取模运算符"
+            },
+            {
+              "source": "取模运算符",
+              "type": "APPLIES_TO",
+              "target": "整数"
+            },
+            {
+              "source": "向下取整除法",
+              "type": "APPLIES_TO",
+              "target": "整数"
+            },
+            {
+              "source": "字符串重复运算",
+              "type": "APPLIES_TO",
+              "target": "字符串"
+            },
+            {
+              "source": "数据可视化",
+              "type": "RELATED_TO",
+              "target": "MATPLOTLIB"
+            },
+            {
+              "source": "显式类型转换",
+              "type": "CONTAINS",
+              "target": "float()函数"
+            },
+            {
+              "source": "显式类型转换",
+              "type": "CONTAINS",
+              "target": "int()函数"
+            },
+            {
+              "source": "显式类型转换",
+              "type": "CONTAINS",
+              "target": "str()函数"
+            },
+            {
+              "source": "标准库",
+              "type": "CONTAINS",
+              "target": "math模块"
+            },
+            {
+              "source": "标准库",
+              "type": "CONTAINS",
+              "target": "内置函数"
+            },
+            {
+              "source": "浮点数",
+              "type": "RELATED_TO",
+              "target": "二进制"
+            },
+            {
+              "source": "混合数据类型",
+              "type": "RELATED_TO",
+              "target": "字符串"
+            },
+            {
+              "source": "混合数据类型",
+              "type": "RELATED_TO",
+              "target": "整数"
+            },
+            {
+              "source": "混合数据类型",
+              "type": "RELATED_TO",
+              "target": "浮点数"
+            },
+            {
+              "source": "真除法",
+              "type": "APPLIES_TO",
+              "target": "整数"
+            },
+            {
+              "source": "科学计算",
+              "type": "RELATED_TO",
+              "target": "SCIPY"
+            },
+            {
+              "source": "自动连接",
+              "type": "RELATED_TO",
+              "target": "字符串字面量连接"
+            },
+            {
+              "source": "表达式",
+              "type": "CONTAINS",
+              "target": "变量"
+            },
+            {
+              "source": "表达式",
+              "type": "CONTAINS",
+              "target": "字面量"
+            },
+            {
+              "source": "表达式",
+              "type": "CONTAINS",
+              "target": "运算符"
+            },
+            {
+              "source": "解释型语言",
+              "type": "RELATED_TO",
+              "target": "解释器"
+            },
+            {
+              "source": "语句",
+              "type": "CONTAINS",
+              "target": "表达式"
+            },
+            {
+              "source": "隐式类型转换",
+              "type": "APPLIES_TO",
+              "target": "浮点数"
+            },
+            {
+              "source": "高级语言",
+              "type": "RELATED_TO",
+              "target": "机器码"
+            }
+          ],
+          "fabricated": [
+            {
+              "source": "PEP 8",
+              "type": "RELATED_TO",
+              "target": "隐式行连接"
+            },
+            {
+              "source": "Python 应用程序",
+              "type": "RELATED_TO",
+              "target": "DJANGO"
+            },
+            {
+              "source": "Python 应用程序",
+              "type": "RELATED_TO",
+              "target": "MATPLOTLIB"
+            },
+            {
+              "source": "Python 应用程序",
+              "type": "RELATED_TO",
+              "target": "SCIPY"
+            },
+            {
+              "source": "Python 应用程序",
+              "type": "RELATED_TO",
+              "target": "TENSORFLOW"
+            },
+            {
+              "source": "ROUND()",
+              "type": "APPLIES_TO",
+              "target": "浮点错误"
+            },
+            {
+              "source": "math 模块",
+              "type": "CONTAINS",
+              "target": "abs 函数"
+            },
+            {
+              "source": "math 模块",
+              "type": "CONTAINS",
+              "target": "round 函数"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.CEIL()"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.COS()"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.FLOOR()"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.LOG()"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.POW()"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.SIN()"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.SQRT()"
+            },
+            {
+              "source": "math模块",
+              "type": "CONTAINS",
+              "target": "MATH.TAN()"
+            },
+            {
+              "source": "代码格式化",
+              "type": "CONTAINS",
+              "target": "自动连接"
+            },
+            {
+              "source": "字符串格式化",
+              "type": "APPLIES_TO",
+              "target": "str 函数"
+            },
+            {
+              "source": "字符串连接",
+              "type": "CONTAINS",
+              "target": "字符串字面量连接"
+            },
+            {
+              "source": "整数除法",
+              "type": "CONTAINS",
+              "target": "取模运算"
+            },
+            {
+              "source": "整数除法",
+              "type": "CONTAINS",
+              "target": "取模运算符"
+            },
+            {
+              "source": "整数除法",
+              "type": "CONTAINS",
+              "target": "向下取整除法"
+            },
+            {
+              "source": "整数除法",
+              "type": "CONTAINS",
+              "target": "真除法"
+            },
+            {
+              "source": "显式类型转换",
+              "type": "CONTAINS",
+              "target": "FLOAT()"
+            },
+            {
+              "source": "显式类型转换",
+              "type": "CONTAINS",
+              "target": "INT()"
+            },
+            {
+              "source": "显式类型转换",
+              "type": "CONTAINS",
+              "target": "STR()"
+            },
+            {
+              "source": "类型转换",
+              "type": "CONTAINS",
+              "target": "float 函数"
+            },
+            {
+              "source": "类型转换",
+              "type": "CONTAINS",
+              "target": "int 函数"
+            },
+            {
+              "source": "类型转换",
+              "type": "CONTAINS",
+              "target": "str 函数"
+            },
+            {
+              "source": "类型转换",
+              "type": "CONTAINS",
+              "target": "显式类型转换"
+            },
+            {
+              "source": "类型转换",
+              "type": "CONTAINS",
+              "target": "隐式类型转换"
+            }
+          ]
+        },
+        "false_positive_relations": [
+          {
+            "source": "PEP 8",
+            "type": "RELATED_TO",
+            "target": "隐式行连接"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "DJANGO"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "MATPLOTLIB"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "SCIPY"
+          },
+          {
+            "source": "Python 应用程序",
+            "type": "RELATED_TO",
+            "target": "TENSORFLOW"
+          },
+          {
+            "source": "ROUND()",
+            "type": "APPLIES_TO",
+            "target": "浮点错误"
+          },
+          {
+            "source": "math 模块",
+            "type": "CONTAINS",
+            "target": "abs 函数"
+          },
+          {
+            "source": "math 模块",
+            "type": "CONTAINS",
+            "target": "round 函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.CEIL()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.COS()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.FLOOR()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.LOG()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.POW()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.SIN()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.SQRT()"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "MATH.TAN()"
+          },
+          {
+            "source": "代码格式化",
+            "type": "CONTAINS",
+            "target": "自动连接"
+          },
+          {
+            "source": "取模运算符",
+            "type": "APPLIES_TO",
+            "target": "单位转换"
+          },
+          {
+            "source": "向下取整除法",
+            "type": "APPLIES_TO",
+            "target": "单位转换"
+          },
+          {
+            "source": "字符串格式化",
+            "type": "APPLIES_TO",
+            "target": "str 函数"
+          },
+          {
+            "source": "字符串连接",
+            "type": "CONTAINS",
+            "target": "字符串字面量连接"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "取模运算"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "取模运算符"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "向下取整除法"
+          },
+          {
+            "source": "整数除法",
+            "type": "CONTAINS",
+            "target": "真除法"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "FLOAT()"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "INT()"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "STR()"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "float 函数"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "int 函数"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "str 函数"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "显式类型转换"
+          },
+          {
+            "source": "类型转换",
+            "type": "CONTAINS",
+            "target": "隐式类型转换"
+          }
+        ],
+        "false_negative_relations": [
+          {
+            "source": "PEP 8",
+            "type": "RELATED_TO",
+            "target": "显式行连接"
+          },
+          {
+            "source": "PYTHON",
+            "type": "RELATED_TO",
+            "target": "解释型语言"
+          },
+          {
+            "source": "PYTHON",
+            "type": "RELATED_TO",
+            "target": "高级语言"
+          },
+          {
+            "source": "Python shell",
+            "type": "RELATED_TO",
+            "target": "解释器"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "Web开发"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "人工智能"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "数据可视化"
+          },
+          {
+            "source": "Python应用",
+            "type": "CONTAINS",
+            "target": "科学计算"
+          },
+          {
+            "source": "Web开发",
+            "type": "RELATED_TO",
+            "target": "DJANGO"
+          },
+          {
+            "source": "Web开发",
+            "type": "RELATED_TO",
+            "target": "INSTAGRAM"
+          },
+          {
+            "source": "float()函数",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "int()函数",
+            "type": "APPLIES_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.ceil()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.floor()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.log()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.pow()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "CONTAINS",
+            "target": "math.sqrt()函数"
+          },
+          {
+            "source": "math模块",
+            "type": "RELATED_TO",
+            "target": "import语句"
+          },
+          {
+            "source": "round()函数",
+            "type": "APPLIES_TO",
+            "target": "浮点错误"
+          },
+          {
+            "source": "str()函数",
+            "type": "APPLIES_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "人工智能",
+            "type": "RELATED_TO",
+            "target": "TENSORFLOW"
+          },
+          {
+            "source": "单位转换",
+            "type": "APPLIES_TO",
+            "target": "取模运算符"
+          },
+          {
+            "source": "单位转换",
+            "type": "APPLIES_TO",
+            "target": "向下取整除法"
+          },
+          {
+            "source": "单位转换",
+            "type": "RELATED_TO",
+            "target": "模数"
+          },
+          {
+            "source": "取模运算",
+            "type": "RELATED_TO",
+            "target": "取模运算符"
+          },
+          {
+            "source": "取模运算符",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "向下取整除法",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "字符串重复运算",
+            "type": "APPLIES_TO",
+            "target": "字符串"
+          },
+          {
+            "source": "数据可视化",
+            "type": "RELATED_TO",
+            "target": "MATPLOTLIB"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "float()函数"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "int()函数"
+          },
+          {
+            "source": "显式类型转换",
+            "type": "CONTAINS",
+            "target": "str()函数"
+          },
+          {
+            "source": "标准库",
+            "type": "CONTAINS",
+            "target": "math模块"
+          },
+          {
+            "source": "标准库",
+            "type": "CONTAINS",
+            "target": "内置函数"
+          },
+          {
+            "source": "浮点数",
+            "type": "RELATED_TO",
+            "target": "二进制"
+          },
+          {
+            "source": "混合数据类型",
+            "type": "RELATED_TO",
+            "target": "字符串"
+          },
+          {
+            "source": "混合数据类型",
+            "type": "RELATED_TO",
+            "target": "整数"
+          },
+          {
+            "source": "混合数据类型",
+            "type": "RELATED_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "真除法",
+            "type": "APPLIES_TO",
+            "target": "整数"
+          },
+          {
+            "source": "科学计算",
+            "type": "RELATED_TO",
+            "target": "SCIPY"
+          },
+          {
+            "source": "自动连接",
+            "type": "RELATED_TO",
+            "target": "字符串字面量连接"
+          },
+          {
+            "source": "表达式",
+            "type": "CONTAINS",
+            "target": "变量"
+          },
+          {
+            "source": "表达式",
+            "type": "CONTAINS",
+            "target": "字面量"
+          },
+          {
+            "source": "表达式",
+            "type": "CONTAINS",
+            "target": "运算符"
+          },
+          {
+            "source": "解释型语言",
+            "type": "RELATED_TO",
+            "target": "解释器"
+          },
+          {
+            "source": "语句",
+            "type": "CONTAINS",
+            "target": "表达式"
+          },
+          {
+            "source": "隐式类型转换",
+            "type": "APPLIES_TO",
+            "target": "浮点数"
+          },
+          {
+            "source": "高级语言",
+            "type": "RELATED_TO",
+            "target": "机器码"
+          }
+        ],
+        "type_confusions": []
+      }
+    ]
+  ]
+}

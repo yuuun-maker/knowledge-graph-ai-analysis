@@ -1,0 +1,212 @@
+{
+  "entities": [
+    {
+      "name": "PYTHON",
+      "category": "概念",
+      "description": "一种高级编程语言，解释器可以运行其代码。"
+    },
+    {
+      "name": "解释器",
+      "category": "概念",
+      "description": "运行Python代码的程序，可以执行最基本的代码行。"
+    },
+    {
+      "name": "INPUT()",
+      "category": "方法",
+      "description": "内置函数，用于从用户获取输入。"
+    },
+    {
+      "name": "类型转换",
+      "category": "概念",
+      "description": "将一种数据类型转换为另一种数据类型的过程。"
+    },
+    {
+      "name": "FLOAT()",
+      "category": "方法",
+      "description": "将值转换为浮点数的函数。"
+    },
+    {
+      "name": "INT()",
+      "category": "方法",
+      "description": "将值转换为整数的函数。"
+    },
+    {
+      "name": "STR()",
+      "category": "方法",
+      "description": "将值转换为字符串的函数。"
+    },
+    {
+      "name": "混合数据类型",
+      "category": "概念",
+      "description": "在表达式中混合使用不同数据类型（如整数、浮点数、字符串）的运算。"
+    },
+    {
+      "name": "浮点错误",
+      "category": "概念",
+      "description": "由于浮点数表示限制导致的舍入或溢出错误。"
+    },
+    {
+      "name": "舍入",
+      "category": "概念",
+      "description": "浮点数运算中因精度限制而产生的近似误差。"
+    },
+    {
+      "name": "溢出",
+      "category": "概念",
+      "description": "数值太大超出浮点数表示范围而导致的错误。"
+    },
+    {
+      "name": "ROUND()",
+      "category": "方法",
+      "description": "内置函数，用于对数字进行四舍五入。"
+    },
+    {
+      "name": "整数除法",
+      "category": "概念",
+      "description": "使用//运算符进行除法，结果为整数（向下取整）。"
+    },
+    {
+      "name": "模运算",
+      "category": "概念",
+      "description": "使用%运算符求余数的运算。"
+    },
+    {
+      "name": "math模块",
+      "category": "概念",
+      "description": "Python标准库中提供数学函数和常量的模块。"
+    },
+    {
+      "name": "MATH.SQRT()",
+      "category": "方法",
+      "description": "math模块中的函数，用于计算平方根。"
+    },
+    {
+      "name": "MATH.PI",
+      "category": "概念",
+      "description": "math模块中的常量，表示圆周率π。"
+    },
+    {
+      "name": "MATH.TAU",
+      "category": "概念",
+      "description": "math模块中的常量，表示2π。"
+    },
+    {
+      "name": "代码格式化",
+      "category": "概念",
+      "description": "编写代码时遵循的格式规范，如空格、换行等。"
+    },
+    {
+      "name": "显式行连接",
+      "category": "概念",
+      "description": "使用反斜杠字符将长代码行分成多行。"
+    },
+    {
+      "name": "字符串连接",
+      "category": "概念",
+      "description": "将多个字符串拼接成一个字符串的操作。"
+    },
+    {
+      "name": "Python职业",
+      "category": "概念",
+      "description": "使用Python编程语言的各种职业领域和应用。"
+    },
+    {
+      "name": "MATPLOTLIB",
+      "category": "概念",
+      "description": "Python库，用于创建图表和绘图。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "PYTHON",
+      "target": "解释器",
+      "type": "RELATED_TO",
+      "evidence": "Python 是一种 ______ 语言。",
+      "confidence": 0.6
+    },
+    {
+      "source": "类型转换",
+      "target": "FLOAT()",
+      "type": "CONTAINS",
+      "evidence": "哪个函数将输入的切片数量转换为可用于计算的数据类型？",
+      "confidence": 0.8
+    },
+    {
+      "source": "类型转换",
+      "target": "INT()",
+      "type": "CONTAINS",
+      "evidence": "哪个函数将输入的切片数量转换为可用于计算的数据类型？",
+      "confidence": 0.8
+    },
+    {
+      "source": "类型转换",
+      "target": "STR()",
+      "type": "CONTAINS",
+      "evidence": "str(x) 的值是多少？",
+      "confidence": 0.8
+    },
+    {
+      "source": "浮点错误",
+      "target": "舍入",
+      "type": "CONTAINS",
+      "evidence": "0.123456789012345678901234567890 * 0.1 产生 0.012345678901234568430878013601。",
+      "confidence": 0.9
+    },
+    {
+      "source": "浮点错误",
+      "target": "溢出",
+      "type": "CONTAINS",
+      "evidence": "语句 result = 2.0 * (10.0 ** 500) 给变量 result 赋了一个太大的值。",
+      "confidence": 0.9
+    },
+    {
+      "source": "整数除法",
+      "target": "模运算",
+      "type": "RELATED_TO",
+      "evidence": "13 / 5 和 13 % 5",
+      "confidence": 0.7
+    },
+    {
+      "source": "math模块",
+      "target": "MATH.SQRT()",
+      "type": "CONTAINS",
+      "evidence": "math.sqrt(100) 的值是多少？",
+      "confidence": 0.9
+    },
+    {
+      "source": "math模块",
+      "target": "MATH.PI",
+      "type": "CONTAINS",
+      "evidence": "πr² 在 Python 语法中是什么？",
+      "confidence": 0.9
+    },
+    {
+      "source": "math模块",
+      "target": "MATH.TAU",
+      "type": "CONTAINS",
+      "evidence": "math.tau / 2 的值是多少？",
+      "confidence": 0.9
+    },
+    {
+      "source": "代码格式化",
+      "target": "显式行连接",
+      "type": "CONTAINS",
+      "evidence": "显式行连接使用哪个字符？",
+      "confidence": 0.8
+    },
+    {
+      "source": "代码格式化",
+      "target": "字符串连接",
+      "type": "RELATED_TO",
+      "evidence": "哪个字符串等价于 \"Today is\" \"a holiday\"？",
+      "confidence": 0.6
+    },
+    {
+      "source": "Python职业",
+      "target": "MATPLOTLIB",
+      "type": "RELATED_TO",
+      "evidence": "以下哪个 Python 库创建图表和绘图？",
+      "confidence": 0.7
+    }
+  ]
+}

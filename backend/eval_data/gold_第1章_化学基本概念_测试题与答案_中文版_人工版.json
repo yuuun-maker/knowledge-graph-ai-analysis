@@ -1,0 +1,208 @@
+[
+  {
+    "text_id": "化学_化学基本概念_第1章_测试题",
+    "source": "data/sample_docs/openstax_化学/第1章_化学基本概念_测试题与答案_中文版.txt",
+    "entities": [
+      {
+        "name": "假说",
+        "category": "概念",
+        "description": "基于观察提出的可检验的预测或解释，尚未经过充分验证。"
+      },
+      {
+        "name": "定律",
+        "category": "概念",
+        "description": "陈述一个被一致观察到的现象，可用于预测。"
+      },
+      {
+        "name": "理论",
+        "category": "概念",
+        "description": "对大量证据进行综合解释的广泛接受的观点。"
+      },
+      {
+        "name": "宏观领域",
+        "category": "概念",
+        "description": "化学中涉及宏观可观测性质与过程（如质量、密度、热量）的领域。"
+      },
+      {
+        "name": "微观领域",
+        "category": "概念",
+        "description": "化学中涉及原子、分子等微观粒子的领域。"
+      },
+      {
+        "name": "符号领域",
+        "category": "概念",
+        "description": "用化学符号（如Al）表示宏观或微观特征的领域。"
+      },
+      {
+        "name": "质量",
+        "category": "概念",
+        "description": "物体所含物质的量的量度，不随位置变化。"
+      },
+      {
+        "name": "重量",
+        "category": "概念",
+        "description": "重力施加在物体上的力，会随重力加速度的变化而变化。"
+      },
+      {
+        "name": "元素",
+        "category": "概念",
+        "description": "由同种原子组成、不能通过化学方法分解为更简单物质的纯净物。"
+      },
+      {
+        "name": "化合物",
+        "category": "概念",
+        "description": "由两种或多种不同元素的原子以固定比例结合而成、可通过化学方法分解的纯净物。"
+      },
+      {
+        "name": "原子",
+        "category": "概念",
+        "description": "元素的最小单位，是构成物质的基本微粒之一。"
+      },
+      {
+        "name": "分子",
+        "category": "概念",
+        "description": "由两个或多个原子通过化学键结合而成的粒子。"
+      },
+      {
+        "name": "物质守恒定律",
+        "category": "定理",
+        "description": "在封闭系统中发生化学变化时，物质的总质量保持不变。"
+      },
+      {
+        "name": "化学变化",
+        "category": "概念",
+        "description": "产生与原始物质不同的新物质的变化，如燃烧、发酵。"
+      },
+      {
+        "name": "强度性质",
+        "category": "概念",
+        "description": "值与所考虑的物质量无关的性质，如温度、密度、沸点。"
+      },
+      {
+        "name": "密度",
+        "category": "公式",
+        "description": "物质的质量与其体积之比，d = m/V，是一种强度性质。"
+      },
+      {
+        "name": "有效数字",
+        "category": "概念",
+        "description": "测量或计算结果中能反映其确定度的数字位数。"
+      },
+      {
+        "name": "准确度",
+        "category": "概念",
+        "description": "测量结果与真实值或公认值的接近程度。"
+      },
+      {
+        "name": "精密度",
+        "category": "概念",
+        "description": "重复同一测量时结果相互一致的程度。"
+      },
+      {
+        "name": "换算因子",
+        "category": "概念",
+        "description": "用不同单位表示的等价量之比，用于把量从一种单位换算成另一种单位。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "假说",
+        "target": "理论",
+        "type": "PRECEDES",
+        "evidence": "(a) 假说。这是基于观察提出的可检验的预测或解释，尚未经过充分验证。(b) 理论。这是对大量证据（如化石记录、遗传学等）进行综合解释的广泛接受的观点。",
+        "core": true
+      },
+      {
+        "source": "定律",
+        "target": "理论",
+        "type": "RELATED_TO",
+        "evidence": "(a) 定律（陈述一个被一致观察到的现象，可用于预测）；(b) 理论（对物质行为的一种被广泛接受的解释）",
+        "core": true
+      },
+      {
+        "source": "质量",
+        "target": "重量",
+        "type": "RELATED_TO",
+        "evidence": "因为质量是物体所含物质的量的量度，不随位置变化；而重量是重力对物体的作用力，会随重力加速度的变化而变化。",
+        "core": true
+      },
+      {
+        "source": "元素",
+        "target": "化合物",
+        "type": "RELATED_TO",
+        "evidence": "元素由同种原子组成，不能通过化学方法分解为更简单的物质；化合物由两种或多种不同元素的原子以固定比例通过化学键结合而成，可以通过化学方法分解为更简单的物质。",
+        "core": true
+      },
+      {
+        "source": "分子",
+        "target": "原子",
+        "type": "CONTAINS",
+        "evidence": "分子是由两个或多个原子通过化学键结合而成的粒子，可以是同种原子或不同种原子。",
+        "core": true
+      },
+      {
+        "source": "原子",
+        "target": "分子",
+        "type": "PRECEDES",
+        "evidence": "原子可以构成分子，分子也可以分解为原子。",
+        "core": false
+      },
+      {
+        "source": "物质守恒定律",
+        "target": "化学变化",
+        "type": "APPLIES_TO",
+        "evidence": "保持不变。在密封烧瓶中，物质守恒，总质量不变。",
+        "core": true
+      },
+      {
+        "source": "宏观领域",
+        "target": "微观领域",
+        "type": "RELATED_TO",
+        "evidence": "该理论通过描述分子（微观粒子）的运动和碰撞来解释宏观可观测的压力变化。",
+        "core": true
+      },
+      {
+        "source": "符号领域",
+        "target": "宏观领域",
+        "type": "RELATED_TO",
+        "evidence": "宏观领域（标签上的Al代表宏观物质铝）。",
+        "core": false
+      },
+      {
+        "source": "符号领域",
+        "target": "微观领域",
+        "type": "RELATED_TO",
+        "evidence": "符号领域，代表微观特征（铝原子）。",
+        "core": false
+      },
+      {
+        "source": "密度",
+        "target": "强度性质",
+        "type": "RELATED_TO",
+        "evidence": "物质的密度（d）是一种强度性质，定义为它的质量（m）与其体积（V）之比。",
+        "core": true
+      },
+      {
+        "source": "换算因子",
+        "target": "密度",
+        "type": "APPLIES_TO",
+        "evidence": "如果汽油的密度为0.8206 g/mL，确定满箱燃料的质量（千克和磅）。",
+        "core": false
+      },
+      {
+        "source": "换算因子",
+        "target": "有效数字",
+        "type": "RELATED_TO",
+        "evidence": "由于978克有3位有效数字，34.5 oz有3位有效数字，因此换算因子可以证明3位有效数字。",
+        "core": false
+      },
+      {
+        "source": "准确度",
+        "target": "精密度",
+        "type": "RELATED_TO",
+        "evidence": "把以下各组测量分类为准确的、精密的、两者皆是或两者皆非。",
+        "core": true
+      }
+    ]
+  }
+]

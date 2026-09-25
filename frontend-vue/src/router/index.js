@@ -54,6 +54,13 @@ const router = createRouter({
       meta: { title: '课程邀请' },
     },
     {
+      // 修改密码：独立整页（从个人中心跳转）
+      path: '/change-password',
+      name: 'change-password',
+      component: () => import('../views/ChangePasswordView.vue'),
+      meta: { title: '修改密码' },
+    },
+    {
       // 个人中心：教师 / 学生共用
       path: '/profile',
       name: 'profile',

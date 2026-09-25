@@ -1,0 +1,133 @@
+{
+  "entities": [
+    {
+      "name": "二叉搜索树",
+      "category": "概念",
+      "description": "一种满足左子树所有节点值小于根节点值、右子树所有节点值大于根节点值，且左右子树也均为二叉搜索树的二叉树。"
+    },
+    {
+      "name": "查找节点",
+      "category": "方法",
+      "description": "在二叉搜索树中根据目标值从根节点开始比较并向下搜索，直到找到目标节点或越过叶节点的操作。"
+    },
+    {
+      "name": "插入节点",
+      "category": "方法",
+      "description": "在二叉搜索树中查找插入位置并插入新节点，同时保持二叉搜索树性质的操作。"
+    },
+    {
+      "name": "删除节点",
+      "category": "方法",
+      "description": "在二叉搜索树中查找目标节点并根据其子节点数量（0、1、2）执行相应删除操作，同时保持二叉搜索树性质的过程。"
+    },
+    {
+      "name": "中序遍历",
+      "category": "方法",
+      "description": "按照“左→根→右”顺序遍历二叉树的方法。"
+    },
+    {
+      "name": "中序遍历有序",
+      "category": "定理",
+      "description": "二叉搜索树的中序遍历序列是升序的这一重要性质。"
+    },
+    {
+      "name": "二分查找算法",
+      "category": "方法",
+      "description": "一种在有序数组中每轮排除一半元素的查找算法。"
+    },
+    {
+      "name": "时间复杂度",
+      "category": "概念",
+      "description": "衡量算法运行时间随输入规模增长的变化趋势的度量。"
+    },
+    {
+      "name": "平衡",
+      "category": "概念",
+      "description": "二叉搜索树的一种理想状态，此时树的高度接近 log n，各项操作时间复杂度为 O(log n)。"
+    },
+    {
+      "name": "退化",
+      "category": "概念",
+      "description": "二叉搜索树因不断插入删除节点而变成链表结构，导致操作时间复杂度退化为 O(n) 的现象。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "二叉搜索树",
+      "target": "查找节点",
+      "type": "CONTAINS",
+      "evidence": "二叉搜索树的操作...查找节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉搜索树",
+      "target": "插入节点",
+      "type": "CONTAINS",
+      "evidence": "二叉搜索树的操作...插入节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉搜索树",
+      "target": "删除节点",
+      "type": "CONTAINS",
+      "evidence": "二叉搜索树的操作...删除节点",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉搜索树",
+      "target": "中序遍历有序",
+      "type": "CONTAINS",
+      "evidence": "二叉搜索树的中序遍历序列是升序的",
+      "confidence": 0.95
+    },
+    {
+      "source": "中序遍历",
+      "target": "中序遍历有序",
+      "type": "PRECEDES",
+      "evidence": "二叉树的中序遍历遵循“左→根→右”的遍历顺序...从而得出一个重要性质：二叉搜索树的中序遍历序列是升序的",
+      "confidence": 0.9
+    },
+    {
+      "source": "查找节点",
+      "target": "插入节点",
+      "type": "PRECEDES",
+      "evidence": "与查找操作相似，从根节点出发，根据当前节点值和 num 的大小关系循环向下搜索",
+      "confidence": 0.85
+    },
+    {
+      "source": "查找节点",
+      "target": "删除节点",
+      "type": "PRECEDES",
+      "evidence": "先在二叉树中查找到目标节点，再将其删除",
+      "confidence": 0.9
+    },
+    {
+      "source": "查找节点",
+      "target": "二分查找算法",
+      "type": "RELATED_TO",
+      "evidence": "二叉搜索树的查找操作与二分查找算法的工作原理一致",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉搜索树",
+      "target": "时间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "二叉搜索树的各项操作的时间复杂度都是对数阶",
+      "confidence": 0.85
+    },
+    {
+      "source": "平衡",
+      "target": "时间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "当二叉树平衡时，使用 O(log n) 时间",
+      "confidence": 0.85
+    },
+    {
+      "source": "退化",
+      "target": "时间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "各种操作的时间复杂度也会退化为 O(n)",
+      "confidence": 0.85
+    }
+  ]
+}

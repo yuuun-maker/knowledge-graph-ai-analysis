@@ -1,0 +1,191 @@
+{
+  "entities": [
+    {
+      "name": "空间复杂度",
+      "category": "概念",
+      "description": "衡量算法占用内存空间随着数据量变大时的增长趋势。"
+    },
+    {
+      "name": "时间复杂度",
+      "category": "概念",
+      "description": "衡量算法运行时间随着数据量变大时的增长趋势。"
+    },
+    {
+      "name": "输入空间",
+      "category": "概念",
+      "description": "用于存储算法的输入数据的内存空间。"
+    },
+    {
+      "name": "暂存空间",
+      "category": "概念",
+      "description": "用于存储算法在运行过程中的变量、对象、函数上下文等数据的内存空间。"
+    },
+    {
+      "name": "输出空间",
+      "category": "概念",
+      "description": "用于存储算法的输出数据的内存空间。"
+    },
+    {
+      "name": "暂存数据",
+      "category": "概念",
+      "description": "用于保存算法运行过程中的各种常量、变量、对象等。"
+    },
+    {
+      "name": "栈帧空间",
+      "category": "概念",
+      "description": "用于保存调用函数的上下文数据。"
+    },
+    {
+      "name": "指令空间",
+      "category": "概念",
+      "description": "用于保存编译后的程序指令，在实际统计中通常忽略不计。"
+    },
+    {
+      "name": "最差空间复杂度",
+      "category": "概念",
+      "description": "考虑最差输入数据和算法运行中的峰值内存时的空间复杂度。"
+    },
+    {
+      "name": "常数阶",
+      "category": "概念",
+      "description": "空间复杂度为 O(1)，常见于数量与输入数据大小 n 无关的常量、变量、对象。"
+    },
+    {
+      "name": "线性阶",
+      "category": "概念",
+      "description": "空间复杂度为 O(n)，常见于元素数量与 n 成正比的数组、链表、栈、队列等。"
+    },
+    {
+      "name": "平方阶",
+      "category": "概念",
+      "description": "空间复杂度为 O(n^2)，常见于矩阵和图，元素数量与 n 成平方关系。"
+    },
+    {
+      "name": "指数阶",
+      "category": "概念",
+      "description": "空间复杂度为 O(2^n)，常见于二叉树。"
+    },
+    {
+      "name": "对数阶",
+      "category": "概念",
+      "description": "空间复杂度为 O(log n)，常见于分治算法。"
+    },
+    {
+      "name": "以空间换时间",
+      "category": "方法",
+      "description": "牺牲内存空间来提升算法运行速度的策略。"
+    },
+    {
+      "name": "以时间换空间",
+      "category": "方法",
+      "description": "牺牲运行时间来降低内存空间占用的策略。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "空间复杂度",
+      "target": "时间复杂度",
+      "type": "RELATED_TO",
+      "evidence": "这个概念与时间复杂度非常类似，只需将“运行时间”替换为“占用内存空间”。",
+      "confidence": 0.95
+    },
+    {
+      "source": "空间复杂度",
+      "target": "输入空间",
+      "type": "CONTAINS",
+      "evidence": "算法在运行过程中使用的内存空间主要包括以下几种。- **输入空间**：用于存储算法的输入数据。",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "暂存空间",
+      "type": "CONTAINS",
+      "evidence": "算法在运行过程中使用的内存空间主要包括以下几种。- **暂存空间**：用于存储算法在运行过程中的变量、对象、函数上下文等数据。",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "输出空间",
+      "type": "CONTAINS",
+      "evidence": "算法在运行过程中使用的内存空间主要包括以下几种。- **输出空间**：用于存储算法的输出数据。",
+      "confidence": 0.9
+    },
+    {
+      "source": "暂存空间",
+      "target": "暂存数据",
+      "type": "CONTAINS",
+      "evidence": "暂存空间可以进一步划分为三个部分。- **暂存数据**：用于保存算法运行过程中的各种常量、变量、对象等。",
+      "confidence": 0.9
+    },
+    {
+      "source": "暂存空间",
+      "target": "栈帧空间",
+      "type": "CONTAINS",
+      "evidence": "暂存空间可以进一步划分为三个部分。- **栈帧空间**：用于保存调用函数的上下文数据。",
+      "confidence": 0.9
+    },
+    {
+      "source": "暂存空间",
+      "target": "指令空间",
+      "type": "CONTAINS",
+      "evidence": "暂存空间可以进一步划分为三个部分。- **指令空间**：用于保存编译后的程序指令，在实际统计中通常忽略不计。",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "最差空间复杂度",
+      "type": "CONTAINS",
+      "evidence": "我们通常只关注最差空间复杂度。",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "常数阶",
+      "type": "CONTAINS",
+      "evidence": "下图展示了常见的空间复杂度类型（从低到高排列）。... 常数阶 O(1)",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "线性阶",
+      "type": "CONTAINS",
+      "evidence": "下图展示了常见的空间复杂度类型（从低到高排列）。... 线性阶 O(n)",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "平方阶",
+      "type": "CONTAINS",
+      "evidence": "下图展示了常见的空间复杂度类型（从低到高排列）。... 平方阶 O(n^2)",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "指数阶",
+      "type": "CONTAINS",
+      "evidence": "下图展示了常见的空间复杂度类型（从低到高排列）。... 指数阶 O(2^n)",
+      "confidence": 0.9
+    },
+    {
+      "source": "空间复杂度",
+      "target": "对数阶",
+      "type": "CONTAINS",
+      "evidence": "下图展示了常见的空间复杂度类型（从低到高排列）。... 对数阶 O(log n)",
+      "confidence": 0.9
+    },
+    {
+      "source": "以空间换时间",
+      "target": "时间复杂度",
+      "type": "APPLIES_TO",
+      "evidence": "降低时间复杂度通常需要以提升空间复杂度为代价，反之亦然。我们将牺牲内存空间来提升算法运行速度的思路称为“以空间换时间”。",
+      "confidence": 0.9
+    },
+    {
+      "source": "以时间换空间",
+      "target": "空间复杂度",
+      "type": "APPLIES_TO",
+      "evidence": "降低时间复杂度通常需要以提升空间复杂度为代价，反之亦然。... 反之，则称为“以时间换空间”。",
+      "confidence": 0.9
+    }
+  ]
+}

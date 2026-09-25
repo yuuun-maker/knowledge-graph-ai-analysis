@@ -1,0 +1,62 @@
+[
+  {
+    "text_id": "数据结构第一章",
+    "entities": [
+      {
+        "name": "线性表",
+        "category": "概念",
+        "description": "由n个数据元素组成的有限序列，是最基本、最常见的数据结构。"
+      },
+      {
+        "name": "顺序存储结构",
+        "category": "概念",
+        "description": "用一组地址连续的存储单元依次存储数据元素的存储结构，支持随机访问。"
+      },
+      {
+        "name": "链式存储结构",
+        "category": "概念",
+        "description": "通过指针将各个结点链接起来的存储结构，插入和删除操作不需要移动元素。"
+      },
+      {
+        "name": "栈",
+        "category": "概念",
+        "description": "一种操作受限的线性表，只能在一端进行插入和删除，遵循后进先出原则。"
+      },
+      {
+        "name": "队列",
+        "category": "概念",
+        "description": "一种操作受限的线性表，只允许在一端插入、另一端删除，遵循先进先出原则。"
+      }
+    ],
+    "relations": [
+      {
+        "source": "线性表",
+        "target": "顺序存储结构",
+        "type": "CONTAINS",
+        "evidence": "线性表有两种存储结构：顺序存储结构（顺序表）和链式存储结构（链表）。",
+        "confidence": 0.95
+      },
+      {
+        "source": "线性表",
+        "target": "链式存储结构",
+        "type": "CONTAINS",
+        "evidence": "线性表有两种存储结构：顺序存储结构（顺序表）和链式存储结构（链表）。",
+        "confidence": 0.95
+      },
+      {
+        "source": "线性表",
+        "target": "栈",
+        "type": "CONTAINS",
+        "evidence": "栈是一种操作受限的线性表",
+        "confidence": 0.95
+      },
+      {
+        "source": "线性表",
+        "target": "队列",
+        "type": "CONTAINS",
+        "evidence": "队列也是一种操作受限的线性表",
+        "confidence": 0.95
+      }
+    ]
+  }
+]

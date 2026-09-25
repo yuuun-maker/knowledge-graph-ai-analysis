@@ -65,6 +65,13 @@ async def upload_avatar(file: UploadFile = File(..., description="头像图片�
     return success(result["data"]) if result["ok"] else error(result["code"], result["message"])
 
 
+@router.delete("/avatar")
+async def delete_avatar(current_user: dict = Depends(get_current_user)):
+    """删除当前用户的头像（清空库中指针并移除磁盘文件）"""
+    result = ProfileService.delete_avatar(current_user["user_id"])
+    return success(result["data"]) if result["ok"] else error(result["code"], result["message"])
+
+
 @router.get("/avatar/{user_id}")
 async def get_avatar(user_id: int):
     """读取头像图片（公开；无头像返回 404，前端回退为姓名首字母色块）"""

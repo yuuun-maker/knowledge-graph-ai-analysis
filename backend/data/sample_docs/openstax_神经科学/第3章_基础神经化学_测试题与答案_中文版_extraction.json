@@ -1,0 +1,222 @@
+{
+  "entities": [
+    {
+      "name": "神经递质",
+      "category": "概念",
+      "description": "允许一个神经元影响其他神经元行为的化学物质。"
+    },
+    {
+      "name": "突触间隙",
+      "category": "概念",
+      "description": "神经元之间的小空间，神经递质被释放到其中。"
+    },
+    {
+      "name": "突触囊泡",
+      "category": "概念",
+      "description": "轴突终末内储存神经递质的结构，其融合需要电压依赖性钙通道的开放。"
+    },
+    {
+      "name": "电压依赖性钙通道",
+      "category": "概念",
+      "description": "突触囊泡在轴突终末融合所需的通道。"
+    },
+    {
+      "name": "G蛋白偶联受体",
+      "category": "概念",
+      "description": "一大类蛋白质的一部分，与附近离子通道相连。"
+    },
+    {
+      "name": "多巴胺",
+      "category": "概念",
+      "description": "由氨基酸制成的神经递质，其产生始于神经元的细胞质，产生L-DOPA。"
+    },
+    {
+      "name": "L-DOPA",
+      "category": "概念",
+      "description": "多巴胺合成过程中的中间产物，通过去除一分子二氧化碳转化为多巴胺。"
+    },
+    {
+      "name": "酪氨酸羟化酶",
+      "category": "概念",
+      "description": "需要铁离子才能正常发挥作用的酶。"
+    },
+    {
+      "name": "芳香族氨基酸脱羧酶",
+      "category": "概念",
+      "description": "在细胞质内活跃，产生多巴胺的酶。"
+    },
+    {
+      "name": "多巴胺-β-羟化酶",
+      "category": "概念",
+      "description": "存在于突触囊泡中，将多巴胺转化为去甲肾上腺素的酶。"
+    },
+    {
+      "name": "去甲肾上腺素",
+      "category": "概念",
+      "description": "由多巴胺在多巴胺-β-羟化酶作用下转化而成的神经递质。"
+    },
+    {
+      "name": "抗坏血酸",
+      "category": "概念",
+      "description": "突触囊泡内作为多巴胺-β-羟化酶的辅因子。"
+    },
+    {
+      "name": "血清素",
+      "category": "概念",
+      "description": "由一分子氨基酸色氨酸通过添加一个羟基，然后去除一分子二氧化碳构建的神经递质。"
+    },
+    {
+      "name": "色氨酸",
+      "category": "概念",
+      "description": "合成血清素所需的氨基酸。"
+    },
+    {
+      "name": "褪黑素",
+      "category": "概念",
+      "description": "在我们入睡后不久释放的物质。"
+    },
+    {
+      "name": "神经肽",
+      "category": "概念",
+      "description": "产生神经肽的神经元遍布整个脑，放电频率往往非常慢。"
+    },
+    {
+      "name": "内啡肽",
+      "category": "概念",
+      "description": "调节从外周传入的疼痛信号，以及许多神经内分泌或神经免疫功能。"
+    },
+    {
+      "name": "谷氨酸",
+      "category": "概念",
+      "description": "脑中最常见的神经递质之一，释放后通过兴奋性氨基酸转运体从突触中移除。"
+    },
+    {
+      "name": "GABA",
+      "category": "概念",
+      "description": "脑中最常见的神经递质之一。"
+    },
+    {
+      "name": "乙酰胆碱",
+      "category": "概念",
+      "description": "通过将一个乙酸分子转移到一个胆碱分子上制成的神经递质。"
+    },
+    {
+      "name": "乙酰胆碱酯酶",
+      "category": "概念",
+      "description": "使释放的乙酰胆碱失活的酶。"
+    },
+    {
+      "name": "蓝斑",
+      "category": "概念",
+      "description": "神经肽神经元主要起源的第四脑室底部结构。"
+    },
+    {
+      "name": "中缝核",
+      "category": "概念",
+      "description": "血清素神经元起源的核团，并投射到脑的每个部分。"
+    },
+    {
+      "name": "基底前脑",
+      "category": "概念",
+      "description": "乙酰胆碱神经元起源的结构，并投射到皮层、海马、杏仁核和嗅球。"
+    },
+    {
+      "name": "钙离子",
+      "category": "概念",
+      "description": "细胞内钙离子的增加激活复杂的生化级联反应，最终涉及神经元的基因。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "神经递质",
+      "target": "突触间隙",
+      "type": "RELATED_TO",
+      "evidence": "神经递质被释放到神经元之间的小空间，称为突触间隙。",
+      "confidence": 0.9
+    },
+    {
+      "source": "突触囊泡",
+      "target": "电压依赖性钙通道",
+      "type": "RELATED_TO",
+      "evidence": "突触囊泡在轴突终末的融合需要：电压依赖性钙通道的开放。",
+      "confidence": 0.9
+    },
+    {
+      "source": "多巴胺",
+      "target": "L-DOPA",
+      "type": "RELATED_TO",
+      "evidence": "多巴胺的产生始于神经元的细胞质，产生L-DOPA。",
+      "confidence": 0.9
+    },
+    {
+      "source": "L-DOPA",
+      "target": "多巴胺",
+      "type": "RELATED_TO",
+      "evidence": "L-DOPA通过去除一分子二氧化碳转化为多巴胺。",
+      "confidence": 0.9
+    },
+    {
+      "source": "酪氨酸羟化酶",
+      "target": "多巴胺",
+      "type": "RELATED_TO",
+      "evidence": "酶酪氨酸羟化酶需要铁离子才能正常发挥作用。",
+      "confidence": 0.7
+    },
+    {
+      "source": "芳香族氨基酸脱羧酶",
+      "target": "多巴胺",
+      "type": "RELATED_TO",
+      "evidence": "酶芳香族氨基酸脱羧酶在细胞质内活跃，产生多巴胺。",
+      "confidence": 0.9
+    },
+    {
+      "source": "多巴胺-β-羟化酶",
+      "target": "去甲肾上腺素",
+      "type": "RELATED_TO",
+      "evidence": "多巴胺-β-羟化酶存在于突触囊泡中，将多巴胺转化为去甲肾上腺素。",
+      "confidence": 0.9
+    },
+    {
+      "source": "抗坏血酸",
+      "target": "多巴胺-β-羟化酶",
+      "type": "RELATED_TO",
+      "evidence": "突触囊泡内抗坏血酸的作用是：作为多巴胺-β-羟化酶的辅因子。",
+      "confidence": 0.9
+    },
+    {
+      "source": "血清素",
+      "target": "色氨酸",
+      "type": "RELATED_TO",
+      "evidence": "神经递质血清素由一分子氨基酸色氨酸通过添加一个羟基，然后去除一分子二氧化碳构建。",
+      "confidence": 0.9
+    },
+    {
+      "source": "血清素",
+      "target": "中缝核",
+      "type": "RELATED_TO",
+      "evidence": "血清素神经元起源于中缝核，并投射到脑的每个部分。",
+      "confidence": 0.9
+    },
+    {
+      "source": "乙酰胆碱",
+      "target": "乙酰胆碱酯酶",
+      "type": "RELATED_TO",
+      "evidence": "释放的乙酰胆碱被乙酰胆碱酯酶失活。",
+      "confidence": 0.9
+    },
+    {
+      "source": "乙酰胆碱",
+      "target": "基底前脑",
+      "type": "RELATED_TO",
+      "evidence": "乙酰胆碱神经元起源于基底前脑，并投射到皮层、海马、杏仁核和嗅球。",
+      "confidence": 0.9
+    },
+    {
+      "source": "神经肽",
+      "target": "蓝斑",
+      "type": "RELATED_TO",
+      "evidence": "神经肽神经元主要起源于第四脑室底部的蓝斑。",
+      "confidence": 0.9
+    }
+  ]
+}

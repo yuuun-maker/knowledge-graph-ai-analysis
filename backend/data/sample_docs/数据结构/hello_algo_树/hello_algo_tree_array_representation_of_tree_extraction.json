@@ -1,0 +1,71 @@
+{
+  "entities": [
+    {
+      "name": "二叉树数组表示",
+      "category": "概念",
+      "description": "用数组存储二叉树节点，通过索引映射关系表示节点间的父子关系。"
+    },
+    {
+      "name": "完美二叉树",
+      "category": "概念",
+      "description": "所有层的节点都完全填满的二叉树。"
+    },
+    {
+      "name": "层序遍历",
+      "category": "方法",
+      "description": "按层从上到下、每层从左到右遍历二叉树节点的方法。"
+    },
+    {
+      "name": "映射公式",
+      "category": "公式",
+      "description": "若节点索引为i，则左子节点索引为2i+1，右子节点索引为2i+2。"
+    },
+    {
+      "name": "完全二叉树",
+      "category": "概念",
+      "description": "除最底层外其他层都满，且最底层节点靠左排列的二叉树。"
+    },
+    {
+      "name": "空位标记",
+      "category": "方法",
+      "description": "在层序遍历序列中显式写出None（或特定值）以唯一表示二叉树结构。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "二叉树数组表示",
+      "target": "完美二叉树",
+      "type": "APPLIES_TO",
+      "evidence": "给定一棵完美二叉树，我们将所有节点按照层序遍历的顺序存储在一个数组中",
+      "confidence": 0.9
+    },
+    {
+      "source": "二叉树数组表示",
+      "target": "完全二叉树",
+      "type": "APPLIES_TO",
+      "evidence": "完全二叉树非常适合使用数组来表示",
+      "confidence": 0.95
+    },
+    {
+      "source": "二叉树数组表示",
+      "target": "层序遍历",
+      "type": "RELATED_TO",
+      "evidence": "将所有节点按照层序遍历的顺序存储在一个数组中",
+      "confidence": 0.9
+    },
+    {
+      "source": "映射公式",
+      "target": "二叉树数组表示",
+      "type": "RELATED_TO",
+      "evidence": "映射公式的角色相当于链表中的节点引用（指针）",
+      "confidence": 0.85
+    },
+    {
+      "source": "空位标记",
+      "target": "二叉树数组表示",
+      "type": "RELATED_TO",
+      "evidence": "我们可以考虑在层序遍历序列中显式地写出所有 None",
+      "confidence": 0.8
+    }
+  ]
+}

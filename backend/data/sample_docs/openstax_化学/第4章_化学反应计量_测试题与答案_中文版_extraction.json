@@ -1,0 +1,379 @@
+{
+  "entities": [
+    {
+      "name": "配平化学方程式",
+      "category": "方法",
+      "description": "通过调整系数使反应物和生成物中每种元素的原子数相等，以符合物质守恒定律。"
+    },
+    {
+      "name": "分子方程式",
+      "category": "概念",
+      "description": "用完整化学式表示所有反应物和产物的方程式。"
+    },
+    {
+      "name": "完全离子方程式",
+      "category": "概念",
+      "description": "将可溶性离子化合物写成离子形式，但保留弱电解质和难溶物为分子形式的方程式。"
+    },
+    {
+      "name": "净离子方程式",
+      "category": "概念",
+      "description": "只保留实际参与反应的离子，省略旁观离子的方程式。"
+    },
+    {
+      "name": "化学反应分类",
+      "category": "概念",
+      "description": "根据反应物和产物的种类及变化将化学反应分为不同类型，如氧化还原、酸碱、沉淀等。"
+    },
+    {
+      "name": "氧化态",
+      "category": "概念",
+      "description": "元素在化合物中表现出的电荷数，用于判断氧化还原反应。"
+    },
+    {
+      "name": "氧化还原反应",
+      "category": "概念",
+      "description": "涉及电子转移、元素氧化态发生变化的化学反应。"
+    },
+    {
+      "name": "酸碱反应",
+      "category": "概念",
+      "description": "涉及质子转移的反应，通常生成盐和水。"
+    },
+    {
+      "name": "半反应法",
+      "category": "方法",
+      "description": "通过将氧化还原反应拆分为氧化半反应和还原半反应来配平方程式的方法。"
+    },
+    {
+      "name": "反应化学计量学",
+      "category": "概念",
+      "description": "研究化学反应中反应物与产物之间量的关系，基于配平化学方程式的系数比进行计算。"
+    },
+    {
+      "name": "限制反应物",
+      "category": "概念",
+      "description": "在化学反应中首先被完全消耗的反应物，决定理论产量。"
+    },
+    {
+      "name": "理论产率",
+      "category": "概念",
+      "description": "根据化学计量关系计算得到的最大产物量。"
+    },
+    {
+      "name": "百分产率",
+      "category": "概念",
+      "description": "实际产量与理论产量的比值，以百分比表示。"
+    },
+    {
+      "name": "滴定",
+      "category": "方法",
+      "description": "一种定量分析方法，通过已知浓度的溶液与待测溶液反应来确定待测物质的浓度。"
+    },
+    {
+      "name": "经验式",
+      "category": "概念",
+      "description": "表示化合物中原子最简单整数比的化学式。"
+    },
+    {
+      "name": "分子式",
+      "category": "概念",
+      "description": "表示分子中原子实际数目的化学式。"
+    },
+    {
+      "name": "化学方程式",
+      "category": "概念",
+      "description": "用化学式表示化学反应的式子，需遵循质量守恒定律。"
+    },
+    {
+      "name": "氧化剂",
+      "category": "概念",
+      "description": "在氧化还原反应中自身被还原、使其他物质被氧化的物质。"
+    },
+    {
+      "name": "还原剂",
+      "category": "概念",
+      "description": "在氧化还原反应中自身被氧化、使其他物质被还原的物质。"
+    },
+    {
+      "name": "复分解反应",
+      "category": "概念",
+      "description": "两种化合物互相交换成分生成另外两种化合物的反应。"
+    },
+    {
+      "name": "置换反应",
+      "category": "概念",
+      "description": "一种单质与一种化合物反应生成另一种单质和另一种化合物的反应。"
+    },
+    {
+      "name": "分解反应",
+      "category": "概念",
+      "description": "一种化合物分解成两种或多种较简单物质的反应。"
+    },
+    {
+      "name": "化学计量学",
+      "category": "概念",
+      "description": "研究化学反应中反应物与生成物之间定量关系的学科。"
+    },
+    {
+      "name": "物质的量",
+      "category": "概念",
+      "description": "表示含有一定数目粒子的集合体的物理量，符号为n，单位为摩尔。"
+    },
+    {
+      "name": "摩尔质量",
+      "category": "概念",
+      "description": "单位物质的量的物质所具有的质量，单位为g/mol。"
+    },
+    {
+      "name": "理论产量",
+      "category": "概念",
+      "description": "根据化学计量关系计算得到的最大产物量。"
+    },
+    {
+      "name": "道尔顿原子理论",
+      "category": "定理",
+      "description": "认为原子在化学反应中不可分割，反应前后原子种类和数目不变的理论。"
+    },
+    {
+      "name": "质量守恒定律",
+      "category": "定理",
+      "description": "化学反应前后物质的总质量保持不变。"
+    },
+    {
+      "name": "化学计量关系",
+      "category": "方法",
+      "description": "利用配平化学方程式中的系数比进行反应物与生成物量的计算。"
+    },
+    {
+      "name": "离子方程式书写",
+      "category": "方法",
+      "description": "将化学方程式改写为完全离子方程式并消去旁观离子得到净离子方程式的过程。"
+    },
+    {
+      "name": "氧化态计算",
+      "category": "方法",
+      "description": "根据化合物中元素氧化态代数和为零的规则计算各元素氧化态。"
+    },
+    {
+      "name": "氧化还原反应配平",
+      "category": "方法",
+      "description": "通过氧化态变化或半反应法配平氧化还原反应方程式。"
+    },
+    {
+      "name": "滴定分析",
+      "category": "方法",
+      "description": "利用已知浓度的标准溶液测定未知溶液浓度的方法。"
+    },
+    {
+      "name": "产率计算",
+      "category": "方法",
+      "description": "通过实际产量与理论产量的比值计算百分产率。"
+    }
+  ],
+  "relations": [
+    {
+      "source": "配平化学方程式",
+      "target": "分子方程式",
+      "type": "APPLIES_TO",
+      "evidence": "写出描述下列每个化学反应的配平分子方程式。",
+      "confidence": 0.9
+    },
+    {
+      "source": "配平化学方程式",
+      "target": "完全离子方程式",
+      "type": "APPLIES_TO",
+      "evidence": "根据配平的分子方程式，写出下列反应的完全离子方程式和净离子方程式",
+      "confidence": 0.9
+    },
+    {
+      "source": "配平化学方程式",
+      "target": "净离子方程式",
+      "type": "APPLIES_TO",
+      "evidence": "根据配平的分子方程式，写出下列反应的完全离子方程式和净离子方程式",
+      "confidence": 0.9
+    },
+    {
+      "source": "分子方程式",
+      "target": "完全离子方程式",
+      "type": "PRECEDES",
+      "evidence": "根据配平的分子方程式，写出下列反应的完全离子方程式和净离子方程式",
+      "confidence": 0.9
+    },
+    {
+      "source": "完全离子方程式",
+      "target": "净离子方程式",
+      "type": "PRECEDES",
+      "evidence": "根据配平的分子方程式，写出下列反应的完全离子方程式和净离子方程式",
+      "confidence": 0.9
+    },
+    {
+      "source": "氧化态",
+      "target": "氧化还原反应",
+      "type": "PRECEDES",
+      "evidence": "确定下列化合物中各元素的氧化态",
+      "confidence": 0.8
+    },
+    {
+      "source": "半反应法",
+      "target": "氧化还原反应",
+      "type": "APPLIES_TO",
+      "evidence": "根据半反应法配平下列各方程式",
+      "confidence": 0.95
+    },
+    {
+      "source": "反应化学计量学",
+      "target": "限制反应物",
+      "type": "CONTAINS",
+      "evidence": "确定限制反应物",
+      "confidence": 0.8
+    },
+    {
+      "source": "反应化学计量学",
+      "target": "理论产率",
+      "type": "CONTAINS",
+      "evidence": "确定该反应的理论产率",
+      "confidence": 0.8
+    },
+    {
+      "source": "反应化学计量学",
+      "target": "百分产率",
+      "type": "CONTAINS",
+      "evidence": "该反应的百分产率是多少",
+      "confidence": 0.8
+    },
+    {
+      "source": "理论产率",
+      "target": "百分产率",
+      "type": "PRECEDES",
+      "evidence": "确定该反应的理论产率（以克计）和百分产率",
+      "confidence": 0.9
+    },
+    {
+      "source": "滴定",
+      "target": "反应化学计量学",
+      "type": "APPLIES_TO",
+      "evidence": "滴定 125 mL 0.0100-M Ca(OH)2 溶液需要多少体积的 0.0105-M HBr 溶液",
+      "confidence": 0.9
+    },
+    {
+      "source": "经验式",
+      "target": "分子式",
+      "type": "PRECEDES",
+      "evidence": "确定其经验式和分子式",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学方程式",
+      "target": "完全离子方程式",
+      "type": "RELATED_TO",
+      "evidence": "完全离子方程式：2Na+(aq) + 2F−(aq) + Ca2+(aq) + 2Cl−(aq) ⟶ CaF2(s) + 2Na+(aq) + 2Cl−(aq)",
+      "confidence": 0.8
+    },
+    {
+      "source": "氧化还原反应",
+      "target": "氧化剂",
+      "type": "RELATED_TO",
+      "evidence": "氧化剂NiCl2，还原剂Mg。",
+      "confidence": 0.8
+    },
+    {
+      "source": "氧化还原反应",
+      "target": "还原剂",
+      "type": "RELATED_TO",
+      "evidence": "氧化剂NiCl2，还原剂Mg。",
+      "confidence": 0.8
+    },
+    {
+      "source": "化学计量学",
+      "target": "物质的量",
+      "type": "PRECEDES",
+      "evidence": "由V和c计算H3PO4的物质的量；由方程式系数比2:3计算H2的物质的量；由n×M计算H2的质量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "物质的量",
+      "target": "摩尔质量",
+      "type": "PRECEDES",
+      "evidence": "由n×M计算H2的质量。",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学计量学",
+      "target": "限制反应物",
+      "type": "CONTAINS",
+      "evidence": "限制反应物为O2。",
+      "confidence": 0.9
+    },
+    {
+      "source": "限制反应物",
+      "target": "理论产量",
+      "type": "PRECEDES",
+      "evidence": "理论产量以限制反应物计算：2.0 mol I2 × (2 mol HI / 1 mol I2) = 4.0 mol HI",
+      "confidence": 0.9
+    },
+    {
+      "source": "理论产量",
+      "target": "百分产率",
+      "type": "PRECEDES",
+      "evidence": "百分产率 = (0.53 g / 0.576 g) × 100% = 92%。",
+      "confidence": 0.9
+    },
+    {
+      "source": "道尔顿原子理论",
+      "target": "质量守恒定律",
+      "type": "PRECEDES",
+      "evidence": "道尔顿原子理论的假设是：原子在化学反应中不可分割，即反应前后原子的种类和数目不变。因此，化学反应只是原子的重新组合，反应前后各元素原子的总数守恒",
+      "confidence": 0.9
+    },
+    {
+      "source": "化学计量关系",
+      "target": "化学计量学",
+      "type": "RELATED_TO",
+      "evidence": "利用配平方程式的化学计量关系，将乙醇的摩尔数与生成醚的摩尔数关联起来。",
+      "confidence": 0.8
+    },
+    {
+      "source": "离子方程式书写",
+      "target": "完全离子方程式",
+      "type": "RELATED_TO",
+      "evidence": "完全离子方程式：2Na+(aq) + 2F−(aq) + Ca2+(aq) + 2Cl−(aq) ⟶ CaF2(s) + 2Na+(aq) + 2Cl−(aq)，净离子方程式：2F−(aq) + Ca2+(aq) ⟶ CaF2(s)",
+      "confidence": 0.8
+    },
+    {
+      "source": "离子方程式书写",
+      "target": "净离子方程式",
+      "type": "RELATED_TO",
+      "evidence": "完全离子方程式：2Na+(aq) + 2F−(aq) + Ca2+(aq) + 2Cl−(aq) ⟶ CaF2(s) + 2Na+(aq) + 2Cl−(aq)，净离子方程式：2F−(aq) + Ca2+(aq) ⟶ CaF2(s)",
+      "confidence": 0.8
+    },
+    {
+      "source": "氧化态计算",
+      "target": "氧化态",
+      "type": "RELATED_TO",
+      "evidence": "NaI: Na +1, I -1",
+      "confidence": 0.8
+    },
+    {
+      "source": "氧化还原反应配平",
+      "target": "氧化还原反应",
+      "type": "RELATED_TO",
+      "evidence": "5Zn(s) + 2NO3−(aq) + 12H+(aq) ⟶ 5Zn2+(aq) + N2(g) + 6H2O(l)",
+      "confidence": 0.8
+    },
+    {
+      "source": "滴定分析",
+      "target": "化学计量学",
+      "type": "RELATED_TO",
+      "evidence": "n(AgNO3) = 0.02022 L × 0.2503 M = 5.061×10^-3 mol。n(NaCl) = n(AgNO3) = 5.061×10^-3 mol。c(NaCl) = 5.061×10^-3 mol / 0.01500 L = 0.3374 M。",
+      "confidence": 0.8
+    },
+    {
+      "source": "产率计算",
+      "target": "百分产率",
+      "type": "RELATED_TO",
+      "evidence": "百分产率 = (0.53 g / 0.576 g) × 100% = 92%。",
+      "confidence": 0.8
+    }
+  ]
+}

@@ -19,7 +19,7 @@ from app.services.knowledge_extractor import KnowledgeExtractor
 from app.services.kg_manager import KnowledgeGraphManager
 from app.core.database import db
 
-PDF_PATH = os.path.join("data", "sample_docs", "数据结构第一章.pdf")
+PDF_PATH = os.path.join("data", "sample_docs", "数据结构", "数据结构第一章.pdf")
 COURSE_ID = "course_e2e_001"
 DOCUMENT_ID = "doc_e2e_001"
 

@@ -588,6 +588,16 @@ class SQLDatabase:
                     f"SELECT d.doc_id FROM t_document d WHERE d.course_id = {table}.{fk} LIMIT 1"
                     f") WHERE document_id IS NULL"
                 )
+            # 向量取数一律按 (course_id, document_id) 过滤，但 t_kp_embedding 的主键是
+            # (course_id, kp_id)，document_id 上没有索引 → 只能走主键前缀命中 course_id，
+            # 再逐行过滤 document_id（course 5 有 117 行，其中目标文档只占 69 行，多扫的
+            # 48 行全是待反序列化的向量文本）。补一个作用域索引消除这部分扫描。
+            # 必须建在 _migrate 而非 _SCHEMA_SQL：旧库的 document_id 列由上面这个循环
+            # ALTER 补齐，而 _SCHEMA_SQL 先于 _migrate 执行，索引会因列不存在而报错。
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_kp_emb_scope "
+                "ON t_kp_embedding(course_id, document_id)"
+            )
             self._migrate_question_bank(conn)
             self._migrate_question_kp(conn)
             self._migrate_embeddings_blob(conn)
@@ -910,6 +920,20 @@ class SQLDatabase:
 
     def get_user_by_id(self, user_id: int) -> dict:
         return self._query_one("SELECT * FROM t_user WHERE user_id = ?", (user_id,))
+
+    def update_password(self, user_id: int, password_hash: str) -> int:
+        """更新指定用户密码哈希（仅本人修改密码使用）"""
+        return self._execute(
+            "UPDATE t_user SET password_hash = ? WHERE user_id = ?",
+            (password_hash, user_id),
+        )
+
+    def deactivate_user(self, user_id: int) -> int:
+        """注销（软停用）指定用户：置 is_active=0，保留历史数据；登录时会被拒绝"""
+        return self._execute(
+            "UPDATE t_user SET is_active = 0 WHERE user_id = ?",
+            (user_id,),
+        )
 
     def list_users(self) -> list:
         return self._query("SELECT * FROM t_user ORDER BY user_id")
@@ -1346,6 +1370,19 @@ class SQLDatabase:
             result.append({"kp_id": r["kp_id"], "embedding": vec})
         return result
 
+    def get_embedding_kp_ids(self, course_id: int, document_id) -> set:
+        """该文档已存向量的 kp_id 集合（向量索引新鲜度比对专用）。
+
+        与 get_embeddings_by_document 的区别：不读 embedding 列。索引新鲜度只需要
+        比对 kp_id 集合，若为此整表取回向量文本并反序列化，纯属浪费（实测 69 条
+        向量下，反序列化占该步耗时的约 70%）。
+        """
+        rows = self._query(
+            "SELECT kp_id FROM t_kp_embedding WHERE course_id = ? AND document_id = ?",
+            (course_id, document_id),
+        )
+        return {r["kp_id"] for r in rows}
+
     def delete_embeddings_by_document(self, course_id: int, document_id) -> int:
         """删除文档全部知识点向量，返回删除条数"""
         with self._connect() as conn:
@@ -1594,31 +1631,6 @@ class SQLDatabase:
             return None
         row["embedding"] = self._loads_json(row["embedding"])
         return row
-
-    def get_question_embeddings_by_document(self, course_id: int, document_id=None) -> list:
-        """取某课程（可限文档）的全部题目向量"""
-        where, params = ["course_id = ?"], [course_id]
-        if document_id is not None:
-            where.append("document_id = ?")
-            params.append(document_id)
-        rows = self._query(
-            f"SELECT question_id, course_id, document_id, text_hash, embedding "
-            f"FROM t_question_embedding WHERE {' AND '.join(where)}",
-            tuple(params),
-        )
-        for r in rows:
-            r["embedding"] = self._loads_json(r["embedding"])
-        return rows
-
-    def delete_question_embeddings_by_document(self, course_id: int, document_id) -> int:
-        """删除该文档的题目向量（文档删除时清理）"""
-        with self._connect() as conn:
-            cur = conn.execute(
-                "DELETE FROM t_question_embedding WHERE course_id = ? AND document_id = ?",
-                (course_id, document_id),
-            )
-            conn.commit()
-            return cur.rowcount
 
     @staticmethod
     def _loads_json(value):
@@ -2666,6 +2678,10 @@ class SQLDatabase:
         防御性处理：若题目在「已被作答之后」才被改挂到别的文档，其答题记录的 document_id
         可能与题目当前 document_id 不一致，故这里先按 question_id 子查询清子表，再删题目，
         避免触发 t_answer_record / t_question_favorite 的外键约束。
+
+        题目向量表（t_question_embedding）同属「按 question_id 挂在题目上」的子表，且无外键、
+        不参与级联，必须在这里一并清理——漏掉会留下指向已删题目的孤儿向量。清理必须在
+        DELETE FROM t_question 之前，否则子查询已取不到 question_id。
         """
         with self._connect() as conn:
             conn.execute(

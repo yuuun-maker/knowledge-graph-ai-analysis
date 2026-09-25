@@ -17,7 +17,6 @@ from openai import OpenAI
 
 from ..core.config import settings
 from ..core.database import db
-from ..core.sql_database import sql_db
 from .embedding import EmbeddingClient, KnowledgeEmbedder
 from .vector_index import vector_index
 
@@ -58,12 +57,16 @@ def _coerce_document_id(document_id):
         return None
 
 
-def _cosine(a: List[float], b: List[float]) -> float:
-    """余弦相似度（纯 Python 实现，避免引入 numpy 重依赖）"""
+def _cosine(a: List[float], b: List[float], norm_a: float = None) -> float:
+    """余弦相似度（纯 Python 实现，避免引入 numpy 重依赖）
+
+    norm_a：a 的 L2 范数。批量比较（如对一个查询向量排序整个索引）时 a 固定不变，
+    传入可省掉每次都重算 a 的范数——1024 维下这是相当可观的一笔重复计算。
+    """
     if not a or not b or len(a) != len(b):
         return 0.0
     dot = sum(x * y for x, y in zip(a, b))
-    na = math.sqrt(sum(x * x for x in a))
+    na = math.sqrt(sum(x * x for x in a)) if norm_a is None else norm_a
     nb = math.sqrt(sum(y * y for y in b))
     if na == 0.0 or nb == 0.0:
         return 0.0
@@ -269,6 +272,13 @@ class QAService:
                 max_tokens=1024,
                 timeout=settings.QA_TIMEOUT,
             )
-            return response.choices[0].message.content.strip()
+            answer = response.choices[0].message.content.strip()
         except Exception as e:
-            return f"抱歉，问答服务暂时不可用：{str(e)}"
+            answer = f"抱歉，问答服务暂时不可用：{str(e)}"
+        return {"answer": answer, "sources": sources}
+
+    async def ask(self, question: str, course_id=None, document_id=None,
+                  allowed_ids: List[int] = None) -> str:
+        """回答问题（RAG 模式），仅返回答案文本；需要引用来源请用 ask_with_sources"""
+        result = await self.ask_with_sources(question, course_id, document_id, allowed_ids)
+        return result["answer"]

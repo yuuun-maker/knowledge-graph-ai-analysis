@@ -1,0 +1,51 @@
+{
+  "seed": 20261008,
+  "run_index": 0,
+  "n_relations_requested": 100,
+  "n_entities_requested": 50,
+  "min_per_type": 10,
+  "relation_pool_size": 156,
+  "entity_pool_size": 154,
+  "relation_sampled": 100,
+  "entity_sampled": 50,
+  "relation_quota_by_type": {
+    "APPLIES_TO": 13,
+    "CONTAINS": 58,
+    "PRECEDES": 2,
+    "RELATED_TO": 27
+  },
+  "relation_pool_by_type": {
+    "CONTAINS": 98,
+    "RELATED_TO": 40,
+    "APPLIES_TO": 16,
+    "PRECEDES": 2
+  },
+  "entity_pool_by_category": {
+    "概念": 122,
+    "公式": 9,
+    "方法": 23
+  },
+  "sources": [
+    {
+      "pred": "eval_data/pred_物理_第2章_运动学_v15.json",
+      "text_id": "物理_第2章_运动学_Kinematics",
+      "run_index": 0,
+      "relations": 54,
+      "entities": 46
+    },
+    {
+      "pred": "eval_data/pred_数据结构_第2章_复杂度分析_v15.json",
+      "text_id": "数据结构_第2章_复杂度分析",
+      "run_index": 0,
+      "relations": 40,
+      "entities": 40
+    },
+    {
+      "pred": "eval_data/pred_化学_第2章_原子分子与离子_v15.json",
+      "text_id": "化学_第2章_原子分子与离子",
+      "run_index": 0,
+      "relations": 62,
+      "entities": 68
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "kind": "qa_response_time",
+  "generated_at": "2026-10-08T15:58:44",
+  "scope": {
+    "course_id": 5,
+    "document_id": 100
+  },
+  "index_before": {
+    "kp_nodes": 51,
+    "stored_vectors": 51
+  },
+  "summary": {
+    "threshold_seconds": 15.0,
+    "questions_total": 21,
+    "errors": 0,
+    "cold_start_s": 1.669,
+    "warm_mean_s": 1.614,
+    "warm_max_s": 2.547,
+    "warm_min_s": 1.036,
+    "all_mean_s": 1.616,
+    "pass": true
+  },
+  "records": [
+    {
+      "id": 1,
+      "type": "概念定义",
+      "question": "什么是封装？",
+      "elapsed_s": 1.669,
+      "scene": "首问",
+      "sources_count": 5,
+      "answer_chars": 260,
+      "error": null
+    },
+    {
+      "id": 2,
+      "type": "概念定义",
+      "question": "什么是继承？",
+      "elapsed_s": 1.474,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 286,
+      "error": null
+    },
+    {
+      "id": 3,
+      "type": "概念定义",
+      "question": "什么是多态？",
+      "elapsed_s": 1.519,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 286,
+      "error": null
+    },
+    {
+      "id": 4,
+      "type": "概念定义",
+      "question": "什么是运算符重载？",
+      "elapsed_s": 1.565,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 322,
+      "error": null
+    },
+    {
+      "id": 5,
+      "type": "概念定义",
+      "question": "什么是抽象类？它和抽象方法是什么关系？",
+      "elapsed_s": 1.408,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 308,
+      "error": null
+    },
+    {
+      "id": 6,
+      "type": "方法用法",
+      "question": "super() 函数有什么作用？",
+      "elapsed_s": 1.556,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 321,
+      "error": null
+    },
+    {
+      "id": 7,
+      "type": "方法用法",
+      "question": "property 装饰器有什么作用？",
+      "elapsed_s": 1.553,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 407,
+      "error": null
+    },
+    {
+      "id": 8,
+      "type": "方法用法",
+      "question": "isinstance() 函数的作用是什么？",
+      "elapsed_s": 1.619,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 367,
+      "error": null
+    },
+    {
+      "id": 9,
+      "type": "方法用法",
+      "question": "静态方法和类方法有什么区别？",
+      "elapsed_s": 2.062,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 443,
+      "error": null
+    },
+    {
+      "id": 10,
+      "type": "方法用法",
+      "question": "如何用 types 模块给对象动态绑定方法？",
+      "elapsed_s": 1.46,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 347,
+      "error": null
+    },
+    {
+      "id": 11,
+      "type": "对比辨析",
+      "question": "基类和派生类有什么区别？",
+      "elapsed_s": 1.928,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 366,
+      "error": null
+    },
+    {
+      "id": 12,
+      "type": "对比辨析",
+      "question": "类属性和实例属性有什么区别？",
+      "elapsed_s": 2.09,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 478,
+      "error": null
+    },
+    {
+      "id": 13,
+      "type": "对比辨析",
+      "question": "私有成员和受保护成员有什么区别？",
+      "elapsed_s": 1.585,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 376,
+      "error": null
+    },
+    {
+      "id": 14,
+      "type": "对比辨析",
+      "question": "私有方法和公有方法有什么区别？",
+      "elapsed_s": 1.501,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 312,
+      "error": null
+    },
+    {
+      "id": 15,
+      "type": "关系前置",
+      "question": "学习运算符重载之前，需要先掌握什么？",
+      "elapsed_s": 2.547,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 564,
+      "error": null
+    },
+    {
+      "id": 16,
+      "type": "关系前置",
+      "question": "类和对象是什么关系？",
+      "elapsed_s": 1.65,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 293,
+      "error": null
+    },
+    {
+      "id": 17,
+      "type": "关系前置",
+      "question": "学习多态之前，需要先掌握什么？",
+      "elapsed_s": 1.642,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 372,
+      "error": null
+    },
+    {
+      "id": 18,
+      "type": "运算符",
+      "question": "Python 中的比较运算符有哪些？",
+      "elapsed_s": 1.239,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 257,
+      "error": null
+    },
+    {
+      "id": 19,
+      "type": "运算符",
+      "question": "什么是位运算符？",
+      "elapsed_s": 1.569,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 299,
+      "error": null
+    },
+    {
+      "id": 20,
+      "type": "运算符",
+      "question": "迭代器和可迭代对象有什么区别？",
+      "elapsed_s": 1.27,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 181,
+      "error": null
+    },
+    {
+      "id": 21,
+      "type": "边界诚实性",
+      "question": "什么是快速排序？它的时间复杂度是多少？",
+      "elapsed_s": 1.036,
+      "scene": "热路径",
+      "sources_count": 5,
+      "answer_chars": 120,
+      "error": null
+    }
+  ]
+}

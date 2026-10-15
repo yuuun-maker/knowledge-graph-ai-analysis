@@ -1,0 +1,147 @@
+%!TEX program = xelatex
+% ============================================================
+% 基于 AIGC 的课程知识图谱智能构建与学习导航系统
+% 提交材料索引（单页）
+% ============================================================
+
+\documentclass[
+    12pt,
+    a4paper,
+    UTF8
+]{ctexart}
+
+% ---------- 页面 ----------
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    top=2.4cm,
+    bottom=2.2cm,
+    left=2.8cm,
+    right=2.8cm
+}
+
+% ---------- 颜色 ----------
+\usepackage{xcolor}
+\definecolor{deepblue}{RGB}{30,88,165}
+
+% ---------- 列表 ----------
+\usepackage{enumitem}
+
+% ---------- 行距 ----------
+\usepackage{setspace}
+
+% ---------- 中文字体 ----------
+\IfFontExistsTF{FandolSong}{
+    \setCJKmainfont{FandolSong}
+    \setCJKsansfont{FandolHei}
+}{
+    \setCJKmainfont{SimSun}
+    \setCJKsansfont{SimHei}
+}
+\IfFontExistsTF{TeX Gyre Termes}{
+    \setmainfont{TeX Gyre Termes}
+}{
+    \setmainfont{Times New Roman}
+}
+
+\setstretch{1.22}
+\setlength{\parindent}{0pt}
+
+% 单页文档：条目间距收紧，保证正文与页脚在 24.5cm 版心内收完
+\newcommand{\itemgap}{0.24cm}
+
+% 材料名：加粗深蓝
+\newcommand{\mat}[1]{{\bfseries\color{deepblue}#1}}
+% 对应说明：小号灰字
+\newcommand{\note}[1]{{\small\color{black!62}#1}}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+% ============================================================
+% 标题
+% ============================================================
+
+\begin{center}
+    {\zihao{3}\heiti 索引}
+
+    \vspace{0.35cm}
+
+    {\zihao{-4} 基于 AIGC 的课程知识图谱智能构建与学习导航系统}
+
+    \vspace{0.2cm}
+
+    {\zihao{5}\color{black!62}
+    2026“数字马力杯”第十三届浙江省大学生服务外包创新应用大赛\quad·\quad A10 赛题\quad·\quad 参赛队「知图」}
+\end{center}
+
+\vspace{0.35cm}
+\hrule
+\vspace{0.5cm}
+
+% ============================================================
+% 一、参赛指南要求材料
+% ============================================================
+
+{\zihao{4}\heiti\color{deepblue} 一、参赛指南要求材料}
+
+\vspace{0.3cm}
+
+\begin{itemize}[leftmargin=0pt,label={},itemsep=\itemgap,parsep=0pt,topsep=0pt]
+    \item \mat{S1\ 方案概要（Summary）}\\
+          \note{不超过 800 字；说明目标问题、思路、创意和亮点。对应 A10 提交材料（1）项目概要介绍。}
+
+    \item \mat{S2\ 解决方案（Business Plan）}\\
+          \note{须详细标注每部分负责人及各成员的角色作用，至少包含 S2A 目标与服务模型、S2B 组织管理与业务分析方案、
+           S2C 技术路线及实现方案、S2D 成本模型及可行性分析。对应 A10 提交材料（3）项目详细方案。}
+
+    \item \mat{S3\ 核心内容展示（Presentation）}\\
+          \note{以 PPT 等形式介绍与展示方案的思路和核心内容，10 分钟以内为宜。对应 A10 提交材料（2）项目简介 PPT。}
+
+    \item \mat{S4\ 原型演示（Prototype Demonstration）}\\
+          \note{S4A 以系统、软件、程序、实物等方式提交实际完成的系统；S4B 以视频形式演示系统完成情况，
+           不超过 10 分钟且压缩控制在 150\,MB 以内。对应 A10 提交材料（4）项目演示视频。}
+
+    \item \mat{S5\ 团队完成过程（How did we do）}\\
+          \note{以 PPT 或视频形式介绍团队完成项目的过程，展示团队与成员在问题解决、创新、学习、文化、沟通、
+           执行、管理等方面的意识与能力，不超过 5 分钟。}
+
+    \item \mat{原创承诺书}\\
+          \note{所有参赛作品必须有原创承诺书。提交的文字与视频作品中不得出现参赛学校名称和指导教师姓名，
+           打包文件中的文件名与目录名同样不得出现，否则视为违规、取消比赛资格。}
+\end{itemize}
+
+\vspace{0.45cm}
+
+% ============================================================
+% 二、命题企业要求提交的材料
+% ============================================================
+
+{\zihao{4}\heiti\color{deepblue} 二、命题企业（A10）要求提交的材料}
+
+\vspace{0.3cm}
+
+\begin{enumerate}[leftmargin=1.4em,itemsep=\itemgap,parsep=0pt,topsep=0pt]
+    \item \mat{系统使用说明文档}\\
+          \note{含安装部署、操作流程、常见问题。}
+
+    \item \mat{提示词工程完整记录}
+
+    \item \mat{知识抽取准确率的测试报告}\\
+          \note{赛题硬性指标：人工抽样验证的准确率不低于 70\%。}
+
+    \item \mat{智能问答的测试集与结果}
+
+    \item \mat{项目开发过程中的图谱构建示例}\\
+          \note{以一门具体课程为例，提供最终生成的图谱截图和原始文档片段。}
+\end{enumerate}
+
+\vfill
+\hrule
+\vspace{0.25cm}
+
+{\small\color{black!62}
+以上包含参赛指南以及命题企业的所有作品提交材料要求。}
+
+\end{document}

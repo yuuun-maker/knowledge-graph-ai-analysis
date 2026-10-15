@@ -1,0 +1,188 @@
+{
+  "kind": "parse_plus_extract",
+  "generated_at": "2026-10-08T15:08:49",
+  "threshold_seconds": 60.0,
+  "params": {
+    "model": "deepseek-chat",
+    "prompt_version": "v1.5",
+    "temperature": 0.15,
+    "chunk_max_tokens": 6000,
+    "overlap_tokens": 400,
+    "max_concurrency": 4,
+    "runs_per_file": 3
+  },
+  "files": [
+    {
+      "file": "eval_data/第7章_树.txt",
+      "format": "txt",
+      "size_bytes": 28938,
+      "sha256": "895163c6e4e2a7211be9e821511bd2102a2ac8778afe843f9e4e4666aacf0fbc",
+      "parsed_chars": 11946,
+      "chunks": 1,
+      "runs": [
+        {
+          "run": 1,
+          "parse_s": 0.001,
+          "extract_s": 11.173,
+          "total_s": 11.173,
+          "entities": 48,
+          "relations": 30,
+          "error": null
+        },
+        {
+          "run": 2,
+          "parse_s": 0.001,
+          "extract_s": 9.883,
+          "total_s": 9.885,
+          "entities": 47,
+          "relations": 33,
+          "error": null
+        },
+        {
+          "run": 3,
+          "parse_s": 0.001,
+          "extract_s": 11.374,
+          "total_s": 11.374,
+          "entities": 48,
+          "relations": 33,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "total_mean_s": 10.811,
+      "total_min_s": 9.885,
+      "total_max_s": 11.374,
+      "runs_ok": 3,
+      "pass": true
+    },
+    {
+      "file": "eval_data/第2章_复杂度分析.txt",
+      "format": "txt",
+      "size_bytes": 39147,
+      "sha256": "f66903737c296a4e05c40b7483934a666fc2fff7fca03e39d718fc1dd050351b",
+      "parsed_chars": 16410,
+      "chunks": 2,
+      "runs": [
+        {
+          "run": 1,
+          "parse_s": 0.001,
+          "extract_s": 8.142,
+          "total_s": 8.143,
+          "entities": 48,
+          "relations": 45,
+          "error": null
+        },
+        {
+          "run": 2,
+          "parse_s": 0.001,
+          "extract_s": 7.127,
+          "total_s": 7.127,
+          "entities": 39,
+          "relations": 36,
+          "error": null
+        },
+        {
+          "run": 3,
+          "parse_s": 0.001,
+          "extract_s": 7.142,
+          "total_s": 7.143,
+          "entities": 39,
+          "relations": 39,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "total_mean_s": 7.471,
+      "total_min_s": 7.127,
+      "total_max_s": 8.143,
+      "runs_ok": 3,
+      "pass": true
+    },
+    {
+      "file": "eval_data/第2章_运动学_Kinematics_中文版.txt",
+      "format": "txt",
+      "size_bytes": 87298,
+      "sha256": "d4ff3d56bc5cb01458916ad5e96d0a48acf438582e1071c27500705e1ad5f282",
+      "parsed_chars": 36647,
+      "chunks": 4,
+      "runs": [
+        {
+          "run": 1,
+          "parse_s": 0.002,
+          "extract_s": 5.976,
+          "total_s": 5.979,
+          "entities": 47,
+          "relations": 62,
+          "error": null
+        },
+        {
+          "run": 2,
+          "parse_s": 0.002,
+          "extract_s": 6.435,
+          "total_s": 6.437,
+          "entities": 46,
+          "relations": 53,
+          "error": null
+        },
+        {
+          "run": 3,
+          "parse_s": 0.002,
+          "extract_s": 7.809,
+          "total_s": 7.811,
+          "entities": 48,
+          "relations": 71,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "total_mean_s": 6.742,
+      "total_min_s": 5.979,
+      "total_max_s": 7.811,
+      "runs_ok": 3,
+      "pass": true
+    },
+    {
+      "file": "data/uploads/5/128_Maven高级.pdf",
+      "format": "pdf",
+      "size_bytes": 16044390,
+      "sha256": "f83f985a884dec11603f0ae03d486315ee652d5c91097e716df3a3c0b5c99b7b",
+      "parsed_chars": 29606,
+      "chunks": 2,
+      "runs": [
+        {
+          "run": 1,
+          "parse_s": 1.96,
+          "extract_s": 6.587,
+          "total_s": 8.548,
+          "entities": 28,
+          "relations": 21,
+          "error": null
+        },
+        {
+          "run": 2,
+          "parse_s": 1.855,
+          "extract_s": 5.528,
+          "total_s": 7.383,
+          "entities": 25,
+          "relations": 18,
+          "error": null
+        },
+        {
+          "run": 3,
+          "parse_s": 1.757,
+          "extract_s": 6.047,
+          "total_s": 7.805,
+          "entities": 30,
+          "relations": 28,
+          "error": null
+        }
+      ],
+      "errors": [],
+      "total_mean_s": 7.912,
+      "total_min_s": 7.383,
+      "total_max_s": 8.548,
+      "runs_ok": 3,
+      "pass": true
+    }
+  ]
+}

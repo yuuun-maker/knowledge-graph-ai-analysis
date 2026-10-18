@@ -1622,6 +1622,8 @@ class SQLDatabase:
         题库（题目/答题记录/题目收藏）同样无级联，必须在删 t_course 前显式清理，
         否则会留下指向已删课程的孤儿题目。
         Scope C 的 t_question_embedding（题目向量）与 t_kp_text（知识点文本缓存）同理。
+        知识融合的 5 张表（t_kp_fusion_*）同理——它们此前只挂在文档级删除路径上，
+        课程级删除会静默残留孤儿融合数据。
         """
         doc_count = self.count_documents_by_course(course_id)
         with self._connect() as conn:
@@ -1632,6 +1634,9 @@ class SQLDatabase:
             conn.execute("DELETE FROM t_question_embedding WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_question_import_batch WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_kp_text WHERE course_id = ?", (course_id,))
+            # 知识融合：5 张表无外键，按 course_id 直删；传入 conn 以并入本事务，
+            # 与「先删融合行、再删 t_course」的顺序要求一起原子生效。
+            self.delete_fusion_by_course(course_id, conn=conn)
             conn.execute("DELETE FROM t_student_favorite WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_learning_record WHERE course_id = ?", (course_id,))
             conn.execute("DELETE FROM t_course_invite WHERE course_id = ?", (course_id,))
@@ -4184,14 +4189,20 @@ class SQLDatabase:
             c.commit()
             return n
 
+    # 知识融合的 5 张表。文档级 / 课程级删除路径与计数共用同一份清单——
+    # 历史上就是因为课程级删除各写各的，漏掉了这 5 张表（详见 delete_fusion_by_course）。
+    _FUSION_TABLES = (
+        "t_kp_fusion_run", "t_kp_fusion_candidate", "t_kp_fusion_map",
+        "t_kp_fusion_conflict", "t_kp_fusion_scope",
+    )
+
     def delete_fusion_by_document(self, course_id: int, document_id, conn=None) -> dict:
         """文档删除时的级联清理：该文档的 run / candidate / map / conflict / scope 全清。
 
         与 delete_questions_by_document 同一先例 —— 挂在 _delete_document_cascade 里，
         必须在 DELETE FROM t_document **之前**执行。
         """
-        tables = ("t_kp_fusion_run", "t_kp_fusion_candidate", "t_kp_fusion_map",
-                  "t_kp_fusion_conflict", "t_kp_fusion_scope")
+        tables = self._FUSION_TABLES
         counts = {}
 
         def _run(c):
@@ -4208,6 +4219,50 @@ class SQLDatabase:
             out = _run(c)
             c.commit()
             return out
+
+    def delete_fusion_by_course(self, course_id: int, conn=None) -> dict:
+        """课程删除时的级联清理：**该课程名下全部文档**的融合数据全清。
+
+        与 delete_fusion_by_document 同一先例，区别只在不带 document_id 条件——
+        删课程会带走它名下的所有文档，文档级清理点在此不适用，必须另走这条路。
+
+        为什么必须清：这 5 张表**都没设物理外键**（与 t_kp_embedding / t_kp_text 同一
+        先例，设了 FK 会让删文档的手工级联直接报错），所以漏清**不会报错**，只会静默
+        堆积指向已删课程的孤儿行。文档级路径早已接上，课程级路径曾长期缺失。
+
+        必须在 DELETE FROM t_course **之前**调用。
+        """
+        tables = self._FUSION_TABLES
+        counts = {}
+
+        def _run(c):
+            for t in tables:
+                counts[t] = c.execute(
+                    f"DELETE FROM {t} WHERE course_id = ?", (course_id,)
+                ).rowcount
+            return counts
+
+        if conn is not None:
+            return _run(conn)
+        with self._connect() as c:
+            out = _run(c)
+            c.commit()
+            return out
+
+    def count_fusion_by_course(self, course_id: int) -> dict:
+        """该课程名下全部文档的融合行数（逐表）。
+
+        与 delete_fusion_by_course 配对：delete_course 的返回值是**文档数**（int），
+        不携带分表计数，故删除报告需在删之前单独取一次——与
+        count_embeddings_by_course / count_questions_by_course 同一用法。
+        """
+        out = {}
+        for t in self._FUSION_TABLES:
+            row = self._query_one(
+                f"SELECT count(*) AS cnt FROM {t} WHERE course_id = ?", (course_id,)
+            )
+            out[t] = row["cnt"] if row else 0
+        return out
 
     def count_fusion_map(self, course_id: int, document_id, status: str = None) -> int:
         where, params = ["course_id = ?", "document_id = ?"], [course_id, document_id]

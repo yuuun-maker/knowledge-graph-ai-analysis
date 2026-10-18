@@ -751,7 +751,7 @@
               <el-select v-model="practiceMode" style="width: 130px" :disabled="practiceLoading">
                 <el-option v-for="m in PRACTICE_MODES" :key="m.value" :label="m.label" :value="m.value" />
               </el-select>
-              <el-button :icon="MagicStick" @click="practiceByRecommendation">按推荐知识点出题</el-button>
+              <el-button :icon="MagicStick" :loading="practiceLoading" @click="practiceByRecommendation">按推荐知识点出题</el-button>
             </div>
             <div v-loading="practiceStatsLoading" class="practice-kpis">
               <div class="practice-kpi">
@@ -1832,6 +1832,9 @@ const PRACTICE_MODES = [
   { value: 'random', label: '随机练习' },
 ]
 const practiceMode = ref('mixed')
+/** 「按推荐知识点出题」最多顺延尝试几个推荐项（推荐给的是「下一步该学」，未必已出题，
+ *  逐个试到有题为止；上限只为避免推荐多而全无题时空转一串请求） */
+const RECO_MAX_TRIES = 5
 const practiceRecommendMeta = ref(null)
 const practiceRecommendHint = computed(() => {
   const meta = practiceRecommendMeta.value
@@ -1947,6 +1950,17 @@ async function loadPracticeStats() {
   }
 }
 
+/** 按当前出题条件取一批题目（只取数、不改状态；「按推荐知识点出题」需要多次试探复用） */
+async function fetchPracticeItems({ kpId } = {}) {
+  return api.getPracticeQuestions({
+    course_id: currentCourseId.value,
+    document_id: practiceScope.value === 'document' ? currentDocumentId.value : undefined,
+    kp_id: kpId || undefined,
+    q_type: practiceQType.value || undefined,
+    count: practiceCount.value,
+  })
+}
+
 /** 出题并重置作答/判定状态（学生接口不下发答案，判分只在提交后返回） */
 async function startPractice() {
   if (!currentCourseId.value) {
@@ -1955,13 +1969,7 @@ async function startPractice() {
   }
   practiceLoading.value = true
   try {
-    const data = await api.getPracticeQuestions({
-      course_id: currentCourseId.value,
-      document_id: practiceScope.value === 'document' ? currentDocumentId.value : undefined,
-      kp_id: practiceKpId.value || undefined,
-      q_type: practiceQType.value || undefined,
-      count: practiceCount.value,
-    })
+    const data = await fetchPracticeItems({ kpId: practiceKpId.value })
     applyPracticeQuestions(data.items || [])
     practiceRecommendMeta.value = null          // 普通出题没有推荐元信息
     if (!practiceList.value.length) {
@@ -2022,27 +2030,54 @@ async function practiceByRecommendation() {
     ElMessage.warning('请先选择课程和学习资料')
     return
   }
+  practiceLoading.value = true
   try {
     const nodes = await ensurePracticeKpOptions()
     const progress = await api.getProgress(currentCourseId.value, currentDocumentId.value)
     const nameOf = (kpId) => nodes.find((n) => String(n.id) === String(kpId))?.label
     const mastered = (progress.mastered_kp_ids || []).map(nameOf).filter(Boolean)
-    const recs = await api.recommendNext(mastered, currentCourseId.value, currentDocumentId.value)
-    const first = (recs || [])[0]
-    if (!first || !first.name) {
+    // 注意：/learning-path/recommend 的 data 是 { mastered, recommendations } 对象而非数组，
+    // 必须取 .recommendations 再下标（本页其余三处调用都是这么写的）。
+    // 这里曾直接对返回对象取 [0]，对象取下标恒为 undefined，导致按钮无论图谱与学情如何
+    // 都必然提示「暂无可推荐的知识点」。api.recommendNext 已经过拦截器解包，就是 data 本身。
+    const res = await api.recommendNext(mastered, currentCourseId.value, currentDocumentId.value)
+    const recs = (res?.recommendations || []).filter((r) => r && r.name)
+    if (!recs.length) {
       ElMessage.info('暂无可推荐的知识点，请先标记已掌握的知识点或查看学习路径')
       return
     }
-    const target = nodes.find((n) => n.label === first.name)
-    practiceKpId.value = target ? target.id : ''
-    if (!target) {
-      ElMessage.warning(`推荐知识点「${first.name}」未在当前图谱中定位，将按其他条件出题`)
-    } else {
-      ElMessage.success(`已按推荐知识点「${first.name}」出题`)
+
+    // 推荐给的是「下一步该学」的知识点，不保证已经出过题：按推荐顺序逐个试，
+    // 取第一个真能抽到题的；图谱里定位不到的跳过（例如陈旧推荐）。
+    // 全部落空才退化为「不带知识点条件」出题——只放宽知识点这一维，
+    // 出题范围/题型/题量仍尊重用户在上方的设置。
+    for (const r of recs.slice(0, RECO_MAX_TRIES)) {
+      const target = nodes.find((n) => n.label === r.name)
+      if (!target) continue
+      const data = await fetchPracticeItems({ kpId: target.id })
+      const items = data.items || []
+      if (!items.length) continue
+      practiceKpId.value = target.id
+      applyPracticeQuestions(items)
+      practiceRecommendMeta.value = null
+      ElMessage.success(`已按推荐知识点「${r.name}」出题（${items.length} 题）`)
+      return
     }
-    await startPractice()
+
+    practiceKpId.value = ''
+    const data = await fetchPracticeItems({})
+    const items = data.items || []
+    applyPracticeQuestions(items)
+    practiceRecommendMeta.value = null
+    if (items.length) {
+      ElMessage.warning(`推荐的知识点暂未出题，已改为按其他条件出题（${items.length} 题）`)
+    } else {
+      ElMessage.info('该范围内暂无题目，请更换出题范围或联系教师添加题目')
+    }
   } catch (e) {
     ElMessage.error(`推荐出题失败：${e.message}`)
+  } finally {
+    practiceLoading.value = false
   }
 }
 

@@ -69,6 +69,14 @@ def main():
             if t in live_tables_now else 0)
         for t in PROTECTED_TABLES
     }
+    # 融合表在线上库可能**已有真实数据**（跑过 DRY_RUN / APPLY 批次）：迁移必须原样保留，
+    # 既不臆造也不丢失。故与线上基线比对，而非断言「必须为 0」——后者只在刚部署、
+    # 尚未跑过任何融合批次时成立，会随线上数据增长而失效（曾因此误报为迁移失败）。
+    live_fusion_before = {
+        t: (sd.sql_db._query_one(f"SELECT count(*) AS c FROM {t}")["c"]
+            if t in live_tables_now else 0)
+        for t in FUSION_TABLES
+    }
 
     tmp_dir = tempfile.mkdtemp(prefix="kg_fusion_migrate_")
     tmp_db = os.path.join(tmp_dir, "app_copy.db")
@@ -99,10 +107,11 @@ def main():
     for idx in FUSION_INDEXES:
         check(f"索引 {idx} 已创建", objs.get(idx) == "index")
 
-    print("\nStep 3: 新表初始为空（迁移不臆造融合数据）")
+    print("\nStep 3: 新表数据在迁移前后保持一致（不臆造、不丢失）")
     for t in FUSION_TABLES:
         n = dbo._query_one(f"SELECT count(*) AS c FROM {t}")["c"]
-        check(f"{t} 初始 0 行", n == 0, f"实际 {n} 行")
+        check(f"{t} 行数与线上一致", n == live_fusion_before[t],
+              f"线上 {live_fusion_before[t]} -> 副本 {n}")
 
     print("\nStep 4: 融合 DAO 的基本读写与 UNIQUE 约束")
     e1 = dbo.fusion_scope_bump_epoch(999999, 888888)

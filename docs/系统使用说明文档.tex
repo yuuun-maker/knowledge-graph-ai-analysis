@@ -794,9 +794,9 @@ npm install
 支持文档格式 & ≥ 2 种 & \textbf{4 种}（PDF / DOCX / TXT / MD） & 代码：\texttt{backend/app/services/document\_service.py} \\
 知识点数量 & ≥ 20 个（一章内容） & 待实测确认 \todomark{} & 见 5.2；历史文档最大抽取 69 个知识点 \\
 关系类型 & ≥ 3 种 & \textbf{4 种}（CONTAINS / PRECEDES / APPLIES\_TO / RELATED\_TO） & 见 4.2 \\
-抽取准确率 & ≥ 70\%（人工抽样） & \textbf{已测}：关系主指标 F1 = \textbf{0.8312} & 《知识抽取准确率测试报告》；原始数据 \texttt{backend/eval\_data/eval\_report\_第7章\_树\_v15.json} \\
-文档解析+抽取 & ≤ 60 秒 & \textbf{待实测} \todomark{} & 采集方法见 5.4 \\
-问答响应 & ≤ 15 秒 & \textbf{待实测} \todomark{} & 采集方法见 5.4 \\
+\textbf{抽取准确率} & ≥ 70\%（\textbf{人工抽样}） & \textbf{开发集 F1 = 0.8312；跨课程降至 0.30\textasciitilde{}0.56；赛题口径待判定} & 见 5.3。开发集数据 \texttt{backend/eval\_data/eval\_report\_第7章\_树\_v15.json}；封存集数据 \texttt{eval\_report\_\{物理,数据结构,化学\}\_第2章\_*\_v15\_人工版.json}；人工抽样判定表待人工填写（\texttt{docs/人工抽样验证方案.md}） \\
+\textbf{文档解析+抽取} & ≤ 60 秒 & \textbf{已实测达标}：4 份文档均值 6.74\textasciitilde{}10.81 秒，最大 11.37 秒 & 见 5.4；原始数据 \texttt{backend/eval\_data/perf\_timing.json} \\
+\textbf{问答响应} & ≤ 15 秒 & \textbf{已实测达标}：21 题均值 1.61 秒，最大 2.55 秒 & 见 5.4；原始数据 \texttt{backend/eval\_data/qa\_timing.json} \\
 多课程管理 & ≥ 2 门独立课程 & \textbf{待补验证记录} \todomark{} & 见 5.5 \\
 普通电脑可运行 & 无需 GPU & 支持 & 见 2.2 \\
 \bottomrule
@@ -813,7 +813,7 @@ npm install
 \toprule
 项 & 值 \\
 \midrule
-测试文本 & 《Hello 算法》第 7 章「树」（CC BY-NC-SA 4.0），清洗后 15330 字符 \\
+测试文本 & 《Hello 算法》第 7 章「树」（CC BY-NC-SA 4.0），实测 12,416 字符 \\
 分块参数 & chunk 6000 tokens / overlap 400 tokens，并发 4 路 \\
 金标准规模 & 49 实体 / 33 关系（人工标注，预测前冻结） \\
 Prompt 版本 & v1.5（定稿） \\
@@ -822,11 +822,12 @@ Prompt 版本 & v1.5（定稿） \\
 \end{tabularx}
 \end{center}
 \begin{todobox}
-\verifymark{} \textbf{两点需在正式报告中明确说明}（属诚实披露，也是赛题「需在文档中说明改进方向」的要求）：
+\verifymark{} \textbf{三点需在正式报告中明确说明}（属诚实披露，也是赛题「需在文档中说明改进方向」的要求）：
 
 \begin{enumerate}
-\item \textbf{该金标准中 PRECEDES 关系为 0 条}（33 条关系由 CONTAINS 25 / RELATED\_TO 5 / APPLIES\_TO 3 构成）。也就是说，\textbf{F1 = 0.8312 覆盖了三种关系类型，但未覆盖前置关系}。而前置关系恰恰是学习路径推荐的基础。建议补充一份包含 PRECEDES 的测试集，否则「三种关系类型均达标」这一表述会不够严谨。
-\item \textbf{赛题要求的是「人工抽样验证」}，而当前评测是「对冻结金标准自动计算」。二者并不等价，建议补做一次随机抽样人工判定（如随机抽 30 个知识点），并在报告中同时给出两种口径的结果。
+\item \textbf{该金标准中 PRECEDES 关系为 0 条}（33 条关系由 CONTAINS 25 / RELATED\_TO 5 / APPLIES\_TO 3 构成）。也就是说，\textbf{F1 = 0.8312 覆盖了三种关系类型，但未覆盖前置关系}。而前置关系恰恰是学习路径推荐的基础。\textbf{已评测的全部章节（开发集 + 三章封存集）Gold 中 PRECEDES 均为 0 条}，这项能力至今未被验证，需单独补做专项评测。
+\item \textbf{赛题要求的是「人工抽样验证」}，而当前评测是「对冻结金标准自动计算」。二者\textbf{不是同一口径}（自动评测能反映漏抽，抽样只能反映查准）。人工抽样验证的\textbf{方法与工具已就绪}（见 \texttt{docs/人工抽样验证方案.md} 及两个配套脚本），\textbf{判定结果待人工填表后生成}。\textbf{在结果产生之前，不得声称「已满足赛题准确率要求」。}
+\item \textbf{0.8312 只代表开发集单一章节，且该分数未泛化到其他课程。} 三章封存集（物理·第 2 章 / 数据结构·第 2 章 / 化学·第 2 章，文本\textbf{从未参与提示词迭代}）的实测关系 F1 为 \textbf{0.3029 / 0.5573 / 0.3912}，\textbf{全部低于赛题的 0.70}。因此本系统的抽取准确率\textbf{在跨课程场景下未达标}，这是必须如实呈现的结论。归因与改进方向见 \texttt{docs/提示词工程完整记录\_竞赛提交版.md} 第 7.1 节。
 \end{enumerate}
 \end{todobox}
 
@@ -2066,7 +2067,7 @@ Neo4j 版本 & 待填 \\
 \toprule
 数据集 & 内容 & 来源 \\
 \midrule
-知识抽取测试 & 《Hello 算法》第 7 章「树」（CC BY-NC-SA 4.0），清洗后 15330 字符 & \texttt{backend/eval\_data/第7章\_树.txt} \\
+知识抽取测试 & 《Hello 算法》第 7 章「树」（CC BY-NC-SA 4.0），实测 12,416 字符 & \texttt{backend/eval\_data/第7章\_树.txt} \\
 抽取金标准 & 49 实体 / 33 关系，人工标注、预测前冻结 & \texttt{backend/eval\_data/gold\_第7章\_树.json} \\
 问答测试集 & 21 题，覆盖 6 类问题 & 《问答测试集》 \\
 \bottomrule
@@ -2158,7 +2159,7 @@ Neo4j 版本 & 待填 \\
 \toprule
 项 & 值 \\
 \midrule
-测试文本 & 《Hello 算法》第 7 章「树」，15330 字符 \\
+测试文本 & 《Hello 算法》第 7 章「树」，12,416 字符 \\
 分块参数 & chunk 6000 tokens / overlap 400 tokens，并发 4 路 \\
 金标准 & 49 实体 / 33 关系，人工标注并在预测前冻结（含 SHA256 记录） \\
 Prompt 版本 & v1.5（定稿） \\
@@ -2175,8 +2176,9 @@ Prompt 版本 & v1.5（定稿） \\
 \toprule
 指标 & 结果 & 说明 \\
 \midrule
-关系主指标 F1 & \textbf{0.8312} & 赛题申报口径 \\
-实体类别准确率 & 见测试报告 & 在「已识别实体」的交集上评价 \\
+关系主指标 F1 & \textbf{0.8312} & \textbf{开发集（第 7 章·树）三轮均值}。注意：这是 Gold 标注下的 F1，\textbf{不是赛题要求的「人工抽样准确率」}；且该分数\textbf{未泛化到封存集}（见下） \\
+实体 F1 & 0.9220 & 同一数据集 \\
+跨课程（封存集）关系 F1 & \textbf{0.3029 / 0.5573 / 0.3912} & 物理·第2章 / 数据结构·第2章 / 化学·第2章，\textbf{均低于 0.70} \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -2203,37 +2205,35 @@ Prompt 版本 & v1.5（定稿） \\
 \toprule
 赛题要求 & 结果 & 是否达标 \\
 \midrule
-准确率 ≥ 70\% & F1 = 0.8312 & $\checkmark$ \\
+准确率 ≥ 70\%（\textbf{人工抽样验证}） & 开发集 F1 = 0.8312；\textbf{跨课程封存集 F1 = 0.3029 / 0.5573 / 0.3912} & \textbf{$\times$ 跨课程未达标}；赛题口径的人工抽样结果待判定 \\
 \bottomrule
 \end{tabularx}
 \end{center}
 \begin{todobox}
-\verifymark{} \textbf{需在正式报告中补充说明的两点}（见 2.8）：
+\verifymark{} \textbf{需在正式报告中补充说明的三点}（见 2.8）：
 
 \begin{enumerate}
-\item 该金标准的 33 条关系中 \textbf{PRECEDES 为 0 条}，故当前 F1 未覆盖前置关系；
-\item 赛题要求「人工抽样验证」，当前为「对冻结金标准的自动评测」，建议补做人工抽样。
+\item 该金标准的 33 条关系中 \textbf{PRECEDES 为 0 条}，故当前 F1 未覆盖前置关系（\textbf{三章封存集同样为 0 条}）；
+\item 赛题要求「人工抽样验证」，当前为「对冻结金标准的自动评测」，二者不是同一口径。方法与工具已就绪，\textbf{判定结果待人工填表后生成}；
+\item \textbf{0.8312 未泛化}：换到未参与提示词迭代的三章封存集后，关系 F1 降至 0.30 \textasciitilde{} 0.56，\textbf{均低于 0.70}。改进方向见 \texttt{docs/提示词工程完整记录\_竞赛提交版.md} 第 7.1.4 节。
 \end{enumerate}
 \end{todobox}
 
 
 \section{文档处理与问答性能测试}
 
-\begin{quote}
-\small
-\todomark{} \textbf{【待补：性能测试记录】}
-
-\textbf{当前状态}：仓库中有性能测试脚本 \texttt{backend/test\_perf\_timing.py}（输出解析耗时、分块数、抽取耗时与总耗时），但\textbf{尚未留存正式的性能测试记录}。
+\textbf{测试条件}：测试机为 Windows 11 + AMD Ryzen 9 7940HX（16 核 32 线程 / 16 GB 内存）普通笔记本，\textbf{全程未使用 GPU}（大模型推理走 DeepSeek 远程 API）。模型 \texttt{deepseek-chat}，提示词 v1.5，temperature 0.15，分块 6000/400 tokens，并发 4 路。每份文档独立运行 \textbf{3 轮}，每轮均重新解析并重新抽取。测试时间 2026-10-08。
 
 \textbf{采集方法}：
 
 \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\small,frame=single,framesep=4pt,rulecolor=\color{codeframe}]
 cd backend
-python test_perf_timing.py
+python test_perf_timing.py --parse-only      # 只测解析，不调 LLM（零成本）
+python test_perf_timing.py --runs 3 --output eval_data/perf_timing.json   # 完整计时并落盘
 \end{Verbatim}
 
-请在与演示相同的机器、相同的测试文档上运行至少 3 次，记录结果如下：
-
+\begin{quote}
+\small
 
 \textbf{文档解析与抽取耗时（赛题要求 ≤ 60 秒）}\par
 
@@ -2241,34 +2241,50 @@ python test_perf_timing.py
 \footnotesize
 \begin{tabularx}{\linewidth}{@{}XXXXXXX@{}}
 \toprule
-轮次 & 文档字符数 & 分块数 & 解析耗时 & 抽取耗时 & 总耗时 & 是否达标 \\
+文档 & 格式 & 字符数 & 分块 & 均值 & 最大 & 是否达标 \\
 \midrule
-第 1 次 & 待填 & 待填 & 待填 & 待填 & 待填 & $\square$ \\
-第 2 次 & 待填 & 待填 & 待填 & 待填 & 待填 & $\square$ \\
-第 3 次 & 待填 & 待填 & 待填 & 待填 & 待填 & $\square$ \\
+\texttt{第7章\_树.txt} & TXT & 11,946 & 1 & 10.81 s & 11.37 s & $\checkmark$ \\
+\texttt{第2章\_复杂度分析.txt} & TXT & 16,410 & 2 & 7.47 s & 8.14 s & $\checkmark$ \\
+\texttt{第2章\_运动学\_Kinematics\_中文版.txt} & TXT & 36,647 & 4 & 6.74 s & 7.81 s & $\checkmark$ \\
+\texttt{128\_Maven高级.pdf} & \textbf{PDF} & 29,606 & 2 & 7.91 s & 8.55 s & $\checkmark$ \\
 \bottomrule
 \end{tabularx}
 \end{center}
+\textbf{结论：四份文档最大 11.37 秒，全部满足 ≤60 秒，留有约 5 倍余量。} 原始数据（含每轮明细与参数快照）见 \texttt{backend/eval\_data/perf\_timing.json}。
+
+三个观察：(1) \textbf{分块越多反而越快}——抽取是 4 路并发，4 块与 1 块占用墙钟接近，而单块文档单次生成内容更长，反而更慢，说明瓶颈在\textbf{单次生成时长}而非分块数；(2) \textbf{PDF 解析明显贵于 TXT}（1.76\textasciitilde{}1.96 s vs <0.01 s），但总耗时仍很低；(3) \textbf{本地硬件基本不是瓶颈}——耗时主要取决于外部 API 的响应速度与网络，本地算力只影响解析与分块（实测 <5\% 的总耗时）。
+
+\textbf{数据边界}：可复现性受外部 API 影响，重跑时若 DeepSeek 侧变慢，数字会升高；本测试的文档规模上限为 36,647 字符，\textbf{更大单章（10 万字符以上）未测}，不应外推。
+
 
 \textbf{智能问答响应耗时（赛题要求 ≤ 15 秒）}\par
 
+\textbf{已实测}（2026-10-08，脚本 \texttt{backend/test\_qa\_timing.py}，原始数据 \texttt{backend/eval\_data/qa\_timing.json}）。测试作用域：course\_id=5 / document\_id=100（《3 类和对象》，51 个知识点）。计时覆盖完整链路——向量化 → 索引新鲜度检查 → 余弦排序 top\_k=5 → 回查 Neo4j → 生成回答。\textbf{21 道题全部成功（0 错误），每题均检索到 5 条来源}。
+
 \begin{center}
 \footnotesize
-\begin{tabularx}{\linewidth}{@{}XXXXXX@{}}
+\begin{tabularx}{\linewidth}{@{}XXXXXXX@{}}
 \toprule
-场景 & 测试题数 & 平均耗时 & P95 耗时 & 最大耗时 & 是否达标 \\
+场景 & 测试题数 & 平均耗时 & 中位 & P95 & 最大 & 是否达标 \\
 \midrule
-索引已就绪 & 待填 & 待填 & 待填 & 待填 & $\square$ \\
-首次提问（含索引构建） & 待填 & 待填 & 待填 & 待填 & $\square$ \\
+首问（含索引新鲜度检查） & 1 & 1.67 s & — & — & 1.67 s & $\checkmark$ \\
+\textbf{热路径（索引已就绪）} & \textbf{20} & \textbf{1.61 s} & 1.57 s & 2.06 s & \textbf{2.55 s} & $\checkmark$ \\
 \bottomrule
 \end{tabularx}
 \end{center}
-\begin{notebox}
-\textbf{建议分两种场景分别记录。} 首次提问需要现场构建向量索引，耗时显著高于常态。分开记录既更真实，也能说明系统在稳态下的性能。
+\textbf{结论：最大 2.55 秒，满足 ≤15 秒，留有约 6 倍余量。}
 
-\end{notebox}
+\textbf{必须说明的一处口径边界}：本次测试前，该作用域的向量索引\textbf{已经建好}（图谱 51 个知识点 / 已存向量 51 条，两者一致），因此\textbf{「首问」并没有触发全量索引重建}，它测到的是常态下的新鲜度比对开销。\textbf{含索引重建的冷启动耗时本次未测} —— 要测它需要先使索引失效（会让 51 个知识点全部重新向量化，产生真实的外部 API 调用），不宜在演示库上做。若需该数据，建议在可丢弃的测试课程上单独测一次。
 
-\textbf{注意}：LLM 与向量服务的响应速度受网络与负载影响，存在轮次波动。建议注明测试时间与网络环境。
+采集命令：
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\small,frame=single,framesep=4pt,rulecolor=\color{codeframe}]
+cd backend
+python test_qa_timing.py --dry-run                          # 先探明图谱作用域，不调 API
+python test_qa_timing.py --output eval_data/qa_timing.json  # 逐题计时并落盘
+\end{Verbatim}
+
+\textbf{注意}：LLM 与向量服务的响应速度受网络与负载影响，存在轮次波动。本记录含 \texttt{generated\_at} 时间戳，重跑时若外部服务变慢，数字会升高。
 
 \end{quote}
 
@@ -3340,7 +3356,7 @@ npx playwright test
 支持 ≥2 种文档格式 & PDF/DOCX/TXT/MD 四种格式解析 & 3.2.3 & 实际上传与解析成功截图 & \shotmark{} 待补 \\
 知识点 ≥20 个（一章内容） & 自动抽取知识点实体 & 3.2.3 5.3 & 真实课程抽取结果截图 & \shotmark{} 待补 \\
 关系类型 ≥3 种 & CONTAINS/PRECEDES/APPLIES\_TO/RELATED\_TO & 4.2 5.3 & 关系类型统计与图谱截图 & \shotmark{} 待补 \\
-抽取准确率 ≥70\% & LLM 抽取 + 多轮提示词迭代 & 5.3 & 独立测试报告（F1=0.8312） & $\checkmark$ 已有报告 \\
+抽取准确率 ≥70\%（\textbf{人工抽样}） & LLM 抽取 + 多轮提示词迭代 & 5.3 & 开发集测试报告（F1=0.8312）+ 三章封存集报告（0.3029/0.5573/0.3912）+ 人工抽样判定表 & \warnmark{} \textbf{部分：开发集有报告，跨课程未达标，赛题口径待判定} \\
 图谱交互与详情展示 & 缩放/拖拽/点击详情/四种布局 & 3.2.4 & 交互操作截图 & \shotmark{} 待补 \\
 列表/卡片展示知识点详情 & 知识点详情抽屉 & 3.2.4 & 详情展示截图 & \shotmark{} 待补 \\
 智能问答（RAG） & 向量检索 + 大模型生成 + 引用来源 & 4.4 & 测试问题、答案、引用与人工评价 & \todomark{} 待补 \\
@@ -3349,8 +3365,8 @@ npx playwright test
 教师端功能完整 & 上传/进度/预览/手动修正 & 3.2 & 编辑前后对比截图 & \shotmark{} 待补 \\
 学生端功能完整 & 浏览/详情/问答/标记/推荐 & 3.3 & 各功能截图 & \shotmark{} 待补 \\
 多课程管理 ≥2 门 & 课程与文档级隔离 & 5.5 & 两门课程的隔离验证记录 & \todomark{} 待补 \\
-解析+抽取 ≤60 秒 & 分块并发抽取 & 5.4 & 实际性能测试记录 & \todomark{} 待补 \\
-问答 ≤15 秒 & 向量检索 + 生成 & 5.4 & 实际性能测试记录 & \todomark{} 待补 \\
+解析+抽取 ≤60 秒 & 分块并发抽取 & 5.4 & 4 份文档 ×3 轮实测记录（\texttt{eval\_data/perf\_timing.json}） & $\checkmark$ \textbf{已实测达标}（最大 11.37 秒） \\
+问答 ≤15 秒 & 向量检索 + 生成 & 5.4 & 21 题逐题计时记录（\texttt{eval\_data/qa\_timing.json}） & $\checkmark$ \textbf{已实测达标}（均值 1.61 秒，最大 2.55 秒） \\
 普通电脑可运行 & 无需 GPU & 2.2 & 部署环境说明 & $\checkmark$ \\
 \bottomrule
 \end{tabularx}

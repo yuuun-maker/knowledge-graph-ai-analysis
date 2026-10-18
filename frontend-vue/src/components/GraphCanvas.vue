@@ -157,8 +157,23 @@ const loading = ref(false)
 const empty = ref(false)
 const emptyText = ref('暂无图谱数据')
 let graph = null
+// 后端原始节点 / 边数据。刻意保留普通变量（G6 渲染与多处读取都直接用它们），
+// 但它们**不是响应式的**，而 coreIds / neighborMap / highlightForceIds 是 computed：
+// computed 只按响应式依赖失效，毫无依赖的 computed 会永久缓存第一次的求值结果。
+// 症状：学生在「图谱浏览」里页面内换文档后，coreIds 仍是上一篇文档的节点 id，
+// 与新的 rawNodes 求交为空 → 局部展开模式下可见节点为 0，画布全空并提示
+// 「当前筛选条件下无可显示节点」。教师端未开 progressive，所以没暴露这个问题。
+// 因此用 dataVersion 把这个数据源显式接进响应式系统：每次换数据 +1，
+// 读了它的 computed 便会跟着重算。
 let rawNodes = [] // 后端原始节点数据
 let rawEdges = [] // 后端原始边数据
+const dataVersion = ref(0) // 原始数据版本号（响应式）：换文档 / 重新加载后 +1
+let renderedVersion = -1 // 画布中实际渲染的数据版本（非响应式，仅在异步渲染流程内读写）
+let renderedNodeIdSet = new Set() // 画布上实际的节点 id 集合（用于判断强调更新是否安全）
+let renderedEdgeIdSet = new Set() // 画布上实际的边 id 集合
+let loadToken = 0 // 加载请求序号：只认最后一次请求的结果，防旧响应覆盖新数据
+let rendering = false // 是否已有一次渲染在飞（G6 的批处理不允许两次渲染重叠）
+let renderQueued = false // 渲染期间又来了渲染请求：跑完当前这轮后用最新数据补跑
 let resizeObserver = null
 let resizeTimer = null
 
@@ -218,6 +233,7 @@ function pathIdSequence() {
 // 邻接结构（供聚焦邻居、局部展开、详情联动复用）
 // ---------------------------------------------------------------
 const neighborMap = computed(() => {
+  dataVersion.value // 建立对原始数据的响应式依赖（见 rawNodes 处的说明）
   const map = new Map()
   for (const e of rawEdges) {
     const s = String(e.source)
@@ -232,6 +248,7 @@ const neighborMap = computed(() => {
 
 // 核心节点 = 无前置（无 PRECEDES 入边）的根节点；无层级结构时退化为度数最高节点
 const coreIds = computed(() => {
+  dataVersion.value // 建立对原始数据的响应式依赖（见 rawNodes 处的说明）
   const hasIncoming = new Set()
   for (const e of rawEdges) {
     if (e.type === 'PRECEDES') hasIncoming.add(String(e.target))
@@ -259,10 +276,14 @@ const focusedNeighborSet = computed(() => {
 })
 
 // 路径高亮强制可见的节点 id（即使局部展开模式下也保证路径节点露出）
-const highlightForceIds = computed(() => highlightToIds())
+const highlightForceIds = computed(() => {
+  dataVersion.value // highlightToIds 读 rawNodes（按名称→id 映射），换文档后必须重算
+  return highlightToIds()
+})
 
 // 可见节点 id（综合：隔离聚焦 > 搜索 > 局部展开 > 全量；再叠加类型筛选 + 路径强制露出）
 const visibleNodeIds = computed(() => {
+  dataVersion.value // 显式依赖原始数据，换文档后必定重算
   if (!rawNodes.length) return []
   const typeOk = (n) => nodeFilter.value.includes(n.type)
 
@@ -308,11 +329,16 @@ const visibleEmpty = computed(
 // 数据加载
 // ---------------------------------------------------------------
 async function loadGraph() {
+  // 请求令牌：换文档时可能有两三个请求同时在飞（URL 回写、上下文切换各触发一次），
+  // 先发的未必先回。若不加这道闸，慢的旧响应最后落地就会把画布刷成「上一篇文档」的图谱
+  // ——表现为切到某篇文档却显示另一篇的内容、或来回切换时好时坏。
+  const token = ++loadToken
   if (!props.courseId || !props.documentId) {
     empty.value = true
     emptyText.value = '请先选择课程和学习资料'
     rawNodes = []
     rawEdges = []
+    dataVersion.value++          // 数据已换（清空），通知依赖它的 computed 重算
     expandedIds.value = []
     focusedId.value = null
     clearCanvas()
@@ -322,25 +348,34 @@ async function loadGraph() {
   empty.value = false
   try {
     const data = await api.getGraphV1(props.courseId, props.documentId, { limit: 800 })
+    if (token !== loadToken) return   // 已有更新的加载请求，本次结果作废（不要覆盖画布）
     rawNodes = data.nodes || []
     rawEdges = data.edges || []
+    dataVersion.value++          // 必须先于下面读取 coreIds：让 coreIds 用新数据重算
     // 局部展开模式：默认展开核心节点 → 显示核心 + 一阶关系
     expandedIds.value = props.progressive ? coreIds.value.slice() : []
     focusedId.value = null
     await renderGraph()
+    if (token !== loadToken) return
     emit('loaded', { nodeCount: rawNodes.length, edgeCount: rawEdges.length })
     centerOnPath()
   } catch (e) {
+    if (token !== loadToken) return
     empty.value = true
     emptyText.value = `图谱加载失败：${e.message}`
     clearCanvas()
   } finally {
-    loading.value = false
+    if (token === loadToken) loading.value = false   // 作废的请求不许关掉新请求的加载态
   }
 }
 
 function clearCanvas() {
   if (graph) {
+    // 画布已被清空：同步作废「画布持有哪批数据」的记录，
+    // 否则后续的强调更新会以为节点还在而调用 updateNodeData → G6 报 Node not found
+    renderedVersion = -1
+    renderedNodeIdSet = new Set()
+    renderedEdgeIdSet = new Set()
     graph.setData({ nodes: [], edges: [] })
     graph.draw()
   }
@@ -661,22 +696,73 @@ watch(
   }
 )
 
-// 结构变化（节点/边集合变化）：重新布局
+// 结构变化（节点/边集合变化）：重新布局。
+// 同一时刻只允许一次渲染在飞：G6 的 setData / updateNodeData 都是「批」处理，
+// 两次渲染重叠（连续快速换文档、换文档同时切视图）会让先一次的批在后一次 setData 之后再执行，
+// 那时批里的 id 已被抹掉 → G6 内部抛 "Node not found for id: xxx"（栈全在 G6 里，捕不到）。
+// 因此渲染期间到达的新请求只记一个标志，等当前这次跑完再用**最新数据**补跑一轮。
 async function renderGraph() {
-  await initGraph()
-  if (!graph) return
-  graph.setData(buildGraphData())
-  await graph.render()
-  emitStats()
+  if (rendering) {
+    renderQueued = true
+    return
+  }
+  rendering = true
+  try {
+    do {
+      renderQueued = false
+      await initGraph()
+      if (!graph) return
+      const d = buildGraphData()
+      renderedNodeIdSet = new Set(d.nodes.map((n) => String(n.id)))   // 记录画布实际持有的元素
+      renderedEdgeIdSet = new Set(d.edges.map((e) => String(e.id)))
+      graph.setData(d)
+      await graph.render()
+      renderedVersion = dataVersion.value   // 画布此刻与哪个数据版本一致（供 canvasHasCurrentData 判断）
+      emitStats()
+    } while (renderQueued)
+  } finally {
+    rendering = false
+  }
 }
 
-// 仅强调变化（opacity/halo/描边等，节点集不变）：不重新布局
+// 画布是否已经渲染了「当前」这批数据。
+// 换文档时 props 先变、数据后到（loadGraph 里有一次网络往返），期间
+// masteredKpIds / currentKpId / recommendedKpIds / highlightPath 等 watch 都会触发
+// 「仅强调」更新。若此时把新文档的 id 丢给还握着上一份数据的画布，G6 会抛
+// "Node not found for id: xxx"、画布停在旧图上，且 renderGraph 之后的 emitStats 也拿不到
+// 新数字（表现为统计数字滞后一篇文档）。这些路径一律要求画布数据已是最新，否则交给
+// 随后的 renderGraph 统一处理（它本就会把最新的高亮状态一起渲染进去）。
+function canvasHasCurrentData() {
+  return !!graph && renderedVersion === dataVersion.value
+}
+
+// 仅强调变化（opacity/halo/描边等）：不重新布局。
+// 注意「强调」有时会顺带改变可见集（路径高亮会强制露出路径节点、隔离聚焦会改可见集），
+// 而 updateNodeData / updateEdgeData 只对**画布上已存在**的节点/边有效——比画布多出来
+// 的元素一旦送进去，G6 就会抛 "Node not found for id: xxx"。
+// 因此先用「画布实际持有」的 id 集合核一遍：全部命中才走轻量的强调更新，
+// 否则退化成重渲染（重渲染本就会把最新的强调状态一起算进去）。
 async function rehighlight() {
-  if (!graph) return
+  if (loading.value) return             // 正在加载/重渲染：那一次 renderGraph 会把最新强调状态一起算进去
+  if (!canvasHasCurrentData()) return
   const d = buildGraphData()
-  await graph.updateNodeData(d.nodes.map((n) => ({ id: n.id, type: n.type, style: n.style })))
-  await graph.updateEdgeData(d.edges.map((e) => ({ id: e.id, style: e.style })))
-  await graph.draw()
+  const allKnown =
+    d.nodes.every((n) => renderedNodeIdSet.has(String(n.id))) &&
+    d.edges.every((e) => renderedEdgeIdSet.has(String(e.id)))
+  if (!allKnown) {
+    await renderGraph()
+    return
+  }
+  try {
+    await graph.updateNodeData(d.nodes.map((n) => ({ id: n.id, type: n.type, style: n.style })))
+    await graph.updateEdgeData(d.edges.map((e) => ({ id: e.id, style: e.style })))
+    await graph.draw()
+  } catch (e) {
+    // G6 的 updateNodeData/updateEdgeData 是「批」处理，真正执行要等到下一帧：校验通过之后、
+    // 批执行之前若又发生一次换文档的 setData，批里的 id 就失效了（连续快速切换文档时会撞上）。
+    // 这不是数据错误，退化成整体重渲染即可（重渲染会带上当前强调状态）。
+    await renderGraph()
+  }
 }
 
 function emitStats() {
@@ -871,6 +957,9 @@ watch(
 watch(
   () => props.highlightPath,
   () => {
+    // 换文档途中不重渲染：此时 rawNodes 可能还是上一篇的，而路径是新的，
+    // 用新路径去渲染旧数据会命中不存在的节点；loadGraph 的 renderGraph 会把最新路径一起渲染
+    if (!canvasHasCurrentData() && graph) return
     if (!rawNodes.length) return
     // 路径高亮可能改变可见集（强制露出路径节点），统一重布局
     renderGraph()
@@ -895,7 +984,8 @@ watch([nodeFilter, edgeFilter, onlyPrecedes, isolateOn], () => renderGraph(), { 
 
 // 搜索命中唯一节点时居中定位
 function centerOnSearch() {
-  if (!graph || !rawNodes.length) return
+  // 同上：画布还握着旧数据时不聚焦，避免 focusElement 命中不存在的节点
+  if (!canvasHasCurrentData() || !rawNodes.length) return
   const kw = (props.searchText || '').trim().toLowerCase()
   if (!kw) return
   const hits = rawNodes.filter((n) => {

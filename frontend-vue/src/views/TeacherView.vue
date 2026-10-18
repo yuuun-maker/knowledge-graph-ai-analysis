@@ -323,13 +323,14 @@
         </el-card>
         <el-card class="page-card graph-card">
           <!--
-            :key 必需，不是顺手加的：切换文档/课程时本页是【就地】换作用域，画布组件不重建。
-            而 GraphCanvas 内部的 rawNodes/rawEdges 是普通 let 变量（非响应式），
-            依赖它们的 computed（visibleNodeIds / visibleEdges / neighborMap…）在属性变化后
-            不会失效——于是新节点被旧 id 集合过滤成空，旧边却仍被画出来，G6 直接抛
-            「Unknown element type of id」。按作用域换 key 强制重建，等于回到「换上下文即重新挂载」
-            的既有语义（打开阅读器里的 PDF 也是同样的写法）。
-            根治要改 GraphCanvas 的数据源为响应式，那是独立一件事，不在本次范围内。
+            :key 按作用域强制重建（打开阅读器里的 PDF 也是同样写法）。历史上是必需的：
+            本页切换文档/课程是【就地】换作用域，画布组件不重建，而当时 GraphCanvas 内部的
+            rawNodes/rawEdges 是普通 let 变量（非响应式），依赖它们的 computed
+            （visibleNodeIds / neighborMap / coreIds…）在属性变化后不会失效——新节点被旧 id
+            集合过滤成空，G6 抛「Node not found for id」。
+            该根因已在 GraphCanvas 内修掉（见其 rawNodes 处 dataVersion 的说明），教师端保留
+            :key 是因为重建能顺带复位缩放/筛选状态，行为已验证；学生端「图谱浏览」不换 key，
+            依赖组件内部的版本与 id 集合校验做到就地正确刷新。
           -->
           <GraphCanvas
             :key="`preview-${currentCourseId}-${currentDocumentId}`"

@@ -256,6 +256,12 @@ _SCHEMA_SQL = [
                           CHECK (parse_status IN ('UPLOADED', 'PARSING', 'PARSED', 'FAILED')),
         extract_status    TEXT NOT NULL DEFAULT 'PENDING'
                           CHECK (extract_status IN ('PENDING', 'EXTRACTING', 'COMPLETED', 'FAILED')),
+        -- 图谱构建阶段（批量上传需要把「抽取完成」与「图谱已入库」区分开）：
+        -- PENDING -> BUILDING -> COMPLETED / FAILED。
+        -- 旧库由 _migrate_document_graph_status 补列并按 extract_status 回填，
+        -- 故 CHECK 只在新建库生效（SQLite 的 ADD COLUMN 不支持 CHECK）。
+        graph_status      TEXT NOT NULL DEFAULT 'PENDING'
+                          CHECK (graph_status IN ('PENDING', 'BUILDING', 'COMPLETED', 'FAILED')),
         error_message     TEXT,
         chunk_count       INTEGER NOT NULL DEFAULT 0,
         entity_count      INTEGER NOT NULL DEFAULT 0,
@@ -881,7 +887,32 @@ class SQLDatabase:
             self._migrate_admin(conn)
             self._migrate_admin_user_columns(conn)
             self._migrate_document_extract_timing(conn)
+            self._migrate_document_graph_status(conn)
             conn.commit()
+
+    def _migrate_document_graph_status(self, conn: sqlite3.Connection):
+        """幂等迁移：t_document 补「图谱构建状态」列。
+
+        为什么需要独立列：批量上传后「文档上传成功」不再等于「图谱构建成功」，
+        原表只有 parse_status / extract_status，无法表达「抽取已完成、正在写 Neo4j」。
+        新增 graph_status 区分 PENDING / BUILDING / COMPLETED / FAILED。
+
+        SQLite 的 ADD COLUMN 带 NOT NULL 必须给默认值，这里默认 'PENDING' 可满足。
+        历史行按已有的 extract_status 回填：
+          - extract_status='COMPLETED' 的历史文档，图谱当年已同步构建 → COMPLETED
+          - 其余（失败 / 进行中 / 未处理）保持 PENDING，由前端统一按失败/待处理展示
+        只回填 COMPLETED，重复执行无副作用；绝不重置已经写入的新状态。
+        """
+        cols = {row["name"] for row in
+                conn.execute("PRAGMA table_info(t_document)").fetchall()}
+        if "graph_status" not in cols:
+            conn.execute(
+                "ALTER TABLE t_document ADD COLUMN graph_status TEXT NOT NULL DEFAULT 'PENDING'"
+            )
+            conn.execute(
+                "UPDATE t_document SET graph_status = 'COMPLETED' "
+                "WHERE extract_status = 'COMPLETED'"
+            )
 
     def _migrate_document_extract_timing(self, conn: sqlite3.Connection):
         """幂等迁移：t_document 补「抽取起止时刻」两列。
@@ -1717,8 +1748,9 @@ class SQLDatabase:
         之所以放在这里而不是 document_service，是因为后者有多条失败返回路径，
         每新增一条都要记得补一次打戳；收口后不存在「漏写」这种失败方式。
         """
-        allowed = {"parse_status", "extract_status", "error_message", "chunk_count",
-                   "entity_count", "relation_count", "vector_collection", "file_path"}
+        allowed = {"parse_status", "extract_status", "graph_status", "error_message",
+                   "chunk_count", "entity_count", "relation_count", "vector_collection",
+                   "file_path"}
         sets, params = [], []
         for key, val in fields.items():
             if key not in allowed:
@@ -1748,6 +1780,20 @@ class SQLDatabase:
     def list_documents_by_course(self, course_id: int) -> list:
         return self._query(
             "SELECT * FROM t_document WHERE course_id = ? ORDER BY doc_id", (course_id,),
+        )
+
+    def get_document_by_sha256(self, course_id: int, file_sha256: str) -> dict:
+        """按内容哈希查同课程里最近一次上传的同名内容文档（批量上传去重）。
+
+        去重范围刻意限定在同一课程内：不同课程的同名文件是两份独立教学资料，
+        各自建图，符合「不跨课程融合」的约束。
+        """
+        if not file_sha256:
+            return None
+        return self._query_one(
+            "SELECT * FROM t_document WHERE course_id = ? AND file_sha256 = ? "
+            "ORDER BY doc_id DESC LIMIT 1",
+            (course_id, file_sha256),
         )
 
     def list_all_documents(self) -> list:

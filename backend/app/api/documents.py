@@ -8,6 +8,8 @@ Phase 5 改造：
 在线阅读改造（新增，不改动上述任何已有端点）：
 - GET /{doc_id}/content 返回文档原始字节流，供前端 PDF/TXT/DOCX 阅读器使用
 """
+from typing import List
+
 from fastapi import APIRouter, UploadFile, File, Form, Depends, Query
 from fastapi.responses import FileResponse, JSONResponse
 
@@ -42,6 +44,27 @@ async def upload_document(
         course_id=cid,
         teacher_id=current_user["user_id"],
     )
+    if not result["ok"]:
+        return error(result["code"], result["message"])
+    return success(result["data"])
+
+
+@router.post("/batch-upload")
+async def batch_upload_documents(
+    files: List[UploadFile] = File(..., description="批量上传的文档（PDF/TXT/DOCX/MD）"),
+    course_id: str = Form(..., description="目标课程 ID"),
+    current_user: dict = Depends(require_teacher),
+):
+    """教师批量上传文档到已有课程。
+
+    请求只做校验 / 落盘 / 去重，随后**立即返回**每个文件自己的 document_id；
+    解析、知识抽取与图谱入库在后台按并发上限逐文档执行，前端轮询文档列表获取真实进度。
+    单个文件失败不会影响同批其他文件。
+    """
+    cid = _coerce_int(course_id)
+    if cid is None:
+        return error(4001, "参数错误：course_id 必须为整数")
+    result = await DocumentService.process_batch(files, cid, current_user["user_id"])
     if not result["ok"]:
         return error(result["code"], result["message"])
     return success(result["data"])
@@ -104,6 +127,17 @@ async def get_document_content(doc_id: int, current_user: dict = Depends(get_cur
         filename=info["file_name"],
         content_disposition_type="inline",
     )
+
+
+@router.post("/{doc_id}/retry")
+async def retry_document(doc_id: int, current_user: dict = Depends(require_teacher)):
+    """重试单篇失败/中断的文档（复用已保存文件，不重复上传）。
+
+    已成功完成的文档会被拒绝，不会重复处理；正在处理中的文档同样拒绝，
+    避免同一 document_id 被并发写入两张图。
+    """
+    result = await DocumentService.retry_document(doc_id, current_user["user_id"])
+    return success(result["data"]) if result["ok"] else error(result["code"], result["message"])
 
 
 @router.delete("/{doc_id}")

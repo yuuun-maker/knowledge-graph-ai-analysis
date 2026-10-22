@@ -88,24 +88,30 @@
           </el-select>
         </div>
 
-        <!-- 上传入口（上传到当前课程，不再自动建课） -->
+        <!-- 批量上传入口（上传到当前课程，每份文档独立解析/抽取/建图） -->
         <el-card class="page-card upload-card">
-          <template #header><span class="panel-header">上传文档</span></template>
+          <template #header>
+            <div class="doc-toolbar">
+              <span class="panel-header">批量上传文档</span>
+              <span class="stats-text">当前课程：{{ currentCourseName }}</span>
+            </div>
+          </template>
           <el-form label-width="80px">
             <el-form-item label="选择文件">
               <el-upload
                 drag
+                multiple
+                v-model:file-list="uploadFileList"
                 :auto-upload="false"
-                :limit="1"
-                :on-change="onFileChange"
-                :on-remove="onFileRemove"
                 accept=".pdf,.txt,.docx,.md"
                 style="max-width: 520px"
               >
                 <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
-                <div class="el-upload__text">将文件拖到此处，或<em>点击选择</em></div>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击选择</em>（可多选）</div>
                 <template #tip>
-                  <div class="el-upload__tip">上传到当前课程，支持 PDF / DOCX / TXT / MD，单文件不超过 50MB</div>
+                  <div class="el-upload__tip">
+                    一次可选择多个文件，每个文件独立构建知识图谱；支持 PDF / DOCX / TXT / MD，单文件不超过 50MB
+                  </div>
                 </template>
               </el-upload>
             </el-form-item>
@@ -114,27 +120,80 @@
                 type="primary"
                 :icon="Upload"
                 :loading="uploading"
-                :disabled="!selectedFile"
-                @click="doUpload"
+                :disabled="!uploadFileList.length"
+                @click="doBatchUpload"
               >
-                上传并构建知识图谱
+                上传并构建知识图谱（{{ uploadFileList.length }} 个文件）
+              </el-button>
+              <el-button v-if="batchItems.length" :disabled="uploading" @click="clearBatchItems">
+                清空处理记录
               </el-button>
             </el-form-item>
           </el-form>
-          <el-alert
-            v-if="uploadResult"
-            type="success"
-            :closable="false"
-            class="upload-result-alert"
-            :title="`「${uploadResult.filename}」上传成功：知识点 ${uploadResult.entity_count ?? 0}，关系 ${uploadResult.relation_count ?? 0}`"
-          />
-          <el-alert
-            v-if="uploadError"
-            type="error"
-            :closable="false"
-            :title="uploadError"
-            class="upload-result-alert"
-          />
+
+          <!-- 批量处理结果：每个文件独立状态，数据全部来自后端真实状态 -->
+          <template v-if="batchItems.length">
+            <div class="batch-summary">
+              <div class="batch-summary__stats">
+                <span>总数 <b>{{ batchSummary.total }}</b></span>
+                <span class="is-success">成功 <b>{{ batchSummary.success }}</b></span>
+                <span class="is-danger">失败 <b>{{ batchSummary.failed }}</b></span>
+                <span class="is-muted">进行中 <b>{{ batchSummary.processing }}</b></span>
+              </div>
+              <el-progress
+                class="batch-summary__progress"
+                :percentage="batchSummary.percentage"
+                :status="batchSummary.failed ? 'exception' : (batchSummary.percentage === 100 ? 'success' : '')"
+                :stroke-width="12"
+                :striped="batchSummary.processing > 0"
+                :striped-flow="batchSummary.processing > 0"
+              />
+            </div>
+            <el-table :data="batchItems" size="small" class="batch-table">
+              <el-table-column prop="file_name" label="文件" min-width="180" show-overflow-tooltip />
+              <el-table-column label="状态" width="120" align="center">
+                <template #default="{ row }">
+                  <el-tag :type="batchStage(row).type" size="small">{{ batchStage(row).text }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column label="进度" min-width="150">
+                <template #default="{ row }">
+                  <el-progress
+                    :percentage="batchStage(row).percentage"
+                    :status="batchStage(row).progressStatus"
+                    :stroke-width="8"
+                    :striped="batchStage(row).inFlight"
+                    :striped-flow="batchStage(row).inFlight"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column label="结果 / 失败原因" min-width="260" show-overflow-tooltip>
+                <template #default="{ row }">
+                  <span v-if="batchStage(row).failed" class="batch-error">{{ batchStage(row).message || '处理失败' }}</span>
+                  <span v-else-if="batchStage(row).completed" class="batch-ok">
+                    知识点 {{ batchDocument(row)?.entity_count ?? 0 }}，关系 {{ batchDocument(row)?.relation_count ?? 0 }}
+                  </span>
+                  <span v-else class="is-muted">{{ batchStage(row).message || '处理中…' }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="100" align="center">
+                <template #default="{ row }">
+                  <el-button
+                    v-if="canRetryBatchItem(row)"
+                    size="small"
+                    type="warning"
+                    plain
+                    :icon="Refresh"
+                    :loading="row.retrying"
+                    @click="retryBatchItem(row)"
+                  >
+                    重试
+                  </el-button>
+                  <span v-else class="is-muted">—</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </template>
         </el-card>
 
         <!-- 文档列表 -->
@@ -153,12 +212,23 @@
             </el-table-column>
             <el-table-column label="解析状态" width="100" align="center">
               <template #default="{ row }">
-                <el-tag :type="parseStatusType(row.parse_status)" size="small">{{ parseStatusText(row.parse_status) }}</el-tag>
+                <el-tooltip :disabled="!row.error_message" :content="row.error_message || ''" placement="top">
+                  <el-tag :type="parseStatusType(row.parse_status)" size="small">{{ parseStatusText(row.parse_status) }}</el-tag>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column label="抽取状态" width="100" align="center">
               <template #default="{ row }">
-                <el-tag :type="extractStatusType(row.extract_status)" size="small">{{ extractStatusText(row.extract_status) }}</el-tag>
+                <el-tooltip :disabled="!row.error_message" :content="row.error_message || ''" placement="top">
+                  <el-tag :type="extractStatusType(row.extract_status)" size="small">{{ extractStatusText(row.extract_status) }}</el-tag>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column label="图谱状态" width="110" align="center">
+              <template #default="{ row }">
+                <el-tooltip :disabled="!row.error_message" :content="row.error_message || ''" placement="top">
+                  <el-tag :type="graphStatusType(row)" size="small">{{ graphStatusText(row) }}</el-tag>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column label="生成进度" min-width="180">
@@ -177,11 +247,20 @@
             <el-table-column label="创建时间" width="150">
               <template #default="{ row }">{{ fmtTime(row.created_at) }}</template>
             </el-table-column>
-            <el-table-column label="操作" width="392" fixed="right">
+            <el-table-column label="操作" width="470" fixed="right">
               <template #default="{ row }">
                 <el-button size="small" type="primary" :icon="Reading" :disabled="row.is_placeholder" @click="readDocument(row)">在线阅读</el-button>
                 <el-button size="small" :icon="Download" plain :disabled="row.is_placeholder" @click="downloadDocument(row)">下载</el-button>
                 <el-button size="small" type="success" plain :icon="UserFilled" :disabled="row.is_placeholder" @click="monitorDocument(row)">监测</el-button>
+                <el-button
+                  v-if="isDocumentFailed(row)"
+                  size="small"
+                  type="warning"
+                  plain
+                  :icon="Refresh"
+                  :loading="row.retrying"
+                  @click="retryDocumentRow(row)"
+                >重试</el-button>
                 <el-button size="small" type="danger" plain :icon="Delete" :disabled="row.is_placeholder" @click="deleteDocument(row)">删除</el-button>
               </template>
             </el-table-column>
@@ -1596,19 +1675,138 @@ const currentDocument = computed(() =>
 )
 const currentDocumentName = computed(() => currentDocument.value?.file_name || '')
 
-// ===================== 文档列表 / 上传 =====================
+// ===================== 文档列表 / 批量上传 =====================
 const documents = ref([])
 const documentsLoading = ref(false)
-const selectedFile = ref(null)
+const uploadFileList = ref([])
 const uploading = ref(false)
-const uploadResult = ref(null)
-const uploadError = ref('')
+// 批量上传的每个文件一条记录；document_id 由后端真实建库后回填，
+// 处理状态一律从 documents（后端 t_document）派生，不做假进度。
+const batchItems = ref([])
+const MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+const BATCH_STORAGE_PREFIX = 'kg_batch_upload_'
 
-function onFileChange(file) {
-  selectedFile.value = file.raw
+function batchStorageKey(courseId) {
+  return `${BATCH_STORAGE_PREFIX}${courseId}`
 }
-function onFileRemove() {
-  selectedFile.value = null
+
+function loadBatchItemsForCourse(courseId) {
+  if (!courseId) {
+    batchItems.value = []
+    return
+  }
+  try {
+    const raw = localStorage.getItem(batchStorageKey(courseId))
+    const list = raw ? JSON.parse(raw) : []
+    batchItems.value = Array.isArray(list) ? list : []
+  } catch {
+    batchItems.value = []
+  }
+}
+
+function persistBatchItems() {
+  if (!currentCourseId.value) return
+  try {
+    // 只保存恢复状态所需的字段；File 对象不可序列化，故不保存
+    const slim = batchItems.value.slice(0, 50).map((it) => ({
+      uid: it.uid,
+      file_name: it.file_name,
+      file_size: it.file_size,
+      document_id: it.document_id ?? null,
+      upload_failed: !!it.upload_failed,
+      duplicate: !!it.duplicate,
+      error: it.error || '',
+      created_at: it.created_at || '',
+    }))
+    localStorage.setItem(batchStorageKey(currentCourseId.value), JSON.stringify(slim))
+  } catch {
+    /* 存储不可用时不影响上传与处理 */
+  }
+}
+
+watch(batchItems, persistBatchItems, { deep: true })
+
+/** 后端文档状态 -> 统一阶段（每阶段文案与百分比都对应真实库状态） */
+function batchDocument(item) {
+  if (!item?.document_id) return null
+  return documents.value.find((d) => String(d.doc_id) === String(item.document_id)) || null
+}
+
+function docGraphStatus(doc) {
+  if (!doc) return 'PENDING'
+  if (doc.graph_status) return doc.graph_status
+  // 兼容迁移前的旧行：抽取完成即视为当年已构建图谱
+  return doc.extract_status === 'COMPLETED' ? 'COMPLETED' : 'PENDING'
+}
+
+function batchStage(item) {
+  const base = { text: '待处理', type: 'info', percentage: 0, inFlight: false, completed: false, failed: false, message: '' }
+  if (item.uploading) {
+    return { ...base, text: '上传中', type: 'warning', percentage: 10, inFlight: true, message: '正在上传文件…' }
+  }
+  if (item.upload_failed && !item.document_id) {
+    return { ...base, text: '失败', type: 'danger', percentage: 100, failed: true, progressStatus: 'exception', message: item.error || '上传失败' }
+  }
+  const doc = batchDocument(item)
+  if (!doc) {
+    return { ...base, text: '待处理', percentage: 5, message: '等待后端建档…' }
+  }
+  const graph = docGraphStatus(doc)
+  if (doc.parse_status === 'FAILED' || doc.extract_status === 'FAILED' || graph === 'FAILED') {
+    const percentage = doc.parse_status === 'FAILED' ? 35 : doc.extract_status === 'FAILED' ? 75 : 90
+    return {
+      ...base, text: '失败', type: 'danger', percentage, failed: true,
+      progressStatus: 'exception', message: doc.error_message || item.error || '处理失败',
+    }
+  }
+  if (graph === 'COMPLETED') {
+    return { ...base, text: '已完成', type: 'success', percentage: 100, completed: true, progressStatus: 'success', message: '' }
+  }
+  if (graph === 'BUILDING') {
+    return { ...base, text: '图谱构建中', type: 'warning', percentage: 90, inFlight: true, message: '正在写入 Neo4j…' }
+  }
+  if (doc.extract_status === 'EXTRACTING') {
+    return { ...base, text: '知识抽取中', type: 'warning', percentage: 70, inFlight: true, message: '正在抽取知识点与关系…' }
+  }
+  if (doc.parse_status === 'PARSING') {
+    return { ...base, text: '解析中', type: 'warning', percentage: 35, inFlight: true, message: '正在解析文档…' }
+  }
+  if (doc.parse_status === 'PARSED' && doc.extract_status === 'COMPLETED') {
+    return { ...base, text: '图谱构建中', type: 'warning', percentage: 85, inFlight: true, message: '准备写入图谱…' }
+  }
+  if (doc.parse_status === 'PARSED') {
+    return { ...base, text: '待抽取', type: 'info', percentage: 50, inFlight: true, message: '排队等待知识抽取…' }
+  }
+  return { ...base, text: '待处理', percentage: 5, inFlight: true, message: '排队等待处理…' }
+}
+
+const batchSummary = computed(() => {
+  const total = batchItems.value.length
+  let success = 0
+  let failed = 0
+  let processing = 0
+  let sum = 0
+  for (const item of batchItems.value) {
+    const stage = batchStage(item)
+    if (stage.completed) success += 1
+    else if (stage.failed) failed += 1
+    else processing += 1
+    sum += stage.percentage
+  }
+  return {
+    total, success, failed, processing,
+    percentage: total ? Math.round(sum / total) : 0,
+  }
+})
+
+function canRetryBatchItem(item) {
+  const stage = batchStage(item)
+  return !!item.document_id && stage.failed && !item.retrying && !item.uploading
+}
+
+function isDocumentFailed(row) {
+  if (!row || row.is_placeholder) return false
+  return row.parse_status === 'FAILED' || row.extract_status === 'FAILED' || docGraphStatus(row) === 'FAILED'
 }
 
 async function loadDocuments() {
@@ -1630,17 +1828,25 @@ async function loadDocuments() {
 // ===================== 解析/抽取进度自动刷新（驱动下方进度条实时显示） =====================
 let docPollTimer = null
 const DOC_POLL_INTERVAL = 3000
-const DOC_POLL_TIMEOUT = 10 * 60 * 1000
+const DOC_POLL_TIMEOUT = 30 * 60 * 1000
 let docPollStartedAt = 0
 
+// 文档是否仍在处理中。失败/完成都是终态，避免解析失败的文档因 extract_status
+// 仍是 PENDING 而让轮询永远停不下来。
+function docIsInFlight(d) {
+  if (d.is_placeholder) return true
+  const graph = docGraphStatus(d)
+  if (d.parse_status === 'FAILED' || d.extract_status === 'FAILED' || graph === 'FAILED') return false
+  if (graph === 'COMPLETED') return false
+  return (
+    ['UPLOADED', 'PARSING'].includes(d.parse_status) ||
+    ['PENDING', 'EXTRACTING'].includes(d.extract_status) ||
+    graph === 'BUILDING'
+  )
+}
+
 // 存在待处理/处理中的文档时才需要轮询（图谱生成进度查看）
-const hasInFlightDoc = computed(() =>
-  documents.value.some(
-    (d) =>
-      ['UPLOADED', 'PARSING'].includes(d.parse_status) ||
-      ['PENDING', 'EXTRACTING'].includes(d.extract_status),
-  ),
-)
+const hasInFlightDoc = computed(() => documents.value.some(docIsInFlight))
 
 function stopDocPolling() {
   if (docPollTimer) {
@@ -1709,18 +1915,66 @@ async function pollDocuments() {
       }
     }
     documents.value = [...heads, ...list.filter((r) => !claimed.has(r.doc_id))]
+    // 网络超时/页面刷新后，按「文件名 + 字节数」把本地批次记录认领回后端真实 document_id
+    recoverBatchItemsFromDocuments(list)
     for (const d of list) {
-      const key = `${d.parse_status}|${d.extract_status}`
-      if (prev.get(d.doc_id) && prev.get(d.doc_id) !== key) {
-        if (d.extract_status === 'COMPLETED') {
-          ElMessage.success(`「${d.file_name}」知识图谱构建完成`)
-        } else if (d.parse_status === 'FAILED' || d.extract_status === 'FAILED') {
-          ElMessage.error(`「${d.file_name}」处理失败，请检查文件后重试`)
-        }
+      const key = `${d.parse_status}|${d.extract_status}|${docGraphStatus(d)}`
+      const oldKey = prev.get(d.doc_id)
+      if (!oldKey || oldKey === key) continue
+      const oldGraph = oldKey.split('|')[2]
+      const graph = docGraphStatus(d)
+      if (graph === 'COMPLETED' && oldGraph !== 'COMPLETED') {
+        ElMessage.success(`「${d.file_name}」知识图谱构建完成`)
+      } else if (
+        (d.parse_status === 'FAILED' || d.extract_status === 'FAILED' || graph === 'FAILED') &&
+        !oldKey.includes('FAILED')
+      ) {
+        ElMessage.error(`「${d.file_name}」处理失败：${d.error_message || '请检查文件后重试'}`)
       }
     }
   } catch {
     /* 轮询失败静默，下一轮自动重试 */
+  }
+}
+
+/**
+ * 把本地批次记录与后端文档列表对上号（只按文件名 + 字节数，且一文档只认领一次）。
+ * 用于两种场景：上传请求超时但后端已建档；页面刷新后恢复批次面板的真实状态。
+ */
+function recoverBatchItemsFromDocuments(list = documents.value, { includeFailed = false } = {}) {
+  const claimed = new Set(
+    batchItems.value.filter((i) => i.document_id).map((i) => String(i.document_id)),
+  )
+  let changed = false
+  for (const item of batchItems.value) {
+    if (item.document_id) continue
+    if (item.upload_failed && !includeFailed) continue
+    const match = list.find((d) => !claimed.has(String(d.doc_id)) && isSameDocument(d, item))
+    if (!match) continue
+    item.document_id = match.doc_id
+    item.upload_failed = false
+    item.error = ''
+    claimed.add(String(match.doc_id))
+    changed = true
+  }
+  if (changed) {
+    batchItems.value = [...batchItems.value]
+    persistBatchItems()
+  }
+}
+
+/** 页面刷新/关闭后恢复出的批次记录：没有 document_id 说明上传没走完，标为可重新选择的失败项 */
+function markInterruptedBatchItems() {
+  let changed = false
+  for (const item of batchItems.value) {
+    if (item.document_id || item.upload_failed) continue
+    item.upload_failed = true
+    item.error = '上传过程已中断（页面刷新或关闭），请重新选择文件'
+    changed = true
+  }
+  if (changed) {
+    batchItems.value = [...batchItems.value]
+    persistBatchItems()
   }
 }
 
@@ -1739,61 +1993,167 @@ watch(activeTab, (tab) => {
   }
 })
 
-async function doUpload() {
-  if (!selectedFile.value) return
+async function doBatchUpload() {
+  if (uploading.value) return
   if (!currentCourseId.value) {
     ElMessage.warning('请先选择课程')
     return
   }
-  uploading.value = true
-  uploadResult.value = null
-  uploadError.value = ''
-
-  // 后端为同步处理（解析+抽取耗时较长），请求返回前前端拿不到 document_id。
-  // 先插入一行本地占位行占住列表顶部，避免点下上传后到后端建档之间进度条一片空白；
-  // 后端建档（解析之前）后，pollDocuments 会用真实行把这一行顶替掉，因此不会出现两行。
-  const placeholderId = `local-${Date.now()}`
-  const placeholder = {
-    doc_id: placeholderId,
-    file_name: selectedFile.value.name,
-    file_type: (selectedFile.value.name.split('.').pop() || '').toUpperCase(),
-    file_size: selectedFile.value.size,
-    parse_status: 'PARSING',
-    extract_status: 'PENDING',
-    entity_count: null,
-    relation_count: null,
-    created_at: new Date().toISOString(),
-    local_stage: 'PARSING',
-    is_placeholder: true,
+  const rawFiles = uploadFileList.value.map((f) => f.raw).filter(Boolean)
+  if (!rawFiles.length) {
+    ElMessage.warning('请先选择要上传的文件')
+    return
   }
-  documents.value = [placeholder, ...documents.value]
 
-  // 处理期间把占位行进度从「解析中」推进到「抽取中」，让进度条持续走动
-  const stageTimer = setTimeout(() => {
-    documents.value = documents.value.map((d) =>
-      d.doc_id === placeholderId ? { ...d, local_stage: 'EXTRACTING' } : d,
-    )
-  }, 8000)
+  uploading.value = true
+  const now = Date.now()
+  const validFiles = []
+  const validItems = []
+  const items = []
+  const allowedExts = ['.pdf', '.txt', '.docx', '.md']
+
+  // 前端先按后端同一套规则做一次快速校验：格式/空文件/50MB；
+  // 不合法文件不发送，直接以失败状态展示，避免白传大文件。
+  for (const file of rawFiles) {
+    const ext = `.${(file.name.split('.').pop() || '').toLowerCase()}`
+    const item = {
+      uid: `batch-${now}-${items.length}-${file.name}`,
+      file_name: file.name,
+      file_size: file.size,
+      document_id: null,
+      uploading: false,
+      upload_failed: false,
+      duplicate: false,
+      error: '',
+      retrying: false,
+      created_at: new Date().toISOString(),
+    }
+    items.push(item)
+    if (!allowedExts.includes(ext)) {
+      item.upload_failed = true
+      item.error = `文件格式不支持，仅支持 PDF/TXT/DOCX/MD，收到: ${ext || '无扩展名'}`
+    } else if (!file.size) {
+      item.upload_failed = true
+      item.error = '文件为空'
+    } else if (file.size > MAX_UPLOAD_BYTES) {
+      item.upload_failed = true
+      item.error = '文件大小超限，最大 50MB'
+    } else {
+      item.uploading = true
+      validFiles.push(file)
+      validItems.push(item)
+    }
+  }
+
+  // 新批次放在最上面；保留最近 50 条，避免 localStorage 无限增长
+  batchItems.value = [...items, ...batchItems.value].slice(0, 50)
+  uploadFileList.value = []
+
+  if (!validFiles.length) {
+    uploading.value = false
+    uploadFileList.value = []
+    ElMessage.error('没有可上传的文件，请查看文件列表中的失败原因')
+    persistBatchItems()
+    return
+  }
+
+  const formData = new FormData()
+  for (const file of validFiles) formData.append('files', file)
 
   try {
-    const formData = new FormData()
-    formData.append('file', selectedFile.value)
-    // 上传到当前课程：只传 course_id，不再传 course_name / 自动建课
-    const result = await api.uploadCourse(formData, currentCourseId.value)
-    uploadResult.value = result
-    ElMessage.success('知识图谱构建完成')
-    // 兜底清掉占位行：轮询通常早已用真实行把它顶替掉（见 pollDocuments），
-    // 这里再滤一次以覆盖「处理极快、全程没轮询过」的情况；若仍有进行中任务则由轮询继续驱动进度
-    documents.value = documents.value.filter((d) => d.doc_id !== placeholderId)
+    const result = await api.uploadDocumentsBatch(formData, currentCourseId.value)
+    const results = result?.items || []
+    // 后端按提交顺序逐个返回；有效文件与 validItems 一一对应
+    validItems.forEach((item, index) => {
+      const r = results[index]
+      item.uploading = false
+      if (!r) {
+        item.upload_failed = true
+        item.error = '后端未返回该文件的处理结果'
+      } else if (r.ok) {
+        item.document_id = r.document_id
+        item.duplicate = !!r.duplicate
+        item.error = r.duplicate ? (r.message || '相同文件已存在，已跳过') : ''
+      } else {
+        item.upload_failed = true
+        item.error = r.message || '上传失败'
+      }
+    })
+    const accepted = validItems.filter((i) => i.document_id).length
+    const failedCount = items.filter((i) => i.upload_failed).length
+    if (accepted) ElMessage.success(`已接收 ${accepted} 个文件，后台正在逐篇构建知识图谱`)
+    if (failedCount) ElMessage.warning(`${failedCount} 个文件未能进入处理队列，请查看失败原因`)
+
+    await loadDocuments()
+    recoverBatchItemsFromDocuments(documents.value)
+    if (hasInFlightDoc.value) startDocPolling()
+  } catch (e) {
+    // 网络超时/断网不等于后端没收到：先回读文档列表，按文件名+大小认领已建档的记录，
+    // 能认领的继续跟踪真实进度，认领不到的才标记失败。
+    await loadDocuments()
+    recoverBatchItemsFromDocuments(documents.value, { includeFailed: true })
+    const unresolved = validItems.filter((i) => !i.document_id)
+    unresolved.forEach((item) => {
+      item.uploading = false
+      item.upload_failed = true
+      item.error = e.message || '上传失败'
+    })
+    if (unresolved.length) {
+      ElMessage.error(`上传失败：${e.message}`)
+    } else {
+      ElMessage.warning('上传请求超时，但后端已接收文件，正在继续跟踪处理进度')
+    }
+    if (hasInFlightDoc.value) startDocPolling()
+  } finally {
+    uploading.value = false
+    batchItems.value = [...batchItems.value]
+    persistBatchItems()
+  }
+}
+
+async function retryBatchItem(item) {
+  if (!item?.document_id || item.retrying) return
+  item.retrying = true
+  try {
+    await api.retryDocument(item.document_id)
+    item.upload_failed = false
+    item.error = ''
+    ElMessage.success(`「${item.file_name}」已重新进入处理队列`)
     await loadDocuments()
     if (hasInFlightDoc.value) startDocPolling()
   } catch (e) {
-    documents.value = documents.value.filter((d) => d.doc_id !== placeholderId)
-    uploadError.value = e.message || '上传失败'
-    ElMessage.error(`上传失败：${e.message}`)
+    item.error = e.message || '重试失败'
+    ElMessage.error(`「${item.file_name}」重试失败：${item.error}`)
   } finally {
-    clearTimeout(stageTimer)
-    uploading.value = false
+    item.retrying = false
+    batchItems.value = [...batchItems.value]
+    persistBatchItems()
+  }
+}
+
+async function retryDocumentRow(row) {
+  if (!row?.doc_id || row.retrying) return
+  row.retrying = true
+  try {
+    await api.retryDocument(row.doc_id)
+    ElMessage.success(`「${row.file_name}」已重新进入处理队列`)
+    await loadDocuments()
+    if (hasInFlightDoc.value) startDocPolling()
+  } catch (e) {
+    ElMessage.error(`重试失败：${e.message}`)
+  } finally {
+    row.retrying = false
+  }
+}
+
+function clearBatchItems() {
+  batchItems.value = []
+  if (currentCourseId.value) {
+    try {
+      localStorage.removeItem(batchStorageKey(currentCourseId.value))
+    } catch {
+      /* ignore */
+    }
   }
 }
 
@@ -2599,10 +2959,19 @@ watch(
   { immediate: true }
 )
 
-// 课程上下文变化 → 加载文档列表
-watch(currentCourseId, (cid) => {
-  if (cid) loadDocuments()
-  else documents.value = []
+// 课程上下文变化 → 加载文档列表 + 该课程的批量上传记录
+watch(currentCourseId, async (cid) => {
+  if (!cid) {
+    documents.value = []
+    batchItems.value = []
+    stopDocPolling()
+    return
+  }
+  // 页面刷新/切换课程后从 localStorage 恢复批次面板；真实状态仍由后端文档列表决定
+  loadBatchItemsForCourse(cid)
+  await loadDocuments()
+  if (!uploading.value) markInterruptedBatchItems()
+  if (hasInFlightDoc.value) startDocPolling()
 })
 
 // (课程, 文档) 变了 → 编辑模式下的「可编辑知识点列表」跟着换。
@@ -3482,35 +3851,43 @@ function extractStatusType(s) {
 function extractStatusText(s) {
   return { PENDING: '待抽取', EXTRACTING: '抽取中', COMPLETED: '已完成', FAILED: '抽取失败' }[s] || s
 }
+function graphStatusType(row) {
+  const s = docGraphStatus(row)
+  return s === 'COMPLETED' ? 'success' : s === 'FAILED' ? 'danger' : s === 'BUILDING' ? 'warning' : 'info'
+}
+function graphStatusText(row) {
+  const s = docGraphStatus(row)
+  return { PENDING: '待构建', BUILDING: '构建中', COMPLETED: '已入库', FAILED: '构建失败' }[s] || s
+}
 
-// 图谱生成进度百分比：排队 5% → 解析中 30% → 已解析 50% → 抽取中 75% → 完成 100%
+// 图谱生成进度百分比：排队 5% → 解析中 30% → 已解析 50% → 抽取中 75% → 图谱入库中 90% → 完成 100%
 function docProgress(doc) {
+  const graph = docGraphStatus(doc)
   if (doc.parse_status === 'FAILED') return 30
   if (doc.extract_status === 'FAILED') return 75
-  if (doc.extract_status === 'COMPLETED') return 100
+  if (graph === 'FAILED') return 90
+  if (graph === 'COMPLETED') return 100
   // 上传请求挂起期间的本地占位行：按阶段推进进度
   if (doc.local_stage === 'UPLOADING') return 15
   if (doc.local_stage === 'PARSING') return 30
   if (doc.local_stage === 'EXTRACTING') return 75
   if (doc.extract_status === 'EXTRACTING') return 75
+  if (graph === 'BUILDING') return 90
   if (doc.parse_status === 'PARSED') return 50
   if (doc.parse_status === 'PARSING') return 30
   return 5
 }
 
 function docProgressStatus(doc) {
-  if (doc.parse_status === 'FAILED' || doc.extract_status === 'FAILED') return 'exception'
-  if (doc.extract_status === 'COMPLETED') return 'success'
+  const graph = docGraphStatus(doc)
+  if (doc.parse_status === 'FAILED' || doc.extract_status === 'FAILED' || graph === 'FAILED') return 'exception'
+  if (graph === 'COMPLETED') return 'success'
   return ''
 }
 
 // 是否处于处理中（进度条条纹流动动画依据）
 function isDocInFlight(doc) {
-  return (
-    ['UPLOADING', 'PARSING', 'EXTRACTING'].includes(doc.local_stage) ||
-    ['UPLOADED', 'PARSING'].includes(doc.parse_status) ||
-    ['PENDING', 'EXTRACTING'].includes(doc.extract_status)
-  )
+  return docIsInFlight(doc)
 }
 </script>
 
@@ -3574,6 +3951,41 @@ function isDocInFlight(doc) {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-3);
+}
+.batch-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-3) 0 var(--space-2);
+  flex-wrap: wrap;
+}
+.batch-summary__stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-label);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.batch-summary__stats .is-success b { color: var(--el-color-success); }
+.batch-summary__stats .is-danger b { color: var(--el-color-danger); }
+.batch-summary__stats .is-muted b { color: var(--color-text-secondary); }
+.batch-summary__progress {
+  flex: 1;
+  min-width: 220px;
+}
+.batch-table {
+  margin-top: var(--space-2);
+}
+.batch-error {
+  color: var(--el-color-danger);
+}
+.batch-ok {
+  color: var(--el-color-success);
+}
+.is-muted {
+  color: var(--color-text-secondary);
 }
 .doc-table :deep(.el-table__header th) {
   background: var(--color-bg-soft);

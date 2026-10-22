@@ -21,6 +21,15 @@ export const api = {
     if (courseId != null && courseId !== '') formData.append('course_id', courseId)
     return request.post('/api/v1/documents/upload', formData, { timeout: 600000 })
   },
+  /** 批量上传文档：后端立即返回每个文件的 document_id，解析/抽取/建图后台执行 */
+  uploadDocumentsBatch: (formData, courseId) => {
+    if (courseId != null && courseId !== '') formData.append('course_id', courseId)
+    // 后端只做校验/落盘/入队，但多文件上传本身的传输时间取决于网络，超时放宽到 10 分钟；
+    // 前端另有「超时后回读文档列表按文件名+大小认领」的兜底。
+    return request.post('/api/v1/documents/batch-upload', formData, { timeout: 600000 })
+  },
+  /** 重试单篇失败文档（复用已保存文件，不重复上传） */
+  retryDocument: (docId) => request.post(`/api/v1/documents/${docId}/retry`),
 
   // ---- 文档管理（对齐后端 /api/v1/documents CRUD） ----
   /** 某课程文档列表 */

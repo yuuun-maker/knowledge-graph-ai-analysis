@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="1900" viewBox="0 0 1300 1900" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1300" height="1900" fill="#FFFFFF"/>
+<defs><marker id="mk-open-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#7048E8" stroke-width="1.8" stroke-linejoin="round"/></marker><marker id="mk-open-FA8C16" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#FA8C16" stroke-width="1.8" stroke-linejoin="round"/></marker></defs>
+<text x="650.0" y="92.0" font-size="46.0" text-anchor="middle" fill="#161A2E" font-weight="bold">融合批次 / 候选 / 映射状态图</text>
+<rect x="60.0" y="150.0" width="1180.0" height="600.0" rx="14.0" fill="#F7F8FC" stroke="#BFC4D2" stroke-width="2.0"/>
+<rect x="78.0" y="166.0" width="310.7" height="40.0" rx="8.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="2.2"/>
+<text x="96.0" y="194.0" font-size="24.0" text-anchor="start" fill="#FA8C16" font-weight="bold">融合批次 t_fusion_run</text>
+<rect x="60.0" y="790.0" width="1180.0" height="560.0" rx="14.0" fill="#F7F8FC" stroke="#BFC4D2" stroke-width="2.0"/>
+<rect x="78.0" y="806.0" width="391.4" height="40.0" rx="8.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="2.2"/>
+<text x="96.0" y="834.0" font-size="24.0" text-anchor="start" fill="#FA8C16" font-weight="bold">融合候选 t_fusion_candidate</text>
+<rect x="60.0" y="1390.0" width="1180.0" height="380.0" rx="14.0" fill="#F7F8FC" stroke="#BFC4D2" stroke-width="2.0"/>
+<rect x="78.0" y="1406.0" width="310.7" height="40.0" rx="8.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="2.2"/>
+<text x="96.0" y="1434.0" font-size="24.0" text-anchor="start" fill="#FA8C16" font-weight="bold">融合映射 t_fusion_map</text>
+<polyline points="240.0,259.0 240.0,289.5 195.0,289.5 195.0,320.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="195.0,416.0 195.0,443.0 210.5,443.0 210.5,470.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="285.0,368.0 400.0,368.0 400.0,470.0 470.0,470.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="210.5,566.0 210.5,593.0 195.0,593.0 195.0,620.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="240.0,909.0 240.0,927.0 195.0,927.0 195.0,945.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="195.0,1041.0 195.0,1075.5 202.0,1075.5 202.0,1110.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="285.0,1015.0 540.0,1015.0 540.0,1110.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="285.0,983.0 940.0,983.0 940.0,1240.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="180.0,1206.0 180.0,1264.0 224.0,1264.0 224.0,1206.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="240.0,1509.0 240.0,1529.5 195.0,1529.5 195.0,1550.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="285.0,1598.0 540.0,1598.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="540.0,1646.0 540.0,1710.0 195.0,1710.0 195.0,1646.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<circle cx="240.0" cy="240.0" r="19.0" fill="#161A2E"/>
+<rect x="105.0" y="320.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="195.0" y="362.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">RUNNING</text>
+<text x="195.0" y="394.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">执行中</text>
+<rect x="105.0" y="470.0" width="211.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="210.5" y="512.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">COMPLETED</text>
+<text x="210.5" y="544.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已完成</text>
+<rect x="470.0" y="470.0" width="180.0" height="96.0" rx="20.0" fill="#FBEAF9" stroke="#C026D3" stroke-width="3.2"/>
+<text x="560.0" y="512.0" font-size="30.0" text-anchor="middle" fill="#C026D3" font-weight="bold">FAILED</text>
+<text x="560.0" y="544.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">失败</text>
+<rect x="105.0" y="620.0" width="180.0" height="96.0" rx="20.0" fill="#FBEAF9" stroke="#C026D3" stroke-width="3.2"/>
+<text x="195.0" y="662.0" font-size="30.0" text-anchor="middle" fill="#C026D3" font-weight="bold">REVOKED</text>
+<text x="195.0" y="694.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已撤销</text>
+<circle cx="240.0" cy="890.0" r="19.0" fill="#161A2E"/>
+<rect x="105.0" y="945.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="195.0" y="987.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">PENDING</text>
+<text x="195.0" y="1019.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">待审核</text>
+<rect x="105.0" y="1110.0" width="194.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="202.0" y="1152.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">ACCEPTED</text>
+<text x="202.0" y="1184.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已通过</text>
+<rect x="470.0" y="1110.0" width="194.0" height="96.0" rx="20.0" fill="#FBEAF9" stroke="#C026D3" stroke-width="3.2"/>
+<text x="567.0" y="1152.0" font-size="30.0" text-anchor="middle" fill="#C026D3" font-weight="bold">REJECTED</text>
+<text x="567.0" y="1184.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已驳回</text>
+<rect x="860.0" y="1240.0" width="194.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="957.0" y="1282.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">DEFERRED</text>
+<text x="957.0" y="1314.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">暂缓</text>
+<circle cx="240.0" cy="1490.0" r="19.0" fill="#161A2E"/>
+<rect x="105.0" y="1550.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="195.0" y="1592.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">ACTIVE</text>
+<text x="195.0" y="1624.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">生效</text>
+<rect x="540.0" y="1550.0" width="180.0" height="96.0" rx="20.0" fill="#FBEAF9" stroke="#C026D3" stroke-width="3.2"/>
+<text x="630.0" y="1592.0" font-size="30.0" text-anchor="middle" fill="#C026D3" font-weight="bold">REVOKED</text>
+<text x="630.0" y="1624.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已撤销</text>
+<rect x="223.5" y="274.3" width="295.7" height="30.4" fill="#FFFFFF"/>
+<text x="371.3" y="296.9" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">扫描 persist / 应用开始</text>
+<rect x="208.8" y="427.8" width="62.0" height="30.4" fill="#FFFFFF"/>
+<text x="239.8" y="450.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">成功</text>
+<rect x="406.0" y="367.0" width="146.6" height="30.4" fill="#FFFFFF"/>
+<text x="479.3" y="389.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">异常 / 回滚</text>
+<rect x="208.8" y="577.8" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="262.8" y="600.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">整批撤销</text>
+<rect x="223.5" y="911.8" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="277.5" y="934.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">候选落库</text>
+<rect x="204.5" y="1060.3" width="192.6" height="30.4" fill="#FFFFFF"/>
+<text x="300.8" y="1082.9" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">审核通过 / 应用</text>
+<rect x="366.0" y="972.6" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="420.0" y="995.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">审核驳回</text>
+<rect x="436.4" y="934.6" width="62.0" height="30.4" fill="#FFFFFF"/>
+<text x="467.4" y="957.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">暂缓</text>
+<rect x="79.0" y="1276.0" width="246.0" height="30.4" fill="#FFFFFF"/>
+<text x="202.0" y="1298.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">再次应用（状态保持）</text>
+<rect x="223.5" y="1514.3" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="277.5" y="1536.9" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">映射写入</text>
+<rect x="316.2" y="1555.6" width="192.6" height="30.4" fill="#FFFFFF"/>
+<text x="412.5" y="1578.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">撤销 / 整批撤销</text>
+<rect x="219.0" y="1726.0" width="177.0" height="30.4" fill="#FFFFFF"/>
+<text x="307.5" y="1748.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">重新应用同一源</text>
+<text x="650.0" y="1866.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">候选按文档唯一；审核结论不被后续扫描覆盖；映射只软撤销（REVOKED），再次应用同一源可恢复 ACTIVE。</text>
+</svg>

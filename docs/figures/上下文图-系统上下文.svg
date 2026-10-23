@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="980" viewBox="0 0 1800 980" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1800" height="980" fill="#FFFFFF"/>
+<defs><marker id="mk-open-2F54EB" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#2F54EB" stroke-width="1.8" stroke-linejoin="round"/></marker><marker id="mk-open-52C41A" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#52C41A" stroke-width="1.8" stroke-linejoin="round"/></marker><marker id="mk-open-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#7048E8" stroke-width="1.8" stroke-linejoin="round"/></marker><marker id="mk-open-08979C" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#08979C" stroke-width="1.8" stroke-linejoin="round"/></marker><marker id="mk-open-FA8C16" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#FA8C16" stroke-width="1.8" stroke-linejoin="round"/></marker></defs>
+<text x="900.0" y="92.0" font-size="46.0" text-anchor="middle" fill="#161A2E" font-weight="bold">系统上下文图</text>
+<polyline points="280.0,288.0 390.0,288.0 390.0,350.0 500.0,350.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-2F54EB)"/>
+<polyline points="280.0,438.0 350.0,438.0 350.0,405.0 500.0,405.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-2F54EB)"/>
+<polyline points="280.0,588.0 430.0,588.0 430.0,460.0 500.0,460.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-2F54EB)"/>
+<polyline points="940.0,330.0 1000.0,330.0 1000.0,213.0 1400.0,213.0" fill="none" stroke="#52C41A" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-start="url(#mk-open-52C41A)" marker-end="url(#mk-open-52C41A)"/>
+<polyline points="940.0,360.0 1040.0,360.0 1040.0,353.0 1400.0,353.0" fill="none" stroke="#52C41A" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-start="url(#mk-open-52C41A)" marker-end="url(#mk-open-52C41A)"/>
+<polyline points="940.0,420.0 1080.0,420.0 1080.0,498.0 1400.0,498.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-start="url(#mk-open-7048E8)" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="940.0,460.0 1120.0,460.0 1120.0,648.0 1400.0,648.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-start="url(#mk-open-08979C)" marker-end="url(#mk-open-08979C)"/>
+<polyline points="940.0,490.0 1160.0,490.0 1160.0,798.0 1400.0,798.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-start="url(#mk-open-FA8C16)" marker-end="url(#mk-open-FA8C16)"/>
+<rect x="70.0" y="250.0" width="210.0" height="76.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="175.0" y="299.0" font-size="30.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">学生</text>
+<rect x="70.0" y="400.0" width="210.0" height="76.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="175.0" y="449.0" font-size="30.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">教师</text>
+<rect x="70.0" y="550.0" width="210.0" height="76.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="175.0" y="599.0" font-size="30.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">平台管理员</text>
+<rect x="500.0" y="300.0" width="440.0" height="210.0" rx="12.0" fill="#F4EEFD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="720.0" y="399.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">面向课程学习的</text>
+<text x="720.0" y="431.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">智能问答与知识检索系统</text>
+<rect x="1400.0" y="170.0" width="340.0" height="86.0" rx="12.0" fill="#FFFFFF" stroke="#52C41A" stroke-width="3.2"/>
+<text x="1570.0" y="224.0" font-size="30.0" text-anchor="middle" fill="#52C41A" font-weight="bold">DeepSeek Chat API</text>
+<rect x="1400.0" y="310.0" width="340.0" height="86.0" rx="12.0" fill="#FFFFFF" stroke="#52C41A" stroke-width="3.2"/>
+<text x="1570.0" y="364.0" font-size="30.0" text-anchor="middle" fill="#52C41A" font-weight="bold">SiliconFlow BGE-M3</text>
+<path d="M1400.0,463.0 L1400.0,533.0 A170.0,13.0 0 0 0 1740.0,533.0 L1740.0,463.0 A170.0,13.0 0 0 0 1400.0,463.0 Z" fill="tint_cyan" stroke="#7048E8" stroke-width="3.2"/>
+<path d="M1400.0,463.0 A170.0,13.0 0 0 1 1740.0,463.0" fill="none" stroke="#7048E8" stroke-width="3.2"/>
+<path d="M1400.0,533.0 A170.0,13.0 0 0 0 1740.0,533.0" fill="none" stroke="#7048E8" stroke-width="3.2"/>
+<text x="1570.0" y="509.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">Neo4j</text>
+<path d="M1400.0,613.0 L1400.0,683.0 A170.0,13.0 0 0 0 1740.0,683.0 L1740.0,613.0 A170.0,13.0 0 0 0 1400.0,613.0 Z" fill="tint_cyan" stroke="#08979C" stroke-width="3.2"/>
+<path d="M1400.0,613.0 A170.0,13.0 0 0 1 1740.0,613.0" fill="none" stroke="#08979C" stroke-width="3.2"/>
+<path d="M1400.0,683.0 A170.0,13.0 0 0 0 1740.0,683.0" fill="none" stroke="#08979C" stroke-width="3.2"/>
+<text x="1570.0" y="659.0" font-size="30.0" text-anchor="middle" fill="#08979C" font-weight="bold">SQLite app.db</text>
+<path d="M1400.0,763.0 L1400.0,833.0 A170.0,13.0 0 0 0 1740.0,833.0 L1740.0,763.0 A170.0,13.0 0 0 0 1400.0,763.0 Z" fill="tint_cyan" stroke="#FA8C16" stroke-width="3.2"/>
+<path d="M1400.0,763.0 A170.0,13.0 0 0 1 1740.0,763.0" fill="none" stroke="#FA8C16" stroke-width="3.2"/>
+<path d="M1400.0,833.0 A170.0,13.0 0 0 0 1740.0,833.0" fill="none" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="1570.0" y="809.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">本地文件存储</text>
+<rect x="1203.8" y="144.6" width="172.4" height="60.7" fill="#FFFFFF"/>
+<text x="1290.0" y="167.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">抽取 / 问答 /</text>
+<text x="1290.0" y="197.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">融合消歧</text>
+<rect x="1213.0" y="284.6" width="154.0" height="60.7" fill="#FFFFFF"/>
+<text x="1290.0" y="307.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">问题与知识点</text>
+<text x="1290.0" y="337.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">向量化</text>
+<rect x="1213.0" y="439.8" width="154.0" height="30.4" fill="#FFFFFF"/>
+<text x="1290.0" y="462.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">知识图谱读写</text>
+<rect x="1223.1" y="579.6" width="133.8" height="60.7" fill="#FFFFFF"/>
+<text x="1290.0" y="602.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">业务数据 /</text>
+<text x="1290.0" y="632.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">向量缓存</text>
+<rect x="1213.0" y="739.8" width="154.0" height="30.4" fill="#FFFFFF"/>
+<text x="1290.0" y="762.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">课程文档文件</text>
+<text x="900.0" y="946.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">实线双向箭头表示系统与外部系统 / 设施的交互内容；各外部依赖的失败影响与降级策略见 §1.7 表与 §5.4。</text>
+</svg>

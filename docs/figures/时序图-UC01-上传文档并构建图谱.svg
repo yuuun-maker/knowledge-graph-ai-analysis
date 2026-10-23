@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1869" height="1586" viewBox="0 0 1869 1586" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1869" height="1586" fill="#FFFFFF"/>
+<defs><marker id="mk-solid-161A2E" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#161A2E"/></marker><marker id="mk-open-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#7048E8" stroke-width="1.8" stroke-linejoin="round"/></marker></defs>
+<text x="934.5" y="75.5" font-size="36.0" text-anchor="middle" fill="#161A2E" font-weight="bold">UC-01 教师上传课程文档并构建知识图谱 · 时序图</text>
+<rect x="46.0" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.0"/>
+<text x="121.0" y="154.3" font-size="22.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">教师</text>
+<polyline points="121.0,178.4 121.0,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="256.0" y="114.4" width="183.3" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#08979C" stroke-width="3.0"/>
+<text x="347.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#08979C" font-weight="bold">前端（Vue3）</text>
+<polyline points="347.6,178.4 347.6,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="499.3" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.0"/>
+<text x="574.3" y="154.3" font-size="22.0" text-anchor="middle" fill="#7048E8" font-weight="bold">文档 API</text>
+<polyline points="574.3,178.4 574.3,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="709.3" y="114.4" width="156.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#C026D3" stroke-width="3.0"/>
+<text x="787.3" y="154.3" font-size="22.0" text-anchor="middle" fill="#C026D3" font-weight="bold">文档解析器</text>
+<polyline points="787.3,178.4 787.3,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="925.3" y="114.4" width="267.8" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#C026D3" stroke-width="3.0"/>
+<text x="1059.2" y="154.3" font-size="22.0" text-anchor="middle" fill="#C026D3" font-weight="bold">KnowledgeExtractor</text>
+<polyline points="1059.2,178.4 1059.2,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1253.0" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#52C41A" stroke-width="3.0"/>
+<text x="1328.0" y="154.3" font-size="22.0" text-anchor="middle" fill="#52C41A" font-weight="bold">DeepSeek</text>
+<polyline points="1328.0,178.4 1328.0,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1463.0" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.0"/>
+<text x="1538.0" y="154.3" font-size="22.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">Neo4j</text>
+<polyline points="1538.0,178.4 1538.0,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1673.0" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.0"/>
+<text x="1748.0" y="154.3" font-size="22.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">SQLite</text>
+<polyline points="1748.0,178.4 1748.0,1510.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1051.2" y="838.4" width="16.0" height="232.0" rx="3.0" fill="#EFEBFF" stroke="#7048E8" stroke-width="2.0"/>
+<rect x="566.3" y="368.4" width="16.0" height="958.0" rx="3.0" fill="#EFEBFF" stroke="#7048E8" stroke-width="2.0"/>
+<polyline points="121.0,252.4 347.6,252.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="107.3" y="218.2" width="254.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="243.6" font-size="20.0" text-anchor="middle" fill="#161A2E">选择课程与文件，提交上传</text>
+<polyline points="347.6,322.4 574.3,322.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="281.6" y="264.2" width="358.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="461.0" y="289.6" font-size="20.0" text-anchor="middle" fill="#161A2E">POST /api/v1/documents/upload（</text>
+<rect x="354.4" y="288.2" width="213.2" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="461.0" y="313.6" font-size="20.0" text-anchor="middle" fill="#161A2E">course_id + file）</text>
+<polyline points="574.3,452.4 640.3,452.4 640.3,478.4 574.3,478.4" fill="none" stroke="#161A2E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<text x="652.3" y="458.4" font-size="20.0" text-anchor="start" fill="#161A2E">校验登录态、教师角色与课程管理权限（</text>
+<text x="652.3" y="482.4" font-size="20.0" text-anchor="start" fill="#161A2E">permissions）</text>
+<polyline points="574.3,536.4 640.3,536.4 640.3,562.4 574.3,562.4" fill="none" stroke="#161A2E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<text x="652.3" y="542.4" font-size="20.0" text-anchor="start" fill="#161A2E">校验扩展名 / 非空 / ≤50MB，清洗文</text>
+<text x="652.3" y="566.4" font-size="20.0" text-anchor="start" fill="#161A2E">件名为 basename</text>
+<polyline points="574.3,606.4 1748.0,606.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="945.0" y="548.2" width="432.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1161.2" y="573.6" font-size="20.0" text-anchor="middle" fill="#161A2E">写入 t_document（parse_status=UPLOADED</text>
+<rect x="1074.2" y="572.2" width="174.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1161.2" y="597.6" font-size="20.0" text-anchor="middle" fill="#161A2E">），回填文件路径</text>
+<polyline points="574.3,652.4 787.3,652.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="472.6" y="618.2" width="416.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="680.8" y="643.6" font-size="20.0" text-anchor="middle" fill="#161A2E">解析文本：UPLOADED → PARSING → PARSED</text>
+<polyline points="787.3,722.4 574.3,722.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="470.6" y="664.2" width="420.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="680.8" y="689.6" font-size="20.0" text-anchor="middle" fill="#161A2E">纯文本；空文本 → parse_status=FAILED，</text>
+<rect x="625.8" y="688.2" width="110.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="680.8" y="713.6" font-size="20.0" text-anchor="middle" fill="#161A2E">返回 2005</text>
+<polyline points="574.3,792.4 1059.2,792.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="702.9" y="734.2" width="227.6" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="816.7" y="759.6" font-size="20.0" text-anchor="middle" fill="#161A2E">分块抽取实体 / 关系：</text>
+<rect x="669.7" y="758.2" width="294.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="816.7" y="783.6" font-size="20.0" text-anchor="middle" fill="#161A2E">extract_status=EXTRACTING</text>
+<polyline points="1059.2,884.4 1328.0,884.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="992.2" y="850.2" width="402.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1193.6" y="875.6" font-size="20.0" text-anchor="middle" fill="#161A2E">chat.completions（实体 / 关系 JSON）</text>
+<polyline points="1328.0,954.4 1059.2,954.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="1047.4" y="896.2" width="292.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1193.6" y="921.6" font-size="20.0" text-anchor="middle" fill="#161A2E">JSON 结果；异常或解析失败 →</text>
+<rect x="1119.4" y="920.2" width="148.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1193.6" y="945.6" font-size="20.0" text-anchor="middle" fill="#161A2E">result.error</text>
+<polyline points="1059.2,1024.4 574.3,1024.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="614.5" y="966.2" width="404.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="816.7" y="991.6" font-size="20.0" text-anchor="middle" fill="#161A2E">实体 / 关系列表；error → FAILED，返回</text>
+<rect x="787.3" y="990.2" width="58.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="816.7" y="1015.6" font-size="20.0" text-anchor="middle" fill="#161A2E">3003</text>
+<polyline points="574.3,1140.4 1538.0,1140.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="848.4" y="1082.2" width="415.6" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1056.2" y="1107.6" font-size="20.0" text-anchor="middle" fill="#161A2E">MERGE 知识点 / 关系（rel_type 白名单校</text>
+<rect x="1029.2" y="1106.2" width="54.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1056.2" y="1131.6" font-size="20.0" text-anchor="middle" fill="#161A2E">验）</text>
+<polyline points="1538.0,1210.4 574.3,1210.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="889.2" y="1152.2" width="334.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1056.2" y="1177.6" font-size="20.0" text-anchor="middle" fill="#161A2E">写入计数；图库异常时当前可能停留</text>
+<rect x="950.8" y="1176.2" width="210.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1056.2" y="1201.6" font-size="20.0" text-anchor="middle" fill="#161A2E">EXTRACTING（G-01）</text>
+<polyline points="574.3,1280.4 1748.0,1280.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="956.2" y="1222.2" width="410.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1161.2" y="1247.6" font-size="20.0" text-anchor="middle" fill="#161A2E">回填 entity_count / relation_count，</text>
+<rect x="1019.8" y="1246.2" width="282.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1161.2" y="1271.6" font-size="20.0" text-anchor="middle" fill="#161A2E">extract_status=COMPLETED</text>
+<polyline points="574.3,1372.4 347.6,1372.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="324.8" y="1338.2" width="272.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="461.0" y="1363.6" font-size="20.0" text-anchor="middle" fill="#161A2E">文档 id 与实体 / 关系统计</text>
+<polyline points="347.6,1418.4 121.0,1418.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="80.5" y="1384.2" width="307.6" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="1409.6" font-size="20.0" text-anchor="middle" fill="#161A2E">展示解析 / 抽取状态与图谱入口</text>
+<text x="934.5" y="1534.4" font-size="18.0" text-anchor="middle" fill="#5A5F73">替代与异常流程（1001 / 1002 / 1003 / 2005 / 3003 / 4003）见 §2.5.1 UC-01、§5.1.1。</text>
+</svg>

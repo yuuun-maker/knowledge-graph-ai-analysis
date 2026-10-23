@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1610" height="2074" viewBox="0 0 1610 2074" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1610" height="2074" fill="#FFFFFF"/>
+<defs><marker id="mk-solid-161A2E" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#161A2E"/></marker><marker id="mk-open-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#7048E8" stroke-width="1.8" stroke-linejoin="round"/></marker></defs>
+<text x="804.9" y="75.5" font-size="36.0" text-anchor="middle" fill="#161A2E" font-weight="bold">UC-03 学生按推荐路径学习并标记掌握 · 时序图</text>
+<rect x="46.0" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.0"/>
+<text x="121.0" y="154.3" font-size="22.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">学生</text>
+<polyline points="121.0,178.4 121.0,1998.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="256.0" y="114.4" width="183.3" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#08979C" stroke-width="3.0"/>
+<text x="347.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#08979C" font-weight="bold">前端（Vue3）</text>
+<polyline points="347.6,178.4 347.6,1998.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="499.3" y="114.4" width="269.5" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.0"/>
+<text x="634.0" y="154.3" font-size="22.0" text-anchor="middle" fill="#7048E8" font-weight="bold">学习 API / 路径 API</text>
+<polyline points="634.0,178.4 634.0,1998.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="828.8" y="114.4" width="230.8" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#C026D3" stroke-width="3.0"/>
+<text x="944.2" y="154.3" font-size="22.0" text-anchor="middle" fill="#C026D3" font-weight="bold">PathRecommender</text>
+<polyline points="944.2,178.4 944.2,1998.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1119.6" y="114.4" width="163.9" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.0"/>
+<text x="1201.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">Neo4j 图谱</text>
+<polyline points="1201.6,178.4 1201.6,1998.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1343.5" y="114.4" width="220.2" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.0"/>
+<text x="1453.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">SQLite 学习记录</text>
+<polyline points="1453.6,178.4 1453.6,1998.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="626.0" y="344.4" width="16.0" height="1470.0" rx="3.0" fill="#EFEBFF" stroke="#7048E8" stroke-width="2.0"/>
+<polyline points="121.0,252.4 347.6,252.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="137.3" y="218.2" width="194.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="243.6" font-size="20.0" text-anchor="middle" fill="#161A2E">打开某文档的学习页</text>
+<polyline points="347.6,298.4 634.0,298.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="321.4" y="264.2" width="338.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="289.6" font-size="20.0" text-anchor="middle" fill="#161A2E">GET /api/v1/learning/progress</text>
+<polyline points="634.0,414.4 1453.6,414.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="838.8" y="356.2" width="410.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1043.8" y="381.6" font-size="20.0" text-anchor="middle" fill="#161A2E">读取本人学习记录（唯一键：用户 + 课程 +</text>
+<rect x="996.8" y="380.2" width="94.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1043.8" y="405.6" font-size="20.0" text-anchor="middle" fill="#161A2E">知识点）</text>
+<polyline points="1453.6,460.4 634.0,460.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="966.8" y="426.2" width="154.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1043.8" y="451.6" font-size="20.0" text-anchor="middle" fill="#161A2E">已掌握记录列表</text>
+<polyline points="634.0,506.4 1201.6,506.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="810.8" y="472.2" width="214.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="917.8" y="497.6" font-size="20.0" text-anchor="middle" fill="#161A2E">统计该文档知识点总数</text>
+<polyline points="1201.6,552.4 634.0,552.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="860.8" y="518.2" width="114.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="917.8" y="543.6" font-size="20.0" text-anchor="middle" fill="#161A2E">知识点总数</text>
+<polyline points="634.0,598.4 347.6,598.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="303.4" y="564.2" width="374.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="589.6" font-size="20.0" text-anchor="middle" fill="#161A2E">总数 / 已掌握数 / 进度百分比 / 记录</text>
+<polyline points="121.0,644.4 347.6,644.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="87.3" y="610.2" width="294.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="635.6" font-size="20.0" text-anchor="middle" fill="#161A2E">点击某个知识点，查看前置知识</text>
+<polyline points="347.6,714.4 634.0,714.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="467.0" y="656.2" width="47.6" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="681.6" font-size="20.0" text-anchor="middle" fill="#161A2E">GET</text>
+<rect x="192.6" y="680.2" width="596.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="705.6" font-size="20.0" text-anchor="middle" fill="#161A2E">/api/v1/learning-path/prerequisites/{knowledge_name}</text>
+<polyline points="634.0,760.4 944.2,760.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="643.7" y="726.2" width="290.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="751.6" font-size="20.0" text-anchor="middle" fill="#161A2E">沿 PRECEDES 入边递归 ≤5 层</text>
+<polyline points="944.2,830.4 1201.6,830.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="899.9" y="772.2" width="346.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1072.9" y="797.6" font-size="20.0" text-anchor="middle" fill="#161A2E">查询前置节点（无 PRECEDES 时回退</text>
+<rect x="965.5" y="796.2" width="214.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1072.9" y="821.6" font-size="20.0" text-anchor="middle" fill="#161A2E">CONTAINS 上层概念）</text>
+<polyline points="1201.6,876.4 944.2,876.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="995.9" y="842.2" width="154.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1072.9" y="867.6" font-size="20.0" text-anchor="middle" fill="#161A2E">前置知识点列表</text>
+<polyline points="944.2,922.4 634.0,922.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="692.1" y="888.2" width="194.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="913.6" font-size="20.0" text-anchor="middle" fill="#161A2E">前置知识（含层级）</text>
+<polyline points="634.0,968.4 347.6,968.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="423.8" y="934.2" width="134.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="959.6" font-size="20.0" text-anchor="middle" fill="#161A2E">前置知识卡片</text>
+<polyline points="121.0,1014.4 347.6,1014.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="147.3" y="980.2" width="174.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="1005.6" font-size="20.0" text-anchor="middle" fill="#161A2E">点击“标记掌握”</text>
+<polyline points="347.6,1060.4 634.0,1060.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="338.2" y="1026.2" width="305.2" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="1051.6" font-size="20.0" text-anchor="middle" fill="#161A2E">POST /api/v1/learning/mark</text>
+<polyline points="634.0,1120.4 700.0,1120.4 700.0,1146.4 634.0,1146.4" fill="none" stroke="#161A2E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<text x="712.0" y="1126.4" font-size="20.0" text-anchor="start" fill="#161A2E">校验知识点属于该课程 + 文档</text>
+<polyline points="634.0,1190.4 1453.6,1190.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="830.4" y="1132.2" width="426.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1043.8" y="1157.6" font-size="20.0" text-anchor="middle" fill="#161A2E">upsert 学习记录（MASTERED，掌握度 100，</text>
+<rect x="967.6" y="1156.2" width="152.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1043.8" y="1181.6" font-size="20.0" text-anchor="middle" fill="#161A2E">来源 MANUAL）</text>
+<polyline points="1453.6,1236.4 634.0,1236.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="956.8" y="1202.2" width="174.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1043.8" y="1227.6" font-size="20.0" text-anchor="middle" fill="#161A2E">写入结果（幂等）</text>
+<polyline points="634.0,1282.4 347.6,1282.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="423.8" y="1248.2" width="134.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="1273.6" font-size="20.0" text-anchor="middle" fill="#161A2E">刷新后的进度</text>
+<polyline points="121.0,1328.4 347.6,1328.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="137.3" y="1294.2" width="194.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="1319.6" font-size="20.0" text-anchor="middle" fill="#161A2E">查看“下一步推荐”</text>
+<polyline points="347.6,1374.4 634.0,1374.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="282.2" y="1340.2" width="417.2" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="1365.6" font-size="20.0" text-anchor="middle" fill="#161A2E">POST /api/v1/learning-path/recommend</text>
+<polyline points="634.0,1444.4 944.2,1444.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="572.1" y="1386.2" width="434.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="1411.6" font-size="20.0" text-anchor="middle" fill="#161A2E">筛选“所有前置已掌握且未掌握”的后继，按前</text>
+<rect x="669.7" y="1410.2" width="238.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="1435.6" font-size="20.0" text-anchor="middle" fill="#161A2E">置数量降序，最多 10 个</text>
+<polyline points="944.2,1490.4 634.0,1490.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="622.1" y="1456.2" width="334.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="1481.6" font-size="20.0" text-anchor="middle" fill="#161A2E">推荐节点（无掌握记录时为根节点）</text>
+<polyline points="634.0,1536.4 347.6,1536.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="443.8" y="1502.2" width="94.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="1527.6" font-size="20.0" text-anchor="middle" fill="#161A2E">推荐列表</text>
+<polyline points="121.0,1582.4 347.6,1582.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="87.3" y="1548.2" width="294.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="1573.6" font-size="20.0" text-anchor="middle" fill="#161A2E">指定目标知识点，查看推荐路径</text>
+<polyline points="347.6,1652.4 634.0,1652.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="461.4" y="1594.2" width="58.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="1619.6" font-size="20.0" text-anchor="middle" fill="#161A2E">POST</text>
+<rect x="282.2" y="1618.2" width="417.2" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="1643.6" font-size="20.0" text-anchor="middle" fill="#161A2E">/api/v1/learning-path/path-to-target</text>
+<polyline points="634.0,1698.4 944.2,1698.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="572.5" y="1664.2" width="433.2" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="1689.6" font-size="20.0" text-anchor="middle" fill="#161A2E">PRECEDES 路径搜索（≤10 条边、≤5 条路径）</text>
+<polyline points="944.2,1768.4 634.0,1768.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="579.3" y="1710.2" width="419.6" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="1735.6" font-size="20.0" text-anchor="middle" fill="#161A2E">路径列表；无路径时返回目标 + RELATED_TO</text>
+<rect x="742.1" y="1734.2" width="94.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="789.1" y="1759.6" font-size="20.0" text-anchor="middle" fill="#161A2E">相关概念</text>
+<polyline points="634.0,1860.4 347.6,1860.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="407.0" y="1826.2" width="167.6" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="490.8" y="1851.6" font-size="20.0" text-anchor="middle" fill="#161A2E">路径 / 相关概念</text>
+<polyline points="347.6,1906.4 121.0,1906.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="157.3" y="1872.2" width="154.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="1897.6" font-size="20.0" text-anchor="middle" fill="#161A2E">按推荐继续学习</text>
+<text x="804.9" y="2022.4" font-size="18.0" text-anchor="middle" fill="#5A5F73">降级（A1~A5、E1~E4）见 §2.5.3 UC-03；图谱不可用时的表现见 §5.4。</text>
+</svg>

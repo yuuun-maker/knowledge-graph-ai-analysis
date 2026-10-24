@@ -3,7 +3,7 @@
 """
 import logging
 from datetime import datetime, timezone
-from typing import List, Dict
+from typing import List
 from ..core.database import db, VALID_RELATION_TYPES, RELATION_TYPE_LABELS
 from ..core.sql_database import sql_db
 from .fusion.fusion_map import load_active_mapping

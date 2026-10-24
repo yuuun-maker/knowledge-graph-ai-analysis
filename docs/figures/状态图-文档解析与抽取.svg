@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1300" viewBox="0 0 1400 1300" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1400" height="1300" fill="#FFFFFF"/>
+<defs><marker id="mk-open-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#7048E8" stroke-width="1.8" stroke-linejoin="round"/></marker></defs>
+<text x="700.0" y="92.0" font-size="46.0" text-anchor="middle" fill="#161A2E" font-weight="bold">文档解析与抽取状态图</text>
+<polyline points="520.0,219.0 520.0,249.5 492.0,249.5 492.0,280.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="492.0,376.0 492.0,413.0 485.0,413.0 485.0,450.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="485.0,546.0 485.0,620.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="485.0,716.0 485.0,753.0 509.0,753.0 509.0,790.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="509.0,886.0 509.0,923.0 500.5,923.0 500.5,960.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="645.0,493.0 900.0,493.0 900.0,646.0 950.0,646.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="645.0,833.0 940.0,833.0 940.0,700.0 950.0,700.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="395.0,816.0 337.0,816.0 337.0,860.0 395.0,860.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="1040.0,716.0 1040.0,761.0 1080.0,761.0 1080.0,806.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="500.5,1056.0 500.5,1081.0 520.0,1081.0 520.0,1106.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<circle cx="520.0" cy="200.0" r="19.0" fill="#161A2E"/>
+<rect x="395.0" y="280.0" width="194.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.2"/>
+<text x="492.0" y="322.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">UPLOADED</text>
+<text x="492.0" y="354.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已上传</text>
+<rect x="395.0" y="450.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.2"/>
+<text x="485.0" y="492.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">PARSING</text>
+<text x="485.0" y="524.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">解析中</text>
+<rect x="395.0" y="620.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.2"/>
+<text x="485.0" y="662.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">PARSED</text>
+<text x="485.0" y="694.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已解析</text>
+<rect x="395.0" y="790.0" width="228.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.2"/>
+<text x="509.0" y="832.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">EXTRACTING</text>
+<text x="509.0" y="864.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">抽取中</text>
+<rect x="395.0" y="960.0" width="211.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.2"/>
+<text x="500.5" y="1002.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">COMPLETED</text>
+<text x="500.5" y="1034.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已完成</text>
+<rect x="950.0" y="620.0" width="180.0" height="96.0" rx="20.0" fill="#FBEAF9" stroke="#C026D3" stroke-width="3.2"/>
+<text x="1040.0" y="662.0" font-size="30.0" text-anchor="middle" fill="#C026D3" font-weight="bold">FAILED</text>
+<text x="1040.0" y="694.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">失败</text>
+<circle cx="520.0" cy="1130.0" r="24.0" fill="#FFFFFF" stroke="#161A2E" stroke-width="3.4"/>
+<circle cx="520.0" cy="1130.0" r="13.0" fill="#161A2E"/>
+<circle cx="1080.0" cy="830.0" r="24.0" fill="#FFFFFF" stroke="#161A2E" stroke-width="3.4"/>
+<circle cx="1080.0" cy="830.0" r="13.0" fill="#161A2E"/>
+<rect x="512.0" y="228.3" width="261.6" height="30.4" fill="#FFFFFF"/>
+<text x="642.8" y="250.9" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">上传校验通过 / 建记录</text>
+<rect x="494.5" y="397.8" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="548.5" y="420.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">开始解析</text>
+<rect x="491.0" y="567.8" width="223.0" height="30.4" fill="#FFFFFF"/>
+<text x="602.5" y="590.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">解析成功且文本非空</text>
+<rect x="503.0" y="737.8" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="557.0" y="760.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">开始抽取</text>
+<rect x="510.8" y="907.8" width="277.3" height="30.4" fill="#FFFFFF"/>
+<text x="649.4" y="930.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">抽取成功 + 入图 + 计数</text>
+<rect x="729.5" y="450.6" width="215.6" height="30.4" fill="#FFFFFF"/>
+<text x="837.4" y="473.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">解析异常 / 空文本</text>
+<rect x="731.5" y="845.0" width="301.2" height="30.4" fill="#FFFFFF"/>
+<text x="882.1" y="867.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">抽取异常 / result.error</text>
+<rect x="73.0" y="807.6" width="246.0" height="60.7" fill="#FFFFFF"/>
+<text x="196.0" y="830.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">入图异常（当前缺口，</text>
+<text x="196.0" y="860.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">目标应转 FAILED）</text>
+<rect x="1066.0" y="745.8" width="192.6" height="30.4" fill="#FFFFFF"/>
+<text x="1162.3" y="768.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">教师删除 / 重传</text>
+<rect x="516.2" y="1065.8" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="570.2" y="1088.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">教师删除</text>
+<text x="60.0" y="1250.0" font-size="23.0" text-anchor="start" fill="#5A5F73" font-weight="normal">注：EXTRACTING → EXTRACTING 为已记录的缺口 G-01（见 §5.4），目标行为应转 FAILED。</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1180" viewBox="0 0 900 1180" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="900" height="1180" fill="#FFFFFF"/>
+<defs><marker id="mk-open-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#7048E8" stroke-width="1.8" stroke-linejoin="round"/></marker><marker id="mk-open-FA8C16" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#FA8C16" stroke-width="1.8" stroke-linejoin="round"/></marker><marker id="mk-open-08979C" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#08979C" stroke-width="1.8" stroke-linejoin="round"/></marker></defs>
+<text x="450.0" y="92.0" font-size="46.0" text-anchor="middle" fill="#161A2E" font-weight="bold">课程治理与业务状态图</text>
+<rect x="60.0" y="150.0" width="780.0" height="440.0" rx="14.0" fill="#F7F8FC" stroke="#BFC4D2" stroke-width="2.0"/>
+<rect x="78.0" y="166.0" width="377.9" height="40.0" rx="8.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="2.2"/>
+<text x="96.0" y="194.0" font-size="24.0" text-anchor="start" fill="#FA8C16" font-weight="bold">治理状态 governance_status</text>
+<rect x="60.0" y="640.0" width="780.0" height="440.0" rx="14.0" fill="#F7F8FC" stroke="#BFC4D2" stroke-width="2.0"/>
+<rect x="78.0" y="656.0" width="230.1" height="40.0" rx="8.0" fill="#FFFFFF" stroke="#08979C" stroke-width="2.2"/>
+<text x="96.0" y="684.0" font-size="24.0" text-anchor="start" fill="#08979C" font-weight="bold">业务状态 status</text>
+<polyline points="190.0,269.0 185.0,310.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="275.0,338.0 520.0,338.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="520.0,320.0 440.0,320.0 440.0,358.0 275.0,358.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="275.0,378.0 400.0,378.0 400.0,518.0 520.0,518.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="520.0,500.0 440.0,500.0 440.0,390.0 275.0,390.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-FA8C16)"/>
+<polyline points="190.0,759.0 185.0,800.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-7048E8)"/>
+<polyline points="275.0,848.0 520.0,848.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-08979C)"/>
+<polyline points="520.0,848.0 275.0,848.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-08979C)"/>
+<polyline points="275.0,848.0 330.0,848.0 330.0,956.0 380.0,956.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-08979C)"/>
+<polyline points="700.0,848.0 760.0,848.0 760.0,980.0 404.0,980.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-open-08979C)"/>
+<circle cx="190.0" cy="250.0" r="19.0" fill="#161A2E"/>
+<rect x="95.0" y="310.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="185.0" y="352.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">normal</text>
+<text x="185.0" y="384.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">正常</text>
+<rect x="520.0" y="290.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="610.0" y="332.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">hidden</text>
+<text x="610.0" y="364.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已下架</text>
+<rect x="520.0" y="470.0" width="194.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.2"/>
+<text x="617.0" y="512.0" font-size="30.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">archived</text>
+<text x="617.0" y="544.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已归档</text>
+<circle cx="190.0" cy="740.0" r="19.0" fill="#161A2E"/>
+<rect x="95.0" y="800.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#08979C" stroke-width="3.2"/>
+<text x="185.0" y="842.0" font-size="30.0" text-anchor="middle" fill="#08979C" font-weight="bold">status1</text>
+<text x="185.0" y="874.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">业务开放</text>
+<rect x="520.0" y="800.0" width="180.0" height="96.0" rx="20.0" fill="#FFFFFF" stroke="#08979C" stroke-width="3.2"/>
+<text x="610.0" y="842.0" font-size="30.0" text-anchor="middle" fill="#08979C" font-weight="bold">status0</text>
+<text x="610.0" y="874.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">已关闭</text>
+<circle cx="380.0" cy="980.0" r="24.0" fill="#FFFFFF" stroke="#161A2E" stroke-width="3.4"/>
+<circle cx="380.0" cy="980.0" r="13.0" fill="#161A2E"/>
+<rect x="193.5" y="274.3" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="247.5" y="296.9" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">课程创建</text>
+<rect x="343.5" y="295.6" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="397.5" y="318.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">平台下架</text>
+<rect x="371.4" y="370.0" width="62.0" height="30.4" fill="#FFFFFF"/>
+<text x="402.4" y="392.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">恢复</text>
+<rect x="406.0" y="468.8" width="62.0" height="30.4" fill="#FFFFFF"/>
+<text x="437.0" y="491.4" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">归档</text>
+<rect x="386.0" y="414.5" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="440.0" y="437.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">取消归档</text>
+<rect x="193.5" y="764.3" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="247.5" y="786.9" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">业务开放</text>
+<rect x="366.5" y="805.6" width="62.0" height="30.4" fill="#FFFFFF"/>
+<text x="397.5" y="828.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">关闭</text>
+<rect x="343.5" y="860.0" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="397.5" y="882.5" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">重新开放</text>
+<rect x="336.0" y="931.2" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="390.0" y="953.7" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">删除课程</text>
+<rect x="651.4" y="937.6" width="108.0" height="30.4" fill="#FFFFFF"/>
+<text x="705.4" y="960.2" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">删除课程</text>
+<text x="450.0" y="1115.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">治理状态与业务状态正交：下架 / 归档不改 status；</text>
+<text x="450.0" y="1146.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">关闭不改 governance_status。对外可见需两者同时正常 / 开放。</text>
+</svg>

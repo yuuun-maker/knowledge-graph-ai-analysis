@@ -3501,7 +3501,7 @@ async function submitGrade(row) {
     ElMessage.warning('请填写 0-100 的分数')
     return
   }
-  let comment = ''
+  let comment
   try {
     const { value } = await ElMessageBox.prompt(
       '可填写评语（可选，学生可见）',

@@ -1,0 +1,331 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2720" viewBox="0 0 1600 2720" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1600" height="2720" fill="#FFFFFF"/>
+<defs><marker id="mk-solid-2F54EB" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#2F54EB"/></marker><marker id="mk-solid-08979C" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#08979C"/></marker><marker id="mk-solid-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#7048E8"/></marker><marker id="mk-solid-C026D3" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#C026D3"/></marker><marker id="mk-solid-FA8C16" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#FA8C16"/></marker></defs>
+<text x="800.0" y="92.0" font-size="46.0" text-anchor="middle" fill="#161A2E" font-weight="bold">领域模型 UML 类图</text>
+<polyline points="340.0,534.0 340.0,722.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-2F54EB)"/>
+<rect x="349.3" y="544.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="362.0" y="564.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="285.1" y="672.3" width="65.8" height="31.2" fill="#FFFFFF"/>
+<text x="318.0" y="692.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">0..1</text>
+<polyline points="510.0,290.0 580.0,290.0 580.0,861.0 650.0,861.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-2F54EB)"/>
+<rect x="527.3" y="248.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="540.0" y="268.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="607.3" y="863.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="620.0" y="883.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="820.0,626.0 820.0,722.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-08979C)"/>
+<rect x="829.3" y="636.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="842.0" y="656.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="785.3" y="672.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="798.0" y="692.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="650.0,320.0 614.0,320.0 614.0,1327.0 650.0,1327.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-08979C)"/>
+<rect x="607.3" y="322.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="620.0" y="342.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="607.3" y="1329.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="620.0" y="1349.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="990.0,450.0 1130.0,450.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-08979C)"/>
+<rect x="1007.3" y="408.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1020.0" y="428.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="1087.3" y="452.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1100.0" y="472.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1300.0,626.0 1300.0,722.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-7048E8)"/>
+<rect x="1309.3" y="636.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1322.0" y="656.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="1265.3" y="672.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1278.0" y="692.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1300.0,1092.0 1300.0,1188.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-7048E8)"/>
+<rect x="1297.4" y="1121.1" width="205.2" height="29.9" fill="#FFFFFF"/>
+<text x="1400.0" y="1140.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">source / target</text>
+<rect x="1265.3" y="1102.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1278.0" y="1122.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="1221.3" y="1138.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1234.0" y="1158.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="170.0,200.0 60.0,200.0 60.0,1678.0 170.0,1678.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-2F54EB)"/>
+<rect x="127.3" y="202.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="140.0" y="222.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="127.3" y="1680.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="140.0" y="1700.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1130.0,850.0 1010.0,850.0 1010.0,1514.0 340.0,1514.0 340.0,1562.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-7048E8)"/>
+<rect x="1087.3" y="852.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1100.0" y="872.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="305.3" y="1512.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="318.0" y="1532.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="170.0,250.0 100.0,250.0 100.0,2098.0 170.0,2098.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-2F54EB)"/>
+<rect x="127.3" y="252.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="140.0" y="272.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="127.3" y="2100.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="140.0" y="2120.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1130.0,900.0 1040.0,900.0 1040.0,1962.0 340.0,1962.0 340.0,2028.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-7048E8)"/>
+<rect x="1087.3" y="902.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1100.0" y="922.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="305.3" y="1978.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="318.0" y="1998.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="990.0,520.0 1100.0,520.0 1100.0,1747.0 1130.0,1747.0" fill="none" stroke="#08979C" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-08979C)"/>
+<rect x="1007.3" y="478.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1020.0" y="498.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="1087.3" y="1749.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1100.0" y="1769.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1470.0,1650.0 1496.0,1650.0 1496.0,907.0 1470.0,907.0" fill="none" stroke="#C026D3" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-C026D3)"/>
+<rect x="1487.3" y="1608.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1500.0" y="1628.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<rect x="1487.3" y="865.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1500.0" y="885.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="510.0,330.0 546.0,330.0 546.0,1724.0 650.0,1724.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-2F54EB)"/>
+<rect x="527.3" y="288.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="540.0" y="308.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="607.3" y="1726.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="620.0" y="1746.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1130.0,1850.0 1070.0,1850.0 1070.0,1724.0 990.0,1724.0" fill="none" stroke="#C026D3" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-C026D3)"/>
+<rect x="1087.3" y="1852.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1100.0" y="1872.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="1007.3" y="1682.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1020.0" y="1702.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1470.0,300.0 1564.0,300.0 1564.0,2010.0 820.0,2010.0 820.0,2028.0" fill="none" stroke="#7048E8" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-7048E8)"/>
+<rect x="1487.3" y="258.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="1500.0" y="278.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="785.3" y="1978.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="798.0" y="1998.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="820.0,2260.0 820.0,2356.0" fill="none" stroke="#FA8C16" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-FA8C16)"/>
+<rect x="829.3" y="2270.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="842.0" y="2290.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="765.1" y="2306.3" width="65.8" height="31.2" fill="#FFFFFF"/>
+<text x="798.0" y="2326.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">0..1</text>
+<polyline points="170.0,300.0 140.0,300.0 140.0,1327.0 170.0,1327.0" fill="none" stroke="#2F54EB" stroke-width="3.0" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#mk-solid-2F54EB)"/>
+<rect x="127.3" y="302.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="140.0" y="322.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">1</text>
+<rect x="127.3" y="1329.3" width="25.4" height="31.2" fill="#FFFFFF"/>
+<text x="140.0" y="1349.0" font-size="24.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">*</text>
+<polyline points="1470.0,2121.0 1530.0,2121.0 1530.0,1327.0 1496.0,1327.0" fill="none" stroke="#C026D3" stroke-width="2.6" stroke-dasharray="9 7" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M170.0,210.0 L510.0,210.0 L510.0,276.0 Q510.0,288.0 498.0,288.0 L182.0,288.0 Q170.0,288.0 170.0,276.0 Z" fill="#EEF1FD"/>
+<rect x="170.0" y="210.0" width="340.0" height="324.0" rx="12.0" fill="none" stroke="#2F54EB" stroke-width="3.2"/>
+<line x1="171.5" y1="288.0" x2="508.5" y2="288.0" stroke="#2F54EB" stroke-width="2.4"/>
+<text x="340.0" y="244.0" font-size="32.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">User</text>
+<text x="340.0" y="275.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">用户</text>
+<text x="196.0" y="322.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="322.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">userId</text>
+<text x="196.0" y="368.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="368.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">username</text>
+<text x="196.0" y="414.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="414.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">role</text>
+<text x="196.0" y="460.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="460.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">isActive</text>
+<text x="196.0" y="506.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="506.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">mustChangePassword</text>
+<path d="M170.0,722.0 L510.0,722.0 L510.0,788.0 Q510.0,800.0 498.0,800.0 L182.0,800.0 Q170.0,800.0 170.0,788.0 Z" fill="#EEF1FD"/>
+<rect x="170.0" y="722.0" width="340.0" height="370.0" rx="12.0" fill="none" stroke="#2F54EB" stroke-width="3.2"/>
+<line x1="171.5" y1="800.0" x2="508.5" y2="800.0" stroke="#2F54EB" stroke-width="2.4"/>
+<text x="340.0" y="756.0" font-size="32.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">Profile</text>
+<text x="340.0" y="787.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">个人资料</text>
+<text x="196.0" y="834.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="834.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">realName</text>
+<text x="196.0" y="880.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="880.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">nickname</text>
+<text x="196.0" y="926.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="926.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">school</text>
+<text x="196.0" y="972.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="972.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">major</text>
+<text x="196.0" y="1018.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1018.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">studentNo</text>
+<text x="196.0" y="1064.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1064.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">teacherNo</text>
+<path d="M650.0,210.0 L990.0,210.0 L990.0,276.0 Q990.0,288.0 978.0,288.0 L662.0,288.0 Q650.0,288.0 650.0,276.0 Z" fill="#E4F5F5"/>
+<rect x="650.0" y="210.0" width="340.0" height="416.0" rx="12.0" fill="none" stroke="#08979C" stroke-width="3.2"/>
+<line x1="651.5" y1="288.0" x2="988.5" y2="288.0" stroke="#08979C" stroke-width="2.4"/>
+<text x="820.0" y="244.0" font-size="32.0" text-anchor="middle" fill="#08979C" font-weight="bold">Course</text>
+<text x="820.0" y="275.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">课程</text>
+<text x="676.0" y="322.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="322.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">courseId</text>
+<text x="676.0" y="368.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="368.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">courseName</text>
+<text x="676.0" y="414.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="414.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">joinCode</text>
+<text x="676.0" y="460.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="460.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">joinMode</text>
+<text x="676.0" y="506.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="506.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">isPublic</text>
+<text x="676.0" y="552.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="552.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">status</text>
+<text x="676.0" y="598.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="598.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">governanceStatus</text>
+<path d="M650.0,722.0 L990.0,722.0 L990.0,788.0 Q990.0,800.0 978.0,800.0 L662.0,800.0 Q650.0,800.0 650.0,788.0 Z" fill="#E4F5F5"/>
+<rect x="650.0" y="722.0" width="340.0" height="278.0" rx="12.0" fill="none" stroke="#08979C" stroke-width="3.2"/>
+<line x1="651.5" y1="800.0" x2="988.5" y2="800.0" stroke="#08979C" stroke-width="2.4"/>
+<text x="820.0" y="756.0" font-size="32.0" text-anchor="middle" fill="#08979C" font-weight="bold">Membership</text>
+<text x="820.0" y="787.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">成员关系</text>
+<text x="676.0" y="834.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="834.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">role</text>
+<text x="676.0" y="880.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="880.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">status</text>
+<text x="676.0" y="926.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="926.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">joinSource</text>
+<text x="676.0" y="972.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="972.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">appliedReason</text>
+<path d="M650.0,1188.0 L990.0,1188.0 L990.0,1254.0 Q990.0,1266.0 978.0,1266.0 L662.0,1266.0 Q650.0,1266.0 650.0,1254.0 Z" fill="#E4F5F5"/>
+<rect x="650.0" y="1188.0" width="340.0" height="278.0" rx="12.0" fill="none" stroke="#08979C" stroke-width="3.2"/>
+<line x1="651.5" y1="1266.0" x2="988.5" y2="1266.0" stroke="#08979C" stroke-width="2.4"/>
+<text x="820.0" y="1222.0" font-size="32.0" text-anchor="middle" fill="#08979C" font-weight="bold">Invite</text>
+<text x="820.0" y="1253.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">邀请</text>
+<text x="676.0" y="1300.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1300.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">token</text>
+<text x="676.0" y="1346.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1346.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">role</text>
+<text x="676.0" y="1392.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1392.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">status</text>
+<text x="676.0" y="1438.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1438.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">expiresAt</text>
+<path d="M1130.0,210.0 L1470.0,210.0 L1470.0,276.0 Q1470.0,288.0 1458.0,288.0 L1142.0,288.0 Q1130.0,288.0 1130.0,276.0 Z" fill="#F4EEFD"/>
+<rect x="1130.0" y="210.0" width="340.0" height="416.0" rx="12.0" fill="none" stroke="#7048E8" stroke-width="3.2"/>
+<line x1="1131.5" y1="288.0" x2="1468.5" y2="288.0" stroke="#7048E8" stroke-width="2.4"/>
+<text x="1300.0" y="244.0" font-size="32.0" text-anchor="middle" fill="#7048E8" font-weight="bold">Document</text>
+<text x="1300.0" y="275.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">文档</text>
+<text x="1156.0" y="322.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="322.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">docId</text>
+<text x="1156.0" y="368.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="368.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">fileName</text>
+<text x="1156.0" y="414.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="414.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">fileType</text>
+<text x="1156.0" y="460.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="460.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">parseStatus</text>
+<text x="1156.0" y="506.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="506.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">extractStatus</text>
+<text x="1156.0" y="552.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="552.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">entityCount</text>
+<text x="1156.0" y="598.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="598.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">relationCount</text>
+<path d="M1130.0,722.0 L1470.0,722.0 L1470.0,788.0 Q1470.0,800.0 1458.0,800.0 L1142.0,800.0 Q1130.0,800.0 1130.0,788.0 Z" fill="#F4EEFD"/>
+<rect x="1130.0" y="722.0" width="340.0" height="370.0" rx="12.0" fill="none" stroke="#7048E8" stroke-width="3.2"/>
+<line x1="1131.5" y1="800.0" x2="1468.5" y2="800.0" stroke="#7048E8" stroke-width="2.4"/>
+<text x="1300.0" y="756.0" font-size="32.0" text-anchor="middle" fill="#7048E8" font-weight="bold">KnowledgePoint</text>
+<text x="1300.0" y="787.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">知识点</text>
+<text x="1156.0" y="834.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="834.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">kpId</text>
+<text x="1156.0" y="880.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="880.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">name</text>
+<text x="1156.0" y="926.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="926.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">category</text>
+<text x="1156.0" y="972.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="972.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">description</text>
+<text x="1156.0" y="1018.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1018.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">confidence</text>
+<text x="1156.0" y="1064.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1064.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">isManual</text>
+<path d="M1130.0,1188.0 L1470.0,1188.0 L1470.0,1254.0 Q1470.0,1266.0 1458.0,1266.0 L1142.0,1266.0 Q1130.0,1266.0 1130.0,1254.0 Z" fill="#F4EEFD"/>
+<rect x="1130.0" y="1188.0" width="340.0" height="278.0" rx="12.0" fill="none" stroke="#7048E8" stroke-width="3.2"/>
+<line x1="1131.5" y1="1266.0" x2="1468.5" y2="1266.0" stroke="#7048E8" stroke-width="2.4"/>
+<text x="1300.0" y="1222.0" font-size="32.0" text-anchor="middle" fill="#7048E8" font-weight="bold">Relation</text>
+<text x="1300.0" y="1253.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">关系</text>
+<text x="1156.0" y="1300.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1300.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">type</text>
+<text x="1156.0" y="1346.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1346.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">evidence</text>
+<text x="1156.0" y="1392.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1392.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">confidence</text>
+<text x="1156.0" y="1438.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1438.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">isManual</text>
+<path d="M170.0,1562.0 L510.0,1562.0 L510.0,1628.0 Q510.0,1640.0 498.0,1640.0 L182.0,1640.0 Q170.0,1640.0 170.0,1628.0 Z" fill="#FBEAF9"/>
+<rect x="170.0" y="1562.0" width="340.0" height="232.0" rx="12.0" fill="none" stroke="#C026D3" stroke-width="3.2"/>
+<line x1="171.5" y1="1640.0" x2="508.5" y2="1640.0" stroke="#C026D3" stroke-width="2.4"/>
+<text x="340.0" y="1596.0" font-size="32.0" text-anchor="middle" fill="#C026D3" font-weight="bold">LearningRecord</text>
+<text x="340.0" y="1627.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">学习记录</text>
+<text x="196.0" y="1674.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1674.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">status</text>
+<text x="196.0" y="1720.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1720.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">masteryLevel</text>
+<text x="196.0" y="1766.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1766.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">source</text>
+<path d="M170.0,2028.0 L510.0,2028.0 L510.0,2094.0 Q510.0,2106.0 498.0,2106.0 L182.0,2106.0 Q170.0,2106.0 170.0,2094.0 Z" fill="#FBEAF9"/>
+<rect x="170.0" y="2028.0" width="340.0" height="140.0" rx="12.0" fill="none" stroke="#C026D3" stroke-width="3.2"/>
+<line x1="171.5" y1="2106.0" x2="508.5" y2="2106.0" stroke="#C026D3" stroke-width="2.4"/>
+<text x="340.0" y="2062.0" font-size="32.0" text-anchor="middle" fill="#C026D3" font-weight="bold">Favorite</text>
+<text x="340.0" y="2093.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">知识点收藏</text>
+<text x="196.0" y="2140.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="2140.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">createdAt</text>
+<path d="M1130.0,1562.0 L1470.0,1562.0 L1470.0,1628.0 Q1470.0,1640.0 1458.0,1640.0 L1142.0,1640.0 Q1130.0,1640.0 1130.0,1628.0 Z" fill="#FBEAF9"/>
+<rect x="1130.0" y="1562.0" width="340.0" height="370.0" rx="12.0" fill="none" stroke="#C026D3" stroke-width="3.2"/>
+<line x1="1131.5" y1="1640.0" x2="1468.5" y2="1640.0" stroke="#C026D3" stroke-width="2.4"/>
+<text x="1300.0" y="1596.0" font-size="32.0" text-anchor="middle" fill="#C026D3" font-weight="bold">Question</text>
+<text x="1300.0" y="1627.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">题目</text>
+<text x="1156.0" y="1674.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1674.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">questionId</text>
+<text x="1156.0" y="1720.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1720.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">qType</text>
+<text x="1156.0" y="1766.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1766.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">stem</text>
+<text x="1156.0" y="1812.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1812.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">difficulty</text>
+<text x="1156.0" y="1858.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1858.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">source</text>
+<text x="1156.0" y="1904.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="1904.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">isActive</text>
+<path d="M1130.0,2028.0 L1470.0,2028.0 L1470.0,2094.0 Q1470.0,2106.0 1458.0,2106.0 L1142.0,2106.0 Q1130.0,2106.0 1130.0,2094.0 Z" fill="#FBEAF9"/>
+<rect x="1130.0" y="2028.0" width="340.0" height="186.0" rx="12.0" fill="none" stroke="#C026D3" stroke-width="3.2"/>
+<line x1="1131.5" y1="2106.0" x2="1468.5" y2="2106.0" stroke="#C026D3" stroke-width="2.4"/>
+<text x="1300.0" y="2062.0" font-size="32.0" text-anchor="middle" fill="#C026D3" font-weight="bold">QuestionKP</text>
+<text x="1300.0" y="2093.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">题目-知识点</text>
+<text x="1156.0" y="2140.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="2140.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">isPrimary</text>
+<text x="1156.0" y="2186.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="1178.0" y="2186.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">weight</text>
+<path d="M650.0,1562.0 L990.0,1562.0 L990.0,1628.0 Q990.0,1640.0 978.0,1640.0 L662.0,1640.0 Q650.0,1640.0 650.0,1628.0 Z" fill="#FBEAF9"/>
+<rect x="650.0" y="1562.0" width="340.0" height="324.0" rx="12.0" fill="none" stroke="#C026D3" stroke-width="3.2"/>
+<line x1="651.5" y1="1640.0" x2="988.5" y2="1640.0" stroke="#C026D3" stroke-width="2.4"/>
+<text x="820.0" y="1596.0" font-size="32.0" text-anchor="middle" fill="#C026D3" font-weight="bold">AnswerRecord</text>
+<text x="820.0" y="1627.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">答题记录</text>
+<text x="676.0" y="1674.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1674.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">userAnswer</text>
+<text x="676.0" y="1720.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1720.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">score</text>
+<text x="676.0" y="1766.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1766.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">gradeStatus</text>
+<text x="676.0" y="1812.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1812.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">gradeSource</text>
+<text x="676.0" y="1858.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="1858.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">isCorrect</text>
+<path d="M650.0,2028.0 L990.0,2028.0 L990.0,2094.0 Q990.0,2106.0 978.0,2106.0 L662.0,2106.0 Q650.0,2106.0 650.0,2094.0 Z" fill="#FFF3E6"/>
+<rect x="650.0" y="2028.0" width="340.0" height="232.0" rx="12.0" fill="none" stroke="#FA8C16" stroke-width="3.2"/>
+<line x1="651.5" y1="2106.0" x2="988.5" y2="2106.0" stroke="#FA8C16" stroke-width="2.4"/>
+<text x="820.0" y="2062.0" font-size="32.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">FusionCandidate</text>
+<text x="820.0" y="2093.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">融合候选</text>
+<text x="676.0" y="2140.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="2140.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">score</text>
+<text x="676.0" y="2186.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="2186.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">decision</text>
+<text x="676.0" y="2232.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="2232.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">status</text>
+<path d="M650.0,2356.0 L990.0,2356.0 L990.0,2422.0 Q990.0,2434.0 978.0,2434.0 L662.0,2434.0 Q650.0,2434.0 650.0,2422.0 Z" fill="#FFF3E6"/>
+<rect x="650.0" y="2356.0" width="340.0" height="186.0" rx="12.0" fill="none" stroke="#FA8C16" stroke-width="3.2"/>
+<line x1="651.5" y1="2434.0" x2="988.5" y2="2434.0" stroke="#FA8C16" stroke-width="2.4"/>
+<text x="820.0" y="2390.0" font-size="32.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">FusionMap</text>
+<text x="820.0" y="2421.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">融合映射</text>
+<text x="676.0" y="2468.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="2468.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">status</text>
+<text x="676.0" y="2514.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="698.0" y="2514.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">runId</text>
+<path d="M170.0,1188.0 L510.0,1188.0 L510.0,1254.0 Q510.0,1266.0 498.0,1266.0 L182.0,1266.0 Q170.0,1266.0 170.0,1254.0 Z" fill="#FFF3E6"/>
+<rect x="170.0" y="1188.0" width="340.0" height="278.0" rx="12.0" fill="none" stroke="#FA8C16" stroke-width="3.2"/>
+<line x1="171.5" y1="1266.0" x2="508.5" y2="1266.0" stroke="#FA8C16" stroke-width="2.4"/>
+<text x="340.0" y="1222.0" font-size="32.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">AuditLog</text>
+<text x="340.0" y="1253.0" font-size="23.0" text-anchor="middle" fill="#5A5F73" font-weight="normal">审计日志</text>
+<text x="196.0" y="1300.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1300.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">action</text>
+<text x="196.0" y="1346.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1346.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">targetType</text>
+<text x="196.0" y="1392.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1392.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">targetId</text>
+<text x="196.0" y="1438.0" font-size="27.0" text-anchor="start" fill="#BFC4D2" font-weight="normal">+</text>
+<text x="218.0" y="1438.0" font-size="27.0" text-anchor="start" fill="#161A2E" font-weight="normal">result</text>
+<rect x="170.0" y="2602.0" width="26.0" height="26.0" rx="6.0" fill="#EEF1FD" stroke="#2F54EB" stroke-width="2.4"/>
+<text x="206.0" y="2622.0" font-size="24.0" text-anchor="start" fill="#161A2E" font-weight="normal">账号与身份</text>
+<rect x="372.0" y="2602.0" width="26.0" height="26.0" rx="6.0" fill="#E4F5F5" stroke="#08979C" stroke-width="2.4"/>
+<text x="408.0" y="2622.0" font-size="24.0" text-anchor="start" fill="#161A2E" font-weight="normal">课程与协作</text>
+<rect x="574.0" y="2602.0" width="26.0" height="26.0" rx="6.0" fill="#F4EEFD" stroke="#7048E8" stroke-width="2.4"/>
+<text x="610.0" y="2622.0" font-size="24.0" text-anchor="start" fill="#161A2E" font-weight="normal">文档与知识图谱</text>
+<rect x="824.0" y="2602.0" width="26.0" height="26.0" rx="6.0" fill="#FBEAF9" stroke="#C026D3" stroke-width="2.4"/>
+<text x="860.0" y="2622.0" font-size="24.0" text-anchor="start" fill="#161A2E" font-weight="normal">学习与练习</text>
+<rect x="1026.0" y="2602.0" width="26.0" height="26.0" rx="6.0" fill="#FFF3E6" stroke="#FA8C16" stroke-width="2.4"/>
+<text x="1062.0" y="2622.0" font-size="24.0" text-anchor="start" fill="#161A2E" font-weight="normal">治理与审计</text>
+<text x="170.0" y="2656.0" font-size="23.0" text-anchor="start" fill="#5A5F73" font-weight="bold">记号：</text>
+<line x1="249.0" y1="2649.0" x2="305.0" y2="2649.0" stroke="#7048E8" stroke-width="3.0"/>
+<text x="317.0" y="2656.0" font-size="23.0" text-anchor="start" fill="#5A5F73" font-weight="normal">关联（箭头指向被引用方，两端为多重性）</text>
+<line x1="794.0" y1="2649.0" x2="850.0" y2="2649.0" stroke="#C026D3" stroke-width="3.0" stroke-dasharray="9 7"/>
+<text x="862.0" y="2656.0" font-size="23.0" text-anchor="start" fill="#5A5F73" font-weight="normal">关联类（QuestionKP）</text>
+</svg>

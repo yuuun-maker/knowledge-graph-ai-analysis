@@ -197,7 +197,6 @@ async def get_candidate(candidate_id: int, admin: dict = Depends(require_admin))
     # 重建上下文（只读；失败就给不可用标记，不阻断详情展示）
     ctx_ok, ctx_error, contexts = False, None, {}
     try:
-        import asyncio
         from ..services.fusion import entity_context
         chunks, ctx_error = await entity_context.load_chunks(course_id, document_id)
         ctx_ok = chunks is not None

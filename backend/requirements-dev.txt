@@ -1,0 +1,4 @@
+# 开发/CI 专用依赖（运行后端服务不需要）
+# 与 requirements.txt 一样精确锁定版本，避免 CI 结果随工具升级漂移。
+-r requirements.txt
+ruff==0.17.2

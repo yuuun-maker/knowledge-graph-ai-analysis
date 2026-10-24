@@ -5,7 +5,7 @@ import json
 import logging
 import re
 import asyncio
-from typing import List, Tuple
+from typing import List
 from openai import OpenAI
 from ..core.config import settings
 from ..core.database import VALID_RELATION_TYPES

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1768" height="2204" viewBox="0 0 1768 2204" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1768" height="2204" fill="#FFFFFF"/>
+<defs><marker id="mk-solid-161A2E" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#161A2E"/></marker></defs>
+<text x="884.0" y="76.8" font-size="40.0" text-anchor="middle" fill="#161A2E" font-weight="bold">练习与批改 · 活动图</text>
+<rect x="44.0" y="146.5" width="557.0" height="2013.0" rx="10.0" fill="#EEF1FD"/>
+<text x="322.5" y="133.0" font-size="30.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">教师 / 学生</text>
+<rect x="604.0" y="146.5" width="557.0" height="2013.0" rx="10.0" fill="#F4EEFD"/>
+<text x="882.5" y="133.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">系统（平台）</text>
+<rect x="1164.0" y="146.5" width="557.0" height="2013.0" rx="10.0" fill="#F7F8FC"/>
+<text x="1442.5" y="133.0" font-size="30.0" text-anchor="middle" fill="#C026D3" font-weight="bold">异常 / 替代分支</text>
+<polyline points="324.0,234.5 324.0,286.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="456.5,325.0 660.0,474.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="1108.0,474.0 1319.0,474.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="1196.0" y="437.1" width="35.0" height="37.8" rx="6.0" fill="#FFFFFF"/>
+<text x="1213.5" y="463.6" font-size="21.0" text-anchor="middle" fill="#C026D3" font-weight="bold">否</text>
+<polyline points="884.0,534.5 884.0,584.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="898.5" y="540.6" width="35.0" height="37.8" rx="6.0" fill="#FFFFFF"/>
+<text x="916.0" y="567.1" font-size="21.0" text-anchor="middle" fill="#161A2E" font-weight="bold">是</text>
+<polyline points="748.0,623.0 515.0,750.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="515.0,750.0 674.1,910.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="674.1,910.0 449.0,1070.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="449.0,1070.0 734.0,1219.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="884.0,1279.5 884.0,1329.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="877.5" y="1285.6" width="77.0" height="37.8" rx="6.0" fill="#FFFFFF"/>
+<text x="916.0" y="1312.1" font-size="21.0" text-anchor="middle" fill="#161A2E" font-weight="bold">客观题</text>
+<polyline points="1034.0,1219.0 1300.5,1384.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="1128.8" y="1264.8" width="77.0" height="37.8" rx="6.0" fill="#FFFFFF"/>
+<text x="1167.3" y="1291.3" font-size="21.0" text-anchor="middle" fill="#C026D3" font-weight="bold">主观题</text>
+<polyline points="1300.5,1384.5 1090.0,1544.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="884.0,1599.5 884.0,1649.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="884.0,1759.5 884.0,1809.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="884.0,1886.5 884.0,1936.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="884.0,1439.5 884.0,1936.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 9" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="793.0" y="1793.3" width="182.0" height="37.8" rx="6.0" fill="#FFFFFF"/>
+<text x="884.0" y="1819.8" font-size="21.0" text-anchor="middle" fill="#161A2E" font-weight="bold">客观题直接进统计</text>
+<polyline points="884.0,2013.5 884.0,2065.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<circle cx="324.0" cy="208.5" r="26.0" fill="#161A2E"/>
+<rect x="191.5" y="286.5" width="265.0" height="77.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="324.0" y="325.7" font-size="22.0" text-anchor="middle" fill="#161A2E">教师创建 / 导入题目</text>
+<polygon points="884.0,413.5 1108.0,474.0 884.0,534.5 660.0,474.0" fill="#F5EEFC" stroke="#7048E8" stroke-width="3.2" stroke-linejoin="round"/>
+<text x="884.0" y="474.7" font-size="22.0" text-anchor="middle" fill="#161A2E" font-weight="bold">字段 / 题型 / 知识点校验</text>
+<rect x="1319.0" y="435.5" width="250.0" height="77.0" rx="12.0" fill="#FFFFFF" stroke="#C026D3" stroke-width="3.2"/>
+<text x="1444.0" y="474.7" font-size="22.0" text-anchor="middle" fill="#C026D3">返回 1001 / 4002</text>
+<rect x="748.0" y="584.5" width="272.0" height="77.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="884.0" y="623.7" font-size="22.0" text-anchor="middle" fill="#161A2E">题目入库（默认启用）</text>
+<rect x="133.0" y="711.5" width="382.0" height="77.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="324.0" y="750.7" font-size="22.0" text-anchor="middle" fill="#161A2E">学生选择练习范围或使用智能推荐</text>
+<rect x="674.1" y="838.5" width="419.8" height="143.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="884.0" y="877.7" font-size="22.0" text-anchor="middle" fill="#161A2E">返回启用题</text>
+<text x="884.0" y="910.7" font-size="22.0" text-anchor="middle" fill="#161A2E">不含答案 / 解析；推荐带 reason /</text>
+<text x="884.0" y="943.7" font-size="22.0" text-anchor="middle" fill="#161A2E">bucket</text>
+<rect x="199.0" y="1031.5" width="250.0" height="77.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="324.0" y="1070.7" font-size="22.0" text-anchor="middle" fill="#161A2E">学生提交作答</text>
+<polygon points="884.0,1158.5 1034.0,1219.0 884.0,1279.5 734.0,1219.0" fill="#F5EEFC" stroke="#7048E8" stroke-width="3.2" stroke-linejoin="round"/>
+<text x="884.0" y="1219.7" font-size="22.0" text-anchor="middle" fill="#161A2E" font-weight="bold">题型？</text>
+<rect x="711.9" y="1329.5" width="344.2" height="110.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="884.0" y="1368.7" font-size="22.0" text-anchor="middle" fill="#161A2E">服务端判分：GRADED / AUTO</text>
+<text x="884.0" y="1401.7" font-size="22.0" text-anchor="middle" fill="#161A2E">返回分数 / 答案 / 解析</text>
+<rect x="1300.5" y="1329.5" width="287.0" height="110.0" rx="12.0" fill="#FFFFFF" stroke="#C026D3" stroke-width="3.2"/>
+<text x="1444.0" y="1368.7" font-size="22.0" text-anchor="middle" fill="#C026D3">落库 PENDING</text>
+<text x="1444.0" y="1401.7" font-size="22.0" text-anchor="middle" fill="#C026D3">不返回参考答案 / 解析</text>
+<rect x="678.0" y="1489.5" width="411.9" height="110.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="884.0" y="1528.7" font-size="22.0" text-anchor="middle" fill="#161A2E">教师待批改列表 → 逐条 / 批量给分</text>
+<text x="884.0" y="1561.7" font-size="22.0" text-anchor="middle" fill="#161A2E">0–100 + 评语</text>
+<rect x="661.3" y="1649.5" width="445.4" height="110.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="884.0" y="1688.7" font-size="22.0" text-anchor="middle" fill="#161A2E">写入 GRADED / TEACHER</text>
+<text x="884.0" y="1721.7" font-size="22.0" text-anchor="middle" fill="#161A2E">is_correct = score ≥ 60；重批覆盖</text>
+<rect x="711.0" y="1809.5" width="345.9" height="77.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="884.0" y="1848.7" font-size="22.0" text-anchor="middle" fill="#161A2E">学生查看分数 / 评语 / 解析</text>
+<rect x="676.7" y="1936.5" width="414.6" height="77.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="884.0" y="1975.7" font-size="22.0" text-anchor="middle" fill="#161A2E">统计与错题本：只纳入 GRADED 记录</text>
+<circle cx="884.0" cy="2091.5" r="26.0" fill="#FFFFFF" stroke="#161A2E" stroke-width="3.2"/>
+<circle cx="884.0" cy="2091.5" r="13.5" fill="#161A2E"/>
+</svg>

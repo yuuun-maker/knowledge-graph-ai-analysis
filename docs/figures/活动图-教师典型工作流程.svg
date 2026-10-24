@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1368" height="1503" viewBox="0 0 1368 1503" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="1368" height="1503" fill="#FFFFFF"/>
+<defs><marker id="mk-solid-161A2E" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#161A2E"/></marker><marker id="mk-solid-C026D3" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#C026D3"/></marker></defs>
+<text x="684.0" y="76.8" font-size="40.0" text-anchor="middle" fill="#161A2E" font-weight="bold">教师工作流程 UML 活动图</text>
+<rect x="44.0" y="146.5" width="637.0" height="1312.5" rx="10.0" fill="#EEF1FD"/>
+<text x="362.5" y="133.0" font-size="30.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">教师</text>
+<rect x="684.0" y="146.5" width="637.0" height="1312.5" rx="10.0" fill="#F4EEFD"/>
+<text x="1002.5" y="133.0" font-size="30.0" text-anchor="middle" fill="#7048E8" font-weight="bold">系统（平台）</text>
+<polyline points="364.0,234.5 364.0,294.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="364.0,373.0 364.0,431.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="505.0,487.5 832.2,487.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="1004.0,544.0 1004.0,602.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="819.3,641.2 493.5,777.8" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="364.0,817.0 364.0,875.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="364.0,997.5 364.0,1055.5" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="378.5" y="1007.6" width="35.0" height="37.8" rx="6.0" fill="#FFFFFF"/>
+<text x="396.0" y="1034.1" font-size="21.0" text-anchor="middle" fill="#161A2E" font-weight="bold">是</text>
+<polyline points="214.0,936.2 66.0,936.2 66.0,777.8 234.5,777.8" fill="none" stroke="#C026D3" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 9" marker-end="url(#mk-solid-C026D3)"/>
+<rect x="90.0" y="826.8" width="250.3" height="40.0" rx="8.0" fill="#FFFFFF" stroke="#C026D3" stroke-width="2.4"/>
+<rect x="93.0" y="827.8" width="238.3" height="37.8" rx="6.0" fill="#FFFFFF"/>
+<text x="100.0" y="854.3" font-size="21.0" text-anchor="start" fill="#C026D3" font-weight="bold">否（补充 / 修正漏抽）</text>
+<polyline points="364.0,1134.0 364.0,1171.6 194.0,1171.6 194.0,1209.2" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="364.0,1134.0 364.0,1163.0 534.0,1163.0 534.0,1192.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="194.0,1287.8 194.0,1326.4 364.0,1326.4 364.0,1365.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<polyline points="534.0,1305.0 534.0,1335.0 364.0,1335.0 364.0,1365.0" fill="none" stroke="#161A2E" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<circle cx="364.0" cy="208.5" r="26.0" fill="#161A2E"/>
+<rect x="211.5" y="294.5" width="305.0" height="78.5" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="364.0" y="334.4" font-size="23.0" text-anchor="middle" fill="#161A2E">创建课程并邀请学生加入</text>
+<rect x="223.0" y="431.0" width="282.0" height="113.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="364.0" y="470.9" font-size="23.0" text-anchor="middle" fill="#161A2E">上传课程文档</text>
+<text x="364.0" y="505.4" font-size="23.0" text-anchor="middle" fill="#161A2E">（教材章节、讲义等）</text>
+<rect x="832.2" y="431.0" width="343.6" height="113.0" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="1004.0" y="470.9" font-size="23.0" text-anchor="middle" fill="#161A2E">文档解析与知识抽取</text>
+<text x="1004.0" y="505.4" font-size="23.0" text-anchor="middle" fill="#161A2E">（自动生成知识点 + 关系）</text>
+<rect x="819.3" y="602.0" width="369.4" height="78.5" rx="12.0" fill="#F7F2FD" stroke="#7048E8" stroke-width="3.2"/>
+<text x="1004.0" y="641.9" font-size="23.0" text-anchor="middle" fill="#161A2E">生成并存储知识图谱（Neo4j）</text>
+<rect x="234.5" y="738.5" width="259.0" height="78.5" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="364.0" y="778.4" font-size="23.0" text-anchor="middle" fill="#161A2E">人工校验与修正图谱</text>
+<polygon points="364.0,875.0 514.0,936.2 364.0,997.5 214.0,936.2" fill="#F5EEFC" stroke="#7048E8" stroke-width="3.2" stroke-linejoin="round"/>
+<text x="364.0" y="936.9" font-size="23.0" text-anchor="middle" fill="#161A2E" font-weight="bold">图谱是否合格？</text>
+<rect x="223.0" y="1055.5" width="282.0" height="78.5" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="364.0" y="1095.4" font-size="23.0" text-anchor="middle" fill="#161A2E">基于图谱组织教学活动</text>
+<rect x="69.0" y="1209.2" width="250.0" height="78.5" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="194.0" y="1249.2" font-size="23.0" text-anchor="middle" fill="#161A2E">出题组卷</text>
+<rect x="409.0" y="1192.0" width="250.0" height="113.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.2"/>
+<text x="534.0" y="1231.9" font-size="23.0" text-anchor="middle" fill="#161A2E">查看学生</text>
+<text x="534.0" y="1266.4" font-size="23.0" text-anchor="middle" fill="#161A2E">学习情况</text>
+<circle cx="364.0" cy="1391.0" r="26.0" fill="#FFFFFF" stroke="#161A2E" stroke-width="3.2"/>
+<circle cx="364.0" cy="1391.0" r="13.5" fill="#161A2E"/>
+</svg>

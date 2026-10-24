@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2149" height="2136" viewBox="0 0 2149 2136" font-family='"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif'>
+<rect x="0" y="0" width="2149" height="2136" fill="#FFFFFF"/>
+<defs><marker id="mk-solid-161A2E" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#161A2E"/></marker><marker id="mk-open-7048E8" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#7048E8" stroke-width="1.8" stroke-linejoin="round"/></marker></defs>
+<text x="1074.3" y="75.5" font-size="36.0" text-anchor="middle" fill="#161A2E" font-weight="bold">UC-02 学生基于课程知识库提问并核对来源 · 时序图</text>
+<rect x="46.0" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#2F54EB" stroke-width="3.0"/>
+<text x="121.0" y="154.3" font-size="22.0" text-anchor="middle" fill="#2F54EB" font-weight="bold">学生</text>
+<polyline points="121.0,178.4 121.0,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="256.0" y="114.4" width="183.3" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#08979C" stroke-width="3.0"/>
+<text x="347.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#08979C" font-weight="bold">前端（Vue3）</text>
+<polyline points="347.6,178.4 347.6,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="499.3" y="114.4" width="274.8" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#7048E8" stroke-width="3.0"/>
+<text x="636.7" y="154.3" font-size="22.0" text-anchor="middle" fill="#7048E8" font-weight="bold">QA API（QAService）</text>
+<polyline points="636.7,178.4 636.7,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="834.1" y="114.4" width="348.7" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#52C41A" stroke-width="3.0"/>
+<text x="1008.4" y="154.3" font-size="22.0" text-anchor="middle" fill="#52C41A" font-weight="bold">EmbeddingClient（BGE-M3）</text>
+<polyline points="1008.4,178.4 1008.4,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1242.8" y="114.4" width="181.5" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#C026D3" stroke-width="3.0"/>
+<text x="1333.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#C026D3" font-weight="bold">VectorIndex</text>
+<polyline points="1333.6,178.4 1333.6,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1484.3" y="114.4" width="198.2" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.0"/>
+<text x="1583.4" y="154.3" font-size="22.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">SQLite 向量表</text>
+<polyline points="1583.4,178.4 1583.4,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1742.6" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#FA8C16" stroke-width="3.0"/>
+<text x="1817.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#FA8C16" font-weight="bold">Neo4j</text>
+<polyline points="1817.6,178.4 1817.6,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="1952.6" y="114.4" width="150.0" height="64.0" rx="12.0" fill="#FFFFFF" stroke="#52C41A" stroke-width="3.0"/>
+<text x="2027.6" y="154.3" font-size="22.0" text-anchor="middle" fill="#52C41A" font-weight="bold">DeepSeek</text>
+<polyline points="2027.6,178.4 2027.6,2060.4" fill="none" stroke="#BFC4D2" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 8"/>
+<rect x="47.0" y="731.4" width="2054.6" height="452.0" rx="6.0" fill="none" stroke="#5A5F73" stroke-width="2.0"/>
+<rect x="47.0" y="731.4" width="241.5" height="34.0" rx="5.0" fill="#FFFFFF" stroke="#5A5F73" stroke-width="2.0"/>
+<text x="59.0" y="754.4" font-size="19.0" text-anchor="start" fill="#161A2E" font-weight="bold">alt 索引失效 / 不存在</text>
+<rect x="47.0" y="945.4" width="241.5" height="34.0" rx="5.0" fill="#FFFFFF" stroke="#5A5F73" stroke-width="2.0"/>
+<text x="59.0" y="968.4" font-size="19.0" text-anchor="start" fill="#161A2E" font-weight="bold">索引有效</text>
+<polyline points="47.0,979.4 2101.6,979.4" fill="none" stroke="#5A5F73" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7"/>
+<rect x="628.7" y="344.4" width="16.0" height="1508.0" rx="3.0" fill="#EFEBFF" stroke="#7048E8" stroke-width="2.0"/>
+<polyline points="121.0,252.4 347.6,252.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="60.5" y="218.2" width="347.6" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="243.6" font-size="20.0" text-anchor="middle" fill="#161A2E">选择课程 / 文档（可选）并输入问题</text>
+<polyline points="347.6,298.4 636.7,298.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="378.8" y="264.2" width="226.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="492.2" y="289.6" font-size="20.0" text-anchor="middle" fill="#161A2E">POST /api/v1/qa/ask</text>
+<polyline points="636.7,428.4 702.7,428.4 702.7,454.4 636.7,454.4" fill="none" stroke="#161A2E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<text x="714.7" y="434.4" font-size="20.0" text-anchor="start" fill="#161A2E">校验课程内容权限；未指定课程时收敛</text>
+<text x="714.7" y="458.4" font-size="20.0" text-anchor="start" fill="#161A2E">allowed_course_ids</text>
+<rect x="576.7" y="498.9" width="816.9" height="49.0" rx="10.0" fill="#FFFBE6" stroke="#FAAD14" stroke-width="2.2"/>
+<text x="592.7" y="522.9" font-size="19.0" text-anchor="start" fill="#161A2E">向量检索需要课程 + 文档作用域；未指定 document_id 时退回关键词检索</text>
+<polyline points="636.7,593.4 1333.6,593.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="791.7" y="535.2" width="386.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="985.1" y="560.6" font-size="20.0" text-anchor="middle" fill="#161A2E">ensure_index：比对 kp_id 集合与融合</text>
+<rect x="950.1" y="559.2" width="70.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="985.1" y="584.6" font-size="20.0" text-anchor="middle" fill="#161A2E">epoch</text>
+<polyline points="1333.6,639.4 1583.4,639.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="1262.3" y="605.2" width="392.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1458.5" y="630.6" font-size="20.0" text-anchor="middle" fill="#161A2E">读取已存向量的 kp_id 列（新鲜度比对）</text>
+<polyline points="1583.4,685.4 1333.6,685.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="1372.3" y="651.2" width="172.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1458.5" y="676.6" font-size="20.0" text-anchor="middle" fill="#161A2E">已存 kp_id 集合</text>
+<polyline points="1333.6,807.4 1817.6,807.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="1448.6" y="773.2" width="254.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1575.6" y="798.6" font-size="20.0" text-anchor="middle" fill="#161A2E">取该文档全部知识点与描述</text>
+<polyline points="1817.6,853.4 1333.6,853.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="1528.6" y="819.2" width="94.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1575.6" y="844.6" font-size="20.0" text-anchor="middle" fill="#161A2E">节点列表</text>
+<polyline points="1333.6,899.4 1008.4,899.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="1084.0" y="865.2" width="174.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1171.0" y="890.6" font-size="20.0" text-anchor="middle" fill="#161A2E">批量向量化知识点</text>
+<polyline points="1008.4,945.4 1333.6,945.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="1024.8" y="911.2" width="292.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1171.0" y="936.6" font-size="20.0" text-anchor="middle" fill="#161A2E">向量（懒重建并写回 SQLite）</text>
+<rect x="1133.6" y="1105.4" width="400.0" height="76.0" rx="10.0" fill="#FFFBE6" stroke="#FAAD14" stroke-width="2.2"/>
+<text x="1149.6" y="1129.4" font-size="19.0" text-anchor="start" fill="#161A2E">直接复用已存向量，不调用外部</text>
+<text x="1149.6" y="1156.4" font-size="19.0" text-anchor="start" fill="#161A2E">embedding</text>
+<polyline points="636.7,1251.4 1008.4,1251.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="745.2" y="1217.2" width="154.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="822.6" y="1242.6" font-size="20.0" text-anchor="middle" fill="#161A2E">embed([问题])</text>
+<polyline points="1008.4,1297.4 636.7,1297.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="775.6" y="1263.2" width="94.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="822.6" y="1288.6" font-size="20.0" text-anchor="middle" fill="#161A2E">问题向量</text>
+<polyline points="636.7,1343.4 1333.6,1343.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="782.9" y="1309.2" width="404.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="985.1" y="1334.6" font-size="20.0" text-anchor="middle" fill="#161A2E">余弦排序取 top-k（纯 Python，无 ANN）</text>
+<polyline points="1333.6,1389.4 636.7,1389.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="839.7" y="1355.2" width="290.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="985.1" y="1380.6" font-size="20.0" text-anchor="middle" fill="#161A2E">top-k 命中（kp_id + 分数）</text>
+<polyline points="636.7,1435.4 1817.6,1435.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="1100.9" y="1401.2" width="252.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1227.1" y="1426.6" font-size="20.0" text-anchor="middle" fill="#161A2E">按 kp_id 回查节点元数据</text>
+<polyline points="1817.6,1481.4 636.7,1481.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="1069.7" y="1447.2" width="314.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1227.1" y="1472.6" font-size="20.0" text-anchor="middle" fill="#161A2E">名称 / 类别 / 描述 / 融合别名</text>
+<polyline points="636.7,1541.4 702.7,1541.4 702.7,1567.4 636.7,1567.4" fill="none" stroke="#161A2E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<text x="714.7" y="1547.4" font-size="20.0" text-anchor="start" fill="#161A2E">按融合映射折到规范节点，拼接上下文</text>
+<polyline points="636.7,1611.4 2027.6,1611.4" fill="none" stroke="#161A2E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk-solid-161A2E)"/>
+<rect x="1181.1" y="1553.2" width="302.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1332.1" y="1578.6" font-size="20.0" text-anchor="middle" fill="#161A2E">生成回答（temperature=0.3，</text>
+<rect x="1178.7" y="1577.2" width="306.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1332.1" y="1602.6" font-size="20.0" text-anchor="middle" fill="#161A2E">max_tokens=1024，超时 15s）</text>
+<polyline points="2027.6,1657.4 636.7,1657.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="1265.9" y="1623.2" width="132.4" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="1332.1" y="1648.6" font-size="20.0" text-anchor="middle" fill="#161A2E">answer 文本</text>
+<rect x="576.7" y="1754.9" width="491.8" height="103.0" rx="10.0" fill="#FFFBE6" stroke="#FAAD14" stroke-width="2.2"/>
+<text x="592.7" y="1778.9" font-size="19.0" text-anchor="start" fill="#161A2E">embedding 不可用 → 记录 warning 并退回关键</text>
+<text x="592.7" y="1805.9" font-size="19.0" text-anchor="start" fill="#161A2E">词 CONTAINS 检索；LLM 失败 → 返回明确致歉文</text>
+<text x="592.7" y="1832.9" font-size="19.0" text-anchor="start" fill="#161A2E">本</text>
+<polyline points="636.7,1922.4 347.6,1922.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="280.8" y="1864.2" width="422.8" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="492.2" y="1889.6" font-size="20.0" text-anchor="middle" fill="#161A2E">answer + sources（sources 即本次上下文</text>
+<rect x="475.2" y="1888.2" width="34.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="492.2" y="1913.6" font-size="20.0" text-anchor="middle" fill="#161A2E">）</text>
+<polyline points="347.6,1968.4 121.0,1968.4" fill="none" stroke="#7048E8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="10 8" marker-end="url(#mk-open-7048E8)"/>
+<rect x="137.3" y="1934.2" width="194.0" height="36.4" rx="6.0" fill="#FFFFFF"/>
+<text x="234.3" y="1959.6" font-size="20.0" text-anchor="middle" fill="#161A2E">展示回答与来源卡片</text>
+<text x="1074.3" y="2084.4" font-size="18.0" text-anchor="middle" fill="#5A5F73">降级与异常（A1~A5、E1~E4）见 §2.5.2 UC-02、§5.1.2；Neo4j 回查未统一降级见缺口 G-02。</text>
+</svg>

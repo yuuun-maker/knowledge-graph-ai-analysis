@@ -1,7 +1,7 @@
 """
 Git 知识图谱管理服务：将 Git 历史建模到 Neo4j 图数据库
 """
-from typing import List, Dict, Optional
+from typing import List
 from ..core.database import db
 
 

@@ -465,7 +465,7 @@ function runStatusLabel(s) {
   return { RUNNING: '进行中', COMPLETED: '已完成', FAILED: '失败', REVOKED: '已撤销' }[s] || s
 }
 function scoreTip(row) {
-  let d = {}
+  let d
   try { d = JSON.parse(row.score_detail || '{}') } catch { d = {} }
   const notes = (d.notes || []).join('；')
   return `词面 ${(d.lexical ?? 0).toFixed(2)} · 上下文 ${d.context === null || d.context === undefined ? '不可用' : d.context.toFixed(2)} · 定义互含 ${(d.desc ?? 0).toFixed(2)}${notes ? ' ｜ ' + notes : ''}`

@@ -61,6 +61,7 @@
 | Embedding | SiliconFlow `BAAI/bge-m3`（1024 维，OpenAI 兼容接口） |
 | 文档解析 | PyPDF2、pdfplumber、python-docx |
 | 测试 | 后端自带断言脚本、13 个评测脚本、Playwright 端到端测试 |
+| 工程化 | ruff（后端静态检查）、ESLint（前端）、GitHub Actions CI（静态检查 + 构建） |
 
 > DeepSeek 不提供 embedding 接口，因此向量化单独使用 SiliconFlow；两者均通过 `openai` SDK 的兼容接口调用。
 
@@ -92,7 +93,8 @@ flowchart LR
 │   ├── eval_*.py                # 13 个评测脚本（抽取准确率、ANN、题库召回…）
 │   ├── eval_data/               # 评测结果 JSON
 │   ├── scripts/                 # 数据准备与迁移脚本
-│   ├── requirements.txt         # 后端依赖（版本精确锁定）
+│   ├── requirements.txt         # 后端运行依赖（版本精确锁定）
+│   ├── requirements-dev.txt     # 仅开发/CI 用（ruff）
 │   └── .env.example             # 环境变量模板
 ├── frontend-vue/                # Vue 3 前端（当前唯一前端）
 │   ├── src/
@@ -104,7 +106,10 @@ flowchart LR
 │   │   └── main.js
 │   ├── tests/                   # Playwright 端到端测试（11 个 spec）
 │   ├── vite.config.js           # 开发代理 /api、/health → :8000
+│   ├── eslint.config.js         # ESLint 扁平配置
 │   └── playwright.config.ts
+├── .github/workflows/ci.yml     # CI：ruff + 导入冒烟 + ESLint + 生产构建
+├── pyproject.toml               # ruff 配置（不声明运行期依赖）
 ├── docs/                        # 设计与评测文档（见文末索引）
 ├── md2tex.py                    # Markdown → LaTeX 辅助脚本
 ├── CLAUDE.md                    # 面向开发者的代码库说明
@@ -207,7 +212,7 @@ npm run build      # 输出 dist/
      → 按 kp_id 回查 Neo4j 获取节点元数据 → 拼入提示词 → DeepSeek 生成
 ```
 
-返回的 `sources` 就是本次实际喂给模型的上下文，保证答案与引用一致。向量以 JSON 存于 `t_kp_embedding`，文档重新抽取导致 `kp_id` 变化时会自动重建索引。21 题问答测试集与结果见 [问答测试集](docs/问答测试集.md)。
+返回的 `sources` 就是本次实际喂给模型的上下文，保证答案与引用一致。向量在 `t_kp_embedding` 中双写：`embedding`（JSON，兼容旧数据）与 `embedding_blob`（float32 BLOB，检索快路径）；检索由 `services/vector_index.py` 做 numpy 矩阵运算并带 60 秒进程内缓存，文档重新抽取导致 `kp_id` 变化时会自动重建索引。21 题问答测试集与结果见 [问答测试集](docs/问答测试集.md)。
 
 ## 验证与评测
 
@@ -226,8 +231,23 @@ npx playwright test
 npx playwright test tests/profile.spec.ts --project=chromium
 ```
 
+静态检查（CI 执行的就是这些，不依赖数据库与外部 API）：
+
+```bash
+# 后端：Pyflakes + 语法错误，配置见 pyproject.toml
+pip install -r backend/requirements-dev.txt
+ruff check .
+
+# 前端：ESLint error 级规则，配置见 frontend-vue/eslint.config.js
+cd frontend-vue && npm run lint
+
+# 生产构建冒烟
+npm run build
+```
+
 - 后端共 **49 个 `test_*.py`** 验证脚本与 **13 个 `eval_*.py`** 评测脚本；前端有 **11 个 Playwright spec**
-- ⚠️ 多数验证脚本会**真实写入** `app.db` 与 Neo4j（创建账号、课程、节点后自行清理）。建议在专用环境运行，跑完核对数据是否复原
+- **CI**（[.github/workflows/ci.yml](.github/workflows/ci.yml)）在每次 push / PR 执行：后端 ruff + `import app.main` 冒烟，前端 ESLint + `vite build`
+- ⚠️ 多数验证脚本会**真实写入** `app.db` 与 Neo4j（创建账号、课程、节点后自行清理）。建议在专用环境运行，跑完核对数据是否复原；因此它们**不放进 CI**
 - 评测运行步骤见 [评测运行简明教程](docs/评测运行简明教程.md)
 
 ## 文档索引

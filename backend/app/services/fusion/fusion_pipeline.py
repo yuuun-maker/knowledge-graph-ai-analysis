@@ -72,7 +72,6 @@ async def scan(course_id: int, document_id, persist: bool = False, use_llm: bool
     contexts, context_ok = {}, chunks is not None
     if context_ok:
         for n in nodes:
-            props = n.get("properties") or {}
             contexts[n["id"]] = entity_context.build_for(
                 n["id"], n.get("label") or "", n.get("description") or "", [],
                 chunks)

@@ -6,8 +6,7 @@ import re
 import json
 import subprocess
 import hashlib
-from typing import List, Dict, Optional
-from datetime import datetime
+from typing import List
 
 from openai import OpenAI
 from ..core.config import settings
@@ -443,7 +442,7 @@ class GitCommitAnalyzer:
             content = response.choices[0].message.content.strip()
             return self._parse_json_response(content)
 
-        except (json.JSONDecodeError, Exception) as e:
+        except (json.JSONDecodeError, Exception):
             return self._fallback_restore_impact(
                 current_version, target_version, commits_to_rollback, affected_files
             )
@@ -481,9 +480,9 @@ class GitCommitAnalyzer:
                 "git revert（推荐）" if n <= 5 else "git reset --hard（谨慎使用）"
             ),
             "commands": [
-                f"# 方案一：硬回滚（会丢失历史）",
+                "# 方案一：硬回滚（会丢失历史）",
                 f"git reset --hard {target_version}",
-                f"# 方案二：安全回滚（保留历史，逐个 revert）",
+                "# 方案二：安全回滚（保留历史，逐个 revert）",
                 *[
                     f"git revert --no-commit {c['short_hash']}"
                     for c in commits_to_rollback[:5]

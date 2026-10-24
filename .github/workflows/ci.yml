@@ -1,0 +1,73 @@
+name: CI
+
+# 只做"不依赖外部服务"的检查：
+# - 后端：ruff 静态检查 + `import app.main` 冒烟（不连 Neo4j / LLM）
+# - 前端：eslint + vite build
+#
+# 端到端验证（backend/test_*.py、Playwright）需要真实的 SQLite + Neo4j + LLM Key，
+# 且会写入真实数据，不适合放在 CI；仍按 docs/评测运行简明教程.md 在专用环境手动执行。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# 同一分支连续推送时取消旧任务，避免排队浪费
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: 后端静态检查与导入冒烟
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+
+      - name: 安装依赖
+        run: pip install -r requirements-dev.txt
+
+      # ruff 配置在仓库根目录 pyproject.toml（include 已限定为 backend/app）
+      - name: Ruff 静态检查
+        working-directory: .
+        run: ruff check .
+
+      # 不启动服务、不连接数据库：只验证所有模块能正常导入（抓循环依赖/缺依赖/语法错误）
+      - name: 导入冒烟
+        run: python -c "import app.main; print('backend import ok')"
+
+  frontend:
+    name: 前端静态检查与构建
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend-vue
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend-vue/package-lock.json
+
+      - name: 安装依赖
+        run: npm ci
+
+      # 只把 error 当失败；存量 no-unused-vars 是 warning，不阻塞
+      - name: ESLint
+        run: npm run lint
+
+      - name: 生产构建
+        run: npm run build

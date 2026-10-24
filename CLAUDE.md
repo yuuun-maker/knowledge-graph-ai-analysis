@@ -30,6 +30,11 @@ npm install && npm run dev
 npx playwright test
 npx playwright test tests/profile.spec.ts --project=chromium
 
+# 静态检查（CI 跑的就是这两条）
+pip install -r backend/requirements-dev.txt
+ruff check .                              # 仓库根目录执行，规则见 pyproject.toml
+cd frontend-vue && npm run lint           # ESLint；npm run lint:fix 可自动修复部分问题
+
 # 健康检查
 curl http://localhost:8000/health
 ```
@@ -40,11 +45,14 @@ curl http://localhost:8000/health
 |---|---|---|
 | 端到端验证脚本 | `backend/test_*.py` | 自带断言、输出 `通过 N/M`，直接 `python test_xxx.py` 运行。多数会**真写 app.db 与 Neo4j 并自清** |
 | 评测脚本 | `backend/eval_*.py` | 知识抽取准确率 / ANN 对比 / 布隆过滤器等，只读，结果落 `backend/eval_data/*.json` |
-| 前端 e2e | `frontend-vue/tests/*.spec.ts` | Playwright，9 个 spec |
+| 前端 e2e | `frontend-vue/tests/*.spec.ts` | Playwright，11 个 spec |
+| 静态检查 | `pyproject.toml` + `frontend-vue/eslint.config.js` | `ruff check .`（Pyflakes + 语法错误）与 `npm run lint`（ESLint error 级） |
+| CI | `.github/workflows/ci.yml` | 后端 ruff + `import app.main` 冒烟；前端 lint + `vite build`。不连 Neo4j / LLM |
 
 - ⚠️ **验证脚本直连线上库**：`app.db` 与 Neo4j 都是真实数据，脚本会真实建账号、建课、建节点。跑完务必核对是否复原（对照 `t_course` / `t_document` / `t_question` / `t_kp_embedding` 计数）
-- **没有 lint / 格式化配置**，也没有 CI / Docker——"变量名写错、只在运行期才炸"这类问题不会被静态拦住
-- `requirements.txt` 对版本**逐个精确锁定**，这不是洁癖：`starlette` 不锁会漂移到 1.x 导致启动崩溃（见文件内注释）。新增依赖请沿用锁定风格
+- **静态检查刻意只选"运行期才会炸"的规则**：后端 `F`（未定义名/未使用导入/变量）+ `E9`（语法错误），只覆盖 `backend/app`；前端 `no-undef` / Vue 语法错误为 error，`no-unused-vars` 因存量多先降为 warning。不要为了"零告警"启用完整 E/W 规则集
+- `requirements.txt` 对版本**逐个精确锁定**，这不是洁癖：`starlette` 不锁会漂移到 1.x 导致启动崩溃（见文件内注释）。新增依赖请沿用锁定风格；仅开发/CI 用的工具放 `backend/requirements-dev.txt`
+- **CI 不跑 `backend/test_*.py` 与 Playwright**：它们需要真实 Neo4j / LLM Key 且会写库，仍按 `docs/评测运行简明教程.md` 在专用环境手动执行
 
 ## 架构概览
 
@@ -87,7 +95,7 @@ curl http://localhost:8000/health
 
 1. **`ensure_index` 是懒构建 + 懒重建**：每次问答都用 Neo4j 的当前 `kp_id` 集合与 SQLite 已存集合比对，不一致才重建。这是刻意的——"有向量就跳过"是错的，重新抽取会整体更换 `kp_id`，旧向量会指向不存在的节点，而表里"非空"会让索引永不重建
 2. **新鲜度比对只读 `kp_id` 列**（`get_embedding_kp_ids`），不要退回 `get_embeddings_by_document`——后者会反序列化全部向量文本，实测占该步耗时 70%
-3. **向量以 JSON 文本存 SQLite**，余弦是纯 Python 手写（刻意不引 numpy）。规模拐点约 **1000 条/文档**（实测 ~0.44ms/条）；当前最大文档 69 条、单次检索 ~20ms，远未到需要 ANN 的程度
+3. **向量双写 `embedding`（JSON 兼容列）+ `embedding_blob`（float32 BLOB 快读列）**，读取优先 BLOB、缺失时回落解析 JSON。检索走 [`services/vector_index.py`](backend/app/services/vector_index.py)：numpy 矩阵乘法 + 进程内缓存（TTL 默认 60s），numpy 不可用或 `VECTOR_FORCE_BRUTE=1` 时回落纯 Python 余弦。实测 N=5,000 时约 0.42ms；当前规模用不上 ANN。注意缓存是**进程内**的，多 worker 部署靠 TTL 收敛，`VECTOR_CACHE_TTL=0` 可关闭
 4. **索引失效粒度是整个 `(course_id, document_id)`**：教师改一个知识点描述 → 该文档全部向量删除 → 下次问答全量重算（真实外部 API 调用）。`delete_embeddings_by_document` 的 7 个调用点即失效收口
 5. **未配 `EMBEDDING_API_KEY` 或调用失败时会静默退回关键词检索**（Cypher `CONTAINS`）。降级本身是对的，但断网演示时会表现为"回答变差却不报错"——排查时先看 `qa_service` 的 warning 日志
 

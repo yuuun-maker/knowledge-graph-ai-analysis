@@ -39,6 +39,8 @@ function inline(text) {
   out = out.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>')
   out = out.replace(/(^|[^_])_([^_\n]+)_(?!_)/g, '$1<em>$2</em>')
   // 还原行内代码
+  // \u0000 是行内代码的占位符标记，刻意使用控制字符避免与正文冲突
+  // eslint-disable-next-line no-control-regex
   out = out.replace(/\u0000C(\d+)\u0000/g, (m, i) => '<code>' + codes[+i] + '</code>')
   return out
 }

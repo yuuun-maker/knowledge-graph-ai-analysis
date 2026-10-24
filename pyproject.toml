@@ -1,0 +1,28 @@
+# Ruff 静态检查配置
+#
+# 这里**只放工具配置**，不声明运行期依赖——后端依赖清单仍是
+# backend/requirements.txt（版本逐个锁定，原因见该文件内注释）。
+#
+# 规则集刻意保持"少而准"：
+#   F  —— Pyflakes：未定义名、未使用导入/变量、f-string 占位符等
+#   E9 —— 语法/缩进类错误（文件本身解析不了）
+# 这两类正是本项目最痛的问题（没有类型检查，写错变量名只在运行期炸），
+# 而不会像完整 E/W 规则那样把大量历史格式问题一次性变成噪声。
+# 需要更严格时再逐步加规则并在 CI 里同步。
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+# 只检查生产代码。scripts/ 与 test_*.py 里有大量"为副作用而赋值"的脚本写法
+# （例如先建测试节点再断言），自动修复会改变语义，故不纳入阻塞级检查。
+include = ["backend/app/**/*.py"]
+extend-exclude = [
+    "backend/data",
+    "backend/eval_data",
+    "backend/backup",
+    "data.legacy-root-*",
+]
+
+[tool.ruff.lint]
+select = ["F", "E9"]

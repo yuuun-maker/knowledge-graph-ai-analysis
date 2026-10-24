@@ -104,7 +104,8 @@ export async function fetchDocumentBuffer(docId) {
       responseType: 'arraybuffer',
     })
   } catch (e) {
-    throw new Error(messageFromError(e))
+    // 保留原始错误作为 cause，便于在控制台展开查看网络层原因
+    throw new Error(messageFromError(e), { cause: e })
   }
 }
 

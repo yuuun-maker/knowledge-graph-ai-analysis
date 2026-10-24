@@ -10,6 +10,7 @@ from ..core.codes import gen_join_code
 from ..core.database import db
 from ..core.sql_database import JOIN_MODES, course_is_visible, sql_db
 from ..core.storage import resolve_document_path
+from .document_service import DocumentService
 from .profile_service import ProfileService
 
 
@@ -368,6 +369,13 @@ class CourseService:
             return {"ok": False, "code": 2001, "message": f"课程不存在: course_id={course_id}"}
         if not confirm:
             return {"ok": False, "code": 2008, "message": "删除课程需二次确认（confirm=true）"}
+
+        # 有文档仍在后台处理时拒绝删除：后台任务会继续向已删除的 course_id
+        # 入图，而课程记录已不存在，孤儿节点只能手工清理；本地源文件也会先被删掉，
+        # 导致处理中的任务因读不到文件而失败。
+        if DocumentService.has_running_documents(course_id):
+            return {"ok": False, "code": 4009,
+                    "message": "该课程有文档正在处理中，请等待处理完成后再删除"}
 
         # 1. 删除文档文件（本地文件系统）
         # 路径解析见 core/storage：历史行的 file_path 可能是其他机器的路径，需回退定位

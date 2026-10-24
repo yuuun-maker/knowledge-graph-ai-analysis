@@ -206,6 +206,12 @@ class DocumentService:
             return {"ok": False, "code": 2005, "message": message}
         sql_db.update_document(doc_id, parse_status="PARSED")
 
+        # 解析期间文档可能已被删除（多进程部署、或管理员从另一实例清理）。
+        # 此时不再继续抽取，避免白花一次 LLM 调用。
+        if not DocumentService._scope_exists(doc_id, course_id):
+            _logger.warning("文档在处理期间被删除，终止任务 doc_id=%s", doc_id)
+            return {"ok": False, "code": 4009, "message": "文档已被删除，任务终止"}
+
         # 2. 抽取（PENDING -> EXTRACTING -> COMPLETED/FAILED）
         sql_db.update_document(doc_id, extract_status="EXTRACTING", error_message=None)
         try:
@@ -225,6 +231,12 @@ class DocumentService:
         relations = result.get("relations", [])
 
         # 3. 入图（整数 course_id + 文档级 document_id；每个文档独立建图）
+        # 入图前必须再确认作用域仍存在：删除与后台任务并发时，绝不能向已删除的
+        # (course_id, document_id) 写入节点——文档行一旦消失，就再也没有入口能清理它们。
+        if not DocumentService._scope_exists(doc_id, course_id):
+            _logger.warning("文档在入图前被删除，终止任务 doc_id=%s", doc_id)
+            return {"ok": False, "code": 4009, "message": "文档已被删除，任务终止"}
+
         sql_db.update_document(
             doc_id,
             extract_status="COMPLETED",
@@ -238,8 +250,18 @@ class DocumentService:
                 KnowledgeGraphManager.build_graph, course_id, doc_id, entities, relations)
         except Exception as e:
             message = f"图谱构建失败: {str(e)}"
+            # 失败时作用域若已消失，建图中途落下的部分节点也要清掉
+            if not DocumentService._scope_exists(doc_id, course_id):
+                DocumentService._cleanup_deleted_scope(course_id, doc_id)
+                return {"ok": False, "code": 4009, "message": "文档已被删除，任务终止"}
             sql_db.update_document(doc_id, graph_status="FAILED", error_message=message)
             return {"ok": False, "code": 5002, "message": message}
+
+        # 入图完成后兜底：若删除发生在构建过程中，把本次写入的节点/关系清掉
+        if not DocumentService._scope_exists(doc_id, course_id):
+            _logger.warning("文档在入图期间被删除，清理残留图谱 doc_id=%s", doc_id)
+            DocumentService._cleanup_deleted_scope(course_id, doc_id)
+            return {"ok": False, "code": 4009, "message": "文档已被删除，任务终止"}
 
         # 4. 只有图谱真正入库后才标记完成
         sql_db.update_document(doc_id, graph_status="COMPLETED", error_message=None)
@@ -279,6 +301,27 @@ class DocumentService:
         _background_tasks.add(task)
         task.add_done_callback(_background_tasks.discard)
         return True
+
+    @staticmethod
+    def _scope_exists(doc_id: int, course_id: int) -> bool:
+        """文档与其所属课程是否仍然存在（后台任务的写入前置条件）。"""
+        return (sql_db.get_document(int(doc_id)) is not None
+                and sql_db.get_course(int(course_id)) is not None)
+
+    @staticmethod
+    def _cleanup_deleted_scope(course_id: int, doc_id: int) -> None:
+        """清理已删除作用域的残留图谱；失败只记日志，任务本身已经终止。"""
+        try:
+            db.delete_document_graph(int(course_id), int(doc_id))
+        except Exception:
+            _logger.exception("清理已删除文档的残留图谱失败 course_id=%s doc_id=%s",
+                              course_id, doc_id)
+
+    @staticmethod
+    def has_running_documents(course_id: int) -> bool:
+        """该课程内是否有文档正由本进程的后台任务处理（删除课程前的检查）。"""
+        docs = sql_db.list_documents_by_course(int(course_id))
+        return any(int(d["doc_id"]) in _running_docs for d in docs)
 
     # ---------- 单文件上传（保持原有同步语义） ----------
 
@@ -597,6 +640,13 @@ class DocumentService:
         """
         doc_id = doc["doc_id"]
         cid = doc["course_id"]
+
+        # 正在后台处理时拒绝删除：删除先删图、后台任务随后继续入图，节点会写进
+        # 已不存在的 (course_id, document_id)，且文档行消失后再无接口能清理它们。
+        # 只认进程内任务注册表——上次进程崩溃留下的 EXTRACTING 不在其中，仍允许删除。
+        if int(doc_id) in _running_docs:
+            return {"ok": False, "code": 4009,
+                    "message": "文档正在处理中，请等待处理完成后再删除"}
 
         # 1. Neo4j 图谱（节点 + 关系；仅当前文档）
         try:

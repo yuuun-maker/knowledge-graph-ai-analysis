@@ -6,6 +6,8 @@ const USER_KEY = 'kg_user'
 const STATUS_DISMISS_KEY = 'kg_backend_status_dismissed'
 const LEARNING_CTX_KEY = 'kg_learning_context'
 const SIDEBAR_KEY = 'kg_sidebar_collapsed'
+// 文档列表请求序号：快速切换课程时只允许最后一次响应写入 learningContext
+let documentsRequestSeq = 0
 
 function readLearningContext() {
   try {
@@ -286,13 +288,19 @@ export const useAppStore = defineStore('app', {
     },
     /** 拉取某课程文档列表，写入 learningContext.documentList 并返回 */
     async fetchDocuments(courseId) {
+      const seq = ++documentsRequestSeq
       if (!courseId) {
         this.learningContext.documentList = []
         return []
       }
       const docs = await api.getDocuments(courseId)
-      this.learningContext.documentList = docs || []
-      return this.learningContext.documentList
+      const list = Array.isArray(docs) ? docs : []
+      // 只让「最后一次请求」且仍是当前课程的响应落地，避免旧课程慢响应覆盖新列表
+      if (seq === documentsRequestSeq
+          && String(this.learningContext.currentCourseId) === String(courseId)) {
+        this.learningContext.documentList = list
+      }
+      return list
     },
   },
 })

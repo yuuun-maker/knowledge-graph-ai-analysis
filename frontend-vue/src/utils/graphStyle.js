@@ -42,3 +42,9 @@ export function nodeTypeLabel(type) {
 export function edgeTypeLabel(type, fallbackLabel) {
   return fallbackLabel || EDGE_TYPE_LABELS[type] || type || '相关'
 }
+
+/** 知识点中文类别 -> el-tag 语义色（学生端详情、收藏、路径共用） */
+export function categoryTagType(category) {
+  const map = { 概念: 'primary', 定理: 'danger', 公式: 'warning', 方法: 'success' }
+  return map[category] || 'info'
+}

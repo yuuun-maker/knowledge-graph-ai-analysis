@@ -880,6 +880,19 @@ class SQLDatabase:
                 "CREATE INDEX IF NOT EXISTS idx_kp_emb_scope "
                 "ON t_kp_embedding(course_id, document_id)"
             )
+            # 文档级删除/统计统一按 (course_id, document_id) 过滤，但这三张表现有索引的
+            # 前导列是 user_id（或根本没有 document_id），删除文档时只能全表扫描。
+            # 与 idx_kp_emb_scope 同理：document_id 列由上面的循环 ALTER 补齐，
+            # 索引必须建在 _migrate 而非 _SCHEMA_SQL，否则旧库会因列不存在而报错。
+            for stmt in (
+                "CREATE INDEX IF NOT EXISTS idx_lr_course_doc "
+                "ON t_learning_record(course_id, document_id)",
+                "CREATE INDEX IF NOT EXISTS idx_fav_course_doc "
+                "ON t_student_favorite(course_id, document_id)",
+                "CREATE INDEX IF NOT EXISTS idx_ans_course_doc "
+                "ON t_answer_record(course_id, document_id)",
+            ):
+                conn.execute(stmt)
             self._migrate_question_bank(conn)
             self._migrate_question_kp(conn)
             self._migrate_embeddings_blob(conn)
@@ -1809,9 +1822,24 @@ class SQLDatabase:
             "SELECT count(*) AS cnt FROM t_document WHERE course_id = ?", (course_id,),
         )["cnt"]
 
-    def count_documents_grouped(self) -> dict:
-        """按课程统计文档数，返回 {course_id: count}"""
-        rows = self._query("SELECT course_id, count(*) AS cnt FROM t_document GROUP BY course_id")
+    def count_documents_grouped(self, course_ids: list = None) -> dict:
+        """按课程统计文档数，返回 {course_id: count}。
+
+        course_ids 给定时只统计这些课程（课程列表按当前页 ID 过滤，避免全表 GROUP BY）。
+        None / 空列表的区别与 member_counts_by_course 一致：None=全部，[]=无结果。
+        """
+        if course_ids is not None and not course_ids:
+            return {}
+        if course_ids:
+            rows = self._query(
+                f"SELECT course_id, count(*) AS cnt FROM t_document "
+                f"WHERE course_id IN ({','.join('?' * len(course_ids))}) "
+                f"GROUP BY course_id",
+                tuple(course_ids),
+            )
+        else:
+            rows = self._query(
+                "SELECT course_id, count(*) AS cnt FROM t_document GROUP BY course_id")
         return {r["course_id"]: r["cnt"] for r in rows}
 
     def delete_document(self, doc_id: int) -> int:

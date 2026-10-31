@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
-import TeacherView from '../views/TeacherView.vue'
-import StudentView from '../views/StudentView.vue'
 
 function readUser() {
   try {
@@ -87,8 +85,20 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue'),
       meta: { title: '数据总览' },
     },
-    { path: '/teacher', name: 'teacher', component: TeacherView, meta: { title: '课程管理' } },
-    { path: '/student', name: 'student', component: StudentView, meta: { title: '学习空间' } },
+    // 教师/学生工作台体积很大（且会静态依赖 G6、ECharts），必须按路由懒加载；
+    // 若在此静态导入，登录页首屏会连同这些重型依赖一起下载。
+    {
+      path: '/teacher',
+      name: 'teacher',
+      component: () => import('../views/TeacherView.vue'),
+      meta: { title: '课程管理' },
+    },
+    {
+      path: '/student',
+      name: 'student',
+      component: () => import('../views/StudentView.vue'),
+      meta: { title: '学习空间' },
+    },
     {
       // 文档在线阅读器：独立整页（不走主框架布局），需要高度占满屏幕
       // query: course_id（用于文档信息与知识点）

@@ -25,6 +25,7 @@
 - `VECTOR_FORCE_BRUTE=1` → 强制纯 Python 路径（A/B 对照用）。
 """
 import os
+import threading
 import time
 
 from ..core.sql_database import _blob_to_vec, sql_db
@@ -83,6 +84,10 @@ class VectorIndex:
         self._cache = {}          # (kind, course_id, document_id) -> {ids, mat|vecs, loaded_at}
         self._hits = 0
         self._misses = 0
+        # 自动标注等同步服务现在通过 asyncio.to_thread 执行，会与问答线程并发访问缓存。
+        # 单纯 get/set 有 GIL 保护，但 invalidate 的「先遍历再 pop」与 _load 的写入
+        # 交错时可能触发 dictionary changed size during iteration；统一加锁。
+        self._lock = threading.RLock()
 
     @property
     def backend(self) -> str:
@@ -90,16 +95,18 @@ class VectorIndex:
         return "brute_py" if (FORCE_BRUTE or not _HAS_NUMPY) else "numpy"
 
     def stats(self) -> dict:
-        return {"backend": self.backend, "cached": len(self._cache),
-                "hits": self._hits, "misses": self._misses, "ttl": CACHE_TTL}
+        with self._lock:
+            return {"backend": self.backend, "cached": len(self._cache),
+                    "hits": self._hits, "misses": self._misses, "ttl": CACHE_TTL}
 
     def invalidate(self, kind=None, course_id=None) -> int:
         """失效缓存（写侧在数据变更后调用）。可按 kind / course_id 收窄，返回清掉的条数。"""
-        keys = [k for k in self._cache
-                if (kind is None or k[0] == kind) and (course_id is None or k[1] == course_id)]
-        for k in keys:
-            self._cache.pop(k, None)
-        return len(keys)
+        with self._lock:
+            keys = [k for k in self._cache
+                    if (kind is None or k[0] == kind) and (course_id is None or k[1] == course_id)]
+            for k in keys:
+                self._cache.pop(k, None)
+            return len(keys)
 
     def kp_search(self, course_id, document_id, q_vec, top_k: int = 10) -> list:
         """知识点向量检索，返回 `[(kp_id, cosine)]` 按余弦降序。`document_id=None` 为课程级。"""
@@ -161,47 +168,54 @@ class VectorIndex:
     # ---------- 缓存加载 ----------
 
     def _load(self, kind: str, course_id, document_id):
-        """返回 `(ids, container)`；container = numpy 矩阵（已 L2 归一化）或 list[list[float]]。"""
-        key = (kind, course_id, document_id)
-        now = time.monotonic()
-        ent = self._cache.get(key)
-        # CACHE_TTL > 0 才用缓存；TTL=0 表示「不缓存」（每次重载，便于对照与调试）
-        if ent is not None and CACHE_TTL > 0 and now - ent["loaded_at"] < CACHE_TTL:
-            self._hits += 1
-            return ent["ids"], (ent["mat"] if "mat" in ent else ent["vecs"])
-        self._misses += 1
+        """返回 `(ids, container)`；container = numpy 矩阵（已 L2 归一化）或 list[list[float]]。
 
-        if kind == _KP:
-            rows = sql_db.get_kp_embedding_blobs(course_id, document_id)
-            key_field = "kp_id"
-        else:
-            rows = sql_db.get_question_embedding_blobs(course_id, document_id)
-            key_field = "question_id"
+        整个「判缓存 → 读库 → 建矩阵 → 回填」过程持锁：既避免并发失效时
+        `invalidate` 与写入交错，也避免多个线程对同一作用域重复读库/建矩阵。
+        锁外只使用返回的不可变矩阵，不会阻塞检索本身。
+        """
+        with self._lock:
+            key = (kind, course_id, document_id)
+            now = time.monotonic()
+            ent = self._cache.get(key)
+            # CACHE_TTL > 0 才用缓存；TTL=0 表示「不缓存」（每次重载，便于对照与调试）
+            if ent is not None and CACHE_TTL > 0 and now - ent["loaded_at"] < CACHE_TTL:
+                self._hits += 1
+                return ent["ids"], (ent["mat"] if "mat" in ent else ent["vecs"])
+            self._misses += 1
 
-        ids, blobs, width = [], [], None
-        for r in rows:
-            blob = r["blob"]
-            if width is None:
-                width = len(blob)
-            if len(blob) != width:          # 维度不一致的脏行跳过，避免整批检索直接崩
-                continue
-            ids.append(r[key_field])
-            blobs.append(blob)
+            if kind == _KP:
+                rows = sql_db.get_kp_embedding_blobs(course_id, document_id)
+                key_field = "kp_id"
+            else:
+                rows = sql_db.get_question_embedding_blobs(course_id, document_id)
+                key_field = "question_id"
 
-        if self.backend == "brute_py":
-            container = [_blob_to_vec(b) for b in blobs]
-            ent = {"ids": ids, "vecs": container, "loaded_at": now}
-        else:
-            container = None
-            if blobs:
-                mat = _np.vstack([_np.frombuffer(b, dtype="<f4") for b in blobs]).astype(_np.float32)
-                # 载入时一次性 L2 归一化：之后「点积 == 余弦」，检索路径只剩一次矩阵乘法
-                norms = _np.linalg.norm(mat, axis=1, keepdims=True)
-                norms[norms == 0] = 1.0
-                container = mat / norms
-            ent = {"ids": ids, "mat": container, "loaded_at": now}
-        self._cache[key] = ent
-        return ids, container
+            ids, blobs, width = [], [], None
+            for r in rows:
+                blob = r["blob"]
+                if width is None:
+                    width = len(blob)
+                if len(blob) != width:      # 维度不一致的脏行跳过，避免整批检索直接崩
+                    continue
+                ids.append(r[key_field])
+                blobs.append(blob)
+
+            if self.backend == "brute_py":
+                container = [_blob_to_vec(b) for b in blobs]
+                ent = {"ids": ids, "vecs": container, "loaded_at": now}
+            else:
+                container = None
+                if blobs:
+                    mat = _np.vstack(
+                        [_np.frombuffer(b, dtype="<f4") for b in blobs]).astype(_np.float32)
+                    # 载入时一次性 L2 归一化：之后「点积 == 余弦」，检索路径只剩一次矩阵乘法
+                    norms = _np.linalg.norm(mat, axis=1, keepdims=True)
+                    norms[norms == 0] = 1.0
+                    container = mat / norms
+                ent = {"ids": ids, "mat": container, "loaded_at": now}
+            self._cache[key] = ent
+            return ids, container
 
     # ---------- 实际检索 ----------
 

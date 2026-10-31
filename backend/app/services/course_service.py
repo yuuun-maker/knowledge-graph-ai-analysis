@@ -97,12 +97,15 @@ class CourseService:
                      teacher_id: int = None, keyword: str = None,
                      course_ids: list = None, category: str = None,
                      is_public: int = None, exclude_course_ids: list = None,
-                     viewer: dict = None) -> dict:
+                     viewer: dict = None, membership_map: dict = None) -> dict:
         """课程列表。
 
         viewer：当前登录用户。传入时，仅对「该用户可管理的课程」附带 join_code——
         加课码等于课程的加入凭证，学生（含已加入的成员）不应在列表里看到，
         否则可以把码转发给课程外的人。不传 viewer 时一律不返回 join_code。
+
+        membership_map：调用方已经查好的 {course_id: 成员行}。我的课程/发现课程
+        在外层已经查过一次，传进来可避免同一请求重复查询 t_course_member。
         """
         page = max(1, page)
         page_size = min(max(1, page_size), 100)
@@ -114,32 +117,45 @@ class CourseService:
 
         # 可管理该课程 => 可以看加课码；同时记录当前用户成员关系，供前端区分主讲/协作教师
         manageable = set()
-        membership_map = {}
         if viewer:
             for c in rows:
                 if c["teacher_id"] == viewer["user_id"]:
                     manageable.add(c["course_id"])
-            for m in sql_db.list_memberships_by_user(viewer["user_id"]):
-                membership_map[m["course_id"]] = m
+            if membership_map is None:
+                membership_map = {
+                    m["course_id"]: m
+                    for m in sql_db.list_memberships_by_user(viewer["user_id"])
+                }
+            for m in membership_map.values():
                 if m["role"] == "teacher" and m["status"] == "approved":
                     manageable.add(m["course_id"])
+        else:
+            membership_map = membership_map or {}
 
-        # 文档数（SQLite 按课程聚合）与节点数/关系数（Neo4j 按课程聚合；Neo4j 不可用时置 0）
-        doc_counts = sql_db.count_documents_grouped()
+        # 只聚合当前页课程：原实现不带过滤，每次打开课程中心都要扫描全图节点与关系。
+        # 页面无数据时连聚合查询都不发（Neo4j 不可用时也不影响列表返回）。
+        cids = [r["course_id"] for r in rows]
+        doc_counts = sql_db.count_documents_grouped(cids)
         node_counts, edge_counts = {}, {}
-        try:
-            for r in db.query("MATCH (n:KnowledgePoint) RETURN n.course_id AS cid, count(n) AS cnt"):
-                node_counts[r["cid"]] = r["cnt"]
-            for r in db.query(
-                "MATCH (a:KnowledgePoint)-[rel]->(b:KnowledgePoint) "
-                "WHERE a.course_id = b.course_id "
-                "RETURN a.course_id AS cid, count(rel) AS cnt"
-            ):
-                edge_counts[r["cid"]] = r["cnt"]
-        except Exception:
-            pass
+        if cids:
+            try:
+                for r in db.query(
+                    "MATCH (n:KnowledgePoint) WHERE n.course_id IN $cids "
+                    "RETURN n.course_id AS cid, count(n) AS cnt",
+                    {"cids": cids},
+                ):
+                    node_counts[r["cid"]] = r["cnt"]
+                for r in db.query(
+                    "MATCH (a:KnowledgePoint)-[rel]->(b:KnowledgePoint) "
+                    "WHERE a.course_id IN $cids AND b.course_id = a.course_id "
+                    "RETURN a.course_id AS cid, count(rel) AS cnt",
+                    {"cids": cids},
+                ):
+                    edge_counts[r["cid"]] = r["cnt"]
+            except Exception:
+                pass
 
-        member_counts = sql_db.member_counts_by_course([r["course_id"] for r in rows])
+        member_counts = sql_db.member_counts_by_course(cids)
 
         items = []
         for r in rows:
@@ -201,7 +217,8 @@ class CourseService:
                     "data": {"total": 0, "page": 1, "page_size": page_size, "items": []}}
 
         r = CourseService.list_courses(page, page_size, None, keyword,
-                                       course_ids=ids, viewer=user)
+                                       course_ids=ids, viewer=user,
+                                       membership_map=memberships)
         for item in r["data"]["items"]:
             m = memberships.get(item["course_id"]) or {}
             # 课程创建者即使没有成员行也算教师
@@ -219,16 +236,16 @@ class CourseService:
                       page: int = 1, page_size: int = 12) -> dict:
         """发现课程：公开且启用的课程，排除「我已是成员 / 我已申请」的"""
         uid = user["user_id"]
-        mine = [m["course_id"] for m in sql_db.list_memberships_by_user(uid)]
+        # 一次查询同时用于「排除已加入课程」与「标记 my_relation」，原实现查了两遍
+        memberships = {m["course_id"]: m for m in sql_db.list_memberships_by_user(uid)}
         r = CourseService.list_courses(page, page_size, None, keyword,
                                        category=category, is_public=1,
-                                       exclude_course_ids=mine)
+                                       exclude_course_ids=list(memberships))
         # 发现课程页不带加课码：这里的课程调用者都不是教师（自己创建的课已被排除）
         # 只保留「对学生可见」的课程：业务状态开放 **且** 未被平台下架 / 归档。
         # 判定口径统一在 course_is_visible，避免各处自行组合 status 与 governance_status。
         data = r["data"]
         data["items"] = [i for i in data["items"] if course_is_visible(i)]
-        memberships = {m["course_id"]: m for m in sql_db.list_memberships_by_user(uid)}
         for item in data["items"]:
             item["my_relation"] = "NONE" if item["course_id"] not in memberships else "KNOWN"
         return r

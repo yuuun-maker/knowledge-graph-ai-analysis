@@ -30,6 +30,12 @@ class Settings:
     LLM_API_KEY: str = os.getenv("LLM_API_KEY", "your-api-key-here")
     LLM_API_BASE: str = os.getenv("LLM_API_BASE", "https://api.deepseek.com/v1")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "deepseek-chat")
+    # 知识抽取要求模型直接输出 JSON：开启后请求携带 response_format=json_object，
+    # 从源头减少「夹带说明文字/代码块」导致的解析失败。
+    # 个别 OpenAI 兼容供应商不支持该参数，抽取器会自动回退普通模式（只回退一次）。
+    LLM_JSON_MODE: bool = (
+        os.getenv("LLM_JSON_MODE", "1").strip().lower() not in ("0", "false", "no", "off")
+    )
 
     # Embedding API 配置（RAG 向量检索；DeepSeek 无 embedding 接口，改用 SiliconFlow BAAI/bge-m3）
     EMBEDDING_API_KEY: str = os.getenv("EMBEDDING_API_KEY", "")

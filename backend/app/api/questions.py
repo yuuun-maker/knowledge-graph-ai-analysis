@@ -16,6 +16,8 @@
 权限：接口层 require_teacher，service 层再做「课程归属校验」（越权 → code 4003）。
 ⚠ 路由顺序：/stats 与 /favorites 必须声明在 /{question_id} 之前，否则会被当成整数路径参数（422）。
 """
+import asyncio
+
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
@@ -218,11 +220,18 @@ async def auto_label_questions(body: AutoLabelRequest,
     cid = _coerce_int(body.course_id)
     if cid is None:
         return error(4001, "参数错误：course_id 必须为整数")
-    return _wrap(QuestionService.auto_label(
+    # auto_label 内部会调用外部 embedding API（批量题时可能持续数秒到数十秒），
+    # 且全是同步代码。直接在 async 端点里执行会占住整个事件循环，期间所有请求都卡住；
+    # 放到线程池执行，与问答/抽取的既有做法一致。
+    # 线程安全说明：sql_db 每次 _connect() 新建连接（不共享 sqlite3.Connection），
+    # Neo4j Driver 本身线程安全；vector_index 的进程内缓存已用锁保护。
+    result = await asyncio.to_thread(
+        QuestionService.auto_label,
         current_user["user_id"], cid, document_id=body.document_id,
         question_ids=body.question_ids, only_missing=body.only_missing,
         apply=body.apply, top_k=body.top_k, apply_threshold=body.apply_threshold,
-    ))
+    )
+    return _wrap(result)
 
 
 @router.post("/{question_id}/kp-candidates")

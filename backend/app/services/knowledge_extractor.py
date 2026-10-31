@@ -304,6 +304,10 @@ PRECEDES / CONTAINS / RELATED_TO / APPLIES_TO
 # 单文档多分块并发抽取的最大并发数（控制同时发往 LLM 的请求量，避免触发限流）
 _MAX_CONCURRENCY = 4
 
+# 单块失败后的重试次数。只重试可恢复错误（超时/限流/网络/JSON/结构），
+# 鉴权失败、请求被拒、输出截断等重发也不会变好的错误直接放弃。
+_EXTRACTION_RETRY = 1
+
 # 分块与输出参数（正式评测需冻结，由 eval_config.make_config 记录到 experiment_config.json）
 _CHUNK_MAX_TOKENS = 6000
 _OVERLAP_TOKENS = 400
@@ -406,6 +410,113 @@ def _parse_confidence(value) -> float:
     return v
 
 
+class ExtractionSchemaError(ValueError):
+    """LLM 返回的 JSON 能解析，但不符合抽取结果的结构约定。"""
+
+
+def _error_result(error_type: str, message: str, retryable: bool) -> dict:
+    """统一的分块失败返回。保留既有 `error` 字段（上层据此判失败），
+    新增 error_type / retryable 供重试决策与日志归因。"""
+    return {
+        "entities": [], "relations": [],
+        "error": message,
+        "error_type": error_type,
+        "retryable": retryable,
+    }
+
+
+def _classify_extraction_error(exc: Exception) -> tuple:
+    """把外部调用异常归类为 `(error_type, 中文消息, 是否可重试)`。
+
+    不依赖具体供应商的异常类名：优先看 HTTP 状态码，再退到类名/错误文本，
+    这样换 OpenAI 兼容供应商时仍能正确区分「限流可重试」与「鉴权失败不可重试」。
+    """
+    name = type(exc).__name__
+    text = str(exc)
+    lower = text.lower()
+    status = getattr(exc, "status_code", None)
+
+    if status in (401, 403) or "authentication" in lower or "invalid api key" in lower:
+        return "auth", f"鉴权失败: {text}", False
+    if status == 429 or "rate limit" in lower:
+        return "rate_limit", f"触发限流: {text}", True
+    if "timeout" in name.lower() or "timed out" in lower or "timeout" in lower:
+        return "timeout", f"请求超时: {text}", True
+    if "connection" in name.lower() or "connection" in lower:
+        return "network", f"网络连接失败: {text}", True
+    if status == 400:
+        return "bad_request", f"请求被拒绝: {text}", False
+    return "api_error", f"接口调用失败: {text}", True
+
+
+def _is_json_mode_rejection(exc: Exception) -> bool:
+    """供应商是否因为不认识 response_format/json_object 而拒绝请求。
+
+    只有明确指向该参数时才回退，避免把其他 400（如提示词过长）误判成兼容性问题。
+    """
+    status = getattr(exc, "status_code", None)
+    text = str(exc).lower()
+    return ((status in (400, 422) or isinstance(exc, TypeError))
+            and ("response_format" in text or "json_object" in text or "json mode" in text))
+
+
+def _validate_extraction_payload(payload) -> tuple:
+    """校验并清理抽取结果结构，返回 `(clean_payload, dropped_count)`。
+
+    - 顶层必须是对象，且至少含 entities / relations 之一，否则判结构非法（触发重试）；
+    - 单条实体/关系结构不合法的**逐条丢弃**而不是整块失败——LLM 偶尔混入 null、
+      字符串或字段类型错误，全部作废会让本来可用的其余结果一起丢失；
+    - 同时把 category/description/evidence 等字段规整为字符串，避免下游
+      `_merge_results` 对非字符串调用 `.strip()` 时抛异常。
+    """
+    if not isinstance(payload, dict):
+        raise ExtractionSchemaError("根节点不是 JSON 对象")
+    if "entities" not in payload and "relations" not in payload:
+        raise ExtractionSchemaError("缺少 entities / relations 字段")
+
+    entities = payload.get("entities", [])
+    relations = payload.get("relations", [])
+    if not isinstance(entities, list) or not isinstance(relations, list):
+        raise ExtractionSchemaError("entities / relations 必须是数组")
+
+    dropped = 0
+    clean_entities = []
+    for item in entities:
+        if not isinstance(item, dict):
+            dropped += 1
+            continue
+        name = item.get("name")
+        if not isinstance(name, str) or not name.strip():
+            dropped += 1
+            continue
+        clean_entities.append({
+            **item,
+            "name": name,
+            "category": item.get("category") if isinstance(item.get("category"), str) else "概念",
+            "description": (item.get("description")
+                            if isinstance(item.get("description"), str) else ""),
+        })
+
+    clean_relations = []
+    for item in relations:
+        if not isinstance(item, dict):
+            dropped += 1
+            continue
+        if not all(isinstance(item.get(k), str) and item[k].strip()
+                   for k in ("source", "target", "type")):
+            dropped += 1
+            continue
+        clean_relations.append({
+            **item,
+            "source": item["source"],
+            "target": item["target"],
+            "type": item["type"],
+            "evidence": item.get("evidence") if isinstance(item.get("evidence"), str) else "",
+        })
+
+    return {"entities": clean_entities, "relations": clean_relations}, dropped
+
+
 class KnowledgeExtractor:
     """基于LLM的知识提取器"""
 
@@ -435,13 +546,24 @@ class KnowledgeExtractor:
 
         results = list(await asyncio.gather(*[_run_one(c) for c in chunks]))
 
-        # 并发下偶发限流/超时/非法 JSON 会导致个别分块失败：对失败分块串行重试一次。
-        # 单块文档同样要重试 —— 原先单块走的是「直接返回、不重试」的捷径，
-        # 一次坏响应就让整篇文档判失败（报「无法从 LLM 返回内容中解析出 JSON」），
-        # 而当时没有重新抽取的入口，用户只能删掉文档重新上传。
+        # 并发下偶发限流/超时/非法 JSON 会导致个别分块失败：对**可恢复**的失败分块
+        # 串行重试 _EXTRACTION_RETRY 次（默认 1 次）。单块文档同样走这里——
+        # 原先单块走「直接返回、不重试」的捷径，一次坏响应就让整篇文档判失败。
+        # 鉴权失败/请求被拒/输出截断属于重发也不会变好的错误，不浪费调用。
         for i, r in enumerate(results):
+            attempts = 0
+            while (r.get("error") and r.get("retryable", True)
+                   and attempts < _EXTRACTION_RETRY):
+                attempts += 1
+                _logger.warning(
+                    "分块 %d/%d 抽取失败（%s），第 %d 次重试",
+                    i + 1, len(chunks), r.get("error_type") or "unknown", attempts)
+                r = await asyncio.to_thread(self._extract_single, chunks[i])
+                results[i] = r
             if r.get("error"):
-                results[i] = await asyncio.to_thread(self._extract_single, chunks[i])
+                _logger.warning(
+                    "分块 %d/%d 最终失败（%s）：%s",
+                    i + 1, len(chunks), r.get("error_type") or "unknown", r.get("error"))
 
         # 单块与多块统一走 _merge_results：实体按名去重、关系白名单/置信度校验都在那里
         # （其 docstring 声明「数据完整性约束不依赖 LLM，全部在此兜底」）。
@@ -449,27 +571,76 @@ class KnowledgeExtractor:
         # 「DB 记 48 个实体、图里只有 33 个节点」（重复名在入图 MERGE 时被折叠）这类对不上的账。
         return self._merge_results(results)
 
+    def _request_completion(self, text: str, use_json_mode: bool):
+        """发一次抽取请求；JSON mode 由调用方决定，便于供应商不支持时回退。"""
+        kwargs = {
+            "model": settings.LLM_MODEL,
+            "messages": [
+                {"role": "system",
+                 "content": "你是一个精确的知识图谱构建助手。请只输出JSON格式的结果。"},
+                {"role": "user", "content": EXTRACTION_PROMPT.replace("{text}", text)},
+            ],
+            "temperature": self.temperature,
+            "max_tokens": _MAX_OUTPUT_TOKENS,
+            "timeout": settings.EXTRACTION_TIMEOUT,
+        }
+        if use_json_mode:
+            kwargs["response_format"] = {"type": "json_object"}
+        return self.client.chat.completions.create(**kwargs)
+
     def _extract_single(self, text: str) -> dict:
-        """对单个文本块执行提取（同步；由 extract 通过线程池并发调用）"""
+        """对单个文本块执行提取（同步；由 extract 通过线程池并发调用）。
+
+        返回结构：成功时为 `{entities, relations}`；失败时额外带
+        `error`（中文原因）、`error_type`（json_invalid / schema_invalid / timeout /
+        rate_limit / auth / truncated …）与 `retryable`，供上层决定是否重试。
+        """
+        use_json_mode = bool(settings.LLM_JSON_MODE)
         try:
-            response = self.client.chat.completions.create(
-                model=settings.LLM_MODEL,
-                messages=[
-                    {"role": "system", "content": "你是一个精确的知识图谱构建助手。请只输出JSON格式的结果。"},
-                    {"role": "user", "content": EXTRACTION_PROMPT.replace("{text}", text)}
-                ],
-                temperature=self.temperature,
-                max_tokens=_MAX_OUTPUT_TOKENS,
-                timeout=settings.EXTRACTION_TIMEOUT
-            )
-
-            content = response.choices[0].message.content.strip()
-            return self._parse_json(content)
-
-        except json.JSONDecodeError as e:
-            return {"entities": [], "relations": [], "error": f"JSON解析失败: {str(e)}"}
+            response = self._request_completion(text, use_json_mode)
         except Exception as e:
-            return {"entities": [], "relations": [], "error": f"提取失败: {str(e)}"}
+            # 供应商不认识 response_format：回退普通模式再试一次（不是业务重试）
+            if use_json_mode and _is_json_mode_rejection(e):
+                _logger.warning("LLM 不支持 JSON mode，回退普通模式: %s", e)
+                try:
+                    response = self._request_completion(text, False)
+                except Exception as e2:
+                    error_type, message, retryable = _classify_extraction_error(e2)
+                    _logger.warning("抽取请求失败（回退后）: type=%s %s", error_type, message)
+                    return _error_result(error_type, message, retryable)
+            else:
+                error_type, message, retryable = _classify_extraction_error(e)
+                _logger.warning("抽取请求失败: type=%s %s", error_type, message)
+                return _error_result(error_type, message, retryable)
+
+        try:
+            choice = response.choices[0]
+            content = (choice.message.content or "").strip()
+            finish_reason = getattr(choice, "finish_reason", None)
+            if finish_reason == "length":
+                _logger.warning("抽取输出达到 max_tokens 被截断，content_len=%d", len(content))
+                return _error_result(
+                    "truncated", "LLM 输出达到 max_tokens 被截断，JSON 不完整", False)
+            if not content:
+                _logger.warning("抽取返回空内容")
+                return _error_result("empty_response", "LLM 返回空内容", True)
+
+            payload = self._parse_json(content)
+            clean, dropped = _validate_extraction_payload(payload)
+            if dropped:
+                _logger.warning("抽取结果中丢弃结构非法的条目 %d 条", dropped)
+            return clean
+
+        except ExtractionSchemaError as e:
+            _logger.warning("抽取结果结构非法: %s", e)
+            return _error_result("schema_invalid", f"结构校验失败: {e}", True)
+        except (ValueError, json.JSONDecodeError) as e:
+            _logger.warning("抽取结果 JSON 解析失败: %s", e)
+            return _error_result("json_invalid", f"JSON解析失败: {e}", True)
+        except Exception as e:
+            error_type, message, retryable = _classify_extraction_error(e)
+            _logger.warning("抽取结果处理失败: type=%s %s", error_type, message)
+            return _error_result(error_type, message, retryable)
 
     @staticmethod
     def _parse_json(content: str) -> dict:
@@ -547,6 +718,7 @@ class KnowledgeExtractor:
         seen_relations = set()
         merged_relations = []
         errors = []
+        error_types = []
         raw_relation_count = 0
         dropped = []
         dropped_counts = {}
@@ -611,6 +783,8 @@ class KnowledgeExtractor:
 
             if result.get("error"):
                 errors.append(result["error"])
+                if result.get("error_type"):
+                    error_types.append(result["error_type"])
 
         merged = {
             "entities": list(merged_entities.values()),
@@ -624,4 +798,6 @@ class KnowledgeExtractor:
         # 分块错误透传（最多携带前 3 条，避免信息过长），供上层判断抽取是否真正成功
         if errors:
             merged["error"] = "；".join(errors[:3])
+            # 归因字段（去重）：上层日志/失败记录可直接看出是限流、超时还是结构问题
+            merged["error_types"] = sorted(set(error_types))
         return merged
